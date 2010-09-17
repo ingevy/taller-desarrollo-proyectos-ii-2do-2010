@@ -1,0 +1,57 @@
+<mockup version="1.0" skin="sketch" measuredW="838" measuredH="644">
+  <controls>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="28" y="34" w="800" h="600" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>A%20Web%20Page%0Ahttp%3A//www.selfmanagement.com.ar</text>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::Canvas" x="178" y="341" w="500" h="150" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::TextInput" x="341" y="360" w="253" h="-1" measuredW="70" measuredH="29" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>aMolinari</text>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Label" x="217" y="363" w="115" h="25" measuredW="57" measuredH="25" zOrder="3" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Usuario%3A</text>
+        <align>right</align>
+      </controlProperties>
+    </control>
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::Button" x="341" y="444" w="84" h="28" measuredW="65" measuredH="28" zOrder="4" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Entrar</text>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Link" x="440" y="445" w="-1" h="-1" measuredW="170" measuredH="25" zOrder="5" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>%BFOlvidaste%20tu%20contrase%F1a%3F</text>
+      </controlProperties>
+    </control>
+    <control controlID="58" controlTypeID="com.balsamiq.mockups::TextInput" x="341" y="401" w="253" h="-1" measuredW="86" measuredH="29" zOrder="6" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>+++++++++</text>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::Label" x="217" y="403" w="115" h="25" measuredW="80" measuredH="25" zOrder="7" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Contrase%F1a%3A</text>
+        <align>right</align>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::Title" x="178" y="295" w="-1" h="-1" measuredW="186" measuredH="46" zOrder="8" locked="true" isInGroup="-1">
+      <controlProperties>
+        <size>28</size>
+        <text>Iniciar%20sesi%F3n</text>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::Image" x="34" y="108" w="789" h="136" measuredW="980" measuredH="151" zOrder="9" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./logo.png</src>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

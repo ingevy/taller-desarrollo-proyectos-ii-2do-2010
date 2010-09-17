@@ -1,0 +1,158 @@
+<mockup version="1.0" skin="sketch" measuredW="853" measuredH="622">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="43" y="12" w="800" h="600" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>A%20Web%20Page%0Ahttp%3A//www.selfmanagement.com.ar/campa%F1as/alta</text>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::Label" x="657" y="108" w="91" h="22" measuredW="85" measuredH="22" zOrder="13" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Jefe%20de%20cuenta</text>
+        <size>11</size>
+        <color>32768</color>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::Link" x="758" y="109" w="-1" h="-1" measuredW="70" measuredH="20" zOrder="14" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Cerrar%20sesi%F3n</text>
+        <size>10</size>
+      </controlProperties>
+    </control>
+    <control controlID="69" controlTypeID="com.balsamiq.mockups::Button" x="675" y="549" w="75" h="-1" measuredW="75" measuredH="28" zOrder="15" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Aceptar</text>
+      </controlProperties>
+    </control>
+    <control controlID="70" controlTypeID="com.balsamiq.mockups::Button" x="758" y="549" w="78" h="-1" measuredW="78" measuredH="28" zOrder="16" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Cancelar</text>
+      </controlProperties>
+    </control>
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::FieldSet" x="63" y="232" w="759" h="170" measuredW="200" measuredH="170" zOrder="17" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Datos%20generales</text>
+      </controlProperties>
+    </control>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::Label" x="648" y="83" w="189" h="25" measuredW="189" measuredH="25" zOrder="12" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Bienvenido%20Alejandro%20Molinari</text>
+      </controlProperties>
+    </control>
+    <control controlID="74" controlTypeID="com.balsamiq.mockups::List" x="83" y="429" w="246" h="126" measuredW="100" measuredH="126" zOrder="19" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Interaction%20to%20Call%20Percent%0ACustomer%20Survey%0AAfter%20Call%20Work%20Percentage%0AAfter%20Call%20Work%20Time%0ATime%20in%20AUX%20Status%0AAvailable%20Call%20Status%20Percentage</text>
+        <hasHeader>false</hasHeader>
+        <alternateRowColor>12303802</alternateRowColor>
+        <color>15594478</color>
+        <selectedIndex>-1</selectedIndex>
+      </controlProperties>
+    </control>
+    <control controlID="75" controlTypeID="com.balsamiq.mockups::List" x="395" y="429" w="246" h="126" measuredW="100" measuredH="126" zOrder="20" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Time%20Spent%20in%20Available%20Call%20Status%0AAverage%20After%20Call%20Work%0AAverage%20Handle%20Time</text>
+        <alternateRowColor>12303802</alternateRowColor>
+        <color>15134199</color>
+      </controlProperties>
+    </control>
+    <control controlID="77" controlTypeID="com.balsamiq.mockups::PointyButton" x="341" y="454" w="-1" h="-1" measuredW="45" measuredH="32" zOrder="21" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <icon>RightTriangleIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="78" controlTypeID="com.balsamiq.mockups::PointyButton" x="341" y="501" w="-1" h="-1" measuredW="45" measuredH="32" zOrder="22" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <direction>left</direction>
+        <icon>LeftTriangleIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="80" controlTypeID="com.balsamiq.mockups::ButtonBar" x="271" y="81" w="-1" h="-1" measuredW="349" measuredH="31" zOrder="23" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Adm.%20Campa%F1as%2C%20Adm.%20Usuarios%2C%20Seguimiento</text>
+        <selectedIndex>-1</selectedIndex>
+        <hrefs>%2C%2C</hrefs>
+      </controlProperties>
+    </control>
+    <control controlID="81" controlTypeID="com.balsamiq.mockups::Label" x="83" y="299" w="70" h="25" measuredW="48" measuredH="25" zOrder="24" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Cliente</text>
+      </controlProperties>
+    </control>
+    <control controlID="82" controlTypeID="com.balsamiq.mockups::ComboBox" x="675" y="299" w="134" h="-1" measuredW="102" measuredH="25" zOrder="25" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>De%20entrada</text>
+      </controlProperties>
+    </control>
+    <control controlID="83" controlTypeID="com.balsamiq.mockups::Label" x="590" y="299" w="70" h="25" measuredW="30" measuredH="25" zOrder="26" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Tipo</text>
+      </controlProperties>
+    </control>
+    <control controlID="85" controlTypeID="com.balsamiq.mockups::ComboBox" x="168" y="299" w="134" h="-1" measuredW="101" measuredH="25" zOrder="27" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Banco%20Hip.</text>
+      </controlProperties>
+    </control>
+    <control controlID="72" controlTypeID="com.balsamiq.mockups::FieldSet" x="63" y="407" w="594" h="170" measuredW="200" measuredH="170" zOrder="18" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>M%E9tricas</text>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Image" x="48" y="81" w="789" h="136" measuredW="980" measuredH="151" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./logo.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::DateChooser" x="431" y="260" w="134" h="-1" measuredW="126" measuredH="29" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>18/09/2010</text>
+      </controlProperties>
+    </control>
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::DateChooser" x="431" y="297" w="134" h="-1" measuredW="125" measuredH="29" zOrder="3" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>30/11/2010</text>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Label" x="83" y="338" w="74" h="25" measuredW="74" measuredH="25" zOrder="4" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Descripci%F3n</text>
+      </controlProperties>
+    </control>
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::TextInput" x="168" y="259" w="134" h="-1" measuredW="84" measuredH="29" zOrder="5" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>CredBcoHip</text>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Label" x="320" y="262" w="98" h="24" measuredW="98" measuredH="25" zOrder="6" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Fecha%20de%20inicio</text>
+      </controlProperties>
+    </control>
+    <control controlID="58" controlTypeID="com.balsamiq.mockups::Label" x="320" y="299" w="98" h="25" measuredW="85" measuredH="25" zOrder="7" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Fecha%20de%20fin</text>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::Label" x="590" y="261" w="70" h="25" measuredW="70" measuredH="25" zOrder="8" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Supervisor</text>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::ComboBox" x="675" y="261" w="134" h="-1" measuredW="102" measuredH="25" zOrder="9" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Juan%20Perez</text>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::Label" x="80" y="259" w="53" h="25" measuredW="53" measuredH="25" zOrder="10" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Nombre</text>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::TextArea" x="168" y="338" w="641" h="47" measuredW="200" measuredH="140" zOrder="11" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Campa%F1a%20para%20la%20promoci%F3n%20de%20extenciones%20de%20cr%E9ditos%20del%20banco%20hipotecario%20para%20los%20clientes%20que%20ya%20tengan%20una%20hipoteca.</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
