@@ -10,19 +10,19 @@
         <src>./logo2.png</src>
       </controlProperties>
     </control>
-    <control controlID="64" controlTypeID="com.balsamiq.mockups::Label" x="648" y="83" w="189" h="25" measuredW="189" measuredH="25" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::Label" x="648" y="89" w="189" h="25" measuredW="189" measuredH="25" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Bienvenido%20Alejandro%20Molinari</text>
       </controlProperties>
     </control>
-    <control controlID="66" controlTypeID="com.balsamiq.mockups::Label" x="657" y="108" w="91" h="22" measuredW="60" measuredH="22" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::Label" x="651" y="112" w="69" h="22" measuredW="60" measuredH="22" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <color>32768</color>
         <size>11</size>
         <text>Supervisor</text>
       </controlProperties>
     </control>
-    <control controlID="67" controlTypeID="com.balsamiq.mockups::Link" x="758" y="109" w="-1" h="-1" measuredW="70" measuredH="20" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::Link" x="762" y="113" w="-1" h="-1" measuredW="70" measuredH="20" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>Cerrar%20sesi%F3n</text>
@@ -88,9 +88,9 @@
         <text>Average%20Handle%20Time</text>
       </controlProperties>
     </control>
-    <control controlID="102" controlTypeID="com.balsamiq.mockups::LinkBar" x="608" y="533" w="-1" h="-1" measuredW="214" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="102" controlTypeID="com.balsamiq.mockups::LinkBar" x="608" y="533" w="-1" h="-1" measuredW="210" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Actual%2C%201%2C%202%2C%203%2C%20Oldest</text>
+        <text>Actual%2C%201%2C%202%2C%203%2C%20Ultima</text>
       </controlProperties>
     </control>
   </controls>
