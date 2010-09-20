@@ -149,6 +149,12 @@
         <control controlID="100" controlTypeID="com.balsamiq.mockups::VRule" x="127" y="1" w="-1" h="24" measuredW="5" measuredH="100" zOrder="2" locked="false" isInGroup="101"/>
       </groupChildrenDescriptors>
     </control>
+    <control controlID="90" controlTypeID="com.balsamiq.mockups::Link" x="67" y="211" w="-1" h="-1" measuredW="103" measuredH="25" zOrder="37" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Nueva%20Campa%F1a</text>
+        <size>13</size>
+      </controlProperties>
+    </control>
     <control controlID="83" controlTypeID="com.balsamiq.mockups::Label" x="225" y="307" w="-1" h="-1" measuredW="112" measuredH="22" zOrder="31" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Hasta%3A%2030/11/2010</text>
