@@ -27,6 +27,11 @@ ECHO Setting SelfManagement database permissions...
 IF ERRORLEVEL 1 GOTO ERROR
 
 ECHO.
+ECHO Populating SelfManagement database with sample data...
+@CALL SQLCMD -S %ServerAlias% -E -b -i ".\SelfManagementDB_Data.sql"
+IF ERRORLEVEL 1 GOTO ERROR
+
+ECHO.
 ECHO ==================================
 ECHO Setup finished successfully!
 ECHO ==================================
