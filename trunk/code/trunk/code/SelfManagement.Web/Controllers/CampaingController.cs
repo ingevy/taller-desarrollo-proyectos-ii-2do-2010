@@ -69,8 +69,9 @@
 
         // The autocomplete request sends a parameter 'q' that contains the filter
         [Authorize(Roles = "AccountManager")]
-        public ActionResult Find(string q)
+        public ActionResult FindCustomer(string q)
         {
+            System.Threading.Thread.Sleep(2500);
             var customers = this.campaingRepository
                                     .SearchCustomer(q)
                                     .Select(c => c.Name);
