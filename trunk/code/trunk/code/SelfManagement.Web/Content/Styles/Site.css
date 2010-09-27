@@ -184,17 +184,34 @@ div.statusMessage  {
 	background: url(../images/searchbox_bg.png) no-repeat top left;
 }
 #mainPanel fieldset { padding: 5px 15px 15px 15px; }
+#mainPanel fieldset div { padding-right:15px; padding-left:15px; margin-top:15px}
+#mainPanel fieldset label { width: 120px }
+#mainPanel fieldset textarea { width: 919px }
+#mainPanel fieldset .uservalue { width: 160px }
 #mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
 #mainPanel label { display: inline-block; width: 70px; }
 #mainPanel select { width: 110px; }
-#mainPanel input[type=submit]  {
+
+#buttonsPanel {
+	 text-align:right;
+	 margin-top: 10px;
+}
+#buttonsPanel input[type=submit]  {
 	width: 120px; height: 37px;
 	padding: 0; border: 0;
-	background: url(../images/search_btn.png) no-repeat; background-position: 0 0;
+	background: url(../images/save_btn.png) no-repeat; background-position: 0 0;
 	text-indent: -1000px; overflow: hidden;
 	cursor: pointer;
 	}
 	#mainPanel input[type=submit]:hover { background-position: 0 -100px; }
+#buttonsPanel input[type=reset]  {
+	width: 120px; height: 37px;
+	padding: 0; border: 0;
+	background: url(../images/cancel_btn.png) no-repeat; background-position: 0 0;
+	text-indent: -1000px; overflow: hidden;
+	cursor: pointer;
+	}
+	#mainPanel input[type=reset]:hover { background-position: 0 -100px; }
 
 #mainPanel .advancedSearch input[type="text"] { width: 110px; }
 #mainPanel .advancedSearch div.fieldsA { float: left; width: 35%; }

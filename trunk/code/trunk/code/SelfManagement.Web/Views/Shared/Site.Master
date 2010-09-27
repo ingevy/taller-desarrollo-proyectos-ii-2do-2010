@@ -20,8 +20,8 @@
                 <ul>
                    <% if(Request.IsAuthenticated) { %>
                     <li><%=Html.ActionLink("Campañas", "Index", "Campaing")%></li>
-                    <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor", new { area = "" }, null)%></li>
-                    <li><%=Html.ActionLink("Agentes", "Index", "Agent", new { area = "" }, null)%></li>
+                    <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor")%></li>
+                    <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
                     <% } %>
                 </ul>
             </div>
