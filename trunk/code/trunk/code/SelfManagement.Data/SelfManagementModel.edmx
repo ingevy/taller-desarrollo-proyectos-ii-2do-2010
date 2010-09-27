@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SelfManagementModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="SelfManagementModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="SelfManagementModelStoreContainer">
           <EntitySet Name="aspnet_Profile" EntityType="SelfManagementModel.Store.aspnet_Profile" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="aspnet_Roles" EntityType="SelfManagementModel.Store.aspnet_Roles" store:Type="Tables" Schema="dbo" />
@@ -154,7 +154,7 @@
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="750" />
           <Property Name="BeginDate" Type="datetime" Nullable="false" />
-          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
           <Property Name="CampaingType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CampaingUsers">
@@ -379,8 +379,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SelfManagementModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -518,7 +517,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="750" Unicode="true" FixedLength="false" />
           <Property Name="BeginDate" Type="DateTime" Nullable="false" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" />
+          <Property Name="EndDate" Type="DateTime" Nullable="true" />
           <Property Name="CampaingType" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CampaingMetricLevels" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Campaings" FromRole="Campaings" ToRole="CampaingMetricLevels" />
           <NavigationProperty Name="CampaingMetrics" Relationship="SelfManagementModel.FK_CampaingMetrics_Campaings" FromRole="Campaings" ToRole="CampaingMetrics" />

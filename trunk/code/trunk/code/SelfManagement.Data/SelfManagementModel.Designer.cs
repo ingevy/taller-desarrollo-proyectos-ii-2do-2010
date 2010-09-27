@@ -1077,9 +1077,8 @@ namespace CallCenter.SelfManagement.Data
         /// <param name="supervisorId">Initial value of the SupervisorId property.</param>
         /// <param name="name">Initial value of the Name property.</param>
         /// <param name="beginDate">Initial value of the BeginDate property.</param>
-        /// <param name="endDate">Initial value of the EndDate property.</param>
         /// <param name="campaingType">Initial value of the CampaingType property.</param>
-        public static Campaing CreateCampaing(global::System.Int32 id, global::System.Int32 customerId, global::System.Int32 supervisorId, global::System.String name, global::System.DateTime beginDate, global::System.DateTime endDate, global::System.Int32 campaingType)
+        public static Campaing CreateCampaing(global::System.Int32 id, global::System.Int32 customerId, global::System.Int32 supervisorId, global::System.String name, global::System.DateTime beginDate, global::System.Int32 campaingType)
         {
             Campaing campaing = new Campaing();
             campaing.Id = id;
@@ -1087,7 +1086,6 @@ namespace CallCenter.SelfManagement.Data
             campaing.SupervisorId = supervisorId;
             campaing.Name = name;
             campaing.BeginDate = beginDate;
-            campaing.EndDate = endDate;
             campaing.CampaingType = campaingType;
             return campaing;
         }
@@ -1245,9 +1243,9 @@ namespace CallCenter.SelfManagement.Data
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.DateTime EndDate
+        public Nullable<global::System.DateTime> EndDate
         {
             get
             {
@@ -1262,8 +1260,8 @@ namespace CallCenter.SelfManagement.Data
                 OnEndDateChanged();
             }
         }
-        private global::System.DateTime _EndDate;
-        partial void OnEndDateChanging(global::System.DateTime value);
+        private Nullable<global::System.DateTime> _EndDate;
+        partial void OnEndDateChanging(Nullable<global::System.DateTime> value);
         partial void OnEndDateChanged();
     
         /// <summary>

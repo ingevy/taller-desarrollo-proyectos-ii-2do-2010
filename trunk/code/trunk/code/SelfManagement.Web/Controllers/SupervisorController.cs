@@ -14,6 +14,7 @@
 
         public SupervisorController(ICampaingRepository campaingRepository)
         {
+            this.campaingRepository = campaingRepository;
         }
 
         //
@@ -48,15 +49,6 @@
             {
                 return View();
             }
-        }
-        
-         //the autocomplete request sends a parameter 'q' that contains the filter
-        public ActionResult Find(string q)
-        {
-            var cities = this.campaingRepository.SearchCustomer(q);
-                  
-            // Returns raw text, one result on each line.
-            return Content(string.Join("\n", cities));
         }
 
         //
