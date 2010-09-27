@@ -6,80 +6,68 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2>Create</h2>
-
     <% using (Html.BeginForm()) {%>
-        <%: Html.ValidationSummary(true) %>
+    <%: Html.ValidationSummary(true) %>
 
-        <fieldset>
-            <legend>Fields</legend>
-            
-            <div class="editor-label">
-                <%: Html.LabelFor(model => model.Name) %>
-            </div>
-            <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.Name) %>
+    <div id="mainPanel" class="panel">
+    <div class="innerPanel">
+        <h2><span>Datos Generales</span></h2>
+        
+        <fieldset>         
+            <div style="float: left;">
+                <label for="Name">Nombre</label>
+                <%: Html.TextBoxFor(model => model.Name, new { Class = "uservalue"})%>
                 <%: Html.ValidationMessageFor(model => model.Name) %>
             </div>
-            
-            <div class="editor-label">
-                <%: Html.LabelFor(model => model.CustomerName) %>
-            </div>
-            <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.CustomerName)%>
-                <%: Html.ValidationMessageFor(model => model.CustomerName)%>
-            </div>
-            
-            <div class="editor-label">
-                <%: Html.LabelFor(model => model.CampaingType) %>
-            </div>
-            <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.CampaingType) %>
-                <%: Html.ValidationMessageFor(model => model.CampaingType) %>
-            </div>
-            
-            <div class="editor-label">
-                <%: Html.LabelFor(model => model.SupervisorId) %>
-            </div>
-            <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.SupervisorId) %>
-                <%: Html.ValidationMessageFor(model => model.SupervisorId) %>
-            </div>
-            
-            <div class="editor-label">
-                <%: Html.LabelFor(model => model.BeginDate) %>
-            </div>
-            <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.BeginDate)%>
+             
+            <div style="float: left;">
+                <label for="BeginDate">Fecha de Inicio</label>
+                <%: Html.TextBoxFor(model => model.BeginDate, new { Class = "uservalue"})%>
                 <%: Html.ValidationMessageFor(model => model.BeginDate) %>
             </div>
             
-            <div class="editor-label">
-                <%: Html.LabelFor(model => model.EndDate) %>
+            <div style="float: left;">
+                <label for="SupervisorId">Supervisor</label>
+                <%: Html.TextBoxFor(model => model.SupervisorId, new { Class = "uservalue"}) %>
+                <%: Html.ValidationMessageFor(model => model.SupervisorId) %>
             </div>
-            <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.EndDate)%>
+
+            <div style="float: left;">
+                <label for="CustomerName">Cliente</label>
+                <%: Html.TextBoxFor(model => model.CustomerName, new { Class = "uservalue"})%>
+                <%: Html.ValidationMessageFor(model => model.CustomerName)%>
+            </div>
+
+            <div style="float: left;">            
+                <label for="EndDate">Fecha de Fin</label>
+                <%: Html.TextBoxFor(model => model.EndDate, new { Class = "uservalue"})%>
                 <%: Html.ValidationMessageFor(model => model.EndDate) %>
             </div>
-            
-            <div class="editor-label">
-                <%: Html.LabelFor(model => model.Description) %>
+
+            <div style="float: left;">
+                <label for="CampaingType">Tipo</label>
+                <%: Html.TextBoxFor(model => model.CampaingType, new { Class = "uservalue"}) %>
+                <%: Html.ValidationMessageFor(model => model.CampaingType) %>
             </div>
-            <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.Description) %>
+
+            <div style="clear: both; height:1px"></div>
+            
+            <div>
+                <label for="Description">Descripción</label>
+                <br />
+                <%: Html.TextAreaFor(model => model.Description)%>
                 <%: Html.ValidationMessageFor(model => model.Description) %>
             </div>
-            
-            <p>
-                <input type="submit" value="Create" />
-            </p>
+
         </fieldset>
-
-    <% } %>
-
-    <div>
-        <%: Html.ActionLink("Back to List", "Index") %>
     </div>
+    </div>            
+    
+    <div id="buttonsPanel">
+        <input type="submit" value="Guardar" />
+        <input type="reset" value="Cancelar" />
+    </div>
+    <% } %>   
 
 </asp:Content>
 

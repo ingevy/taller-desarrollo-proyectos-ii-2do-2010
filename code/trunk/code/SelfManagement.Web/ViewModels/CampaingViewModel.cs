@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace CallCenter.SelfManagement.Web.ViewModels
+﻿namespace CallCenter.SelfManagement.Web.ViewModels
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class CampaingViewModel
     {
         public int Id { get; set; }
