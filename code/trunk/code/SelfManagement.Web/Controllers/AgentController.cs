@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace CallCenter.SelfManagement.Web.Controllers
+﻿namespace CallCenter.SelfManagement.Web.Controllers
 {
+    using System.Web.Mvc;
+    using CallCenter.SelfManagement.Data;
+    using CallCenter.SelfManagement.Web.Helpers;
+
     public class AgentController : Controller
     {
+        private readonly ICampaingRepository campaingRepository;
+
+        public AgentController() : this(new RepositoryFactory().GetCampaingRepository())
+        {
+        }
+
+        public AgentController(ICampaingRepository campaingRepository)
+        {
+            this.campaingRepository = campaingRepository;
+        }
+
         //
         // GET: /Agent/
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
