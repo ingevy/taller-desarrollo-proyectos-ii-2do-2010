@@ -1,31 +1,33 @@
-﻿namespace CallCenter.SelfManagement.Web.Controllers
-{
-    using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
-    public class CampaingController : Controller
+namespace CallCenter.SelfManagement.Web.Controllers
+{
+    public class AgentController : Controller
     {
         //
-        // GET: /Campaing/
-
-        [Authorize(Roles = "AccountManager")]
+        // GET: /Agent/
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Index()
         {
             return View();
         }
 
         //
-        // GET: /Campaing/Create
-        [Authorize(Roles = "AccountManager")]
+        // GET: /Agent/Create
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Create()
         {
             return View();
         } 
 
         //
-        // POST: /Campaing/Create
-
+        // POST: /Agent/Create
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         [HttpPost]
-        [Authorize(Roles = "AccountManager")]
         public ActionResult Create(FormCollection collection)
         {
             try
@@ -41,18 +43,17 @@
         }
         
         //
-        // GET: /Campaing/Edit/5
-        [Authorize(Roles = "AccountManager")] 
+        // GET: /Agent/Edit/5
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")] 
         public ActionResult Edit(int id)
         {
             return View();
         }
 
         //
-        // POST: /Campaing/Edit/5
-
+        // POST: /Agent/Edit/5
         [HttpPost]
-        [Authorize(Roles = "AccountManager")]
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Edit(int id, FormCollection collection)
         {
             try
@@ -68,18 +69,18 @@
         }
 
         //
-        // GET: /Campaing/Delete/5
-        [Authorize(Roles = "AccountManager")] 
+        // GET: /Agent/Delete/5
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")] 
         public ActionResult Delete(int id)
         {
             return View();
         }
 
         //
-        // POST: /Campaing/Delete/5
+        // POST: /Agent/Delete/5
 
         [HttpPost]
-        [Authorize(Roles = "AccountManager")]
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try

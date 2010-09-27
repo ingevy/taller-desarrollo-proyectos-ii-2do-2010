@@ -1,40 +1,60 @@
-﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
-    <link href="../../Content/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="en-US" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <meta name="description" content="Sistema SelfManagement para control de métricas de Campañas del Call Center y seguimiento de la parte variable del sueldo" />
+    <link href="<%=Url.Content("~/Content/Styles/Site.css")%>" rel="stylesheet" type="text/css" media="screen" />
 </head>
-
 <body>
-    <div class="page">
-
+    <div id="container">
         <div id="header">
-            <div id="title">
-                <h1>My MVC Application</h1>
+            <div id="logo">
+                <h1><a href="<%= Url.Content("~/")%>">SelfManagement</a></h1>
             </div>
-              
-            <div id="logindisplay">
-                <% Html.RenderPartial("LogOnUserControl"); %>
-            </div> 
-            
-            <div id="menucontainer">
-            
-                <ul id="menu">              
-                    <li><%: Html.ActionLink("Home", "Index", "Home")%></li>
-                    <li><%: Html.ActionLink("About", "About", "Home")%></li>
+            <hr />
+            <div id="navigation">
+                <ul>
+                   <% if(Request.IsAuthenticated) { %>
+                    <li><%=Html.ActionLink("Campañas", "Index", "Campaing")%></li>
+                    <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor", new { area = "" }, null)%></li>
+                    <li><%=Html.ActionLink("Agentes", "Index", "Agent", new { area = "" }, null)%></li>
+                    <% } %>
                 </ul>
-            
+            </div>
+            <div id="toolbar">
+                <% Html.RenderPartial("LogOnUserControl"); %>
             </div>
         </div>
-
-        <div id="main">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-
-            <div id="footer">
+        <div id="pageWrapper">
+            <div id="page">
+                <hr />
+                <div id="main">
+                    <% if(!string.IsNullOrEmpty(Request.QueryString["msg"])) { %>
+                        <div class="statusMessage" id="statusMessage">
+                            <%:Request.QueryString["msg"]%>
+                        </div>
+                        <script type="text/javascript">
+                            setTimeout(function () { document.getElementById("statusMessage").style.display = 'none'; }, 3500);
+                        </script>
+                    <% } %>
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                </div>
             </div>
+        </div>
+        <br />
+        <div id="footer">
+            <hr />
+            <p class="fiuba"><img src="<%=Url.Content("~/Content/Images/fiuba_logo.png")%>" alt="Facultad de Ingeniería" /></p>
+            <p class="copyright">
+                Todos los derechos reservados | <a href="#">Términos de Uso</a> | <a href="#">Política de Privacidad</a><br />
+                &copy; 2010 FIUBA
+            </p>
         </div>
     </div>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery-1.4.1.js")%>"></script>
 </body>
 </html>

@@ -7,13 +7,8 @@
     {
         public ActionResult Index()
         {
-            ViewData["Message"] = "Welcome to ASP.NET MVC!";
+            this.ViewData["WelcomeMessage"] = "¡Bienvenido al sistema SelfManagement!";
 
-            return View();
-        }
-
-        public ActionResult About()
-        {
             return View();
         }
     }
