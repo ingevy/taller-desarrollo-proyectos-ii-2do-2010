@@ -71,6 +71,7 @@
     <Compile Include="Controllers\CampaingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SupervisorController.cs" />
+    <Compile Include="Helpers\EntityTranslator.cs" />
     <Compile Include="Helpers\ExtensionMethodHelper.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

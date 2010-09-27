@@ -13,7 +13,29 @@ function addMetricLevel(listId, metricId, metricName, metricDescription, metricF
     var metricElement = $("#" + metricId)[0];
 
     if (metricElement == undefined) {
-        alert('undefined');
+        var index = $("#" + listId)[0].children.length;
+
+        var html = "<li style=\"display: block;\" id=\"" + metricId.toString() + "\" class=\"ui-state-default\">"
++ "<input type=\"hidden\" value=\"New\" name=\"CampaingMetrics[" + index.toString() + "].MetricLevelStatus\" id=\"CampaingMetrics_" + index.toString() + "__MetricLevelStatus\">"
++ "<input type=\"hidden\" value=" + metricId.toString() + " name=\"CampaingMetrics[" + index.toString() + "].MetricId\" id=\"CampaingMetrics_" + index.toString() + "__MetricId\">"
++ "<input type=\"hidden\" value=" + metricName.toString() + " name=\"CampaingMetrics[" + index.toString() + "].Name\" id=\"CampaingMetrics_" + index.toString() + "__Name\">"
++ "<input type=\"hidden\" value=" + metricDescription + " name=\"CampaingMetrics[" + index.toString() + "].Description\" id=\"CampaingMetrics_" + index.toString() + "__Description\">"
++ "<h3><a href=\"#\">" + metricName.toString() + "</a></h3>"
++ "<p>" + metricDescription + "</p>"
++ "<input type=\"hidden\" value=\"" + metricFormatType.toString() + "\" name=\"CampaingMetrics[" + index.toString() + "].FormatType\" id= \"CampaingMetrics_" + index.toString() + "__FormatType\">"
++ "<div class=\"inline estimatedMinutes\">"
++ "Optimo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].OptimalLevel\" id=\"CampaingMetrics_" + index.toString() + "__OptimalLevel\" isdatepicker=\"true\">"
++ "&nbsp;&nbsp;&nbsp;"
++ "Objetivo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].ObjectiveLevel\" id=\"CampaingMetrics_" + index.toString() + "__ObjectiveLevel\" isdatepicker=\"true\">"
++ "&nbsp;&nbsp;&nbsp;"
++ "Minimo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].MinimumLevel\" id=\"CampaingMetrics_" + index.toString() + "__MinimumLevel\" isdatepicker=\"true\">"
++ "</div>"
++ "<p class=\"options\">"
++ "<a href=\"JavaScript:removeMetricLevel('" + metricId.toString() + "')\" title=\"Remover Métrica\" class=\"btn remove\">Remover Métrica</a>"
++ "</p>"
++ "</li>";
+
+        $("#" + listId)[0].innerHTML += html;
     }
     else if (metricElement.children[0].value == "Remove") {
         metricElement.children[0].value == "New"
@@ -24,24 +46,6 @@ function addMetricLevel(listId, metricId, metricName, metricDescription, metricF
     }
 
 
-
-//<li style="display: block;" id="20" class="ui-state-default">
-//                        <input type="hidden" value="New" name="CampaingMetrics[0].MetricLevelStatus" id="CampaingMetrics_0__MetricLevelStatus">
-//                        <input type="hidden" value="20" name="CampaingMetrics[0].MetricId" id="CampaingMetrics_0__MetricId">
-//                        <h3><a href="#">I2C_PCT</a></h3>
-//                        <p>Interaction to Call Percent</p>
-//                        <input type="hidden" value="0" name="CampaingMetrics[0].FormatType" id="CampaingMetrics_0__FormatType">
-//                        <div class="inline estimatedMinutes">
-//                            Optimo: <input type="text" value="10" size="3" name="CampaingMetrics[0].OptimalLevel" id="CampaingMetrics_0__OptimalLevel" isdatepicker="true">
-//                            &nbsp;&nbsp;&nbsp;
-//                            Objetivo: <input type="text" value="20" size="3" name="CampaingMetrics[0].ObjectiveLevel" id="CampaingMetrics_0__ObjectiveLevel" isdatepicker="true">
-//                            &nbsp;&nbsp;&nbsp;
-//                            Mínimo: <input type="text" value="25" size="3" name="CampaingMetrics[0].MinimumLevel" id="CampaingMetrics_0__MinimumLevel" isdatepicker="true">
-//                        </div>
-//                        <p class="options">
-//                            <a href="JavaScript:removeMetricLevel('20')" title="Remover Métrica" class="btn remove">Remover Métrica</a>
-//                        </p>
-//                    </li>
 
 //    var textSelected = $("#" + comboId).children()[index].text;
 //    var valueSelected = $("#" + comboId).children()[index].value;
