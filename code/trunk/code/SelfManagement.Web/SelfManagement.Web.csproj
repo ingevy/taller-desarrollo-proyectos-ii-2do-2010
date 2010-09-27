@@ -86,6 +86,7 @@
     <Content Include="Content\Images\body_bg.png" />
     <Content Include="Content\Images\btn_add.png" />
     <Content Include="Content\Images\btn_close.png" />
+    <Content Include="Content\Images\cancel_btn.png" />
     <Content Include="Content\Images\controls.png" />
     <Content Include="Content\Images\estimatedtime_bg.png" />
     <Content Include="Content\Images\fiuba_logo.png" />
@@ -101,6 +102,7 @@
     <Content Include="Content\Images\itineraryaddin_bg.png" />
     <Content Include="Content\Images\itinerarymap_bg.png" />
     <Content Include="Content\Images\preloader.gif" />
+    <Content Include="Content\Images\save_btn.png" />
     <Content Include="Content\Images\searchbox_bg.png" />
     <Content Include="Content\Images\search_btn.png" />
     <Content Include="Content\Images\selfmanagement_logo.png" />
@@ -108,7 +110,11 @@
     <Content Include="Content\Images\ui_controls.png" />
     <Content Include="Content\Images\validation_field_bg.png" />
     <Content Include="Content\Images\warning.png" />
+    <Content Include="Content\Images\calendar_icon.png" />
+    <Content Include="Content\Images\calendar_icon_big.png" />
+    <Content Include="Content\Scripts\datepickercontrol.js" />
     <Content Include="Content\Scripts\jquery.autocomplete.js" />
+    <Content Include="Content\Styles\datepickercontrol.css" />
     <Content Include="Global.asax" />
     <Content Include="Views\Agent\Index.aspx" />
     <Content Include="Views\Campaing\Create.aspx" />

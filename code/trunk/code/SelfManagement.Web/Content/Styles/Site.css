@@ -184,10 +184,11 @@ div.statusMessage  {
 	background: url(../images/searchbox_bg.png) no-repeat top left;
 }
 #mainPanel fieldset { padding: 5px 15px 15px 15px; }
-#mainPanel fieldset div { padding-right:15px; padding-left:15px; margin-top:15px}
+#mainPanel fieldset div { padding-right:15px; padding-left:15px; margin-top:15px }
 #mainPanel fieldset label { width: 120px }
 #mainPanel fieldset textarea { width: 919px }
 #mainPanel fieldset .uservalue { width: 160px }
+#mainPanel fieldset nobr .uservalue { width: 138px }
 #mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
 #mainPanel label { display: inline-block; width: 70px; }
 #mainPanel select { width: 110px; }
@@ -203,7 +204,7 @@ div.statusMessage  {
 	text-indent: -1000px; overflow: hidden;
 	cursor: pointer;
 	}
-	#mainPanel input[type=submit]:hover { background-position: 0 -100px; }
+	#buttonsPanel input[type=submit]:hover { background-position: 0 -100px; }
 #buttonsPanel input[type=reset]  {
 	width: 120px; height: 37px;
 	padding: 0; border: 0;
@@ -211,7 +212,7 @@ div.statusMessage  {
 	text-indent: -1000px; overflow: hidden;
 	cursor: pointer;
 	}
-	#mainPanel input[type=reset]:hover { background-position: 0 -100px; }
+	#buttonsPanel input[type=reset]:hover { background-position: 0 -100px; }
 
 #mainPanel .advancedSearch input[type="text"] { width: 110px; }
 #mainPanel .advancedSearch div.fieldsA { float: left; width: 35%; }
@@ -582,4 +583,62 @@ ol.activities p.routeEstimate:hover { text-decoration: underline; cursor: pointe
 	font-size: 13px; font-weight: bold;
 	color: #f00;
 
+}
+
+/* autocomplete */
+/*div.ac_results ul { 
+  margin:0; 
+  padding:0; 
+  list-style-type:none; 
+  border: solid 1px #ccc; 
+} 
+
+div.ac_results ul li { 
+  font-family: Arial, Verdana, Sans-Serif; 
+  font-size: 12px; 
+  margin: 1px; 
+  padding: 3px; 
+  cursor: pointer; 
+} 
+
+div.ac_results ul li.ac_over { 
+  background-color: #acf; 
+}*/
+
+.acInput {
+	width: 200px;
+}
+.acResults {
+	padding: 0px;
+	border: 1px solid WindowFrame;
+	background-color: Window;
+	overflow: hidden;
+}
+
+.acResults ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.acResults li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	font: menu;
+	font-size: 12px;
+	overflow: hidden;
+}
+
+.acLoading {
+	background: url(../images/preloader.gif) right center no-repeat;
+}
+
+.acSelect {
+	background-color: Highlight;
+	color: HighlightText;
 }
