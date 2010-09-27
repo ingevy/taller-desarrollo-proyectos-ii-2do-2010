@@ -45,7 +45,7 @@
                                 .RetrieveAvailableMetrics()
                                 .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
                                 .ToList(),
-                CampaingMetrics = new List<CampaingMetricLevelViewModel> { new CampaingMetricLevelViewModel { MetricId = 1, Name = "I2C_PCT", Description = "Interaction to Call Percent", FormatType = 0, OptimalLevel = "10", ObjectiveLevel = "20", MinimumLevel = "25" } }
+                CampaingMetrics = new List<CampaingMetricLevelViewModel> { new CampaingMetricLevelViewModel { MetricId = 20, MetricLevelStatus = "New", Name = "I2C_PCT", Description = "Interaction to Call Percent", FormatType = 0, OptimalLevel = "10", ObjectiveLevel = "20", MinimumLevel = "25" } }
             };
 
             return View(model);

@@ -114,6 +114,7 @@
     <Content Include="Content\Images\warning.png" />
     <Content Include="Content\Images\calendar_icon.png" />
     <Content Include="Content\Images\calendar_icon_big.png" />
+    <Content Include="Content\Scripts\campaingmetrics.js" />
     <Content Include="Content\Scripts\datepickercontrol.js" />
     <Content Include="Content\Scripts\jquery.autocomplete.js" />
     <Content Include="Content\Styles\datepickercontrol.css" />

@@ -92,7 +92,7 @@
     <div class="panel" id="availablemetrics">
     <div class="innerPanel">
         <h2><span id="itineraryName">Metricas Disponibles</span></h2>
-        <div class="" style="display: block;" id="itineraryDynamic">
+        <div class="" id="itineraryDynamic">
         <div class="items">
                 <ul style="height: 315px;" class="activities ui-sortable" id="itineraryDynamicList">
                     <%
@@ -105,7 +105,7 @@
                         <p><%= metric.Description %></p>
                         <input type="hidden" value="<%= metric.FormatType %>" />
                         <p class="options">
-                            <a class="btn add" title="Agregar Métrica" href="#">Agregar Métrica</a>
+                            <a class="btn add" title="Agregar Métrica" href="JavaScript:addMetricLevel('metricLevelList', '<%= metric.Id %>', '<%= metric.Name %>', '<%= metric.Description %>', '<%= metric.FormatType %>')">Agregar Métrica</a>
                         </p>
                     </li>
                     <% } %>
@@ -113,8 +113,6 @@
             </div>
          </div>
          
-        <script type="text/javascript">document.getElementById("itineraryStatic").style.display = 'none'</script>
-        <script type="text/javascript">document.getElementById("itineraryDynamic").style.display = 'block'</script>
         <div class="toolbox"></div>
         
     </div>
@@ -123,15 +121,16 @@
     <div class="panel" id="campaingmetrics">
     <div class="innerPanel">
         <h2><span id="Span1">Metricas de la Campaña</span></h2>
-        <div class="" style="display: block;" id="Div2">
+        <div class="">
         <div class="items">
-                <ul style="height: 315px;" class="activities ui-sortable" id="Ul1">
+                <ul style="height: 315px;" class="activities ui-sortable" id="metricLevelList">
                     <%
                        var index = 1;
                        foreach (var campaingMetric in this.Model.CampaingMetrics)
                        {
                     %>
-                    <li class="ui-state-default">
+                    <li class="ui-state-default" id="<%= campaingMetric.MetricId %>" style="display: block;">
+                        <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].MetricLevelStatus", campaingMetric.MetricLevelStatus)%>
                         <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].MetricId", campaingMetric.MetricId)%>
                         <h3><a href="#"><%= campaingMetric.Name%></a></h3>
                         <p><%= campaingMetric.Description%></p>
@@ -144,7 +143,7 @@
                             Mínimo: <%= Html.TextBox("CampaingMetrics[" + (index - 1) + "].MinimumLevel", campaingMetric.MinimumLevel, new { size = "3" })%>
                         </div>
                         <p class="options">
-                            <a class="btn remove" title="Remover Métrica" href="#">Remover Métrica</a>
+                            <a class="btn remove" title="Remover Métrica" href="JavaScript:removeMetricLevel('<%= campaingMetric.MetricId %>')">Remover Métrica</a>
                         </p>
                     </li>
                     <%
@@ -153,9 +152,7 @@
                 </ul>
             </div>
          </div>
-         
-        <script type="text/javascript">            document.getElementById("itineraryStatic").style.display = 'none'</script>
-        <script type="text/javascript">            document.getElementById("itineraryDynamic").style.display = 'block'</script>
+
         <div class="toolbox"></div>
         
     </div>

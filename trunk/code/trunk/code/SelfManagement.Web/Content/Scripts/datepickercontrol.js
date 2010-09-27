@@ -422,7 +422,7 @@ DatePickerControl.createButton = function(input, useId)
 	calButton.className = "calendarbutton";
 	calButton.style.position = "relative";
 	calButton.style.cursor = "pointer";
-	calButton.style.verticalAlign = "center";
+	calButton.style.verticalAlign = "middle";
 	calButton.style.height = input.offsetHeight;
 	calButton.src = "/content/images/calendar_icon.png";
 	if (this.buttonPosition == "in"){
