@@ -5,7 +5,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, ul, li, p { padding: 0; margin: 0; line-height: 1em; font-size: 95%; font-weight: normal; font-style: normal; }
-input, textarea, select { font-size: 100%; font-weight: normal; font-style: normal; }
+input, textarea, select, option { font-size: 100%; font-weight: normal; font-style: normal; }
 fieldset { border: 0; padding: 0; margin: 0; }
 ul { list-style: none; }
 img { border: 0; }
@@ -118,7 +118,7 @@ a { color: #06f; }
 a:hover { color: #000; }
 
 body { color: #515d76; }
-body, input, textarea, td, th { font-family: "Segoe UI", Arial, Tahoma, Sans-Serif; }
+body, input, textarea, td, th, select, option { font-family: "Segoe UI", Arial, Tahoma, Sans-Serif; }
 #container {
     text-align: center;
     background: #fff url(../images/body_bg.png) repeat-x top left;
@@ -183,7 +183,6 @@ div.statusMessage  {
 	width: 984px;
 	background: url(../images/mainbox_bg_top.png) no-repeat top left;
 }
-
 #mainPanel .innerPanel {
 	width: 984px;
 	background: url(../images/mainbox_bg_bottom.png) no-repeat bottom left;
@@ -196,7 +195,7 @@ div.statusMessage  {
 #mainPanel fieldset nobr .uservalue { width: 138px }
 #mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
 #mainPanel label { display: inline-block; width: 70px; }
-#mainPanel select { width: 110px; }
+/*#mainPanel select { width: 110px; }*/
 
 #buttonsPanel {
 	 text-align:right;
