@@ -71,7 +71,6 @@
         [Authorize(Roles = "AccountManager")]
         public ActionResult FindCustomer(string q)
         {
-            System.Threading.Thread.Sleep(2500);
             var customers = this.campaingRepository
                                     .SearchCustomer(q)
                                     .Select(c => c.Name);

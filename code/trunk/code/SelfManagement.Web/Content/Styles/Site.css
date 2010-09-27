@@ -180,8 +180,13 @@ div.statusMessage  {
 
 /* search form */
 #mainPanel {
-	width: 984px; height: 391px;
-	background: url(../images/searchbox_bg.png) no-repeat top left;
+	width: 984px;
+	background: url(../images/mainbox_bg_top.png) no-repeat top left;
+}
+
+#mainPanel .innerPanel {
+	width: 984px;
+	background: url(../images/mainbox_bg_bottom.png) no-repeat bottom left;
 }
 #mainPanel fieldset { padding: 5px 15px 15px 15px; }
 #mainPanel fieldset div { padding-right:15px; padding-left:15px; margin-top:15px }

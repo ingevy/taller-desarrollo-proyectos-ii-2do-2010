@@ -14,12 +14,12 @@
 
     </script>
 
-
     <!-- Español -->
     <input type="hidden" id="DPC_TODAY_TEXT" value="Hoy" />
     <input type="hidden" id="DPC_BUTTON_TITLE" value="Abric calendario..." />
     <input type="hidden" id="DPC_MONTH_NAMES" value="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']" />
     <input type="hidden" id="DPC_DAY_NAMES" value="['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa']" />
+    <!-- Español -->
 
     <% using (Html.BeginForm()) {%>
     <%: Html.ValidationSummary(true) %>
