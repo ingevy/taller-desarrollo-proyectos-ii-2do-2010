@@ -337,26 +337,22 @@ div.panel div.items ul.itineraries li ul.activities  {
 .handler { cursor: move !important; }
 .clone { cursor: move; margin-top: -15px; margin-left: -100px  }
 .clone .options { display: none; }
-#itinerary .empty { position: absolute; width: 450px; }        
-#itinerary ul { min-height: 300px; }
-#itinerary .items li.ui-state-highlight { border: 1px solid #fcefa1; }
-#itinerary .items li.ui-state-default { }
-#itinerary .items li.ui-sortable-helper { border: 1px solid #fcefa1; }
-#itinerary .items li .btn { height: 37px; display: inline-block; line-height: 0px; }
-#itinerary .items li .handler {
+#availablemetrics .empty, #campaingmetrics .empty { position: absolute; width: 450px; }        
+#availablemetrics ul, #campaingmetrics ul { min-height: 300px; }
+#availablemetrics .items li.ui-state-highlight, #campaingmetrics .items li.ui-state-highlight { border: 1px solid #fcefa1; }
+#availablemetrics .items li.ui-state-default, #campaingmetrics .items li.ui-state-default { }
+#availablemetrics .items li.ui-sortable-helper, #campaingmetrics .items li.ui-sortable-helper { border: 1px solid #fcefa1; }
+#availablemetrics .items li .btn ,#campaingmetrics .items li .btn { height: 37px; display: inline-block; line-height: 0px; }
+#availablemetrics .items li .handler, #campaingmetrics .items li .handler {
 	display: inline-block;
 	width: 37px; height: 37px;
 	background: url(../images/btn_reorder.png) no-repeat;
 	line-height: 0px; text-indent: -1000px; overflow: hidden;
     }
 
-#itinerary .toolbox .email { padding-left: 20px; background: url(../images/itinerary_controls.png) no-repeat; background-position: 0px 4px; }
-#itinerary .toolbox .save { padding-left: 20px; background: url(../images/itinerary_controls.png) no-repeat; background-position: 0px -76px; }
-#itinerary .toolbox .print { padding-left: 20px; background: url(../images/itinerary_controls.png) no-repeat; background-position: 0px -36px; }
-
 input.estimatedMinutes { text-align: right; }
 
-/* itinerary addin boxes */
+/* campaingmetrics addin boxes */
 .itineraryAddinBox {
 	position: absolute;
 	margin: auto; margin-top: -135px; margin-bottom: 10px;
@@ -437,7 +433,7 @@ ul.reviews li  {
 		}
 		#header #navigation #myItinerariesBox ul li img { float: right; }
 		
-/* itinerary details */
+/* campaingmetrics details */
 p.estimatedTime {
     background: url(../images/estimatedtime_bg.png) no-repeat center center;
     margin: 5px 0 0 0; padding: 0; height: 45px; line-height: 40px !important; text-align: center;
@@ -453,7 +449,7 @@ ol.activities p.routeEstimate {
 }
 ol.activities p.routeEstimate:hover { text-decoration: underline; cursor: pointer;  }
 		
-/* itinerary driving directions */
+/* campaingmetrics driving directions */
 #itineraryMap {
 	width: 984px; height: 380px;
 	clear: both;

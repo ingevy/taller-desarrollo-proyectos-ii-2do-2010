@@ -79,6 +79,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CampaingViewModel.cs" />
+    <Compile Include="ViewModels\CampaingMetricLevelViewModel.cs" />
     <Compile Include="ViewModels\MetricViewModel.cs" />
     <Compile Include="ViewModels\SupervisorViewModel.cs" />
   </ItemGroup>
