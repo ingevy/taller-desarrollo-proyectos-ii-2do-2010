@@ -55,5 +55,68 @@
                 return query.ToList();
             }
         }
+
+        public Customer GetOrCreateCustomerByName(string customerName)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var customer = ctx.Customers
+                    .FullTextSearch(customerName, true)
+                    .FirstOrDefault();
+
+                if (customer == null)
+                {
+                    customer = new Customer { Name = customerName };
+                    ctx.AddToCustomers(customer);
+                    ctx.SaveChanges();
+
+                    customer = ctx.Customers
+                        .FullTextSearch(customerName, true)
+                        .FirstOrDefault();
+                }
+
+                return customer;
+            }
+        }
+
+        public int SaveCampaing(Campaing campaing)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                ctx.AddToCampaings(campaing);
+                ctx.SaveChanges();
+
+                var campaingId = ctx.Campaings
+                    .Where(c => (c.Name == campaing.Name) && (c.SupervisorId == campaing.SupervisorId) && (c.CampaingType == campaing.CampaingType))
+                    .Select(c => c.Id)
+                    .FirstOrDefault();
+
+                var campaingUser = new CampaingUser
+                {
+                    CampaingId = campaingId,
+                    InnerUserId = campaing.SupervisorId,
+                    BeginDate = campaing.BeginDate,
+                    EndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value : DateTime.MaxValue 
+                };
+
+                ctx.AddToCampaingUsers(campaingUser);
+                ctx.SaveChanges();
+
+                return campaingId;
+            }
+        }
+
+        public void SaveCampaingMetrics(IEnumerable<CampaingMetricLevel> campaingMetricLevels)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                foreach (var campaingMetricLevel in campaingMetricLevels)
+                {
+                    ctx.AddToCampaingMetricLevels(campaingMetricLevel);
+                }
+
+                ctx.SaveChanges();
+            }
+        }
     }
 }

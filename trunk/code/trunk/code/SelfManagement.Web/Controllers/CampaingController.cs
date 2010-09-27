@@ -45,7 +45,7 @@
                                 .RetrieveAvailableMetrics()
                                 .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
                                 .ToList(),
-                CampaingMetrics = new List<CampaingMetricLevelViewModel> { new CampaingMetricLevelViewModel { MetricId = 20, MetricLevelStatus = "New", Name = "I2C_PCT", Description = "Interaction to Call Percent", FormatType = 0, OptimalLevel = "10", ObjectiveLevel = "20", MinimumLevel = "25" } }
+                CampaingMetrics = new List<CampaingMetricLevelViewModel>()
             };
 
             return View(model);
@@ -58,9 +58,15 @@
         public ActionResult Create(CampaingViewModel campaingToCreate)
         {
             var datesValid = campaingToCreate.AreDatesValid();
-            if (ModelState.IsValid && datesValid)
+            var metrics = campaingToCreate.CampaingMetrics == null
+                            ? 0
+                            : campaingToCreate.CampaingMetrics.Count;
+
+            if (ModelState.IsValid && datesValid && (metrics == 3))
             {
-                // TODO: Add insert logic here
+                var campaingId = this.campaingRepository.SaveCampaing(campaingToCreate.ToEntity(this.campaingRepository));
+                this.campaingRepository.SaveCampaingMetrics(campaingToCreate.CampaingMetrics.Select(cm => cm.ToEntity(campaingId)));
+
                 return RedirectToAction("Index");
             }
 
@@ -113,7 +119,6 @@
 
         //
         // POST: /Campaing/Edit/5
-
         [HttpPost]
         [Authorize(Roles = "AccountManager")]
         public ActionResult Edit(int id, FormCollection collection)
@@ -140,7 +145,6 @@
 
         //
         // POST: /Campaing/Delete/5
-
         [HttpPost]
         [Authorize(Roles = "AccountManager")]
         public ActionResult Delete(int id, FormCollection collection)
