@@ -23,6 +23,9 @@
         public string ObjectiveLevel { get; set; }
 
         [Required(ErrorMessage = "El nivel minimo de la métrica es requerido.")]
-        public string MinimumLevel { get; set; }        
+        public string MinimumLevel { get; set; }
+
+        [Required]
+        public string MetricLevelStatus { get; set; }
     }
 }
