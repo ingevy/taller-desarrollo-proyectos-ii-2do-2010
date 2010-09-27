@@ -1,14 +1,16 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl" %>
+<p>
 <%
     if (Request.IsAuthenticated) {
 %>
-        Welcome <b><%: Page.User.Identity.Name %></b>!
-        [ <%: Html.ActionLink("Log Off", "LogOff", "Account") %> ]
+        <b><%: Page.User.Identity.Name %></b> (<%: Page.User.GetRole() %>) | 
+        <%: Html.ActionLink("Cerrar Sesión", "LogOff", "Account", null, new { id = "loginLink" })%>
 <%
     }
     else {
-%> 
-        [ <%: Html.ActionLink("Log On", "LogOn", "Account") %> ]
+%>
+        <%: Html.ActionLink("Iniciar Sesión", "LogOn", "Account", null, new { id = "loginLink" })%>
 <%
     }
 %>
+</p>

@@ -1,344 +1,568 @@
-﻿/*----------------------------------------------------------
-The base color for this template is #5c87b2. If you'd like
-to use a different color start by replacing all instances of
-#5c87b2 with your new color.
-----------------------------------------------------------*/
-body
-{
-    background-color: #5c87b2;
-    font-size: .75em;
-    font-family: Verdana, Helvetica, Sans-Serif;
-    margin: 0;
-    padding: 0;
-    color: #696969;
-}
-
-a:link
-{
-    color: #034af3;
-    text-decoration: underline;
-}
-a:visited
-{
-    color: #505abc;
-}
-a:hover
-{
-    color: #1d60ff;
-    text-decoration: none;
-}
-a:active
-{
-    color: #12eb87;
-}
-
-p, ul
-{
-    margin-bottom: 20px;
-    line-height: 1.6em;
-}
-
-/* HEADINGS   
-----------------------------------------------------------*/
-h1, h2, h3, h4, h5, h6
-{
-    font-size: 1.5em;
-    color: #000;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-h1
-{
-    font-size: 2em;
-    padding-bottom: 0;
-    margin-bottom: 0;
-}
-h2
-{
-    padding: 0 0 10px 0;
-}
-h3
-{
-    font-size: 1.2em;
-}
-h4
-{
+/* reset css */
+body {
+    padding: 0; margin: 0;
     font-size: 1.1em;
 }
-h5, h6
-{
-    font-size: 1em;
+
+h1, h2, h3, h4, h5, h6, ul, li, p { padding: 0; margin: 0; line-height: 1em; font-size: 95%; font-weight: normal; font-style: normal; }
+input, textarea, select { font-size: 100%; font-weight: normal; font-style: normal; }
+fieldset { border: 0; padding: 0; margin: 0; }
+ul { list-style: none; }
+img { border: 0; }
+p { margin: 1em 0; }
+h2 { font-weight: bold; font-size: 16px; }
+h3 { font-weight: bold; color: #333; margin: 0; padding: 0; }
+
+hr, .sep { display: none; }
+.off { display: none; }
+.inline { display: inline; }
+.clear { clear: both; }
+.loading { background: url(../images/preloader.gif) no-repeat center center; }
+.loading * { display: none !important; }
+.disabled * { color: #aaa !important;  }
+a.loading { background-position: 100% 50% !important; padding-right: 30px; }
+input.loading { background-position: 100% 50% !important; padding-right: 30px; }
+input.disabled { color: #aaa; }
+input[type="text"], input[type="password"], textarea { border: 1px solid #aaa; background: #fff url(../images/textbox_bg.png) no-repeat top left; color: #000; }
+.field-validation-error, .field-validation-error-wrapper span, .errorShort {
+	display: inline;
+	position: absolute;
+	color: #fff !important;
+	background: url(../images/validation_field_bg.png) no-repeat left top;
+	padding: 6px 10px 8px 30px;
+	line-height: 100%;
+	min-height: 4px;
+	margin-left: 5px; margin-top: 7px;
+	white-space: nowrap;
+	font-size: 13px; font-weight: bold;
+	color: #f00;
+}
+.errorShort {
+	height: 15px; width: 12px;
+	padding: 0;
+	overflow: hidden;
+	text-indent: 100px;
 }
 
-/* this rule styles <h2> tags that are the 
-first child of the left and right table columns */
-.rightColumn > h1, .rightColumn > h2, .leftColumn > h1, .leftColumn > h2
-{
-    margin-top: 0;
+.errorBox {
+	padding-top: 50px; padding-left: 130px;
+	padding-bottom: 30px;
+	background: url(../images/warning.png) no-repeat 20px 55px ;
 }
 
-/* PRIMARY LAYOUT ELEMENTS   
-----------------------------------------------------------*/
+/* buttons */
+input[type="button"], input[type="submit"]  {
+	display: inline;
+	border: 0;
+	background: transparent;
+	text-decoration: underline;
+	padding: 0;
+	cursor: pointer;
+	color: #06f;
+}
+input[type="button"]:hover, input[type="submit"]:hover { color: #000; }
 
-/* you can specify a greater or lesser percentage for the 
-page width. Or, you can specify an exact pixel width. */
-.page
-{
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+div.submit {
+	height: 30px; text-align: right; padding: 5px;
+	border-top: 1px solid #9fbde5;
 }
 
-#header
-{
-    position: relative;
-    margin-bottom: 0px;
-    color: #000;
-    padding: 0;
+.btn {
+    display: inline-block; width: 24px; height: 24px;
+    background: url(../images/ui_controls.png) no-repeat;
+    text-indent: -1000px; overflow: hidden; cursor: pointer;
 }
+.add { background-position: -120px; }
+.remove { background-position: -80px; }
+.moveUp { background-position: -280px; }
+.moveDown { background-position: -320px; }
+.relatedItineraries { background-position: -360px; }
 
-#header h1
-{
-    font-weight: bold;
-    padding: 5px 0;
-    margin: 0;
-    color: #fff;
-    border: none;
-    line-height: 2em;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 32px !important;
+.bulkAdd { display: block; font-size: 14px; line-height: 24px; text-align: right;
+           border-bottom: 1px solid #eee; padding-bottom: 4px;
+           padding-right: 27px; background: url(../images/btn_add.png) no-repeat top right;
+        }
+span.bulkAdd { padding-right: 0; background: none; }
+span.bulkAdd a { border: 0; }
+
+/* rating icons */
+span.rating span { display: none; }
+span.rating_0_0,
+span.rating_0_5,
+span.rating_1_0,
+span.rating_1_5,
+span.rating_2_0,
+span.rating_2_5,
+span.rating_3_0,
+span.rating_3_5,
+span.rating_4_0,
+span.rating_4_5,
+span.rating_5_0 {
+	display: inline-block; width: 82px; height: 13px;
+	overflow: hidden; text-indent: -1000px;
+	background: url(../images/ico_ratings.png) no-repeat;
 }
+span.rating_0_0 { background-position: 0px 0px }
+span.rating_0_5 { background-position: 0px -13px }
+span.rating_1_0 { background-position: 0px -26px }
+span.rating_1_5 { background-position: 0px -39px }
+span.rating_2_0 { background-position: 0px -52px }
+span.rating_2_5 { background-position: 0px -65px }
+span.rating_3_0 { background-position: 0px -78px }
+span.rating_3_5 { background-position: 0px -91px }
+span.rating_4_0 { background-position: 0px -104px }
+span.rating_4_5 { background-position: 0px -117px }
+span.rating_5_0 { background-position: 0px -130px }
 
-#main
-{
-    padding: 30px 30px 15px 30px;
-    background-color: #fff;
-    margin-bottom: 30px;
-    _height: 1px; /* only IE6 applies CSS properties starting with an underscore */
-}
+a { color: #06f; }
+a:hover { color: #000; }
 
-#footer
-{
-    color: #999;
-    padding: 10px 0;
+body { color: #515d76; }
+body, input, textarea, td, th { font-family: "Segoe UI", Arial, Tahoma, Sans-Serif; }
+#container {
     text-align: center;
-    line-height: normal;
-    margin: 0;
-    font-size: .9em;
+    background: #fff url(../images/body_bg.png) repeat-x top left;
+	}
+
+#header {
+	position: relative;
+	margin: 0 auto; text-align: left;
+	height: 64px; width: 1004px;
+	background: url(../images/header_bg.png) no-repeat top left;
+	}
+	#header #logo {
+		position: absolute;
+		text-align: center; 
+		}
+		#header #logo h1 a {
+			margin-left: 18px; margin-top: 0px;
+			display: block; width: 160px; height: 58px;
+			background: url(../images/header_logo.png) no-repeat top left;
+			text-indent: -1000px; overflow: hidden;
+			}
+		
+	#header #navigation {
+		padding-top: 18px; width: auto;
+		text-align: center;
+		text-transform: uppercase;
+		}
+		#header #navigation ul {
+			margin: 0 auto;
+			}
+		#header #navigation li {
+			display: inline-block;
+			padding: 2px 0;
+			border-left: 2px solid #ccc; padding-left: 12px; margin-left: 10px;
+			}
+		#header #navigation li:first-child { border-left: 0; padding-left:0; margin-left: 0; }
+		#header #navigation li a { text-decoration: none; }
+		
+	#header #toolbar {
+		position: absolute; top: 0; right: 0;
+		padding: 10px 25px;
+		text-align: right;
+		color: #000
+		}
+		#header #toolbar p { margin: 0 ; padding: 0; font-size: .8em; }
+		#header #toolbar span { display: block; padding: 2px 0; }
+#pageWrapper {
+	margin: 0 auto; text-align: left;
+	width: 984px;
+	}
+	
+/* status message */
+div.statusMessage  {
+	padding: 10px;
+	background-color: #cef;
+	border: 1px solid #aaa;
+	margin-top: 10px;
 }
 
-/* TAB MENU   
-----------------------------------------------------------*/
-ul#menu
-{
-    border-bottom: 1px #5C87B2 solid;
-    padding: 0 0 2px;
-    position: relative;
-    margin: 0;
-    text-align: right;
+/* search form */
+#mainPanel {
+	width: 984px; height: 391px;
+	background: url(../images/searchbox_bg.png) no-repeat top left;
+}
+#mainPanel fieldset { padding: 5px 15px 15px 15px; }
+#mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
+#mainPanel label { display: inline-block; width: 70px; }
+#mainPanel select { width: 110px; }
+#mainPanel input[type=submit]  {
+	width: 120px; height: 37px;
+	padding: 0; border: 0;
+	background: url(../images/search_btn.png) no-repeat; background-position: 0 0;
+	text-indent: -1000px; overflow: hidden;
+	cursor: pointer;
+	}
+	#mainPanel input[type=submit]:hover { background-position: 0 -100px; }
+
+#mainPanel .advancedSearch input[type="text"] { width: 110px; }
+#mainPanel .advancedSearch div.fieldsA { float: left; width: 35%; }
+#mainPanel .advancedSearch div.fieldsA p:first-child { margin-bottom: 20px; }
+#mainPanel .advancedSearch div.fieldsB { float: left; padding-top: 5px; }
+	#mainPanel .advancedSearch div.fieldsB label { padding-left: 10px; }
+	#mainPanel .advancedSearch input#StreetAddress { width: 310px; }
+#mainPanel .advancedSearch input[type=submit]  { position: absolute; margin-top: 85px; margin-left: 50px;}
+#mainPanel .advancedSearch a.mode { position: absolute; margin-top: 12px; margin-left: 55px; }
+
+#mainPanel .simpleSearch { text-align: center; padding-top: 35px; }
+#mainPanel .simpleSearch #Query { width: 450px; padding: 4px;  }
+#mainPanel .simpleSearch p { width: 750px; margin: auto; padding: 0; text-align: left; }
+
+/* panels */
+div.panel {
+	margin-top: 20px;
+	width: 483px; background: url(../images/halfbox_top.png) no-repeat top left;
+	}
+	div.panel h2 { color: #000; height: 28px; line-height: 27px; margin: 0; padding: 0 0 0 15px; }
+	div.panel h3, div.panel p { line-height: 30px;  }
+	div.panel li h3, div.panel li p { line-height: 1.2em; margin: .5em 0; }
+	div.panel div.items {
+		height: 300px; overflow: auto;
+		border-width: 0 2px 0 2px; border-color: #9fbde5; border-style: solid;
+		padding: 15px;
+		}
+	div.panel div.toolbox {
+		padding: 20px 0px 15px 0px; min-height: 15px;
+		background: url(../images/halfbox_bottom.png) no-repeat top left;
+		text-align: center; line-height: 30px;
+        font-size: .9em;
+		}
+	div.panel div.pager strong { font-weight: bold; }
+	div.panel div.pager ul { list-style: none; display: inline; }
+	div.panel div.pager ul li { display: inline-block; padding: 0 2px 0 5px; border-left: 1px solid #ccc; }
+	div.panel div.pager ul li:first-child { border: 0; }
+	
+/* dual panels */
+div.dual div.panel { float: right; }
+div.dual div.panel:first-child { float: left; }
+	
+div.searchResults  { background: url(../images/halfbox_results_top.png) no-repeat top left; float: left !important; }
+	div.searchResults h2 { padding: 0; }
+	div.searchResults h2 ul { margin: 0; padding: 0; list-style: none; display: inline; }
+	div.searchResults h2 ul li { margin: 0; padding: 0; display: inline; float: left; font-weight: bold; position: relative; z-index: 999; }
+	div.searchResults h2 ul li strong, div.searchResults h2 ul li a  {
+		display: block; float: left; width: 121px; height: 27px;
+		line-height: 27px; margin-right: 6px;
+		text-align: center;
+		background: url(../images/halfbox_results_tabs.png) no-repeat;
+	}
+	div.searchResults h2 ul li a { background-position: 0 -100px; }
+	div.searchResults h2 ul li strong { background-position: 0 0px; }
+	
+	/* activity itineraries li */
+	div.searchResults h2 ul li.flex { background: url(../images/halfbox_results_bigtab.png) no-repeat top right; padding-right: 10px; }
+		div.searchResults h2 ul li.flex strong { width: auto; background: url(../images/halfbox_results_bigtab.png) no-repeat top left; }
+		div.searchResults h2 ul li.flex strong a {
+			text-indent: -1000px; overflow: hidden;
+			margin: 4px; 
+			width: 23px; height: 22px; background: url(../images/halfbox_results_bigtab_back.png) no-repeat top center;
+			}
+	
+	div.searchResults div.subheader { z-index: 500; }
+
+/* ajax - search results panel tabs activation */
+.searchResults ul.none * { display: none !important; }
+.activeActivity .linkActivities { display: block; }
+.activeActivity .linkItineraries { display: none; }
+.activeActivity .linkActivityItineraries { display: none; }
+
+.activeItinerary .linkItineraries { display: block; }
+.activeItinerary .linkActivities { display: none; }
+.activeItinerary .linkActivityItineraries { display: none; }
+
+.activeActivityItinerary .linkItineraries { display: none; }
+.activeActivityItinerary .linkActivities { display: none; }
+.activeActivityItinerary .linkActivityItineraries { display: block; }
+
+/* activities */
+div.panel div.subheader {
+	position: absolute; margin-top: -23px;
+	width: 470px; text-align: right;
+	font-size: .70em;
+	}
+div.panel div.items ul.activities li { position: relative; padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #ccc; border-top: 1px solid transparent }
+div.panel div.items ul.activities h3 span.rating { float: right; font-weight: normal; }
+div.panel div.items ul.activities p { margin: 0; padding: 0; line-height: 25px; }
+div.panel div.items ul.activities p.options { float: right; position: absolute; top: 25px; right: 0; font-size: 12px; }
+div.panel div.items ul.activities p.options .btn { height: 37px; display: inline-block; line-height: 0px; }
+div.panel div.items ul.activities p.options .handler {
+	display: inline-block;
+	width: 37px; height: 37px;
+	background: url(../images/btn_drag.png) no-repeat;
+	line-height: 0px; text-indent: -1000px; overflow: hidden;
+	}
+	
+div.ajaxError p { margin: 10px 0; }
+div.ajaxError h3  {
+	color: #f30; line-height: 1em;
+	padding: 0 0 10px 50px; background: url(../images/ico_warning.png) no-repeat left 3px ;
+	}
+div.ajaxError .details { font-size: .7em; line-height: 1em; }
+
+/* itineraries */
+div.panel div.items ul.itineraries h3 span.rating { float: right; font-weight: normal; }
+div.panel div.items ul.itineraries h3 span.rating span { display: none; }
+div.panel div.items ul.itineraries li { 
+	padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #ccc; border-top: 1px solid transparent
+}
+div.panel div.items ul.itineraries li ul.activities  {
+	margin-top: 5px; padding: 5px;
+	background-color: #f9f9f9; border: 1px solid #eee;
 }
 
-ul#menu li
-{
-    display: inline;
-    list-style: none;
+/* itinerary items */
+.handler { cursor: move !important; }
+.clone { cursor: move; margin-top: -15px; margin-left: -100px  }
+.clone .options { display: none; }
+#itinerary .empty { position: absolute; width: 450px; }        
+#itinerary ul { min-height: 300px; }
+#itinerary .items li.ui-state-highlight { border: 1px solid #fcefa1; }
+#itinerary .items li.ui-state-default { }
+#itinerary .items li.ui-sortable-helper { border: 1px solid #fcefa1; }
+#itinerary .items li .btn { height: 37px; display: inline-block; line-height: 0px; }
+#itinerary .items li .handler {
+	display: inline-block;
+	width: 37px; height: 37px;
+	background: url(../images/btn_reorder.png) no-repeat;
+	line-height: 0px; text-indent: -1000px; overflow: hidden;
+    }
+
+#itinerary .toolbox .email { padding-left: 20px; background: url(../images/itinerary_controls.png) no-repeat; background-position: 0px 4px; }
+#itinerary .toolbox .save { padding-left: 20px; background: url(../images/itinerary_controls.png) no-repeat; background-position: 0px -76px; }
+#itinerary .toolbox .print { padding-left: 20px; background: url(../images/itinerary_controls.png) no-repeat; background-position: 0px -36px; }
+
+input.estimatedMinutes { text-align: right; }
+
+/* itinerary addin boxes */
+.itineraryAddinBox {
+	position: absolute;
+	margin: auto; margin-top: -135px; margin-bottom: 10px;
+	height: 125px; width: 480px;
+	background: url(../images/itineraryaddin_bg.png) no-repeat center center;
+	color: #000;
+	}
+	.itineraryAddinBox h3 { margin: 0; padding: 0; font-size: 14px; padding-top: 5px; color: #fff; }
+	.itineraryAddinBox input[type=text] { width: 180px; }
+	.itineraryAddinBox input[type=submit] { }
+	.itineraryAddinBox .close {
+		position: absolute; top: 10px; right: 25px; 
+		display: block; width: 18px; height: 18px;
+		text-indent: -1000px; overflow: hidden;
+		background: url(../images/btn_close.png) no-repeat center center;
+		cursor: pointer;
+	}
+	
+/* shareit addin box */
+ul.shareit {
+	list-style: none; padding: 0; margin: 10px 30px;
+	display: block;
+	}
+	ul.shareit li {
+		display: block; float: left;
+        line-height: 22px; width: 100px; font-size: 11px;
+        text-align: left;
+		}
+		ul.shareit li a { text-decoration: none; }
+		ul.shareit li span { 
+	        width:18px; height:18px;
+	        display: inline-block;
+	        background: url(../images/social_icons.png) no-repeat;
+		}
+		ul.shareit span.stumbleupon { background-position: -54px -36px; }
+		ul.shareit span.newsvine { background-position: -36px -18px; }
+		ul.shareit span.technorati { background-position: -54px -18px; }
+		ul.shareit span.furl { background-position: -0px -0px; }
+		ul.shareit span.twitter { background-position: -36px -0px; }
+		ul.shareit span.delicious { background-position: -0px -18px; }
+		ul.shareit span.bloglines { background-position: -18px -36px; }
+		ul.shareit span.yahoo { background-position: -36px -36px; }
+		ul.shareit span.google { background-position: -18px -18px; }
+		ul.shareit span.co-mments { background-position: 0px -36px; }
+		ul.shareit span.facebook { background-position: -18px -0px; }
+
+/* user profile */
+#profileForm label { display: inline-block; width: 150px; }
+
+/* register user */
+#registerForm label { display: inline-block; width: 150px; }
+
+/* reviews */
+ul.reviews li  {
+	line-height: 1em;
+	padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #ccc; border-top: 1px solid transparent 
+	}
+	ul.reviews li p { line-height: 1em; }
+	
+/* my itineraries */
+#header #navigation #myItinerariesBox {
+	position: absolute; margin-left: -70px; margin-top: 5px; z-index: 1000;
+	width: 255px; height: 245px;
+	background: url(../images/myitineraries_bg.png) no-repeat top center;
+	}
+	#header #navigation #myItinerariesBox ul {
+		width: 243px; height: 205px;
+		margin: 27px 0 0 5px; padding: 0;
+		overflow: auto;
+		list-style: none;
+		text-align: left;
+		text-transform: none;
+		}
+	#header #navigation #myItinerariesBox ul li  {
+		display: block; margin: 0; padding: 0; border: 0;
+		margin: 8px 5px;
+		padding-left: 13px; background: url(../images/myitineraries_bullet.png) no-repeat 0px 3px;
+		}
+		#header #navigation #myItinerariesBox ul li img { float: right; }
+		
+/* itinerary details */
+p.estimatedTime {
+    background: url(../images/estimatedtime_bg.png) no-repeat center center;
+    margin: 5px 0 0 0; padding: 0; height: 45px; line-height: 40px !important; text-align: center;
+    font-size: .8em;
+    }
+ol.activities { list-style-type: upper-alpha }
+ol.activities p.routeEstimate {
+	font-size: .85em;
+	line-height: 24px; height: 24px; 
+	padding: 0; padding-left: 12px;
+	background: url(../images/itinerary_routeicon.png) no-repeat center left;
+	color: #36c; font-size: .85em;
+}
+ol.activities p.routeEstimate:hover { text-decoration: underline; cursor: pointer;  }
+		
+/* itinerary driving directions */
+#itineraryMap {
+	width: 984px; height: 380px;
+	clear: both;
+	background: url(../images/itinerarymap_bg.png) no-repeat top center;
+	}
+	#itineraryMap div.loading {
+		position: absolute; margin-left: 9px; margin-top: 28px;
+		width: 550px; height: 100px /*250px*/; padding-top: 150px;
+		text-align: center; 
+	}
+	#itineraryRouteMap {
+		position: relative; left: 9px; top: 28px;
+	}
+	#itineraryRouteSelector 
+	{
+		position: absolute; margin-left: 572px; margin-top: 28px;
+		line-height: 40px; height: 40px;  width: 380px;
+		font-size: .8em; border-bottom: 1px solid #ccc;
+	}
+		#itineraryRouteSelector a.selected { color: #000; text-decoration: none; font-weight: bold; cursor: default; }
+	#itineraryRouteDetails  {
+		position: absolute; margin-left: 572px; margin-top: 58px;
+		padding: 10px; height: 300px; width: 390px; overflow: auto;
+		font-size: .8em; 
+		}
+		#itineraryRouteDetails ul { list-style-type: circle; padding-left: 10px; margin: 5px; margin-bottom: 10px; }
+		#itineraryRouteDetails ul h4 { font-weight:bold; margin: 0; padding: 0; }
+		#itineraryRouteDetails ul li { margin: 3px; }
+		#itineraryRouteDetails ul li:hover, #itineraryRouteDetails ul li.selected { color: #36c; cursor: pointer; }
+		
+/* comments */
+.comments div.items li { border-bottom: 1px solid #ccc; padding: 0px; margin: 0px; }
+.comments div.items p { line-height: 25px; padding: 5px 0; margin: 0; }
+#commentForm h3 { padding: 5px 0; }
+#commentForm textarea { width: 100%; }
+#commentForm p { line-height: 1em; margin: 0; }
+	
+/* footer */
+#footer {
+	clear: both;
+	width: 993px; height: 98px;
+	margin: 0 auto; text-align: left;
+	padding-top: 10px; margin-bottom: 20px;
+	background: url(../images/footer_bg.png) no-repeat bottom left;
+	font-size: 14px;
+	}
+#footer p.fiuba { float: right; padding: 10px 20px; }
+#footer p.copyright { float: left; padding: 15px 20px; line-height: 1.5em; }
+
+/* AJAX Control Toolkit Rating */
+.ratingStar {
+    font-size: 0pt;
+    width: 17px;
+    height: 15px;
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-image: url(../images/star.gif);
+    float:left;            
+}
+.ratingReadOnly a, .ratingEditable a {
+    display: inline-block;    
+}
+.ratingVotes {
+    float:right;    
+}
+.filledRatingStar {     
+    background-position: 0 -16px;
+}
+.emptyRatingStar {
+    background-position: 0 0px;
+}
+.savedRatingStar {
+    background-position: 0 -32px;
+}
+/* END AJAX Control Toolkit Rating */
+
+/* auto complete */
+.ac_results {
+	padding: 0px;
+	border: 1px solid black;
+	background-color: white;
+	overflow: hidden;
+	z-index: 99999;
 }
 
-ul#menu li#greeting
-{
-    padding: 10px 20px;
-    font-weight: bold;
-    text-decoration: none;
-    line-height: 2.8em;
-    color: #fff;
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
-ul#menu li a
-{
-    padding: 10px 20px;
-    font-weight: bold;
-    text-decoration: none;
-    line-height: 2.8em;
-    background-color: #e8eef4;
-    color: #034af3;
+.ac_results li {
+	margin: 0px;
+	padding: 4px 2px;
+	cursor: default;
+	display: block;
+	/* 
+	if width will be 100% horizontal scrollbar will apear 
+	when scroll mode will be used
+	*/
+	/*width: 100%;*/
+	font-size: 100%;
+	/* 
+	it is very important, if line-height not setted or setted 
+	in relative units scroll will be broken in firefox
+	*/
+	overflow: hidden;
+	line-height: 100%;
 }
 
-ul#menu li a:hover
-{
-    background-color: #fff;
-    text-decoration: none;
+.ac_odd {
+	background-color: #fafafa;
 }
 
-ul#menu li a:active
-{
-    background-color: #a6e2a6;
-    text-decoration: none;
+.ac_over {
+	background-color: #0A246A;
+	color: white;
 }
 
-ul#menu li.selected a
-{
-    background-color: #fff;
-    color: #000;
-}
+.error-message {
+	margin: 4px;
+	line-height: 100%;
+	min-height: 4px;
+	margin-left: 5px; margin-top: 7px;
+	white-space: nowrap;
+	font-size: 13px; font-weight: bold;
+	color: #f00;
 
-/* FORM LAYOUT ELEMENTS   
-----------------------------------------------------------*/
-
-fieldset 
-{
-    margin: 1em 0;
-    padding: 1em;
-    border: 1px solid #CCC;
-}
-
-fieldset p 
-{
-    margin: 2px 12px 10px 10px;
-}
-
-legend 
-{
-    font-size: 1.1em;
-    font-weight: 600;
-    padding: 2px 4px 8px 4px;
-}
-
-input[type="text"] 
-{
-    width: 200px;
-    border: 1px solid #CCC;
-}
-
-input[type="password"] 
-{
-    width: 200px;
-    border: 1px solid #CCC;
-}
-
-/* TABLE
-----------------------------------------------------------*/
-
-table 
-{
-  border: solid 1px #e8eef4;
-  border-collapse: collapse;
-}
-
-table td 
-{
-  padding: 5px;   
-  border: solid 1px #e8eef4;
-}
-
-table th
-{
-  padding: 6px 5px;
-  text-align: left;
-  background-color: #e8eef4; 
-  border: solid 1px #e8eef4;   
-}
-
-/* MISC  
-----------------------------------------------------------*/
-.clear
-{
-    clear: both;
-}
-
-.error
-{
-    color:Red;
-}
-
-#menucontainer
-{
-    margin-top:40px;
-}
-
-div#title
-{
-    display:block;
-    float:left;
-    text-align:left;
-}
-
-#logindisplay
-{
-    font-size:1.1em;
-    display:block;
-    text-align:right;
-    margin:10px;
-    color:White;
-}
-
-#logindisplay a:link
-{
-    color: white;
-    text-decoration: underline;
-}
-
-#logindisplay a:visited
-{
-    color: white;
-    text-decoration: underline;
-}
-
-#logindisplay a:hover
-{
-    color: white;
-    text-decoration: none;
-}
-
-/* Styles for validation helpers
------------------------------------------------------------*/
-.field-validation-error
-{
-    color: #ff0000;
-}
-
-.field-validation-valid
-{
-    display: none;
-}
-
-.input-validation-error
-{
-    border: 1px solid #ff0000;
-    background-color: #ffeeee;
-}
-
-.validation-summary-errors
-{
-    font-weight: bold;
-    color: #ff0000;
-}
-
-.validation-summary-valid
-{
-    display: none;
-}
-
-/* Styles for editor and display helpers
-----------------------------------------------------------*/
-.display-label,
-.editor-label,
-.display-field,
-.editor-field
-{
-    margin: 0.5em 0;
-}
-
-.text-box
-{
-    width: 30em;
-}
-
-.text-box.multi-line
-{
-    height: 6.5em;
-}
-
-.tri-state
-{
-    width: 6em;
 }

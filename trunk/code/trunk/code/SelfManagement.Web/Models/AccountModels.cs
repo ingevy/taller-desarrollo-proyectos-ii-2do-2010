@@ -81,7 +81,9 @@
         int MinPasswordLength { get; }
 
         bool ValidateUser(string userName, string password);
+
         MembershipCreateStatus CreateUser(string userName, string password, string email);
+
         bool ChangePassword(string userName, string oldPassword, string newPassword);
     }
 
@@ -153,6 +155,7 @@
     public interface IFormsAuthenticationService
     {
         void SignIn(string userName, bool createPersistentCookie);
+
         void SignOut();
     }
 
