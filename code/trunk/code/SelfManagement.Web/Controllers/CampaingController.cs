@@ -1,12 +1,13 @@
 ﻿namespace CallCenter.SelfManagement.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
-    using System.Globalization;
     
     public class CampaingController : Controller
     {
@@ -43,28 +44,40 @@
                 Metrics = this.campaingRepository
                                 .RetrieveAvailableMetrics()
                                 .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
-                                .ToList()
+                                .ToList(),
+                CampaingMetrics = new List<CampaingMetricLevelViewModel> { new CampaingMetricLevelViewModel { MetricId = 1, Name = "I2C_PCT", Description = "Interaction to Call Percent", FormatType = 0, OptimalLevel = "10", ObjectiveLevel = "20", MinimumLevel = "25" } }
             };
 
-            return View("Create", model);
+            return View(model);
         }
 
         //
         // POST: /Campaing/Create
         [HttpPost]
         [Authorize(Roles = "AccountManager")]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(CampaingViewModel campaingToCreate)
         {
-            try
+            var datesValid = campaingToCreate.AreDatesValid();
+            if (ModelState.IsValid && datesValid)
             {
                 // TODO: Add insert logic here
-
                 return RedirectToAction("Index");
             }
-            catch
+
+            campaingToCreate.Supervisors = this.campaingRepository.RetrieveAvailableSupervisors(DateTime.Today)
+                                .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up) })
+                                .ToList();
+            campaingToCreate.Metrics = this.campaingRepository
+                                .RetrieveAvailableMetrics()
+                                .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
+                                .ToList();
+
+            if (!datesValid)
             {
-                return View();
-            }
+                ModelState["EndDate"].Errors.Add("La fecha de inicio tiene que ser menor que la de fin");
+            }            
+
+            return View(campaingToCreate);
         }
 
         // The autocomplete request sends a parameter 'q' that contains the filter
