@@ -105,7 +105,6 @@
     <Content Include="Content\Images\minbox_bg_top.png" />
     <Content Include="Content\Images\preloader.gif" />
     <Content Include="Content\Images\save_btn.png" />
-    <Content Include="Content\Images\searchbox_bg.png" />
     <Content Include="Content\Images\search_btn.png" />
     <Content Include="Content\Images\selfmanagement_logo.png" />
     <Content Include="Content\Images\textbox_bg.png" />

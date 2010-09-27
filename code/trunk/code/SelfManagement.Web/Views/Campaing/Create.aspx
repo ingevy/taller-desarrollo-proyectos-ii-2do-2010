@@ -7,11 +7,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <script type="text/javascript">
-
         $(document).ready(function () {
-            $("input#Name").autocomplete('<%= Url.Action("FindCustomer", "Campaing") %>', { loadingClass: "acLoading" });
+            $("input#CustomerName").autocomplete('<%= Url.Action("FindCustomer", "Campaing") %>', { loadingClass: "acLoading" });
         }); 
-
     </script>
 
     <!-- Español -->
@@ -43,7 +41,14 @@
             
             <div style="float: left;">
                 <label for="SupervisorId">Supervisor</label>
-                <%: Html.TextBoxFor(model => model.SupervisorId, new { Class = "uservalue"}) %>
+                <%
+                    var supervisors = this.Model.Supervisors.Select(s => new SelectListItem { Text = s.DisplayName, Value = s.Id.ToString() });
+                    if (supervisors.Count() > 0)
+                    {
+                        supervisors.FirstOrDefault().Selected = true;
+                    }
+                %>
+                <%: Html.DropDownListFor(model => model.SupervisorId, supervisors, new { Class = "uservalue" })%>
                 <%: Html.ValidationMessageFor(model => model.SupervisorId) %>
             </div>
 
@@ -61,7 +66,10 @@
 
             <div style="float: left;">
                 <label for="CampaingType">Tipo</label>
-                <%: Html.TextBoxFor(model => model.CampaingType, new { Class = "uservalue"}) %>
+                <%
+                    var campaingTypes = new List<SelectListItem> { new SelectListItem { Text = "De Entrada", Value = "0", Selected = true}, new SelectListItem { Text = "De Salida", Value = "1" } };
+                %>
+                <%: Html.DropDownListFor(model => model.CampaingType, campaingTypes, new { Class = "uservalue" })%>
                 <%: Html.ValidationMessageFor(model => model.CampaingType) %>
             </div>
 
