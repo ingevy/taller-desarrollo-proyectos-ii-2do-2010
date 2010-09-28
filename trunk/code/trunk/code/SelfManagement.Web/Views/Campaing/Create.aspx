@@ -125,10 +125,11 @@ foreach (var metric in this.Model.Metrics)
         <div class="">
         <div class="items">
                 <ul style="height: 315px;" class="activities ui-sortable" id="metricLevelList">
-                    <%
-var index = 1;
-foreach (var campaingMetric in this.Model.CampaingMetrics)
-{
+                    <%  if (this.Model.CampaingMetrics != null)
+                        {
+                            var index = 1;
+                            foreach (var campaingMetric in this.Model.CampaingMetrics)
+                            {
                     %>
                     <li class="ui-state-default" id="<%= campaingMetric.MetricId %>" style="display: block;">
                         <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].MetricLevelStatus", campaingMetric.MetricLevelStatus)%>
@@ -149,9 +150,10 @@ foreach (var campaingMetric in this.Model.CampaingMetrics)
                             <a class="btn remove" title="Remover Métrica" href="JavaScript:removeMetricLevel('<%= campaingMetric.MetricId %>')">Remover Métrica</a>
                         </p>
                     </li>
-                    <%
-index++;
-} %>
+                    <%          index++;
+                            }
+                        }
+                    %>
                 </ul>
             </div>
          </div>

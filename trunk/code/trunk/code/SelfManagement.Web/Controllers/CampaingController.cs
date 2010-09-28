@@ -44,8 +44,7 @@
                 Metrics = this.campaingRepository
                                 .RetrieveAvailableMetrics()
                                 .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
-                                .ToList(),
-                CampaingMetrics = new List<CampaingMetricLevelViewModel>()
+                                .ToList()
             };
 
             return View(model);
