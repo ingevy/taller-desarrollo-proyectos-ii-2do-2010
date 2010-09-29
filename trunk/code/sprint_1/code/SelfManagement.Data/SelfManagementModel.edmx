@@ -1,0 +1,931 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SelfManagementModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="SelfManagementModelStoreContainer">
+          <EntitySet Name="aspnet_Profile" EntityType="SelfManagementModel.Store.aspnet_Profile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="aspnet_Roles" EntityType="SelfManagementModel.Store.aspnet_Roles" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="aspnet_Users" EntityType="SelfManagementModel.Store.aspnet_Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="aspnet_UsersInRoles" EntityType="SelfManagementModel.Store.aspnet_UsersInRoles" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CampaingMetricLevels" EntityType="SelfManagementModel.Store.CampaingMetricLevels" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CampaingMetrics" EntityType="SelfManagementModel.Store.CampaingMetrics" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Campaings" EntityType="SelfManagementModel.Store.Campaings" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CampaingUsers" EntityType="SelfManagementModel.Store.CampaingUsers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Customers" EntityType="SelfManagementModel.Store.Customers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Metrics" EntityType="SelfManagementModel.Store.Metrics" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProcessedFiles" EntityType="SelfManagementModel.Store.ProcessedFiles" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserMetrics" EntityType="SelfManagementModel.Store.UserMetrics" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserProfiles" EntityType="SelfManagementModel.Store.UserProfiles" store:Type="Views" store:Schema="dbo" store:Name="UserProfiles">
+            <DefiningQuery>SELECT 
+      [UserProfiles].[UserId] AS [UserId], 
+      [UserProfiles].[InnerUserId] AS [InnerUserId], 
+      [UserProfiles].[UserName] AS [UserName], 
+      [UserProfiles].[DNI] AS [DNI], 
+      [UserProfiles].[Name] AS [Name], 
+      [UserProfiles].[LastName] AS [LastName], 
+      [UserProfiles].[GrossSalary] AS [GrossSalary], 
+      [UserProfiles].[Workday] AS [Workday], 
+      [UserProfiles].[Status] AS [Status], 
+      [UserProfiles].[Role] AS [Role]
+      FROM [dbo].[UserProfiles] AS [UserProfiles]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__aspnet_Pr__UserI__6754599E" Association="SelfManagementModel.Store.FK__aspnet_Pr__UserI__6754599E">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="aspnet_Profile" EntitySet="aspnet_Profile" />
+          </AssociationSet>
+          <AssociationSet Name="FK__aspnet_Us__RoleI__656C112C" Association="SelfManagementModel.Store.FK__aspnet_Us__RoleI__656C112C">
+            <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
+            <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__aspnet_Us__UserI__66603565" Association="SelfManagementModel.Store.FK__aspnet_Us__UserI__66603565">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetricLevels_Campaings" Association="SelfManagementModel.Store.FK_CampaingMetricLevels_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetricLevels_Metrics" Association="SelfManagementModel.Store.FK_CampaingMetricLevels_Metrics">
+            <End Role="Metrics" EntitySet="Metrics" />
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetrics_CampaingMetricLevels" Association="SelfManagementModel.Store.FK_CampaingMetrics_CampaingMetricLevels">
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+            <End Role="CampaingMetrics" EntitySet="CampaingMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetrics_Campaings" Association="SelfManagementModel.Store.FK_CampaingMetrics_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="CampaingMetrics" EntitySet="CampaingMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetrics_Metrics" Association="SelfManagementModel.Store.FK_CampaingMetrics_Metrics">
+            <End Role="Metrics" EntitySet="Metrics" />
+            <End Role="CampaingMetrics" EntitySet="CampaingMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Campaings_Customers" Association="SelfManagementModel.Store.FK_Campaings_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Campaings" EntitySet="Campaings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingUsers_Campaings" Association="SelfManagementModel.Store.FK_CampaingUsers_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="CampaingUsers" EntitySet="CampaingUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMetrics_CampaingMetricLevels" Association="SelfManagementModel.Store.FK_UserMetrics_CampaingMetricLevels">
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+            <End Role="UserMetrics" EntitySet="UserMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMetrics_Campaings" Association="SelfManagementModel.Store.FK_UserMetrics_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="UserMetrics" EntitySet="UserMetrics" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="aspnet_Profile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PropertyNames" Type="ntext" Nullable="false" />
+          <Property Name="PropertyValuesString" Type="ntext" Nullable="false" />
+          <Property Name="PropertyValuesBinary" Type="image" Nullable="false" />
+          <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="aspnet_Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="LoweredRoleName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="InnerUserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="LoweredUserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="MobileAlias" Type="nvarchar" MaxLength="16" />
+          <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+          <Property Name="LastActivityDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="aspnet_UsersInRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CampaingMetricLevels">
+          <Key>
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="MetricId" />
+          </Key>
+          <Property Name="CampaingId" Type="int" Nullable="false" />
+          <Property Name="MetricId" Type="int" Nullable="false" />
+          <Property Name="OptimalLevel" Type="float" Nullable="false" />
+          <Property Name="ObjectiveLevel" Type="float" Nullable="false" />
+          <Property Name="MinimumLevel" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CampaingMetrics">
+          <Key>
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="MetricId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="CampaingId" Type="int" Nullable="false" />
+          <Property Name="MetricId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Value" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Campaings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="SupervisorId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="750" />
+          <Property Name="BeginDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="CampaingType" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CampaingUsers">
+          <Key>
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="BeginDate" />
+          </Key>
+          <Property Name="CampaingId" Type="int" Nullable="false" />
+          <Property Name="InnerUserId" Type="int" Nullable="false" />
+          <Property Name="BeginDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Metrics">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MetricName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ShortDescription" Type="nvarchar" MaxLength="250" />
+          <Property Name="LondDescription" Type="nvarchar" MaxLength="600" />
+          <Property Name="Format" Type="int" Nullable="false" />
+          <Property Name="CLRType" Type="nvarchar" Nullable="false" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="ProcessedFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FileSystemPath" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="DateProcessed" Type="datetime" Nullable="false" />
+          <Property Name="DateLastModified" Type="datetime" Nullable="false" />
+          <Property Name="Log" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="HasErrors" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserMetrics">
+          <Key>
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="MetricId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="InnerUserId" Type="int" Nullable="false" />
+          <Property Name="CampaingId" Type="int" Nullable="false" />
+          <Property Name="MetricId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Value" Type="float" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'SelfManagement.dbo.UserProfiles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="UserProfiles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="UserName" />
+            <PropertyRef Name="Role" />
+          </Key>
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="InnerUserId" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="DNI" Type="varchar" MaxLength="500" />
+          <Property Name="Name" Type="varchar" MaxLength="500" />
+          <Property Name="LastName" Type="varchar" MaxLength="500" />
+          <Property Name="GrossSalary" Type="varchar" MaxLength="500" />
+          <Property Name="Workday" Type="varchar" MaxLength="500" />
+          <Property Name="Status" Type="varchar" MaxLength="500" />
+          <Property Name="Role" Type="nvarchar" Nullable="false" MaxLength="256" />
+        </EntityType>
+        <Association Name="FK__aspnet_Pr__UserI__6754599E">
+          <End Role="aspnet_Users" Type="SelfManagementModel.Store.aspnet_Users" Multiplicity="1" />
+          <End Role="aspnet_Profile" Type="SelfManagementModel.Store.aspnet_Profile" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="aspnet_Profile">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__aspnet_Us__RoleI__656C112C">
+          <End Role="aspnet_Roles" Type="SelfManagementModel.Store.aspnet_Roles" Multiplicity="1" />
+          <End Role="aspnet_UsersInRoles" Type="SelfManagementModel.Store.aspnet_UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="aspnet_UsersInRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__aspnet_Us__UserI__66603565">
+          <End Role="aspnet_Users" Type="SelfManagementModel.Store.aspnet_Users" Multiplicity="1" />
+          <End Role="aspnet_UsersInRoles" Type="SelfManagementModel.Store.aspnet_UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="aspnet_UsersInRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetricLevels_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Store.Campaings" Multiplicity="1" />
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.Store.CampaingMetricLevels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetricLevels">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetricLevels_Metrics">
+          <End Role="Metrics" Type="SelfManagementModel.Store.Metrics" Multiplicity="1" />
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.Store.CampaingMetricLevels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Metrics">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetricLevels">
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetrics_CampaingMetricLevels">
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.Store.CampaingMetricLevels" Multiplicity="1" />
+          <End Role="CampaingMetrics" Type="SelfManagementModel.Store.CampaingMetrics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CampaingMetricLevels">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Principal>
+            <Dependent Role="CampaingMetrics">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetrics_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Store.Campaings" Multiplicity="1" />
+          <End Role="CampaingMetrics" Type="SelfManagementModel.Store.CampaingMetrics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetrics">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetrics_Metrics">
+          <End Role="Metrics" Type="SelfManagementModel.Store.Metrics" Multiplicity="1" />
+          <End Role="CampaingMetrics" Type="SelfManagementModel.Store.CampaingMetrics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Metrics">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetrics">
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Campaings_Customers">
+          <End Role="Customers" Type="SelfManagementModel.Store.Customers" Multiplicity="1" />
+          <End Role="Campaings" Type="SelfManagementModel.Store.Campaings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Campaings">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingUsers_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Store.Campaings" Multiplicity="1" />
+          <End Role="CampaingUsers" Type="SelfManagementModel.Store.CampaingUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingUsers">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMetrics_CampaingMetricLevels">
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.Store.CampaingMetricLevels" Multiplicity="1" />
+          <End Role="UserMetrics" Type="SelfManagementModel.Store.UserMetrics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CampaingMetricLevels">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Principal>
+            <Dependent Role="UserMetrics">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMetrics_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Store.Campaings" Multiplicity="1" />
+          <End Role="UserMetrics" Type="SelfManagementModel.Store.UserMetrics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMetrics">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SelfManagementModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SelfManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="aspnet_Profile" EntityType="SelfManagementModel.aspnet_Profile" />
+          <EntitySet Name="aspnet_Roles" EntityType="SelfManagementModel.aspnet_Roles" />
+          <EntitySet Name="aspnet_Users" EntityType="SelfManagementModel.aspnet_Users" />
+          <EntitySet Name="CampaingMetricLevels" EntityType="SelfManagementModel.CampaingMetricLevel" />
+          <EntitySet Name="CampaingMetrics" EntityType="SelfManagementModel.CampaingMetric" />
+          <EntitySet Name="Campaings" EntityType="SelfManagementModel.Campaing" />
+          <EntitySet Name="CampaingUsers" EntityType="SelfManagementModel.CampaingUser" />
+          <EntitySet Name="Customers" EntityType="SelfManagementModel.Customer" />
+          <EntitySet Name="Metrics" EntityType="SelfManagementModel.Metric" />
+          <EntitySet Name="ProcessedFiles" EntityType="SelfManagementModel.ProcessedFile" />
+          <EntitySet Name="UserMetrics" EntityType="SelfManagementModel.UserMetric" />
+          <EntitySet Name="UserProfiles" EntityType="SelfManagementModel.UserProfile" />
+          <AssociationSet Name="FK__aspnet_Pr__UserI__6754599E" Association="SelfManagementModel.FK__aspnet_Pr__UserI__6754599E">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="aspnet_Profile" EntitySet="aspnet_Profile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetricLevels_Campaings" Association="SelfManagementModel.FK_CampaingMetricLevels_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetricLevels_Metrics" Association="SelfManagementModel.FK_CampaingMetricLevels_Metrics">
+            <End Role="Metrics" EntitySet="Metrics" />
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetrics_CampaingMetricLevels" Association="SelfManagementModel.FK_CampaingMetrics_CampaingMetricLevels">
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+            <End Role="CampaingMetrics" EntitySet="CampaingMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMetrics_CampaingMetricLevels" Association="SelfManagementModel.FK_UserMetrics_CampaingMetricLevels">
+            <End Role="CampaingMetricLevels" EntitySet="CampaingMetricLevels" />
+            <End Role="UserMetrics" EntitySet="UserMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetrics_Campaings" Association="SelfManagementModel.FK_CampaingMetrics_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="CampaingMetrics" EntitySet="CampaingMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingMetrics_Metrics" Association="SelfManagementModel.FK_CampaingMetrics_Metrics">
+            <End Role="Metrics" EntitySet="Metrics" />
+            <End Role="CampaingMetrics" EntitySet="CampaingMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Campaings_Customers" Association="SelfManagementModel.FK_Campaings_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Campaings" EntitySet="Campaings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CampaingUsers_Campaings" Association="SelfManagementModel.FK_CampaingUsers_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="CampaingUsers" EntitySet="CampaingUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMetrics_Campaings" Association="SelfManagementModel.FK_UserMetrics_Campaings">
+            <End Role="Campaings" EntitySet="Campaings" />
+            <End Role="UserMetrics" EntitySet="UserMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="aspnet_UsersInRoles" Association="SelfManagementModel.aspnet_UsersInRoles">
+            <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="aspnet_Profile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="PropertyNames" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="PropertyValuesString" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="PropertyValuesBinary" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="LastUpdatedDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="aspnet_Users" Relationship="SelfManagementModel.FK__aspnet_Pr__UserI__6754599E" FromRole="aspnet_Profile" ToRole="aspnet_Users" />
+        </EntityType>
+        <EntityType Name="aspnet_Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Guid" Nullable="false" />
+          <Property Name="RoleId" Type="Guid" Nullable="false" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="LoweredRoleName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="aspnet_Users" Relationship="SelfManagementModel.aspnet_UsersInRoles" FromRole="aspnet_Roles" ToRole="aspnet_Users" />
+        </EntityType>
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="InnerUserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="LoweredUserName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="MobileAlias" Type="String" MaxLength="16" Unicode="true" FixedLength="false" />
+          <Property Name="IsAnonymous" Type="Boolean" Nullable="false" />
+          <Property Name="LastActivityDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="aspnet_Profile" Relationship="SelfManagementModel.FK__aspnet_Pr__UserI__6754599E" FromRole="aspnet_Users" ToRole="aspnet_Profile" />
+          <NavigationProperty Name="aspnet_Roles" Relationship="SelfManagementModel.aspnet_UsersInRoles" FromRole="aspnet_Users" ToRole="aspnet_Roles" />
+        </EntityType>
+        <EntityType Name="CampaingMetricLevel">
+          <Key>
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="MetricId" />
+          </Key>
+          <Property Name="CampaingId" Type="Int32" Nullable="false" />
+          <Property Name="MetricId" Type="Int32" Nullable="false" />
+          <Property Name="OptimalLevel" Type="Double" Nullable="false" />
+          <Property Name="ObjectiveLevel" Type="Double" Nullable="false" />
+          <Property Name="MinimumLevel" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Campaing" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Campaings" FromRole="CampaingMetricLevels" ToRole="Campaings" />
+          <NavigationProperty Name="Metric" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Metrics" FromRole="CampaingMetricLevels" ToRole="Metrics" />
+          <NavigationProperty Name="CampaingMetrics" Relationship="SelfManagementModel.FK_CampaingMetrics_CampaingMetricLevels" FromRole="CampaingMetricLevels" ToRole="CampaingMetrics" />
+          <NavigationProperty Name="UserMetrics" Relationship="SelfManagementModel.FK_UserMetrics_CampaingMetricLevels" FromRole="CampaingMetricLevels" ToRole="UserMetrics" />
+        </EntityType>
+        <EntityType Name="CampaingMetric">
+          <Key>
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="MetricId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="CampaingId" Type="Int32" Nullable="false" />
+          <Property Name="MetricId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <NavigationProperty Name="CampaingMetricLevel" Relationship="SelfManagementModel.FK_CampaingMetrics_CampaingMetricLevels" FromRole="CampaingMetrics" ToRole="CampaingMetricLevels" />
+          <NavigationProperty Name="Campaing" Relationship="SelfManagementModel.FK_CampaingMetrics_Campaings" FromRole="CampaingMetrics" ToRole="Campaings" />
+          <NavigationProperty Name="Metric" Relationship="SelfManagementModel.FK_CampaingMetrics_Metrics" FromRole="CampaingMetrics" ToRole="Metrics" />
+        </EntityType>
+        <EntityType Name="Campaing">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="SupervisorId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="750" Unicode="true" FixedLength="false" />
+          <Property Name="BeginDate" Type="DateTime" Nullable="false" />
+          <Property Name="EndDate" Type="DateTime" Nullable="true" />
+          <Property Name="CampaingType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CampaingMetricLevels" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Campaings" FromRole="Campaings" ToRole="CampaingMetricLevels" />
+          <NavigationProperty Name="CampaingMetrics" Relationship="SelfManagementModel.FK_CampaingMetrics_Campaings" FromRole="Campaings" ToRole="CampaingMetrics" />
+          <NavigationProperty Name="Customer" Relationship="SelfManagementModel.FK_Campaings_Customers" FromRole="Campaings" ToRole="Customers" />
+          <NavigationProperty Name="CampaingUsers" Relationship="SelfManagementModel.FK_CampaingUsers_Campaings" FromRole="Campaings" ToRole="CampaingUsers" />
+          <NavigationProperty Name="UserMetrics" Relationship="SelfManagementModel.FK_UserMetrics_Campaings" FromRole="Campaings" ToRole="UserMetrics" />
+        </EntityType>
+        <EntityType Name="CampaingUser">
+          <Key>
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="BeginDate" />
+          </Key>
+          <Property Name="CampaingId" Type="Int32" Nullable="false" />
+          <Property Name="InnerUserId" Type="Int32" Nullable="false" />
+          <Property Name="BeginDate" Type="DateTime" Nullable="false" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Campaing" Relationship="SelfManagementModel.FK_CampaingUsers_Campaings" FromRole="CampaingUsers" ToRole="Campaings" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Campaings" Relationship="SelfManagementModel.FK_Campaings_Customers" FromRole="Customers" ToRole="Campaings" />
+        </EntityType>
+        <EntityType Name="Metric">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MetricName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ShortDescription" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="LondDescription" Type="String" MaxLength="600" Unicode="true" FixedLength="false" />
+          <Property Name="Format" Type="Int32" Nullable="false" />
+          <Property Name="CLRType" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="CampaingMetricLevels" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Metrics" FromRole="Metrics" ToRole="CampaingMetricLevels" />
+          <NavigationProperty Name="CampaingMetrics" Relationship="SelfManagementModel.FK_CampaingMetrics_Metrics" FromRole="Metrics" ToRole="CampaingMetrics" />
+        </EntityType>
+        <EntityType Name="ProcessedFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileSystemPath" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="DateProcessed" Type="DateTime" Nullable="false" />
+          <Property Name="DateLastModified" Type="DateTime" Nullable="false" />
+          <Property Name="Log" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="HasErrors" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserMetric">
+          <Key>
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="CampaingId" />
+            <PropertyRef Name="MetricId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="InnerUserId" Type="Int32" Nullable="false" />
+          <Property Name="CampaingId" Type="Int32" Nullable="false" />
+          <Property Name="MetricId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <NavigationProperty Name="CampaingMetricLevel" Relationship="SelfManagementModel.FK_UserMetrics_CampaingMetricLevels" FromRole="UserMetrics" ToRole="CampaingMetricLevels" />
+          <NavigationProperty Name="Campaing" Relationship="SelfManagementModel.FK_UserMetrics_Campaings" FromRole="UserMetrics" ToRole="Campaings" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="UserName" />
+            <PropertyRef Name="Role" />
+          </Key>
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="InnerUserId" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="DNI" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="LastName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="GrossSalary" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Workday" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Status" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Role" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK__aspnet_Pr__UserI__6754599E">
+          <End Role="aspnet_Users" Type="SelfManagementModel.aspnet_Users" Multiplicity="1" />
+          <End Role="aspnet_Profile" Type="SelfManagementModel.aspnet_Profile" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="aspnet_Profile">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetricLevels_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Campaing" Multiplicity="1" />
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.CampaingMetricLevel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetricLevels">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetricLevels_Metrics">
+          <End Role="Metrics" Type="SelfManagementModel.Metric" Multiplicity="1" />
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.CampaingMetricLevel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Metrics">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetricLevels">
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetrics_CampaingMetricLevels">
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.CampaingMetricLevel" Multiplicity="1" />
+          <End Role="CampaingMetrics" Type="SelfManagementModel.CampaingMetric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CampaingMetricLevels">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Principal>
+            <Dependent Role="CampaingMetrics">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMetrics_CampaingMetricLevels">
+          <End Role="CampaingMetricLevels" Type="SelfManagementModel.CampaingMetricLevel" Multiplicity="1" />
+          <End Role="UserMetrics" Type="SelfManagementModel.UserMetric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CampaingMetricLevels">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Principal>
+            <Dependent Role="UserMetrics">
+              <PropertyRef Name="CampaingId" />
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetrics_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Campaing" Multiplicity="1" />
+          <End Role="CampaingMetrics" Type="SelfManagementModel.CampaingMetric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetrics">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingMetrics_Metrics">
+          <End Role="Metrics" Type="SelfManagementModel.Metric" Multiplicity="1" />
+          <End Role="CampaingMetrics" Type="SelfManagementModel.CampaingMetric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Metrics">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingMetrics">
+              <PropertyRef Name="MetricId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Campaings_Customers">
+          <End Role="Customers" Type="SelfManagementModel.Customer" Multiplicity="1" />
+          <End Role="Campaings" Type="SelfManagementModel.Campaing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Campaings">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CampaingUsers_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Campaing" Multiplicity="1" />
+          <End Role="CampaingUsers" Type="SelfManagementModel.CampaingUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CampaingUsers">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMetrics_Campaings">
+          <End Role="Campaings" Type="SelfManagementModel.Campaing" Multiplicity="1" />
+          <End Role="UserMetrics" Type="SelfManagementModel.UserMetric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMetrics">
+              <PropertyRef Name="CampaingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="aspnet_UsersInRoles">
+          <End Role="aspnet_Roles" Type="SelfManagementModel.aspnet_Roles" Multiplicity="*" />
+          <End Role="aspnet_Users" Type="SelfManagementModel.aspnet_Users" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SelfManagementModelStoreContainer" CdmEntityContainer="SelfManagementEntities">
+          <EntitySetMapping Name="aspnet_Profile"><EntityTypeMapping TypeName="SelfManagementModel.aspnet_Profile"><MappingFragment StoreEntitySet="aspnet_Profile">
+            <ScalarProperty Name="UserId" ColumnName="UserId" />
+            <ScalarProperty Name="PropertyNames" ColumnName="PropertyNames" />
+            <ScalarProperty Name="PropertyValuesString" ColumnName="PropertyValuesString" />
+            <ScalarProperty Name="PropertyValuesBinary" ColumnName="PropertyValuesBinary" />
+            <ScalarProperty Name="LastUpdatedDate" ColumnName="LastUpdatedDate" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="aspnet_Roles"><EntityTypeMapping TypeName="SelfManagementModel.aspnet_Roles"><MappingFragment StoreEntitySet="aspnet_Roles">
+            <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+            <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+            <ScalarProperty Name="LoweredRoleName" ColumnName="LoweredRoleName" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="aspnet_Users"><EntityTypeMapping TypeName="SelfManagementModel.aspnet_Users"><MappingFragment StoreEntitySet="aspnet_Users">
+            <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+            <ScalarProperty Name="UserId" ColumnName="UserId" />
+            <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
+            <ScalarProperty Name="UserName" ColumnName="UserName" />
+            <ScalarProperty Name="LoweredUserName" ColumnName="LoweredUserName" />
+            <ScalarProperty Name="MobileAlias" ColumnName="MobileAlias" />
+            <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+            <ScalarProperty Name="LastActivityDate" ColumnName="LastActivityDate" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="CampaingMetricLevels"><EntityTypeMapping TypeName="SelfManagementModel.CampaingMetricLevel"><MappingFragment StoreEntitySet="CampaingMetricLevels">
+            <ScalarProperty Name="CampaingId" ColumnName="CampaingId" />
+            <ScalarProperty Name="MetricId" ColumnName="MetricId" />
+            <ScalarProperty Name="OptimalLevel" ColumnName="OptimalLevel" />
+            <ScalarProperty Name="ObjectiveLevel" ColumnName="ObjectiveLevel" />
+            <ScalarProperty Name="MinimumLevel" ColumnName="MinimumLevel" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="CampaingMetrics"><EntityTypeMapping TypeName="SelfManagementModel.CampaingMetric"><MappingFragment StoreEntitySet="CampaingMetrics">
+            <ScalarProperty Name="CampaingId" ColumnName="CampaingId" />
+            <ScalarProperty Name="MetricId" ColumnName="MetricId" />
+            <ScalarProperty Name="Date" ColumnName="Date" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Campaings"><EntityTypeMapping TypeName="SelfManagementModel.Campaing"><MappingFragment StoreEntitySet="Campaings">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+            <ScalarProperty Name="SupervisorId" ColumnName="SupervisorId" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+            <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+            <ScalarProperty Name="CampaingType" ColumnName="CampaingType" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="CampaingUsers"><EntityTypeMapping TypeName="SelfManagementModel.CampaingUser"><MappingFragment StoreEntitySet="CampaingUsers">
+            <ScalarProperty Name="CampaingId" ColumnName="CampaingId" />
+            <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
+            <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+            <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Customers"><EntityTypeMapping TypeName="SelfManagementModel.Customer"><MappingFragment StoreEntitySet="Customers">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Metrics"><EntityTypeMapping TypeName="SelfManagementModel.Metric"><MappingFragment StoreEntitySet="Metrics">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="MetricName" ColumnName="MetricName" />
+            <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+            <ScalarProperty Name="LondDescription" ColumnName="LondDescription" />
+            <ScalarProperty Name="Format" ColumnName="Format" />
+            <ScalarProperty Name="CLRType" ColumnName="CLRType" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProcessedFiles"><EntityTypeMapping TypeName="SelfManagementModel.ProcessedFile"><MappingFragment StoreEntitySet="ProcessedFiles">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="FileSystemPath" ColumnName="FileSystemPath" />
+            <ScalarProperty Name="DateProcessed" ColumnName="DateProcessed" />
+            <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
+            <ScalarProperty Name="Log" ColumnName="Log" />
+            <ScalarProperty Name="HasErrors" ColumnName="HasErrors" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="UserMetrics"><EntityTypeMapping TypeName="SelfManagementModel.UserMetric"><MappingFragment StoreEntitySet="UserMetrics">
+            <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
+            <ScalarProperty Name="CampaingId" ColumnName="CampaingId" />
+            <ScalarProperty Name="MetricId" ColumnName="MetricId" />
+            <ScalarProperty Name="Date" ColumnName="Date" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="UserProfiles"><EntityTypeMapping TypeName="SelfManagementModel.UserProfile"><MappingFragment StoreEntitySet="UserProfiles">
+            <ScalarProperty Name="UserId" ColumnName="UserId" />
+            <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
+            <ScalarProperty Name="UserName" ColumnName="UserName" />
+            <ScalarProperty Name="DNI" ColumnName="DNI" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="LastName" ColumnName="LastName" />
+            <ScalarProperty Name="GrossSalary" ColumnName="GrossSalary" />
+            <ScalarProperty Name="Workday" ColumnName="Workday" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="Role" ColumnName="Role" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <AssociationSetMapping Name="aspnet_UsersInRoles" TypeName="SelfManagementModel.aspnet_UsersInRoles" StoreEntitySet="aspnet_UsersInRoles">
+            <EndProperty Name="aspnet_Roles">
+              <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="aspnet_Users">
+              <ScalarProperty Name="UserId" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="SelfManagementModel">
+        <EntityTypeShape EntityType="SelfManagementModel.aspnet_Profile" Width="1.5" PointX="12.25" PointY="9" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.aspnet_Roles" Width="1.5" PointX="7.75" PointY="9" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.aspnet_Users" Width="1.5" PointX="10" PointY="8.625" Height="2.9417936197916656" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.CampaingMetricLevel" Width="1.5" PointX="5.25" PointY="4.625" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.CampaingMetric" Width="1.5" PointX="7.5" PointY="4.875" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Campaing" Width="1.5" PointX="3" PointY="4.25" Height="3.5186979166666674" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.CampaingUser" Width="1.5" PointX="5.25" PointY="8.5" Height="1.9802864583333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Customer" Width="1.5" PointX="0.75" PointY="5.25" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Metric" Width="1.5" PointX="3" PointY="0.75" Height="2.5571907552083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.ProcessedFile" Width="1.5" PointX="5.75" PointY="1.5" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.UserMetric" Width="1.5" PointX="10.5" PointY="4.875" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.UserProfile" Width="1.5" PointX="0.75" PointY="9.5" Height="2.9417936197916674" IsExpanded="true" />
+        <AssociationConnector Association="SelfManagementModel.FK__aspnet_Pr__UserI__6754599E" ManuallyRouted="false">
+          <ConnectorPoint PointX="11.5" PointY="10.0862939453125" />
+          <ConnectorPoint PointX="12.25" PointY="10.0862939453125" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_CampaingMetricLevels_Campaings" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="5.99974609375" />
+          <ConnectorPoint PointX="5.25" PointY="5.99974609375" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_CampaingMetricLevels_Metrics" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="1.09375" />
+          <ConnectorPoint PointX="5.46875" PointY="1.09375" />
+          <ConnectorPoint PointX="5.46875" PointY="4.625" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_CampaingMetrics_CampaingMetricLevels" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="6.0574446614583337" />
+          <ConnectorPoint PointX="7.5" PointY="6.0574446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_UserMetrics_CampaingMetricLevels" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="7.3744921875" />
+          <ConnectorPoint PointX="7.125" PointY="7.7494921875" />
+          <ConnectorPoint PointX="7.125" PointY="7.6148893229166674" />
+          <ConnectorPoint PointX="10.125" PointY="7.6148893229166674" />
+          <ConnectorPoint PointX="10.5" PointY="7.2398893229166674" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_CampaingMetrics_Campaings" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="7.5259407552083335" />
+          <ConnectorPoint PointX="6.8181152343750009" PointY="7.5259407552083326" />
+          <ConnectorPoint PointX="6.984781901041667" PointY="7.5259407552083335" />
+          <ConnectorPoint PointX="8.25" PointY="7.5259407552083335" />
+          <ConnectorPoint PointX="8.25" PointY="7.2398893229166674" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_CampaingMetrics_Metrics" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="1.2968775000000008" />
+          <ConnectorPoint PointX="5.385416666666667" PointY="1.2968775000000001" />
+          <ConnectorPoint PointX="5.552083333333333" PointY="1.2968775000000008" />
+          <ConnectorPoint PointX="8.25" PointY="1.2968775000000008" />
+          <ConnectorPoint PointX="8.25" PointY="4.875" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_Campaings_Customers" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.047841796875" />
+          <ConnectorPoint PointX="3" PointY="6.047841796875" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_CampaingUsers_Campaings" ManuallyRouted="false">
+          <ConnectorPoint PointX="3.75" PointY="7.7686979166666674" />
+          <ConnectorPoint PointX="3.75" PointY="9.4901432291666659" />
+          <ConnectorPoint PointX="5.25" PointY="9.4901432291666659" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.FK_UserMetrics_Campaings" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="7.6917936197916674" />
+          <ConnectorPoint PointX="11.2812525" PointY="7.6917936197916674" />
+          <ConnectorPoint PointX="11.2812525" PointY="7.2398893229166674" />
+        </AssociationConnector>
+        <AssociationConnector Association="SelfManagementModel.aspnet_UsersInRoles" ManuallyRouted="false">
+          <ConnectorPoint PointX="9.25" PointY="10.0862939453125" />
+          <ConnectorPoint PointX="10" PointY="10.0862939453125" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
