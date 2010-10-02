@@ -1,4 +1,4 @@
-﻿namespace CallCenter.SelfManagement.Metric
+﻿namespace CallCenter.SelfManagement.Metric.Interfaces
 {
     public interface ICampaingMetric
     {
