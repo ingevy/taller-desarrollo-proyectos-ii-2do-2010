@@ -9,7 +9,7 @@
     public class InteractionToCallPercentMetric : IMetric
     {
         private IDictionary<int, double> calculatedValues = new Dictionary<int, double>();
-        private string valueType = "Percent";
+        private ExternalSystemFiles externalFileNeeded = ExternalSystemFiles.SUMMARY;
         private DateTime metricDate;
 
         public InteractionToCallPercentMetric(DateTime metricDate)
@@ -22,11 +22,6 @@
             get { return this.calculatedValues; }
         }
 
-        public string ValueType
-        {
-            get { return this.valueType; }
-        }
-
         public DateTime MetricDate
         {
             get { return this.metricDate; }
@@ -35,11 +30,11 @@
         public void ProcessFiles(IList<IDataFile> dataFiles)
         {
             var metricFiles = (from f in dataFiles
-                               where f.ExternalSystemName == "Summary"
+                               where f.ExternalSystemFile == this.externalFileNeeded
                                select f).ToList<IDataFile>();
 
             if (metricFiles.Count != 1)
-            { 
+            {
                 throw new System.ArgumentException("Couldn't find necessary file to process metric"); 
             }
 
@@ -53,9 +48,9 @@
             foreach (var line in dataLines)
             {
                 //var lineDate = Convert.ToDateTime(line[1],new CultureInfo("es-AR"));
-                var agentId = Convert.ToInt32(line[0]);
-                var cantLlamadas = Convert.ToInt32(line[2]);
-                var cantTransferidas = Convert.ToInt32(line[5]);
+                var agentId = Convert.ToInt32(line["Legajo"]);
+                var cantLlamadas = Convert.ToInt32(line["Cantidad Llamadas"]);
+                var cantTransferidas = Convert.ToInt32(line["Cantidad Llamadas Transferidas"]);
                 var metricValue = (cantLlamadas - cantTransferidas) / cantLlamadas;
 
                 this.calculatedValues.Add(agentId, metricValue);
