@@ -1,13 +1,13 @@
-﻿namespace Callcenter.SelfManagement.Metric.Interfaces
+﻿namespace CallCenter.SelfManagement.Metric.Interfaces
 {
     using System;
 
     public interface IDataFile
     {
-        string GetExternalSystemName();
+        string ExternalSystemName { get; set; }
 
-        DateTime GetFileDate();
+        DateTime FileDate { get; set; }
 
-        string GetFilePath();
+        string FilePath { get; set; }
     }
 }
