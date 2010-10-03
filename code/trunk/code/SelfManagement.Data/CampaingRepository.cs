@@ -78,12 +78,37 @@
 
         public IList<Supervisor> RetrieveCampaingSupervisors(int campaingId)
         {
-            throw new NotImplementedException();
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors
+                    .Where(s => ctx.CampaingUsers.Any(cu => (cu.InnerUserId == s.InnerUserId) && (cu.CampaingId == campaingId)))
+                    .ToList();
+            }
+        }
+
+        public IList<Agent> RetrieveCampaingAgents(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Agents
+                    .Where(a => ctx.CampaingUsers.Any(cu => (cu.InnerUserId == a.InnerUserId) && (cu.CampaingId == campaingId)))
+                    .ToList();
+            }
         }
 
         public IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId)
         {
-            throw new NotImplementedException();
+            using (var ctx = new SelfManagementEntities())
+            {
+                if (!ctx.Supervisors.Any(s => s.InnerUserId == supervisorId))
+                {
+                    throw new ArgumentException("Solo se pueden agentes asignados a un Supervisor.", "supervisorId");
+                }
+
+                return ctx.Agents
+                    .Where(a => ctx.SupervisorAgents.Any(sa => (sa.AgentId == a.InnerUserId) && (sa.SupervisorId == supervisorId)))
+                    .ToList();
+            }
         }
 
         public int RetrieveOrCreateCustomerIdByName(string customerName)
@@ -120,13 +145,13 @@
         {
             if (campaingMetricLevels.Where(cml => cml.Enabled).Count() != 3)
             {
-                throw new ArgumentException("Por cada campaña se requieren tres métricas obligatoriamente.");
+                throw new ArgumentException("Por cada campaña se requieren tres métricas obligatoriamente.", "campaingMetricLevels");
             }
 
             var campaingId = campaingMetricLevels.FirstOrDefault().CampaingId;
             if (!campaingMetricLevels.All(cml => cml.CampaingId == campaingId))
             {
-                throw new ArgumentException("Todas las metricas deben pertenecer a una misma campaña.");
+                throw new ArgumentException("Todas las metricas deben pertenecer a una misma campaña.", "campaingMetricLevels");
             }
 
             using (var ctx = new SelfManagementEntities())
@@ -166,7 +191,35 @@
 
         public void SaveCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors)
         {
-            throw new NotImplementedException();
+            var campaingId = campaingSupervisors.FirstOrDefault().CampaingId;
+            if (!campaingSupervisors.All(cu => cu.CampaingId == campaingId))
+            {
+                throw new ArgumentException("Todas los supervisores deben pertenecer a una misma campaña.", "campaingSupervisors");
+            }
+
+            using (var ctx = new SelfManagementEntities())
+            {
+                var supervisorIds = campaingSupervisors.Select(cu => cu.InnerUserId).ToList();
+
+                if (!supervisorIds.All(supervisorId => ctx.Supervisors.Any(s => s.InnerUserId == supervisorId)))
+                {
+                    throw new ArgumentException("Solo se pueden asignar usarios que tengan rol de Supervisor.", "campaingSupervisors");
+                }
+                
+                foreach (var supervisor in campaingSupervisors)
+                {
+                    ctx.CampaingUsers.AddObject(supervisor);
+                }
+
+                foreach (var agent in ctx.Agents.Where(a => a.SupervisorId.HasValue && supervisorIds.Contains(a.SupervisorId.Value)))
+                {
+                    var supervisor = campaingSupervisors.FirstOrDefault(cu => cu.InnerUserId == agent.SupervisorId);
+
+                    ctx.CampaingUsers.AddObject(new CampaingUser { CampaingId = campaingId, InnerUserId = agent.InnerUserId, BeginDate = supervisor.BeginDate, EndDate = supervisor.EndDate });
+                }
+
+                ctx.SaveChanges();
+            }
         }
     }
 }

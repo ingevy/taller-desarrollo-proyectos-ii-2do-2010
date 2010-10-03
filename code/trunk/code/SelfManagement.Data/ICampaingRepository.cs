@@ -17,6 +17,8 @@
 
         IList<Supervisor> RetrieveCampaingSupervisors(int campaingId);
 
+        IList<Agent> RetrieveCampaingAgents(int campaingId);
+
         IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId);
 
         int RetrieveOrCreateCustomerIdByName(string customerName);
