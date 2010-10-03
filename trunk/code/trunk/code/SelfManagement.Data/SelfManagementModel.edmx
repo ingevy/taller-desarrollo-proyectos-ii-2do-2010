@@ -107,6 +107,7 @@
           <Property Name="OptimalLevel" Type="float" Nullable="false" />
           <Property Name="ObjectiveLevel" Type="float" Nullable="false" />
           <Property Name="MinimumLevel" Type="float" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CampaingMetrics">
           <Key>
@@ -158,6 +159,7 @@
           <Property Name="ShortDescription" Type="nvarchar" MaxLength="250" />
           <Property Name="LondDescription" Type="nvarchar" MaxLength="600" />
           <Property Name="Format" Type="int" Nullable="false" />
+          <Property Name="IsHighestToLowest" Type="bit" Nullable="false" />
           <Property Name="CLRType" Type="nvarchar" Nullable="false" MaxLength="500" />
         </EntityType>
         <EntityType Name="ProcessedFiles">
@@ -354,79 +356,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="aspnet_Membership_ChangePasswordQuestionAndAnswer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
-          <Parameter Name="NewPasswordQuestion" Type="nvarchar" Mode="In" />
-          <Parameter Name="NewPasswordAnswer" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="aspnet_Membership_CreateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
-          <Parameter Name="Password" Type="nvarchar" Mode="In" />
-          <Parameter Name="PasswordSalt" Type="nvarchar" Mode="In" />
-          <Parameter Name="Email" Type="nvarchar" Mode="In" />
-          <Parameter Name="PasswordQuestion" Type="nvarchar" Mode="In" />
-          <Parameter Name="PasswordAnswer" Type="nvarchar" Mode="In" />
-          <Parameter Name="IsApproved" Type="bit" Mode="In" />
-          <Parameter Name="CurrentTimeUtc" Type="datetime" Mode="In" />
-          <Parameter Name="CreateDate" Type="datetime" Mode="In" />
-          <Parameter Name="UniqueEmail" Type="int" Mode="In" />
-          <Parameter Name="PasswordFormat" Type="int" Mode="In" />
-          <Parameter Name="UserId" Type="uniqueidentifier" Mode="InOut" />
-        </Function>
-        <Function Name="aspnet_Membership_FindUsersByEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="EmailToMatch" Type="nvarchar" Mode="In" />
-          <Parameter Name="PageIndex" Type="int" Mode="In" />
-          <Parameter Name="PageSize" Type="int" Mode="In" />
-        </Function>
-        <Function Name="aspnet_Membership_FindUsersByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="UserNameToMatch" Type="nvarchar" Mode="In" />
-          <Parameter Name="PageIndex" Type="int" Mode="In" />
-          <Parameter Name="PageSize" Type="int" Mode="In" />
-        </Function>
-        <Function Name="aspnet_Membership_GetAllUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="PageIndex" Type="int" Mode="In" />
-          <Parameter Name="PageSize" Type="int" Mode="In" />
-        </Function>
-        <Function Name="aspnet_Membership_ResetPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
-          <Parameter Name="NewPassword" Type="nvarchar" Mode="In" />
-          <Parameter Name="MaxInvalidPasswordAttempts" Type="int" Mode="In" />
-          <Parameter Name="PasswordAttemptWindow" Type="int" Mode="In" />
-          <Parameter Name="PasswordSalt" Type="nvarchar" Mode="In" />
-          <Parameter Name="CurrentTimeUtc" Type="datetime" Mode="In" />
-          <Parameter Name="PasswordFormat" Type="int" Mode="In" />
-          <Parameter Name="PasswordAnswer" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="aspnet_Membership_SetPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
-          <Parameter Name="NewPassword" Type="nvarchar" Mode="In" />
-          <Parameter Name="PasswordSalt" Type="nvarchar" Mode="In" />
-          <Parameter Name="CurrentTimeUtc" Type="datetime" Mode="In" />
-          <Parameter Name="PasswordFormat" Type="int" Mode="In" />
-        </Function>
-        <Function Name="aspnet_Roles_GetAllRoles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="aspnet_Users_CreateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationId" Type="uniqueidentifier" Mode="In" />
-          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
-          <Parameter Name="IsUserAnonymous" Type="bit" Mode="In" />
-          <Parameter Name="LastActivityDate" Type="datetime" Mode="In" />
-          <Parameter Name="UserId" Type="uniqueidentifier" Mode="InOut" />
-        </Function>
-        <Function Name="aspnet_Users_DeleteUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ApplicationName" Type="nvarchar" Mode="In" />
-          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
-          <Parameter Name="TablesToDeleteFrom" Type="int" Mode="In" />
-          <Parameter Name="NumTablesDeletedFrom" Type="int" Mode="InOut" />
-        </Function>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
@@ -509,6 +438,7 @@
           <Property Name="OptimalLevel" Type="Double" Nullable="false" />
           <Property Name="ObjectiveLevel" Type="Double" Nullable="false" />
           <Property Name="MinimumLevel" Type="Double" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Campaing" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Campaings" FromRole="CampaingMetricLevels" ToRole="Campaings" />
           <NavigationProperty Name="Metric" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Metrics" FromRole="CampaingMetricLevels" ToRole="Metrics" />
           <NavigationProperty Name="CampaingMetrics" Relationship="SelfManagementModel.FK_CampaingMetrics_CampaingMetricLevels" FromRole="CampaingMetricLevels" ToRole="CampaingMetrics" />
@@ -574,6 +504,7 @@
           <Property Name="ShortDescription" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
           <Property Name="LondDescription" Type="String" MaxLength="600" Unicode="true" FixedLength="false" />
           <Property Name="Format" Type="Int32" Nullable="false" />
+          <Property Name="IsHighestToLowest" Type="Boolean" Nullable="false" />
           <Property Name="CLRType" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="CampaingMetricLevels" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Metrics" FromRole="Metrics" ToRole="CampaingMetricLevels" />
           <NavigationProperty Name="CampaingMetrics" Relationship="SelfManagementModel.FK_CampaingMetrics_Metrics" FromRole="Metrics" ToRole="CampaingMetrics" />
@@ -792,6 +723,7 @@
             <ScalarProperty Name="OptimalLevel" ColumnName="OptimalLevel" />
             <ScalarProperty Name="ObjectiveLevel" ColumnName="ObjectiveLevel" />
             <ScalarProperty Name="MinimumLevel" ColumnName="MinimumLevel" />
+            <ScalarProperty Name="Enabled" ColumnName="Enabled" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="CampaingMetrics"><EntityTypeMapping TypeName="SelfManagementModel.CampaingMetric"><MappingFragment StoreEntitySet="CampaingMetrics">
             <ScalarProperty Name="CampaingId" ColumnName="CampaingId" />
@@ -824,6 +756,7 @@
             <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
             <ScalarProperty Name="LondDescription" ColumnName="LondDescription" />
             <ScalarProperty Name="Format" ColumnName="Format" />
+            <ScalarProperty Name="IsHighestToLowest" ColumnName="IsHighestToLowest" />
             <ScalarProperty Name="CLRType" ColumnName="CLRType" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ProcessedFiles"><EntityTypeMapping TypeName="SelfManagementModel.ProcessedFile"><MappingFragment StoreEntitySet="ProcessedFiles">
@@ -889,47 +822,45 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="SelfManagementModel">
-        <EntityTypeShape EntityType="SelfManagementModel.aspnet_Users" Width="1.5" PointX="5.75" PointY="1.375" Height="2.5571907552083335" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.CampaingMetricLevel" Width="1.5" PointX="5.25" PointY="4.75" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.aspnet_Users" Width="1.5" PointX="7.75" PointY="1.5" Height="2.5571907552083335" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.CampaingMetricLevel" Width="1.5" PointX="5.25" PointY="4.75" Height="2.9417936197916674" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.CampaingMetric" Width="1.5" PointX="7.5" PointY="5" Height="2.3648893229166656" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.Campaing" Width="1.5" PointX="3" PointY="4.5" Height="3.3263964843749996" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.CampaingUser" Width="1.5" PointX="5.25" PointY="8.625" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.CampaingUser" Width="1.5" PointX="5.25" PointY="8.875" Height="1.9802864583333317" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.Customer" Width="1.5" PointX="0.75" PointY="5.375" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.Metric" Width="1.5" PointX="3" PointY="0.75" Height="2.7494921874999996" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.ProcessedFile" Width="1.5" PointX="7.75" PointY="1.375" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.SupervisorAgent" Width="1.5" PointX="7.75" PointY="8.375" Height="1.4033821614583317" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.UserMetric" Width="1.5" PointX="10.5" PointY="4.875" Height="2.5571907552083353" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.Agent" Width="1.5" PointX="0.75" PointY="9.375" Height="2.9417936197916674" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.Supervisor" Width="1.5" PointX="9.75" PointY="8.375" Height="2.7494921875000031" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Metric" Width="1.5" PointX="3" PointY="0.75" Height="2.9417936197916674" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.ProcessedFile" Width="1.5" PointX="7.75" PointY="8.5" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.SupervisorAgent" Width="1.5" PointX="0.75" PointY="9.5" Height="1.4033821614583317" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.UserMetric" Width="1.5" PointX="10.5" PointY="5" Height="2.5571907552083353" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Agent" Width="1.5" PointX="9.75" PointY="8.5" Height="2.9417936197916674" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Supervisor" Width="1.5" PointX="0.75" PointY="12.5" Height="2.7494921875000031" IsExpanded="true" />
         <AssociationConnector Association="SelfManagementModel.FK_CampaingMetricLevels_Campaings" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="6.12474609375" />
-          <ConnectorPoint PointX="5.25" PointY="6.12474609375" />
+          <ConnectorPoint PointX="4.5" PointY="6.2208968098958337" />
+          <ConnectorPoint PointX="5.25" PointY="6.2208968098958337" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_CampaingMetricLevels_Metrics" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="1.03125" />
-          <ConnectorPoint PointX="5.46875" PointY="1.03125" />
-          <ConnectorPoint PointX="5.46875" PointY="4.75" />
+          <ConnectorPoint PointX="4.5" PointY="2.2208968098958337" />
+          <ConnectorPoint PointX="6" PointY="2.2208968098958337" />
+          <ConnectorPoint PointX="6" PointY="4.75" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_CampaingMetrics_CampaingMetricLevels" ManuallyRouted="false">
           <ConnectorPoint PointX="6.75" PointY="6.1824446614583328" />
           <ConnectorPoint PointX="7.5" PointY="6.1824446614583328" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_UserMetrics_CampaingMetricLevels" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="4.90625" />
-          <ConnectorPoint PointX="7.510416666666667" PointY="4.9062499999999991" />
-          <ConnectorPoint PointX="7.677083333333333" PointY="4.90625" />
-          <ConnectorPoint PointX="10.5" PointY="4.90625" />
+          <ConnectorPoint PointX="6.75" PointY="7.4922900390625005" />
+          <ConnectorPoint PointX="8.1666666666666661" PointY="7.4922900390625" />
+          <ConnectorPoint PointX="8.3333333333333339" PointY="7.4922900390625005" />
+          <ConnectorPoint PointX="10.5" PointY="7.4922900390625005" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_CampaingMetrics_Campaings" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="7.6941943359375" />
-          <ConnectorPoint PointX="8.25" PointY="7.6941943359375" />
+          <ConnectorPoint PointX="4.5" PointY="7.7903450520833335" />
+          <ConnectorPoint PointX="8.25" PointY="7.7903450520833335" />
           <ConnectorPoint PointX="8.25" PointY="7.3648893229166656" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_CampaingMetrics_Metrics" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="1.2031275000000008" />
-          <ConnectorPoint PointX="5.385416666666667" PointY="1.2031275000000001" />
-          <ConnectorPoint PointX="5.552083333333333" PointY="1.2031275000000008" />
-          <ConnectorPoint PointX="7.59375" PointY="1.2031275000000008" />
+          <ConnectorPoint PointX="4.5" PointY="1.09375" />
+          <ConnectorPoint PointX="7.59375" PointY="1.09375" />
           <ConnectorPoint PointX="7.59375" PointY="5" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_Campaings_Customers" ManuallyRouted="false">
@@ -938,18 +869,20 @@
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_CampaingUsers_Campaings" ManuallyRouted="false">
           <ConnectorPoint PointX="3.75" PointY="7.826396484375" />
-          <ConnectorPoint PointX="3.75" PointY="9.6151432291666659" />
-          <ConnectorPoint PointX="5.25" PointY="9.6151432291666659" />
+          <ConnectorPoint PointX="3.75" PointY="9.8651432291666659" />
+          <ConnectorPoint PointX="5.25" PointY="9.8651432291666659" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_UserMetrics_Campaings" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="7.79154791015625" />
-          <ConnectorPoint PointX="11.25" PointY="7.79154791015625" />
-          <ConnectorPoint PointX="11.25" PointY="7.4321907552083353" />
+          <ConnectorPoint PointX="4.5" PointY="7.8083707682291665" />
+          <ConnectorPoint PointX="11.25" PointY="7.8083707682291665" />
+          <ConnectorPoint PointX="11.25" PointY="7.5571907552083353" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_UserMetrics_Metrics" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="0.85937249999999921" />
-          <ConnectorPoint PointX="11.25" PointY="0.85937249999999921" />
-          <ConnectorPoint PointX="11.25" PointY="4.875" />
+          <ConnectorPoint PointX="4.5" PointY="1.2968775000000008" />
+          <ConnectorPoint PointX="7.510416666666667" PointY="1.2968775000000001" />
+          <ConnectorPoint PointX="7.677083333333333" PointY="1.2968775000000008" />
+          <ConnectorPoint PointX="11.25" PointY="1.2968775000000008" />
+          <ConnectorPoint PointX="11.25" PointY="5" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

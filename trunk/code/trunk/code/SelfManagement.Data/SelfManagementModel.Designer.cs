@@ -1504,7 +1504,8 @@ namespace CallCenter.SelfManagement.Data
         /// <param name="optimalLevel">Initial value of the OptimalLevel property.</param>
         /// <param name="objectiveLevel">Initial value of the ObjectiveLevel property.</param>
         /// <param name="minimumLevel">Initial value of the MinimumLevel property.</param>
-        public static CampaingMetricLevel CreateCampaingMetricLevel(global::System.Int32 campaingId, global::System.Int32 metricId, global::System.Double optimalLevel, global::System.Double objectiveLevel, global::System.Double minimumLevel)
+        /// <param name="enabled">Initial value of the Enabled property.</param>
+        public static CampaingMetricLevel CreateCampaingMetricLevel(global::System.Int32 campaingId, global::System.Int32 metricId, global::System.Double optimalLevel, global::System.Double objectiveLevel, global::System.Double minimumLevel, global::System.Boolean enabled)
         {
             CampaingMetricLevel campaingMetricLevel = new CampaingMetricLevel();
             campaingMetricLevel.CampaingId = campaingId;
@@ -1512,6 +1513,7 @@ namespace CallCenter.SelfManagement.Data
             campaingMetricLevel.OptimalLevel = optimalLevel;
             campaingMetricLevel.ObjectiveLevel = objectiveLevel;
             campaingMetricLevel.MinimumLevel = minimumLevel;
+            campaingMetricLevel.Enabled = enabled;
             return campaingMetricLevel;
         }
 
@@ -1643,6 +1645,30 @@ namespace CallCenter.SelfManagement.Data
         private global::System.Double _MinimumLevel;
         partial void OnMinimumLevelChanging(global::System.Double value);
         partial void OnMinimumLevelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enabled
+        {
+            get
+            {
+                return _Enabled;
+            }
+            set
+            {
+                OnEnabledChanging(value);
+                ReportPropertyChanging("Enabled");
+                _Enabled = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enabled");
+                OnEnabledChanged();
+            }
+        }
+        private global::System.Boolean _Enabled;
+        partial void OnEnabledChanging(global::System.Boolean value);
+        partial void OnEnabledChanged();
 
         #endregion
     
@@ -2073,13 +2099,15 @@ namespace CallCenter.SelfManagement.Data
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="metricName">Initial value of the MetricName property.</param>
         /// <param name="format">Initial value of the Format property.</param>
+        /// <param name="isHighestToLowest">Initial value of the IsHighestToLowest property.</param>
         /// <param name="cLRType">Initial value of the CLRType property.</param>
-        public static Metric CreateMetric(global::System.Int32 id, global::System.String metricName, global::System.Int32 format, global::System.String cLRType)
+        public static Metric CreateMetric(global::System.Int32 id, global::System.String metricName, global::System.Int32 format, global::System.Boolean isHighestToLowest, global::System.String cLRType)
         {
             Metric metric = new Metric();
             metric.Id = id;
             metric.MetricName = metricName;
             metric.Format = format;
+            metric.IsHighestToLowest = isHighestToLowest;
             metric.CLRType = cLRType;
             return metric;
         }
@@ -2209,6 +2237,30 @@ namespace CallCenter.SelfManagement.Data
         private global::System.Int32 _Format;
         partial void OnFormatChanging(global::System.Int32 value);
         partial void OnFormatChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsHighestToLowest
+        {
+            get
+            {
+                return _IsHighestToLowest;
+            }
+            set
+            {
+                OnIsHighestToLowestChanging(value);
+                ReportPropertyChanging("IsHighestToLowest");
+                _IsHighestToLowest = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsHighestToLowest");
+                OnIsHighestToLowestChanged();
+            }
+        }
+        private global::System.Boolean _IsHighestToLowest;
+        partial void OnIsHighestToLowestChanging(global::System.Boolean value);
+        partial void OnIsHighestToLowestChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
