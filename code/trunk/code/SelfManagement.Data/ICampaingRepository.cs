@@ -5,16 +5,20 @@
 
     public interface ICampaingRepository
     {
+        IList<Customer> RetrieveCustomersByName(string customerName);
+
         IList<Metric> RetrieveAvailableMetrics();
 
-        IList<Customer> SearchCustomer(string text);
+        IList<Supervisor> RetrieveAvailableSupervisors(DateTime beginDate, DateTime? endDate = null);
 
-        IList<UserProfile> RetrieveAvailableSupervisors(DateTime beginDate, DateTime? endDate = null);
+        Campaing RetrieveCampaingById(int campaingId);
 
-        Customer GetOrCreateCustomerByName(string customerName);
+        int RetrieveOrCreateCustomerIdByName(string customerName);
 
-        int SaveCampaing(Campaing campaing);
+        int CreateCampaing(Campaing campaing);
 
         void SaveCampaingMetrics(IEnumerable<CampaingMetricLevel> campaingMetricLevels);
+
+        void SaveCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors);
     }
 }

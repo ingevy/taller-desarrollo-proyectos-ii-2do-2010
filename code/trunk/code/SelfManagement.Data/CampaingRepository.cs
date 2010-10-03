@@ -17,92 +17,82 @@
             }
         }
 
-        public IList<Customer> SearchCustomer(string text)
+        public IList<Customer> RetrieveCustomersByName(string customerName)
         {
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.Customers
-                    .FullTextSearch(text)
+                    .FullTextSearch(customerName)
                     .ToList();
             }
         }
 
-        public IList<UserProfile> RetrieveAvailableSupervisors(DateTime beginDate, DateTime? endDate = null)
+        public IList<Supervisor> RetrieveAvailableSupervisors(DateTime beginDate, DateTime? endDate = null)
         {
             using (var ctx = new SelfManagementEntities())
             {
-                IQueryable<UserProfile> query;
+                IQueryable<Supervisor> query;
 
                 if (endDate.HasValue)
                 {
                     var finalDate = endDate.Value;
 
-                    query = from up in ctx.UserProfiles
-                            where (up.Role == "Supervisor") && ctx.CampaingUsers
-                                                                    .Where(cu => cu.InnerUserId == up.InnerUserId)
-                                                                    .All(cu => ((beginDate < cu.BeginDate) || (beginDate > cu.EndDate)) && ((finalDate < cu.BeginDate) || (finalDate > cu.EndDate)))
-                            select up;
+                    query = from s in ctx.Supervisors
+                            where ctx.CampaingUsers
+                                    .Where(cu => cu.InnerUserId == s.InnerUserId)
+                                    .All(cu => ((beginDate < cu.BeginDate) || (beginDate > cu.EndDate)) && ((finalDate < cu.BeginDate) || (finalDate > cu.EndDate)))
+                            select s;
                 }
                 else
                 {
-                    query = from up in ctx.UserProfiles
-                            where (up.Role == "Supervisor") && ctx.CampaingUsers
-                                                                    .Where(cu => cu.InnerUserId == up.InnerUserId)
-                                                                    .All(cu => beginDate > cu.EndDate)
-                            select up;
+                    query = from s in ctx.Supervisors
+                            where ctx.CampaingUsers
+                                    .Where(cu => cu.InnerUserId == s.InnerUserId)
+                                    .All(cu => beginDate > cu.EndDate)
+                            select s;
                 }
 
                 return query.ToList();
             }
         }
 
-        public Customer GetOrCreateCustomerByName(string customerName)
+        public Campaing RetrieveCampaingById(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Campaings
+                    .Where(c => c.Id == campaingId)
+                    .FirstOrDefault();
+            }
+        }
+
+        public int RetrieveOrCreateCustomerIdByName(string customerName)
         {
             using (var ctx = new SelfManagementEntities())
             {
                 var customer = ctx.Customers
-                    .FullTextSearch(customerName, true)
+                    .Where(c => c.Name == customerName)
                     .FirstOrDefault();
 
                 if (customer == null)
                 {
                     customer = new Customer { Name = customerName };
-                    ctx.AddToCustomers(customer);
+                    ctx.Customers.AddObject(customer);
                     ctx.SaveChanges();
-
-                    customer = ctx.Customers
-                        .FullTextSearch(customerName, true)
-                        .FirstOrDefault();
                 }
 
-                return customer;
+                return customer.Id;
             }
         }
 
-        public int SaveCampaing(Campaing campaing)
+        public int CreateCampaing(Campaing campaing)
         {
             using (var ctx = new SelfManagementEntities())
             {
-                ctx.AddToCampaings(campaing);
+                ctx.Campaings.AddObject(campaing);
                 ctx.SaveChanges();
 
-                var campaingId = ctx.Campaings
-                    .Where(c => (c.Name == campaing.Name) && (c.SupervisorId == campaing.SupervisorId) && (c.CampaingType == campaing.CampaingType))
-                    .Select(c => c.Id)
-                    .FirstOrDefault();
-
-                var campaingUser = new CampaingUser
-                {
-                    CampaingId = campaingId,
-                    InnerUserId = campaing.SupervisorId,
-                    BeginDate = campaing.BeginDate,
-                    EndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value : DateTime.MaxValue 
-                };
-
-                ctx.AddToCampaingUsers(campaingUser);
-                ctx.SaveChanges();
-
-                return campaingId;
+                return campaing.Id;
             }
         }
 
@@ -112,11 +102,16 @@
             {
                 foreach (var campaingMetricLevel in campaingMetricLevels)
                 {
-                    ctx.AddToCampaingMetricLevels(campaingMetricLevel);
+                    ctx.CampaingMetricLevels.AddObject(campaingMetricLevel);
                 }
 
                 ctx.SaveChanges();
             }
+        }
+
+        public void SaveCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -19,8 +19,8 @@
         [Range(0, 1, ErrorMessage = "El tipo de campaña es de entrada o salida.")]
         public int CampaingType { get; set; }
 
-        [Required(ErrorMessage = "Se requiere un supervisor.")]
-        public int SupervisorId { get; set; }
+        [Required(ErrorMessage = "Se requiere al menos un supervisor.")]
+        public IList<CampaingMetricLevelViewModel> CampaingSupervisors { get; set; }
 
         [Required(ErrorMessage = "La fecha de inicio es requerida.")]
         [CustomValidation(typeof(CampaingViewModel), "ValidateDate")]
@@ -31,12 +31,12 @@
 
         public string Description { get; set; }
 
-        public IList<SupervisorViewModel> Supervisors { get; set; }
-
-        public IList<MetricViewModel> Metrics { get; set; }
-
         [Required(ErrorMessage = "Se requiere definir tres metricas para la campaña.")]
         public IList<CampaingMetricLevelViewModel> CampaingMetrics { get; set; }
+
+        public IList<SupervisorViewModel> AvailableSupervisors { get; set; }
+
+        public IList<MetricViewModel> AvailableMetrics { get; set; }
 
         public static ValidationResult ValidateDate(string newDate, ValidationContext pValidationContext)
         {
