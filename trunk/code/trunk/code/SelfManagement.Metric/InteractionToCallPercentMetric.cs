@@ -47,7 +47,6 @@
 
             foreach (var line in dataLines)
             {
-                //var lineDate = Convert.ToDateTime(line[1],new CultureInfo("es-AR"));
                 var agentId = Convert.ToInt32(line["Legajo"]);
                 var cantLlamadas = Convert.ToInt32(line["Cantidad Llamadas"]);
                 var cantTransferidas = Convert.ToInt32(line["Cantidad Llamadas Transferidas"]);
