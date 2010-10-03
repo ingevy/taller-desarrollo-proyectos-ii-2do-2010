@@ -7,8 +7,6 @@
     {
         IDictionary<int, double> CalculatedValues { get; }
 
-        string ValueType { get; }
-
         DateTime MetricDate { get; }
 
         void ProcessFiles(IList<IDataFile> dataFiles);

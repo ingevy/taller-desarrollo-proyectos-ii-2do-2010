@@ -7,20 +7,20 @@
 
     class DataFile : IDataFile
     {
-        private string externalSystemName;
+        private ExternalSystemFiles externalSystemFile;
         private DateTime fileDate;
         private string filePath;
 
-        public DataFile(string externalSystemName, DateTime fileDate, string filePath)
+        public DataFile(ExternalSystemFiles externalSystemFile, DateTime fileDate, string filePath)
         {
-            this.externalSystemName = externalSystemName;
+            this.externalSystemFile = externalSystemFile;
             this.fileDate = fileDate;
             this.filePath = filePath;
         }
 
-        public string ExternalSystemName
+        public ExternalSystemFiles ExternalSystemFile
         {
-            get { return this.externalSystemName; }
+            get { return this.externalSystemFile; }
         }
 
         public System.DateTime FileDate
@@ -33,23 +33,38 @@
             get { return this.filePath; }
         }
 
-        public List<string[]> DataLines
+        public IList<Dictionary<string,string>> DataLines
         {
             get
             {
-                List<string[]> parsedData = new List<string[]>();
+                IList<Dictionary<string, string>> parsedData = new List<Dictionary<string,string>>();
 
                 try
                 {
                     using (StreamReader readFile = new StreamReader(this.FilePath))
                     {
                         string line;
+                        string[] columns = null;
                         string[] row;
+                        bool isFirstLine = true;
 
                         while ((line = readFile.ReadLine()) != null)
                         {
-                            row = line.Split(',');
-                            parsedData.Add(row);
+                            if (isFirstLine)
+                            {
+                                columns = line.Split(',');
+                                isFirstLine = false;
+                            }
+                            else
+                            {
+                                row = line.Split(',');
+                                var lineValues = new Dictionary<string, string>();
+                                for (var i = 0; i < row.Length; i++)
+                                {
+                                    lineValues.Add(columns[i], row[i]);
+                                }
+                                parsedData.Add(lineValues);
+                            }
                         }
                     }
                 }

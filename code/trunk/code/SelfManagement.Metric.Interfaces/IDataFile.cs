@@ -5,12 +5,12 @@
 
     public interface IDataFile
     {
-        string ExternalSystemName { get; }
+        ExternalSystemFiles ExternalSystemFile { get; }
 
         DateTime FileDate { get; }
 
         string FilePath { get; }
 
-        List<string[]> DataLines { get; }
+        IList<Dictionary<string,string>> DataLines { get; }
     }
 }
