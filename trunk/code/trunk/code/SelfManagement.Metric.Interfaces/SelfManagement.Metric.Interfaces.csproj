@@ -8,7 +8,7 @@
     <ProjectGuid>{D26281D0-3961-4C40-ABC4-0299BCFB765B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Callcenter.SelfManagement.Metric.Interfaces</RootNamespace>
+    <RootNamespace>CallCenter.SelfManagement.Metric.Interfaces</RootNamespace>
     <AssemblyName>SelfManagement.Metric.Interfaces</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
