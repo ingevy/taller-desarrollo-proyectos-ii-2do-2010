@@ -13,11 +13,17 @@
 
         Campaing RetrieveCampaingById(int campaingId);
 
+        IList<CampaingMetricLevel> RetrieveCampaingMetricLevels(int campaingId);
+
+        IList<Supervisor> RetrieveCampaingSupervisors(int campaingId);
+
+        IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId);
+
         int RetrieveOrCreateCustomerIdByName(string customerName);
 
         int CreateCampaing(Campaing campaing);
 
-        void SaveCampaingMetrics(IEnumerable<CampaingMetricLevel> campaingMetricLevels);
+        void SaveCampaingMetricLevels(IEnumerable<CampaingMetricLevel> campaingMetricLevels);
 
         void SaveCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors);
     }

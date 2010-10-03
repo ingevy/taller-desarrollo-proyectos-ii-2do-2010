@@ -64,7 +64,7 @@
             if (ModelState.IsValid && datesValid && (metrics == 3))
             {
                 var campaingId = this.campaingRepository.CreateCampaing(campaingToCreate.ToEntity(this.campaingRepository));
-                this.campaingRepository.SaveCampaingMetrics(campaingToCreate.CampaingMetrics.Select(cm => cm.ToEntity(campaingId)));
+                this.campaingRepository.SaveCampaingMetricLevels(campaingToCreate.CampaingMetrics.Select(cm => cm.ToEntity(campaingId)));
                 this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.AvailableSupervisors.Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
 
                 return RedirectToAction("Index");
