@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfManagement.Metric", "Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfManagement.Metric.Interfaces", "SelfManagement.Metric.Interfaces\SelfManagement.Metric.Interfaces.csproj", "{D26281D0-3961-4C40-ABC4-0299BCFB765B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfManagement.Metric.Tests", "SelfManagement.Metric.Tests\SelfManagement.Metric.Tests.csproj", "{7A278B16-1F6A-4F16-8574-5948519B809E}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SelfManagement.Web.vsmdi
@@ -95,6 +97,16 @@ Global
 		{D26281D0-3961-4C40-ABC4-0299BCFB765B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D26281D0-3961-4C40-ABC4-0299BCFB765B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D26281D0-3961-4C40-ABC4-0299BCFB765B}.Release|x86.ActiveCfg = Release|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7A278B16-1F6A-4F16-8574-5948519B809E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,5 +114,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{00ED57E8-1F09-48EB-BACA-5E453D41FA58} = {CC00003B-F9BE-4FBF-8017-077B786498BE}
 		{216F7812-35EE-47B1-95FA-AAB02CDC77F8} = {CC00003B-F9BE-4FBF-8017-077B786498BE}
+		{7A278B16-1F6A-4F16-8574-5948519B809E} = {CC00003B-F9BE-4FBF-8017-077B786498BE}
 	EndGlobalSection
 EndGlobal
