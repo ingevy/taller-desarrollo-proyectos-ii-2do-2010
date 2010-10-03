@@ -27,10 +27,10 @@
             var data = new CampaingMetricLevel
             {
                 CampaingId = campaingId,
-                MetricId = model.MetricId,
-                OptimalLevel = double.Parse(model.OptimalLevel),
-                ObjectiveLevel = double.Parse(model.ObjectiveLevel),
-                MinimumLevel = double.Parse(model.MinimumLevel)
+                MetricId = model.Id,
+                OptimalLevel = double.Parse(model.OptimalLevel, CultureInfo.CurrentUICulture),
+                ObjectiveLevel = double.Parse(model.ObjectiveLevel, CultureInfo.CurrentUICulture),
+                MinimumLevel = double.Parse(model.MinimumLevel, CultureInfo.CurrentUICulture)
             };
 
             return data;

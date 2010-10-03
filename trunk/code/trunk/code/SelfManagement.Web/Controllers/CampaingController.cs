@@ -37,14 +37,17 @@
         {
             var model = new CampaingViewModel
             {
-                BeginDate = DateTime.Today.ToShortDateString(),
-                AvailableSupervisors = this.campaingRepository.RetrieveAvailableSupervisors(DateTime.Today)
-                                .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up) })
-                                .ToList(),
-                AvailableMetrics = this.campaingRepository
-                                .RetrieveAvailableMetrics()
-                                .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
-                                .ToList()
+                BeginDate = DateTime.Today.ToString("yyyy/dd/MM", CultureInfo.CurrentUICulture),
+                CampaingSupervisors = this.campaingRepository
+                                            .RetrieveAvailableSupervisors(DateTime.Today)
+                                            .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up), Selected = false })
+                                            .OrderByDescending(s => s.Selected)
+                                            .ToList(),
+                CampaingMetricLevels = this.campaingRepository
+                                        .RetrieveAvailableMetrics()
+                                        .Select(m => new CampaingMetricLevelViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format, IsHighestToLowest = m.IsHighestToLowest, Selected = false })
+                                        .OrderByDescending(cml => cml.Selected)
+                                        .ToList()
             };
 
             return View(model);
@@ -57,33 +60,33 @@
         public ActionResult Create(CampaingViewModel campaingToCreate)
         {
             var datesValid = campaingToCreate.AreDatesValid();
-            var metrics = campaingToCreate.CampaingMetrics == null
+            var metrics = campaingToCreate.CampaingMetricLevels == null
                             ? 0
-                            : campaingToCreate.CampaingMetrics.Count;
+                            : campaingToCreate.CampaingMetricLevels.Count;
 
             if (ModelState.IsValid && datesValid && (metrics == 3))
             {
                 var campaingId = this.campaingRepository.CreateCampaing(campaingToCreate.ToEntity(this.campaingRepository));
-                this.campaingRepository.SaveCampaingMetricLevels(campaingToCreate.CampaingMetrics.Select(cm => cm.ToEntity(campaingId)));
-                this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.AvailableSupervisors.Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
+                this.campaingRepository.SaveCampaingMetricLevels(campaingToCreate.CampaingMetricLevels.Select(cml => cml.ToEntity(campaingId)));
+                this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.CampaingSupervisors.Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
 
                 return RedirectToAction("Index");
             }
 
-            campaingToCreate.AvailableSupervisors = this.campaingRepository.RetrieveAvailableSupervisors(DateTime.Today)
-                                .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up) })
-                                .ToList();
-            campaingToCreate.AvailableMetrics = this.campaingRepository
-                                .RetrieveAvailableMetrics()
-                                .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
-                                .ToList();
+            //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
+            //                                                        .OrderByDescending(s => s.Selected)
+            //                                                        .ToList();
+
+            campaingToCreate.CampaingMetricLevels = campaingToCreate.CampaingMetricLevels
+                                                                    .OrderByDescending(cml => cml.Selected)
+                                                                    .ToList();
 
             if (!datesValid)
             {
                 ModelState["EndDate"].Errors.Add("La fecha de inicio tiene que ser menor que la de fin");
             }            
 
-            return View(campaingToCreate);
+            return View("Create", campaingToCreate);
         }
 
         // The autocomplete request sends a parameter 'q' that contains the filter

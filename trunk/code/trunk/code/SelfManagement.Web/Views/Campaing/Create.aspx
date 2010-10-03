@@ -35,22 +35,12 @@
             </div>
              
             <div style="float: left;">
-                <label for="BeginDate">Fecha de Inicio</label>
-                <%: Html.TextBoxFor(model => model.BeginDate, new { Class = "uservalue", datepicker = "true", datepicker_format = "DD/MM/YYYY" })%>
-                <%: Html.ValidationMessageFor(model => model.BeginDate)%>
-            </div>
-            
-            <div style="float: left;">
-                <label for="SupervisorId">Supervisor</label>
+                <label for="CampaingType">Tipo</label>
                 <%
-var supervisors = this.Model.Supervisors.Select(s => new SelectListItem { Text = s.DisplayName, Value = s.Id.ToString() });
-if (supervisors.Count() > 0)
-{
-    supervisors.FirstOrDefault().Selected = true;
-}
+                    var campaingTypes = new List<SelectListItem> { new SelectListItem { Text = "De Entrada", Value = "0", Selected = true }, new SelectListItem { Text = "De Salida", Value = "1" } };
                 %>
-                <%: Html.DropDownListFor(model => model.SupervisorId, supervisors, new { Class = "uservalue" })%>
-                <%: Html.ValidationMessageFor(model => model.SupervisorId)%>
+                <%: Html.DropDownListFor(model => model.CampaingType, campaingTypes, new { Class = "uservalue" })%>
+                <%: Html.ValidationMessageFor(model => model.CampaingType)%>
             </div>
 
             <div style="float: left;">
@@ -59,21 +49,18 @@ if (supervisors.Count() > 0)
                 <%: Html.ValidationMessageFor(model => model.CustomerName)%>
             </div>
 
+            <div style="float: left;">
+                <label for="BeginDate">Fecha de Inicio</label>
+                <%: Html.TextBoxFor(model => model.BeginDate, new { Class = "uservalue", datepicker = "true", datepicker_format = "DD/MM/YYYY" })%>
+                <%: Html.ValidationMessageFor(model => model.BeginDate)%>
+            </div>            
+
             <div style="float: left;">            
                 <label for="EndDate">Fecha de Fin</label>
                 <%: Html.TextBoxFor(model => model.EndDate, new { Class = "uservalue", datepicker = "true", datepicker_format = "DD/MM/YYYY" })%>
                 <%: Html.ValidationMessageFor(model => model.EndDate)%>
             </div>
-
-            <div style="float: left;">
-                <label for="CampaingType">Tipo</label>
-                <%
-var campaingTypes = new List<SelectListItem> { new SelectListItem { Text = "De Entrada", Value = "0", Selected = true }, new SelectListItem { Text = "De Salida", Value = "1" } };
-                %>
-                <%: Html.DropDownListFor(model => model.CampaingType, campaingTypes, new { Class = "uservalue" })%>
-                <%: Html.ValidationMessageFor(model => model.CampaingType)%>
-            </div>
-
+                        
             <div style="clear: both; height:1px"></div>
             
             <div>
@@ -93,23 +80,49 @@ var campaingTypes = new List<SelectListItem> { new SelectListItem { Text = "De E
     <div class="panel" id="availablemetrics">
     <div class="innerPanel">
         <h2><span id="itineraryName">Metricas Disponibles</span></h2>
+        <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels) %>                          
         <div class="" id="itineraryDynamic">
         <div class="items">
                 <ul style="height: 315px;" class="activities ui-sortable" id="itineraryDynamicList">
                     <%
-foreach (var metric in this.Model.Metrics)
-{
+                        for (var index = 0; index < this.Model.CampaingMetricLevels.Count(); index++)
+                        {
                     %>
                     <li class="ui-state-default">
-                        <span class="off id"><%= metric.Id%></span>
-                        <h3><a href="#"><%= metric.Name%></a></h3>
-                        <p><%= metric.Description%></p>
-                        <input type="hidden" value="<%= metric.FormatType %>" />
+                        <span class="off id"><%: Html.HiddenFor(model => model.CampaingMetricLevels[index].Id) %></span>
+                        <h3><a href="#"><%= this.Model.CampaingMetricLevels[index].Name %></a></h3>
+                        <p><%= this.Model.CampaingMetricLevels[index].Description %></p>
+                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].Name) %>
+                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].Description)%>
+                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].FormatType) %>
+                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].IsHighestToLowest) %>
+                        <div class="inline estimatedMinutes">
+                            Optimo: <%: Html.TextBoxFor(model => model.CampaingMetricLevels[index].OptimalLevel, new { size = "3" }) %>
+                            <% if (this.Model.CampaingMetricLevels[index].Selected)
+                               {
+                            %>
+                            <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels[index].OptimalLevel)%>
+                            <% } %>
+                            &nbsp;&nbsp;&nbsp;
+                            Objetivo: <%: Html.TextBoxFor(model => model.CampaingMetricLevels[index].ObjectiveLevel, new { size = "3" }) %>
+                            <% if (this.Model.CampaingMetricLevels[index].Selected)
+                               {
+                            %>
+                            <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels[index].ObjectiveLevel) %>
+                            <% } %>
+                            &nbsp;&nbsp;&nbsp;
+                            Minimo: <%: Html.TextBoxFor(model => model.CampaingMetricLevels[index].MinimumLevel, new { size = "3" }) %>
+                            <% if (this.Model.CampaingMetricLevels[index].Selected)
+                               {
+                            %>
+                            <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels[index].MinimumLevel) %>
+                            <% } %>
+                        </div>
                         <p class="options">
-                            <a class="btn add" title="Agregar Métrica" href="JavaScript:addMetricLevel('metricLevelList', '<%= metric.Id %>', '<%= metric.Name %>', '<%= metric.Description %>', '<%= metric.FormatType %>')">Agregar Métrica</a>
+                            <%: Html.CheckBoxFor(model => model.CampaingMetricLevels[index].Selected)%>
                         </p>
                     </li>
-                    <% } %>
+                    <%  } %>
                 </ul>
             </div>
          </div>
@@ -125,35 +138,12 @@ foreach (var metric in this.Model.Metrics)
         <div class="">
         <div class="items">
                 <ul style="height: 315px;" class="activities ui-sortable" id="metricLevelList">
-                    <%  if (this.Model.CampaingMetrics != null)
-                        {
-                            var index = 1;
-                            foreach (var campaingMetric in this.Model.CampaingMetrics)
-                            {
-                    %>
-                    <li class="ui-state-default" id="<%= campaingMetric.MetricId %>" style="display: block;">
-                        <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].MetricLevelStatus", campaingMetric.MetricLevelStatus)%>
-                        <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].MetricId", campaingMetric.MetricId)%>
-                        <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].Name", campaingMetric.Name)%>
-                        <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].Description", campaingMetric.Description)%>
-                        <h3><a href="#"><%= campaingMetric.Name%></a></h3>
-                        <p><%= campaingMetric.Description%></p>
-                        <%= Html.Hidden("CampaingMetrics[" + (index - 1) + "].FormatType", campaingMetric.FormatType)%>
-                        <div class="inline estimatedMinutes">
-                            Optimo: <%= Html.TextBox("CampaingMetrics[" + (index - 1) + "].OptimalLevel", campaingMetric.OptimalLevel, new { size = "3" })%>
-                            &nbsp;&nbsp;&nbsp;
-                            Objetivo: <%= Html.TextBox("CampaingMetrics[" + (index - 1) + "].ObjectiveLevel", campaingMetric.ObjectiveLevel, new { size = "3" })%>
-                            &nbsp;&nbsp;&nbsp;
-                            Minimo: <%= Html.TextBox("CampaingMetrics[" + (index - 1) + "].MinimumLevel", campaingMetric.MinimumLevel, new { size = "3" })%>
-                        </div>
-                        <p class="options">
-                            <a class="btn remove" title="Remover Métrica" href="JavaScript:removeMetricLevel('<%= campaingMetric.MetricId %>')">Remover Métrica</a>
-                        </p>
-                    </li>
-                    <%          index++;
-                            }
-                        }
-                    %>
+                    
+                    
+
+
+
+
                 </ul>
             </div>
          </div>
