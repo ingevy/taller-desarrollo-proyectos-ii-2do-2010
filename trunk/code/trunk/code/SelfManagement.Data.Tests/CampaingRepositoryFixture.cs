@@ -421,5 +421,539 @@
             Assert.AreEqual(75, sampleCampaingMetricLevel.ObjectiveLevel);
             Assert.AreEqual(70, sampleCampaingMetricLevel.MinimumLevel);
         }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldSaveCampaingSupervisors()
+        {
+            IList<Supervisor> campaingSupervisorsResult = null;
+            IList<Agent> campaingAgentsResult = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+                campaingSupervisorsResult = repository.RetrieveCampaingSupervisors(campaingId);
+                campaingAgentsResult = repository.RetrieveCampaingAgents(campaingId);
+            }
+
+            Assert.IsNotNull(campaingSupervisorsResult);
+            Assert.AreEqual(2, campaingSupervisorsResult.Count);
+
+            Assert.IsNotNull(campaingAgentsResult);
+            Assert.AreEqual(4, campaingAgentsResult.Count);
+
+            var sampleSupervisor = campaingSupervisorsResult.FirstOrDefault(s => s.InnerUserId == 3);
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual(3, sampleSupervisor.InnerUserId);
+            Assert.AreEqual(2, campaingAgentsResult.Where(a => a.SupervisorId == sampleSupervisor.InnerUserId).Count());
+
+            sampleSupervisor = campaingSupervisorsResult.FirstOrDefault(s => s.InnerUserId == 5);
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual(5, sampleSupervisor.InnerUserId);
+            Assert.AreEqual(2, campaingAgentsResult.Where(a => a.SupervisorId == sampleSupervisor.InnerUserId).Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldThrowSavingCampaingSupervisorsFromDifferentCampaings()
+        {
+            IList<Supervisor> campaingSupervisorsResult = null;
+            IList<Agent> campaingAgentsResult = null;
+
+            using (new TransactionScope())
+            {
+                var repository = new CampaingRepository();               
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing 3",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var campaingId1 = repository.CreateCampaing(campaing);
+
+                campaing = new Campaing
+                {
+                    Name = "Test Campaing 2",
+                    CampaingType = 1,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 2
+                };
+                var campaingId2 = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId1, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId2, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldThrowSavingCampaingSupervisorsWhenTheRolIsNotSupervisor()
+        {
+            IList<Supervisor> campaingSupervisorsResult = null;
+            IList<Agent> campaingAgentsResult = null;
+
+            using (new TransactionScope())
+            {
+                var repository = new CampaingRepository();
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing 3",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    // InnerUserId == 6 is an Agent, not a Supervisor.
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 6, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginDate1()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate);
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault();
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.DNI));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Name));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.LastName));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.GrossSalary));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Workday));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Status));
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginDate2()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate.AddDays(-10));
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault();
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginDate3()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate.AddDays(15));
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault();
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginDate4()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate.AddDays(32));
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 3);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor1", sampleSupervisor.UserName);
+
+            sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 4);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+
+            sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 5);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor3", sampleSupervisor.UserName);
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates1()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate.AddDays(-5), campaing.EndDate.Value.AddDays(-5));
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault();
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates2()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate.AddDays(5), campaing.EndDate.Value.AddDays(5));
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault();
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates3()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate.AddDays(-35), campaing.EndDate.Value.AddDays(-35));
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 3);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor1", sampleSupervisor.UserName);
+
+            sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 4);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+
+            sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 5);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor3", sampleSupervisor.UserName);
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates4()
+        {
+            IList<Supervisor> result = null;
+
+            using (new TransactionScope())
+            {
+                var campaing = new Campaing
+                {
+                    Name = "Test Campaing",
+                    CampaingType = 0,
+                    BeginDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(31),
+                    CustomerId = 1
+                };
+                var repository = new CampaingRepository();
+
+                var campaingId = repository.CreateCampaing(campaing);
+
+                var campaingSupervisors = new List<CampaingUser>
+                {
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 3, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                    new CampaingUser { CampaingId = campaingId, InnerUserId = 5, BeginDate = campaing.BeginDate, EndDate = campaing.EndDate.Value },
+                };
+
+                repository.SaveCampaingSupervisors(campaingSupervisors);
+
+                result = repository.RetrieveAvailableSupervisors(campaing.BeginDate.AddDays(35), campaing.EndDate.Value.AddDays(35));
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+
+            var sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 3);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor1", sampleSupervisor.UserName);
+
+            sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 4);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
+
+            sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 5);
+
+            Assert.IsNotNull(sampleSupervisor);
+            Assert.AreEqual("Supervisor3", sampleSupervisor.UserName);
+        }
+
+        [TestMethod]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldRetrieveAgentsBySupervisorId()
+        {
+            IList<Agent> result = null;
+
+            using (new TransactionScope())
+            {
+                var repository = new CampaingRepository();
+
+                result = repository.RetrieveAgentsBySupervisorId(3);
+            }
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+
+            var sampleAgent = result.FirstOrDefault(a => a.InnerUserId == 6);
+
+            Assert.IsNotNull(sampleAgent);
+            Assert.AreEqual(3, sampleAgent.SupervisorId);
+            Assert.AreEqual("Agente1", sampleAgent.UserName);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.GrossSalary));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
+
+            sampleAgent = result.FirstOrDefault(a => a.InnerUserId == 7);
+
+            Assert.IsNotNull(sampleAgent);
+            Assert.AreEqual(3, sampleAgent.SupervisorId);
+            Assert.AreEqual("Agente2", sampleAgent.UserName);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.GrossSalary));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        [DeploymentItem("SelfManagement.mdf")]
+        public void ShouldThrowRetrievingAgentsBySupervisorIdWhenItIsNotASupervisor()
+        {
+            IList<Agent> result = null;
+
+            using (new TransactionScope())
+            {
+                var repository = new CampaingRepository();
+
+                result = repository.RetrieveAgentsBySupervisorId(10);
+            }
+        }
     }
 }
