@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("SelfManagementModel", "FK__aspnet_Pr__UserI__6754599E", "aspnet_Users", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.aspnet_Users), "aspnet_Profile", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(CallCenter.SelfManagement.Data.aspnet_Profile), true)]
 [assembly: EdmRelationshipAttribute("SelfManagementModel", "FK_CampaingMetricLevels_Campaings", "Campaings", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.Campaing), "CampaingMetricLevels", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.CampaingMetricLevel), true)]
 [assembly: EdmRelationshipAttribute("SelfManagementModel", "FK_CampaingMetricLevels_Metrics", "Metrics", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.Metric), "CampaingMetricLevels", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.CampaingMetricLevel), true)]
 [assembly: EdmRelationshipAttribute("SelfManagementModel", "FK_CampaingMetrics_CampaingMetricLevels", "CampaingMetricLevels", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.CampaingMetricLevel), "CampaingMetrics", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.CampaingMetric), true)]
@@ -28,7 +27,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("SelfManagementModel", "FK_Campaings_Customers", "Customers", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.Customer), "Campaings", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.Campaing), true)]
 [assembly: EdmRelationshipAttribute("SelfManagementModel", "FK_CampaingUsers_Campaings", "Campaings", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.Campaing), "CampaingUsers", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.CampaingUser), true)]
 [assembly: EdmRelationshipAttribute("SelfManagementModel", "FK_UserMetrics_Campaings", "Campaings", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.Campaing), "UserMetrics", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.UserMetric), true)]
-[assembly: EdmRelationshipAttribute("SelfManagementModel", "aspnet_UsersInRoles", "aspnet_Roles", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.aspnet_Roles), "aspnet_Users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.aspnet_Users))]
+[assembly: EdmRelationshipAttribute("SelfManagementModel", "FK_UserMetrics_Metrics", "Metrics", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CallCenter.SelfManagement.Data.Metric), "UserMetrics", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CallCenter.SelfManagement.Data.UserMetric), true)]
 
 #endregion
 
@@ -79,38 +78,6 @@ namespace CallCenter.SelfManagement.Data
         #endregion
     
         #region ObjectSet Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<aspnet_Profile> aspnet_Profile
-        {
-            get
-            {
-                if ((_aspnet_Profile == null))
-                {
-                    _aspnet_Profile = base.CreateObjectSet<aspnet_Profile>("aspnet_Profile");
-                }
-                return _aspnet_Profile;
-            }
-        }
-        private ObjectSet<aspnet_Profile> _aspnet_Profile;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<aspnet_Roles> aspnet_Roles
-        {
-            get
-            {
-                if ((_aspnet_Roles == null))
-                {
-                    _aspnet_Roles = base.CreateObjectSet<aspnet_Roles>("aspnet_Roles");
-                }
-                return _aspnet_Roles;
-            }
-        }
-        private ObjectSet<aspnet_Roles> _aspnet_Roles;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -243,6 +210,22 @@ namespace CallCenter.SelfManagement.Data
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<SupervisorAgent> SupervisorAgents
+        {
+            get
+            {
+                if ((_SupervisorAgents == null))
+                {
+                    _SupervisorAgents = base.CreateObjectSet<SupervisorAgent>("SupervisorAgents");
+                }
+                return _SupervisorAgents;
+            }
+        }
+        private ObjectSet<SupervisorAgent> _SupervisorAgents;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<UserMetric> UserMetrics
         {
             get
@@ -259,37 +242,37 @@ namespace CallCenter.SelfManagement.Data
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<UserProfile> UserProfiles
+        public ObjectSet<Agent> Agents
         {
             get
             {
-                if ((_UserProfiles == null))
+                if ((_Agents == null))
                 {
-                    _UserProfiles = base.CreateObjectSet<UserProfile>("UserProfiles");
+                    _Agents = base.CreateObjectSet<Agent>("Agents");
                 }
-                return _UserProfiles;
+                return _Agents;
             }
         }
-        private ObjectSet<UserProfile> _UserProfiles;
+        private ObjectSet<Agent> _Agents;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Supervisor> Supervisors
+        {
+            get
+            {
+                if ((_Supervisors == null))
+                {
+                    _Supervisors = base.CreateObjectSet<Supervisor>("Supervisors");
+                }
+                return _Supervisors;
+            }
+        }
+        private ObjectSet<Supervisor> _Supervisors;
 
         #endregion
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the aspnet_Profile EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToaspnet_Profile(aspnet_Profile aspnet_Profile)
-        {
-            base.AddObject("aspnet_Profile", aspnet_Profile);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the aspnet_Roles EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToaspnet_Roles(aspnet_Roles aspnet_Roles)
-        {
-            base.AddObject("aspnet_Roles", aspnet_Roles);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the aspnet_Users EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -356,6 +339,14 @@ namespace CallCenter.SelfManagement.Data
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the SupervisorAgents EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSupervisorAgents(SupervisorAgent supervisorAgent)
+        {
+            base.AddObject("SupervisorAgents", supervisorAgent);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the UserMetrics EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToUserMetrics(UserMetric userMetric)
@@ -364,11 +355,19 @@ namespace CallCenter.SelfManagement.Data
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the UserProfiles EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the Agents EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToUserProfiles(UserProfile userProfile)
+        public void AddToAgents(Agent agent)
         {
-            base.AddObject("UserProfiles", userProfile);
+            base.AddObject("Agents", agent);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Supervisors EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSupervisors(Supervisor supervisor)
+        {
+            base.AddObject("Supervisors", supervisor);
         }
 
         #endregion
@@ -382,30 +381,26 @@ namespace CallCenter.SelfManagement.Data
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="aspnet_Profile")]
+    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="Agent")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class aspnet_Profile : EntityObject
+    public partial class Agent : EntityObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new aspnet_Profile object.
+        /// Create a new Agent object.
         /// </summary>
         /// <param name="userId">Initial value of the UserId property.</param>
-        /// <param name="propertyNames">Initial value of the PropertyNames property.</param>
-        /// <param name="propertyValuesString">Initial value of the PropertyValuesString property.</param>
-        /// <param name="propertyValuesBinary">Initial value of the PropertyValuesBinary property.</param>
-        /// <param name="lastUpdatedDate">Initial value of the LastUpdatedDate property.</param>
-        public static aspnet_Profile Createaspnet_Profile(global::System.Guid userId, global::System.String propertyNames, global::System.String propertyValuesString, global::System.Byte[] propertyValuesBinary, global::System.DateTime lastUpdatedDate)
+        /// <param name="innerUserId">Initial value of the InnerUserId property.</param>
+        /// <param name="userName">Initial value of the UserName property.</param>
+        public static Agent CreateAgent(global::System.Guid userId, global::System.Int32 innerUserId, global::System.String userName)
         {
-            aspnet_Profile aspnet_Profile = new aspnet_Profile();
-            aspnet_Profile.UserId = userId;
-            aspnet_Profile.PropertyNames = propertyNames;
-            aspnet_Profile.PropertyValuesString = propertyValuesString;
-            aspnet_Profile.PropertyValuesBinary = propertyValuesBinary;
-            aspnet_Profile.LastUpdatedDate = lastUpdatedDate;
-            return aspnet_Profile;
+            Agent agent = new Agent();
+            agent.UserId = userId;
+            agent.InnerUserId = innerUserId;
+            agent.UserName = userName;
+            return agent;
         }
 
         #endregion
@@ -441,324 +436,227 @@ namespace CallCenter.SelfManagement.Data
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String PropertyNames
-        {
-            get
-            {
-                return _PropertyNames;
-            }
-            set
-            {
-                OnPropertyNamesChanging(value);
-                ReportPropertyChanging("PropertyNames");
-                _PropertyNames = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PropertyNames");
-                OnPropertyNamesChanged();
-            }
-        }
-        private global::System.String _PropertyNames;
-        partial void OnPropertyNamesChanging(global::System.String value);
-        partial void OnPropertyNamesChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String PropertyValuesString
-        {
-            get
-            {
-                return _PropertyValuesString;
-            }
-            set
-            {
-                OnPropertyValuesStringChanging(value);
-                ReportPropertyChanging("PropertyValuesString");
-                _PropertyValuesString = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PropertyValuesString");
-                OnPropertyValuesStringChanged();
-            }
-        }
-        private global::System.String _PropertyValuesString;
-        partial void OnPropertyValuesStringChanging(global::System.String value);
-        partial void OnPropertyValuesStringChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Byte[] PropertyValuesBinary
-        {
-            get
-            {
-                return StructuralObject.GetValidValue(_PropertyValuesBinary);
-            }
-            set
-            {
-                OnPropertyValuesBinaryChanging(value);
-                ReportPropertyChanging("PropertyValuesBinary");
-                _PropertyValuesBinary = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PropertyValuesBinary");
-                OnPropertyValuesBinaryChanged();
-            }
-        }
-        private global::System.Byte[] _PropertyValuesBinary;
-        partial void OnPropertyValuesBinaryChanging(global::System.Byte[] value);
-        partial void OnPropertyValuesBinaryChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime LastUpdatedDate
-        {
-            get
-            {
-                return _LastUpdatedDate;
-            }
-            set
-            {
-                OnLastUpdatedDateChanging(value);
-                ReportPropertyChanging("LastUpdatedDate");
-                _LastUpdatedDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LastUpdatedDate");
-                OnLastUpdatedDateChanged();
-            }
-        }
-        private global::System.DateTime _LastUpdatedDate;
-        partial void OnLastUpdatedDateChanging(global::System.DateTime value);
-        partial void OnLastUpdatedDateChanged();
-
-        #endregion
-    
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("SelfManagementModel", "FK__aspnet_Pr__UserI__6754599E", "aspnet_Users")]
-        public aspnet_Users aspnet_Users
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<aspnet_Users>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Users").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<aspnet_Users>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Users").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<aspnet_Users> aspnet_UsersReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<aspnet_Users>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Users");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<aspnet_Users>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Users", value);
-                }
-            }
-        }
-
-        #endregion
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="aspnet_Roles")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class aspnet_Roles : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new aspnet_Roles object.
-        /// </summary>
-        /// <param name="applicationId">Initial value of the ApplicationId property.</param>
-        /// <param name="roleId">Initial value of the RoleId property.</param>
-        /// <param name="roleName">Initial value of the RoleName property.</param>
-        /// <param name="loweredRoleName">Initial value of the LoweredRoleName property.</param>
-        public static aspnet_Roles Createaspnet_Roles(global::System.Guid applicationId, global::System.Guid roleId, global::System.String roleName, global::System.String loweredRoleName)
-        {
-            aspnet_Roles aspnet_Roles = new aspnet_Roles();
-            aspnet_Roles.ApplicationId = applicationId;
-            aspnet_Roles.RoleId = roleId;
-            aspnet_Roles.RoleName = roleName;
-            aspnet_Roles.LoweredRoleName = loweredRoleName;
-            return aspnet_Roles;
-        }
-
-        #endregion
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Guid ApplicationId
-        {
-            get
-            {
-                return _ApplicationId;
-            }
-            set
-            {
-                OnApplicationIdChanging(value);
-                ReportPropertyChanging("ApplicationId");
-                _ApplicationId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ApplicationId");
-                OnApplicationIdChanged();
-            }
-        }
-        private global::System.Guid _ApplicationId;
-        partial void OnApplicationIdChanging(global::System.Guid value);
-        partial void OnApplicationIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Guid RoleId
+        public global::System.Int32 InnerUserId
         {
             get
             {
-                return _RoleId;
+                return _InnerUserId;
             }
             set
             {
-                if (_RoleId != value)
+                if (_InnerUserId != value)
                 {
-                    OnRoleIdChanging(value);
-                    ReportPropertyChanging("RoleId");
-                    _RoleId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("RoleId");
-                    OnRoleIdChanged();
+                    OnInnerUserIdChanging(value);
+                    ReportPropertyChanging("InnerUserId");
+                    _InnerUserId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("InnerUserId");
+                    OnInnerUserIdChanged();
                 }
             }
         }
-        private global::System.Guid _RoleId;
-        partial void OnRoleIdChanging(global::System.Guid value);
-        partial void OnRoleIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String RoleName
-        {
-            get
-            {
-                return _RoleName;
-            }
-            set
-            {
-                OnRoleNameChanging(value);
-                ReportPropertyChanging("RoleName");
-                _RoleName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("RoleName");
-                OnRoleNameChanged();
-            }
-        }
-        private global::System.String _RoleName;
-        partial void OnRoleNameChanging(global::System.String value);
-        partial void OnRoleNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LoweredRoleName
-        {
-            get
-            {
-                return _LoweredRoleName;
-            }
-            set
-            {
-                OnLoweredRoleNameChanging(value);
-                ReportPropertyChanging("LoweredRoleName");
-                _LoweredRoleName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LoweredRoleName");
-                OnLoweredRoleNameChanged();
-            }
-        }
-        private global::System.String _LoweredRoleName;
-        partial void OnLoweredRoleNameChanging(global::System.String value);
-        partial void OnLoweredRoleNameChanged();
+        private global::System.Int32 _InnerUserId;
+        partial void OnInnerUserIdChanging(global::System.Int32 value);
+        partial void OnInnerUserIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String Description
+        public Nullable<global::System.Int32> SupervisorId
         {
             get
             {
-                return _Description;
+                return _SupervisorId;
             }
             set
             {
-                OnDescriptionChanging(value);
-                ReportPropertyChanging("Description");
-                _Description = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Description");
-                OnDescriptionChanged();
+                OnSupervisorIdChanging(value);
+                ReportPropertyChanging("SupervisorId");
+                _SupervisorId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SupervisorId");
+                OnSupervisorIdChanged();
             }
         }
-        private global::System.String _Description;
-        partial void OnDescriptionChanging(global::System.String value);
-        partial void OnDescriptionChanged();
-
-        #endregion
-    
-        #region Navigation Properties
+        private Nullable<global::System.Int32> _SupervisorId;
+        partial void OnSupervisorIdChanging(Nullable<global::System.Int32> value);
+        partial void OnSupervisorIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("SelfManagementModel", "aspnet_UsersInRoles", "aspnet_Users")]
-        public EntityCollection<aspnet_Users> aspnet_Users
+        public global::System.String UserName
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<aspnet_Users>("SelfManagementModel.aspnet_UsersInRoles", "aspnet_Users");
+                return _UserName;
             }
             set
             {
-                if ((value != null))
+                if (_UserName != value)
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<aspnet_Users>("SelfManagementModel.aspnet_UsersInRoles", "aspnet_Users", value);
+                    OnUserNameChanging(value);
+                    ReportPropertyChanging("UserName");
+                    _UserName = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("UserName");
+                    OnUserNameChanged();
                 }
             }
         }
+        private global::System.String _UserName;
+        partial void OnUserNameChanging(global::System.String value);
+        partial void OnUserNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DNI
+        {
+            get
+            {
+                return _DNI;
+            }
+            set
+            {
+                OnDNIChanging(value);
+                ReportPropertyChanging("DNI");
+                _DNI = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DNI");
+                OnDNIChanged();
+            }
+        }
+        private global::System.String _DNI;
+        partial void OnDNIChanging(global::System.String value);
+        partial void OnDNIChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastName
+        {
+            get
+            {
+                return _LastName;
+            }
+            set
+            {
+                OnLastNameChanging(value);
+                ReportPropertyChanging("LastName");
+                _LastName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastName");
+                OnLastNameChanged();
+            }
+        }
+        private global::System.String _LastName;
+        partial void OnLastNameChanging(global::System.String value);
+        partial void OnLastNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String GrossSalary
+        {
+            get
+            {
+                return _GrossSalary;
+            }
+            set
+            {
+                OnGrossSalaryChanging(value);
+                ReportPropertyChanging("GrossSalary");
+                _GrossSalary = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("GrossSalary");
+                OnGrossSalaryChanged();
+            }
+        }
+        private global::System.String _GrossSalary;
+        partial void OnGrossSalaryChanging(global::System.String value);
+        partial void OnGrossSalaryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Workday
+        {
+            get
+            {
+                return _Workday;
+            }
+            set
+            {
+                OnWorkdayChanging(value);
+                ReportPropertyChanging("Workday");
+                _Workday = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Workday");
+                OnWorkdayChanged();
+            }
+        }
+        private global::System.String _Workday;
+        partial void OnWorkdayChanging(global::System.String value);
+        partial void OnWorkdayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status;
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
 
         #endregion
+    
     }
     
     /// <summary>
@@ -994,69 +892,6 @@ namespace CallCenter.SelfManagement.Data
 
         #endregion
     
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("SelfManagementModel", "FK__aspnet_Pr__UserI__6754599E", "aspnet_Profile")]
-        public aspnet_Profile aspnet_Profile
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<aspnet_Profile>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Profile").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<aspnet_Profile>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Profile").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<aspnet_Profile> aspnet_ProfileReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<aspnet_Profile>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Profile");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<aspnet_Profile>("SelfManagementModel.FK__aspnet_Pr__UserI__6754599E", "aspnet_Profile", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("SelfManagementModel", "aspnet_UsersInRoles", "aspnet_Roles")]
-        public EntityCollection<aspnet_Roles> aspnet_Roles
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<aspnet_Roles>("SelfManagementModel.aspnet_UsersInRoles", "aspnet_Roles");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<aspnet_Roles>("SelfManagementModel.aspnet_UsersInRoles", "aspnet_Roles", value);
-                }
-            }
-        }
-
-        #endregion
     }
     
     /// <summary>
@@ -1074,16 +909,14 @@ namespace CallCenter.SelfManagement.Data
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="customerId">Initial value of the CustomerId property.</param>
-        /// <param name="supervisorId">Initial value of the SupervisorId property.</param>
         /// <param name="name">Initial value of the Name property.</param>
         /// <param name="beginDate">Initial value of the BeginDate property.</param>
         /// <param name="campaingType">Initial value of the CampaingType property.</param>
-        public static Campaing CreateCampaing(global::System.Int32 id, global::System.Int32 customerId, global::System.Int32 supervisorId, global::System.String name, global::System.DateTime beginDate, global::System.Int32 campaingType)
+        public static Campaing CreateCampaing(global::System.Int32 id, global::System.Int32 customerId, global::System.String name, global::System.DateTime beginDate, global::System.Int32 campaingType)
         {
             Campaing campaing = new Campaing();
             campaing.Id = id;
             campaing.CustomerId = customerId;
-            campaing.SupervisorId = supervisorId;
             campaing.Name = name;
             campaing.BeginDate = beginDate;
             campaing.CampaingType = campaingType;
@@ -1143,30 +976,6 @@ namespace CallCenter.SelfManagement.Data
         private global::System.Int32 _CustomerId;
         partial void OnCustomerIdChanging(global::System.Int32 value);
         partial void OnCustomerIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 SupervisorId
-        {
-            get
-            {
-                return _SupervisorId;
-            }
-            set
-            {
-                OnSupervisorIdChanging(value);
-                ReportPropertyChanging("SupervisorId");
-                _SupervisorId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("SupervisorId");
-                OnSupervisorIdChanged();
-            }
-        }
-        private global::System.Int32 _SupervisorId;
-        partial void OnSupervisorIdChanging(global::System.Int32 value);
-        partial void OnSupervisorIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2472,6 +2281,28 @@ namespace CallCenter.SelfManagement.Data
                 }
             }
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("SelfManagementModel", "FK_UserMetrics_Metrics", "UserMetrics")]
+        public EntityCollection<UserMetric> UserMetrics
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<UserMetric>("SelfManagementModel.FK_UserMetrics_Metrics", "UserMetrics");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<UserMetric>("SelfManagementModel.FK_UserMetrics_Metrics", "UserMetrics", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -2656,6 +2487,344 @@ namespace CallCenter.SelfManagement.Data
         private global::System.Boolean _HasErrors;
         partial void OnHasErrorsChanging(global::System.Boolean value);
         partial void OnHasErrorsChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="Supervisor")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Supervisor : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Supervisor object.
+        /// </summary>
+        /// <param name="userId">Initial value of the UserId property.</param>
+        /// <param name="innerUserId">Initial value of the InnerUserId property.</param>
+        /// <param name="userName">Initial value of the UserName property.</param>
+        public static Supervisor CreateSupervisor(global::System.Guid userId, global::System.Int32 innerUserId, global::System.String userName)
+        {
+            Supervisor supervisor = new Supervisor();
+            supervisor.UserId = userId;
+            supervisor.InnerUserId = innerUserId;
+            supervisor.UserName = userName;
+            return supervisor;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid UserId
+        {
+            get
+            {
+                return _UserId;
+            }
+            set
+            {
+                if (_UserId != value)
+                {
+                    OnUserIdChanging(value);
+                    ReportPropertyChanging("UserId");
+                    _UserId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("UserId");
+                    OnUserIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _UserId;
+        partial void OnUserIdChanging(global::System.Guid value);
+        partial void OnUserIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 InnerUserId
+        {
+            get
+            {
+                return _InnerUserId;
+            }
+            set
+            {
+                if (_InnerUserId != value)
+                {
+                    OnInnerUserIdChanging(value);
+                    ReportPropertyChanging("InnerUserId");
+                    _InnerUserId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("InnerUserId");
+                    OnInnerUserIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _InnerUserId;
+        partial void OnInnerUserIdChanging(global::System.Int32 value);
+        partial void OnInnerUserIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UserName
+        {
+            get
+            {
+                return _UserName;
+            }
+            set
+            {
+                if (_UserName != value)
+                {
+                    OnUserNameChanging(value);
+                    ReportPropertyChanging("UserName");
+                    _UserName = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("UserName");
+                    OnUserNameChanged();
+                }
+            }
+        }
+        private global::System.String _UserName;
+        partial void OnUserNameChanging(global::System.String value);
+        partial void OnUserNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DNI
+        {
+            get
+            {
+                return _DNI;
+            }
+            set
+            {
+                OnDNIChanging(value);
+                ReportPropertyChanging("DNI");
+                _DNI = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DNI");
+                OnDNIChanged();
+            }
+        }
+        private global::System.String _DNI;
+        partial void OnDNIChanging(global::System.String value);
+        partial void OnDNIChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastName
+        {
+            get
+            {
+                return _LastName;
+            }
+            set
+            {
+                OnLastNameChanging(value);
+                ReportPropertyChanging("LastName");
+                _LastName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastName");
+                OnLastNameChanged();
+            }
+        }
+        private global::System.String _LastName;
+        partial void OnLastNameChanging(global::System.String value);
+        partial void OnLastNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String GrossSalary
+        {
+            get
+            {
+                return _GrossSalary;
+            }
+            set
+            {
+                OnGrossSalaryChanging(value);
+                ReportPropertyChanging("GrossSalary");
+                _GrossSalary = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("GrossSalary");
+                OnGrossSalaryChanged();
+            }
+        }
+        private global::System.String _GrossSalary;
+        partial void OnGrossSalaryChanging(global::System.String value);
+        partial void OnGrossSalaryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Workday
+        {
+            get
+            {
+                return _Workday;
+            }
+            set
+            {
+                OnWorkdayChanging(value);
+                ReportPropertyChanging("Workday");
+                _Workday = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Workday");
+                OnWorkdayChanged();
+            }
+        }
+        private global::System.String _Workday;
+        partial void OnWorkdayChanging(global::System.String value);
+        partial void OnWorkdayChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status;
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="SupervisorAgent")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class SupervisorAgent : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SupervisorAgent object.
+        /// </summary>
+        /// <param name="agentId">Initial value of the AgentId property.</param>
+        /// <param name="supervisorId">Initial value of the SupervisorId property.</param>
+        public static SupervisorAgent CreateSupervisorAgent(global::System.Int32 agentId, global::System.Int32 supervisorId)
+        {
+            SupervisorAgent supervisorAgent = new SupervisorAgent();
+            supervisorAgent.AgentId = agentId;
+            supervisorAgent.SupervisorId = supervisorId;
+            return supervisorAgent;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 AgentId
+        {
+            get
+            {
+                return _AgentId;
+            }
+            set
+            {
+                if (_AgentId != value)
+                {
+                    OnAgentIdChanging(value);
+                    ReportPropertyChanging("AgentId");
+                    _AgentId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("AgentId");
+                    OnAgentIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _AgentId;
+        partial void OnAgentIdChanging(global::System.Int32 value);
+        partial void OnAgentIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 SupervisorId
+        {
+            get
+            {
+                return _SupervisorId;
+            }
+            set
+            {
+                OnSupervisorIdChanging(value);
+                ReportPropertyChanging("SupervisorId");
+                _SupervisorId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SupervisorId");
+                OnSupervisorIdChanged();
+            }
+        }
+        private global::System.Int32 _SupervisorId;
+        partial void OnSupervisorIdChanging(global::System.Int32 value);
+        partial void OnSupervisorIdChanged();
 
         #endregion
     
@@ -2904,294 +3073,46 @@ namespace CallCenter.SelfManagement.Data
                 }
             }
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("SelfManagementModel", "FK_UserMetrics_Metrics", "Metrics")]
+        public Metric Metric
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Metric>("SelfManagementModel.FK_UserMetrics_Metrics", "Metrics").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Metric>("SelfManagementModel.FK_UserMetrics_Metrics", "Metrics").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Metric> MetricReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Metric>("SelfManagementModel.FK_UserMetrics_Metrics", "Metrics");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Metric>("SelfManagementModel.FK_UserMetrics_Metrics", "Metrics", value);
+                }
+            }
+        }
 
         #endregion
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="UserProfile")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class UserProfile : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new UserProfile object.
-        /// </summary>
-        /// <param name="userId">Initial value of the UserId property.</param>
-        /// <param name="innerUserId">Initial value of the InnerUserId property.</param>
-        /// <param name="userName">Initial value of the UserName property.</param>
-        /// <param name="role">Initial value of the Role property.</param>
-        public static UserProfile CreateUserProfile(global::System.Guid userId, global::System.Int32 innerUserId, global::System.String userName, global::System.String role)
-        {
-            UserProfile userProfile = new UserProfile();
-            userProfile.UserId = userId;
-            userProfile.InnerUserId = innerUserId;
-            userProfile.UserName = userName;
-            userProfile.Role = role;
-            return userProfile;
-        }
-
-        #endregion
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Guid UserId
-        {
-            get
-            {
-                return _UserId;
-            }
-            set
-            {
-                if (_UserId != value)
-                {
-                    OnUserIdChanging(value);
-                    ReportPropertyChanging("UserId");
-                    _UserId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("UserId");
-                    OnUserIdChanged();
-                }
-            }
-        }
-        private global::System.Guid _UserId;
-        partial void OnUserIdChanging(global::System.Guid value);
-        partial void OnUserIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 InnerUserId
-        {
-            get
-            {
-                return _InnerUserId;
-            }
-            set
-            {
-                if (_InnerUserId != value)
-                {
-                    OnInnerUserIdChanging(value);
-                    ReportPropertyChanging("InnerUserId");
-                    _InnerUserId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("InnerUserId");
-                    OnInnerUserIdChanged();
-                }
-            }
-        }
-        private global::System.Int32 _InnerUserId;
-        partial void OnInnerUserIdChanging(global::System.Int32 value);
-        partial void OnInnerUserIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String UserName
-        {
-            get
-            {
-                return _UserName;
-            }
-            set
-            {
-                if (_UserName != value)
-                {
-                    OnUserNameChanging(value);
-                    ReportPropertyChanging("UserName");
-                    _UserName = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("UserName");
-                    OnUserNameChanged();
-                }
-            }
-        }
-        private global::System.String _UserName;
-        partial void OnUserNameChanging(global::System.String value);
-        partial void OnUserNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String DNI
-        {
-            get
-            {
-                return _DNI;
-            }
-            set
-            {
-                OnDNIChanging(value);
-                ReportPropertyChanging("DNI");
-                _DNI = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("DNI");
-                OnDNIChanged();
-            }
-        }
-        private global::System.String _DNI;
-        partial void OnDNIChanging(global::System.String value);
-        partial void OnDNIChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                OnNameChanging(value);
-                ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Name");
-                OnNameChanged();
-            }
-        }
-        private global::System.String _Name;
-        partial void OnNameChanging(global::System.String value);
-        partial void OnNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String LastName
-        {
-            get
-            {
-                return _LastName;
-            }
-            set
-            {
-                OnLastNameChanging(value);
-                ReportPropertyChanging("LastName");
-                _LastName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("LastName");
-                OnLastNameChanged();
-            }
-        }
-        private global::System.String _LastName;
-        partial void OnLastNameChanging(global::System.String value);
-        partial void OnLastNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String GrossSalary
-        {
-            get
-            {
-                return _GrossSalary;
-            }
-            set
-            {
-                OnGrossSalaryChanging(value);
-                ReportPropertyChanging("GrossSalary");
-                _GrossSalary = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("GrossSalary");
-                OnGrossSalaryChanged();
-            }
-        }
-        private global::System.String _GrossSalary;
-        partial void OnGrossSalaryChanging(global::System.String value);
-        partial void OnGrossSalaryChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Workday
-        {
-            get
-            {
-                return _Workday;
-            }
-            set
-            {
-                OnWorkdayChanging(value);
-                ReportPropertyChanging("Workday");
-                _Workday = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Workday");
-                OnWorkdayChanged();
-            }
-        }
-        private global::System.String _Workday;
-        partial void OnWorkdayChanging(global::System.String value);
-        partial void OnWorkdayChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Status
-        {
-            get
-            {
-                return _Status;
-            }
-            set
-            {
-                OnStatusChanging(value);
-                ReportPropertyChanging("Status");
-                _Status = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Status");
-                OnStatusChanged();
-            }
-        }
-        private global::System.String _Status;
-        partial void OnStatusChanging(global::System.String value);
-        partial void OnStatusChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Role
-        {
-            get
-            {
-                return _Role;
-            }
-            set
-            {
-                if (_Role != value)
-                {
-                    OnRoleChanging(value);
-                    ReportPropertyChanging("Role");
-                    _Role = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Role");
-                    OnRoleChanged();
-                }
-            }
-        }
-        private global::System.String _Role;
-        partial void OnRoleChanging(global::System.String value);
-        partial void OnRoleChanged();
-
-        #endregion
-    
     }
 
     #endregion

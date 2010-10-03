@@ -23,6 +23,10 @@ ECHO Building SelfManagement solution...
 C:\Windows\Microsoft.NET\Framework\v4.0.30319\MsBuild "%~dp0..\code\SelfManagement.sln" /p:Configuration=Release
 
 ECHO.
+ECHO Stoping Default Web Site runnning in port 80...
+%APPCMD% stop site /site.name:"Default Web Site"
+
+ECHO.
 ECHO Trying to remove 'callcenter.selfmanagement.com' site from IIS...
 FOR /F %%s in ('%APPCMD% list sites callcenter.selfmanagement.com /text:ID') DO IF /I %%s NEQ "" %APPCMD% delete site /site.name:"callcenter.selfmanagement.com"
 

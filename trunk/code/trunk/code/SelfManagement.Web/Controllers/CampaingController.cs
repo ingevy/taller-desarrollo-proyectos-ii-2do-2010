@@ -38,10 +38,10 @@
             var model = new CampaingViewModel
             {
                 BeginDate = DateTime.Today.ToShortDateString(),
-                Supervisors = this.campaingRepository.RetrieveAvailableSupervisors(DateTime.Today)
+                AvailableSupervisors = this.campaingRepository.RetrieveAvailableSupervisors(DateTime.Today)
                                 .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up) })
                                 .ToList(),
-                Metrics = this.campaingRepository
+                AvailableMetrics = this.campaingRepository
                                 .RetrieveAvailableMetrics()
                                 .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
                                 .ToList()
@@ -63,16 +63,17 @@
 
             if (ModelState.IsValid && datesValid && (metrics == 3))
             {
-                var campaingId = this.campaingRepository.SaveCampaing(campaingToCreate.ToEntity(this.campaingRepository));
+                var campaingId = this.campaingRepository.CreateCampaing(campaingToCreate.ToEntity(this.campaingRepository));
                 this.campaingRepository.SaveCampaingMetrics(campaingToCreate.CampaingMetrics.Select(cm => cm.ToEntity(campaingId)));
+                this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.AvailableSupervisors.Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
 
                 return RedirectToAction("Index");
             }
 
-            campaingToCreate.Supervisors = this.campaingRepository.RetrieveAvailableSupervisors(DateTime.Today)
+            campaingToCreate.AvailableSupervisors = this.campaingRepository.RetrieveAvailableSupervisors(DateTime.Today)
                                 .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up) })
                                 .ToList();
-            campaingToCreate.Metrics = this.campaingRepository
+            campaingToCreate.AvailableMetrics = this.campaingRepository
                                 .RetrieveAvailableMetrics()
                                 .Select(m => new MetricViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format })
                                 .ToList();
@@ -90,7 +91,7 @@
         public ActionResult FindCustomer(string q)
         {
             var customers = this.campaingRepository
-                                    .SearchCustomer(q)
+                                    .RetrieveCustomersByName(q)
                                     .Select(c => c.Name);
 
             // Returns raw text, one result on each line.
@@ -160,14 +161,14 @@
             }
         }
 
-        private static string GetDisplayName(UserProfile userProfile)
+        private static string GetDisplayName(Supervisor supervisor)
         {
-            if (!string.IsNullOrEmpty(userProfile.Name) && !string.IsNullOrEmpty(userProfile.LastName))
+            if (!string.IsNullOrEmpty(supervisor.Name) && !string.IsNullOrEmpty(supervisor.LastName))
             {
-                return string.Format(CultureInfo.CurrentUICulture, "{0} {1} ({2})", userProfile.Name, userProfile.LastName, userProfile.InnerUserId);
+                return string.Format(CultureInfo.CurrentUICulture, "{0} {1} ({2})", supervisor.Name, supervisor.LastName, supervisor.InnerUserId);
             }
 
-            return string.Format(CultureInfo.CurrentUICulture, "{0} ({1})", userProfile.UserName, userProfile.InnerUserId);
+            return string.Format(CultureInfo.CurrentUICulture, "{0} ({1})", supervisor.UserName, supervisor.InnerUserId);
         } 
     }
 }
