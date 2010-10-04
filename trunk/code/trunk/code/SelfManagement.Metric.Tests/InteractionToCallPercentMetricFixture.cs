@@ -76,6 +76,8 @@
             Assert.AreEqual(i2c1, i2cMetric.CalculatedValues[Convert.ToInt32(dic1["Legajo"])]);
             Assert.AreEqual(i2c2, i2cMetric.CalculatedValues[Convert.ToInt32(dic2["Legajo"])]);
             Assert.AreEqual(i2c3, i2cMetric.CalculatedValues[Convert.ToInt32(dic3["Legajo"])]);
+
+            newDataFile1.VerifyAll();
         }
 
         private Dictionary<string, string> GenerateDictionaryForSummaryFile(string csvData)
