@@ -38,12 +38,15 @@
             <div id="page">
                 <hr />
                 <div id="main">
-                    <% if(!string.IsNullOrEmpty(Request.QueryString["msg"])) { %>
+                    <%
+                       if(!string.IsNullOrEmpty(Request.QueryString["msg"]))
+                       {
+                    %>
                         <div class="statusMessage" id="statusMessage">
                             <%:Request.QueryString["msg"]%>
                         </div>
                         <script type="text/javascript">
-                            setTimeout(function () { document.getElementById("statusMessage").style.display = 'none'; }, 3500);
+                            setTimeout(function () { document.getElementById("statusMessage").style.display = 'none'; }, 4250);
                         </script>
                     <% } %>
                     <asp:ContentPlaceHolder ID="MainContent" runat="server" />

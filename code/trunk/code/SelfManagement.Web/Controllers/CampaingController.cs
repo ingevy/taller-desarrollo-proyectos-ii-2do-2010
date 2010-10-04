@@ -11,6 +11,7 @@
     
     public class CampaingController : Controller
     {
+        private const string CampaingMetricLevelsKey = "CampaingMetricLevels[{0}].{1}";
         private readonly ICampaingRepository campaingRepository;
 
         public CampaingController() : this(new RepositoryFactory().GetCampaingRepository())
@@ -27,7 +28,7 @@
         [Authorize(Roles = "AccountManager")]
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
         //
@@ -42,15 +43,17 @@
                                             .RetrieveAvailableSupervisors(DateTime.Today)
                                             .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up), Selected = false })
                                             .OrderByDescending(s => s.Selected)
+                                            .ThenBy(s => s.Id)
                                             .ToList(),
                 CampaingMetricLevels = this.campaingRepository
                                         .RetrieveAvailableMetrics()
                                         .Select(m => new CampaingMetricLevelViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format, IsHighestToLowest = m.IsHighestToLowest, Selected = false })
                                         .OrderByDescending(cml => cml.Selected)
+                                        .ThenBy(cml => cml.Name)
                                         .ToList()
             };
 
-            return View(model);
+            return this.View(model);
         }
 
         //
@@ -60,17 +63,19 @@
         public ActionResult Create(CampaingViewModel campaingToCreate)
         {
             var datesValid = campaingToCreate.AreDatesValid();
-            var metrics = campaingToCreate.CampaingMetricLevels == null
-                            ? 0
-                            : campaingToCreate.CampaingMetricLevels.Count;
+            this.ClearInvalidErrors(campaingToCreate);
 
-            if (ModelState.IsValid && datesValid && (metrics == 3))
+            if (this.ModelState.IsValid && datesValid)
             {
                 var campaingId = this.campaingRepository.CreateCampaing(campaingToCreate.ToEntity(this.campaingRepository));
-                this.campaingRepository.SaveCampaingMetricLevels(campaingToCreate.CampaingMetricLevels.Select(cml => cml.ToEntity(campaingId)));
-                this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.CampaingSupervisors.Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
+                this.campaingRepository.SaveCampaingMetricLevels(campaingToCreate.CampaingMetricLevels
+                                                                                    .Where(cml => cml.Selected)
+                                                                                    .Select(cml => cml.ToEntity(campaingId)));
+                this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.CampaingSupervisors
+                                                                                    .Where(s => s.Selected)
+                                                                                    .Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
 
-                return RedirectToAction("Index");
+                return this.RedirectToAction("Index", new { msg = Url.Encode("La nueva Campaña se creó exitosamente.")});
             }
 
             //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
@@ -83,10 +88,10 @@
 
             if (!datesValid)
             {
-                ModelState["EndDate"].Errors.Add("La fecha de inicio tiene que ser menor que la de fin");
-            }            
+                this.ModelState["EndDate"].Errors.Add("La fecha de inicio tiene que ser menor que la de fin");
+            }
 
-            return View("Create", campaingToCreate);
+            return this.View(campaingToCreate);
         }
 
         // The autocomplete request sends a parameter 'q' that contains the filter
@@ -109,7 +114,7 @@
                                 .Select(s => GetDisplayName(s));
 
             // Returns raw text, one result on each line.
-            return Content(string.Join("\n", supervisors));
+            return this.Content(string.Join("\n", supervisors));
         }
 
         //
@@ -117,7 +122,7 @@
         [Authorize(Roles = "AccountManager")] 
         public ActionResult Edit(int id)
         {
-            return View();
+            return this.View();
         }
 
         //
@@ -129,12 +134,12 @@
             try
             {
                 // TODO: Add update logic here
- 
-                return RedirectToAction("Index");
+
+                return this.RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return this.View();
             }
         }
 
@@ -143,7 +148,7 @@
         [Authorize(Roles = "AccountManager")] 
         public ActionResult Delete(int id)
         {
-            return View();
+            return this.View();
         }
 
         //
@@ -155,12 +160,30 @@
             try
             {
                 // TODO: Add delete logic here
- 
-                return RedirectToAction("Index");
+
+                return this.RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return this.View();
+            }
+        }
+
+        private void ClearInvalidErrors(CampaingViewModel campaing)
+        {
+            for (var index = 0; index < campaing.CampaingMetricLevels.Count; index++)
+            {
+                if (!campaing.CampaingMetricLevels[index].Selected)
+                {
+                    var key = string.Format(CultureInfo.InvariantCulture, CampaingMetricLevelsKey, index, "OptimalLevel");
+                    this.ModelState[key].Errors.Clear();
+
+                    key = string.Format(CultureInfo.InvariantCulture, CampaingMetricLevelsKey, index, "ObjectiveLevel");
+                    this.ModelState[key].Errors.Clear();
+
+                    key = string.Format(CultureInfo.InvariantCulture, CampaingMetricLevelsKey, index, "MinimumLevel");
+                    this.ModelState[key].Errors.Clear();
+                }
             }
         }
 

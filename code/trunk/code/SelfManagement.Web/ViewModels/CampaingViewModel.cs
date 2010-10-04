@@ -20,9 +20,6 @@
         [Range(0, 1, ErrorMessage = "El tipo de campaña es de entrada o salida.")]
         public int CampaingType { get; set; }
 
-        [CustomValidation(typeof(CampaingViewModel), "ValidateCampaingSupervisors")]
-        public IList<SupervisorViewModel> CampaingSupervisors { get; set; }
-
         [Required(ErrorMessage = "La fecha de inicio es requerida.")]
         [CustomValidation(typeof(CampaingViewModel), "ValidateDate")]
         public string BeginDate { get; set; }
@@ -32,8 +29,29 @@
 
         public string Description { get; set; }
 
-        [CustomValidation(typeof(CampaingViewModel), "ValidateCampaingMetrics")]
         public IList<CampaingMetricLevelViewModel> CampaingMetricLevels { get; set; }
+
+        [Range(3, 3, ErrorMessage = "Se requiere definir tres metricas para cada Campaña.")]
+        public int CampaingMetricLevelsCount
+        {
+            get { return this.CampaingMetricLevels.Where(cml => cml.Selected).Count(); }
+        }
+
+        public IList<SupervisorViewModel> CampaingSupervisors { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Se requiere al menos un Supervisor para cada Campaña.")]
+        public int CampaingSupervisorsCount
+        {
+            get
+            {
+                if (this.CampaingSupervisors != null)
+                {
+                    return this.CampaingSupervisors.Where(s => s.Selected).Count();
+                }
+
+                return 0;
+            }
+        }
 
         public bool AreDatesValid()
         {
@@ -59,7 +77,7 @@
             return false;
         }
 
-        public static ValidationResult ValidateDate(string newDate, ValidationContext pValidationContext)
+        public static ValidationResult ValidateDate(string newDate, ValidationContext validationContext)
         {
             if (!string.IsNullOrWhiteSpace(newDate))
             {
@@ -68,26 +86,6 @@
                 {
                     return new ValidationResult("Formato de fecha invalido", new List<string> { "BeginDate" });
                 }
-            }
-
-            return ValidationResult.Success;
-        }
-
-        public static ValidationResult ValidateCampaingMetrics(IList<CampaingMetricLevelViewModel> campaingMetrics, ValidationContext pValidationContext)
-        {
-            if ((campaingMetrics == null) || (campaingMetrics.Where(cm => cm.Selected).Count() != 3))
-            {
-                return new ValidationResult("Se requiere definir tres metricas para cada Campaña", new List<string> { "CampaingMetricLevels" });
-            }
-
-            return ValidationResult.Success;
-        }
-
-        public static ValidationResult ValidateCampaingSupervisors(IList<SupervisorViewModel> cmpaingSupervisors, ValidationContext pValidationContext)
-        {
-            if ((cmpaingSupervisors == null) || (cmpaingSupervisors.Where(cs => cs.Selected).Count() == 0))
-            {
-                return new ValidationResult("Se requiere al menos un Supervisor para cada Campaña", new List<string> { "CampaingSupervisors" });
             }
 
             return ValidationResult.Success;
