@@ -64,18 +64,18 @@
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
 
-            var ictMetric = new InteractionToCallPercentMetric(new DateTime());
-            ictMetric.ProcessFiles(dataFiles);
+            var i2cMetric = new InteractionToCallPercentMetric(new DateTime());
+            i2cMetric.ProcessFiles(dataFiles);
 
-            Assert.AreEqual(3, ictMetric.CalculatedValues.Count);
+            Assert.AreEqual(3, i2cMetric.CalculatedValues.Count);
 
-            var ict1 = (Convert.ToInt32(dic1["Cantidad Llamadas"]) - Convert.ToInt32(dic1["Cantidad Llamadas Transferidas"])) / Convert.ToInt32(dic1["Cantidad Llamadas"]);
-            var ict2 = (Convert.ToInt32(dic2["Cantidad Llamadas"]) - Convert.ToInt32(dic2["Cantidad Llamadas Transferidas"])) / Convert.ToInt32(dic2["Cantidad Llamadas"]);
-            var ict3 = (Convert.ToInt32(dic3["Cantidad Llamadas"]) - Convert.ToInt32(dic3["Cantidad Llamadas Transferidas"])) / Convert.ToInt32(dic3["Cantidad Llamadas"]);
+            var i2c1 = InteractionToCallPercentMetric.CalculateMetricValue(Convert.ToInt32(dic1["Cantidad Llamadas"]), Convert.ToInt32(dic1["Cantidad Llamadas Transferidas"]));
+            var i2c2 = InteractionToCallPercentMetric.CalculateMetricValue(Convert.ToInt32(dic2["Cantidad Llamadas"]), Convert.ToInt32(dic2["Cantidad Llamadas Transferidas"]));
+            var i2c3 = InteractionToCallPercentMetric.CalculateMetricValue(Convert.ToInt32(dic3["Cantidad Llamadas"]), Convert.ToInt32(dic3["Cantidad Llamadas Transferidas"]));
 
-            Assert.AreEqual(ict1, ictMetric.CalculatedValues[Convert.ToInt32(dic1["Legajo"])]);
-            Assert.AreEqual(ict2, ictMetric.CalculatedValues[Convert.ToInt32(dic2["Legajo"])]);
-            Assert.AreEqual(ict3, ictMetric.CalculatedValues[Convert.ToInt32(dic3["Legajo"])]);
+            Assert.AreEqual(i2c1, i2cMetric.CalculatedValues[Convert.ToInt32(dic1["Legajo"])]);
+            Assert.AreEqual(i2c2, i2cMetric.CalculatedValues[Convert.ToInt32(dic2["Legajo"])]);
+            Assert.AreEqual(i2c3, i2cMetric.CalculatedValues[Convert.ToInt32(dic3["Legajo"])]);
         }
 
         private Dictionary<string, string> GenerateDictionaryForSummaryFile(string csvData)

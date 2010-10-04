@@ -8,6 +8,11 @@
 
     public class InteractionToCallPercentMetric : IMetric
     {
+        public static double CalculateMetricValue(int cantLlamadas, int cantLlamadasTransferidas)
+        {
+            return ((cantLlamadas - cantLlamadasTransferidas) / cantLlamadas);
+        }
+   
         private IDictionary<int, double> calculatedValues = new Dictionary<int, double>();
         private ExternalSystemFiles externalFileNeeded = ExternalSystemFiles.SUMMARY;
         private DateTime metricDate;
@@ -50,7 +55,7 @@
                 var agentId = Convert.ToInt32(line["Legajo"]);
                 var cantLlamadas = Convert.ToInt32(line["Cantidad Llamadas"]);
                 var cantTransferidas = Convert.ToInt32(line["Cantidad Llamadas Transferidas"]);
-                var metricValue = (cantLlamadas - cantTransferidas) / cantLlamadas;
+                var metricValue = InteractionToCallPercentMetric.CalculateMetricValue(cantLlamadas, cantTransferidas);
 
                 this.calculatedValues.Add(agentId, metricValue);
             }
