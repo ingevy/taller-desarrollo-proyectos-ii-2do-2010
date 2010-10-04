@@ -37,7 +37,7 @@
         {
             var model = new CampaingViewModel
             {
-                BeginDate = DateTime.Today.ToString("yyyy/dd/MM", CultureInfo.CurrentUICulture),
+                BeginDate = DateTime.Today.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture),
                 CampaingSupervisors = this.campaingRepository
                                             .RetrieveAvailableSupervisors(DateTime.Today)
                                             .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up), Selected = false })
@@ -77,9 +77,9 @@
             //                                                        .OrderByDescending(s => s.Selected)
             //                                                        .ToList();
 
-            campaingToCreate.CampaingMetricLevels = campaingToCreate.CampaingMetricLevels
-                                                                    .OrderByDescending(cml => cml.Selected)
-                                                                    .ToList();
+            //campaingToCreate.CampaingMetricLevels = campaingToCreate.CampaingMetricLevels
+            //                                                        .OrderByDescending(cml => cml.Selected)
+            //                                                        .ToList();
 
             if (!datesValid)
             {

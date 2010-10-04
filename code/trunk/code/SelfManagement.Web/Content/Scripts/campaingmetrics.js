@@ -1,3 +1,14 @@
+function showOrHideMetricLevels(event, id) {
+    metricLevelsElement = $("#" + id);
+
+    if (metricLevelsElement[0].style.display == "none") {
+        metricLevelsElement.show();
+    }
+    else {
+        metricLevelsElement.hide();
+    }
+}
+
 function removeMetricLevel(id) {
     if ($("#" + id + " > input")[0].value == "New") {
         $("#" + id + " > input")[0].value = "None";
@@ -23,7 +34,7 @@ function addMetricLevel(listId, metricId, metricName, metricDescription, metricF
 + "<h3><a href=\"#\">" + metricName.toString() + "</a></h3>"
 + "<p>" + metricDescription + "</p>"
 + "<input type=\"hidden\" value=\"" + metricFormatType.toString() + "\" name=\"CampaingMetrics[" + index.toString() + "].FormatType\" id= \"CampaingMetrics_" + index.toString() + "__FormatType\">"
-+ "<div class=\"inline estimatedMinutes\">"
++ "<div class=\"inline metricLevels\">"
 + "Optimo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].OptimalLevel\" id=\"CampaingMetrics_" + index.toString() + "__OptimalLevel\" isdatepicker=\"true\">"
 + "&nbsp;&nbsp;&nbsp;"
 + "Objetivo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].ObjectiveLevel\" id=\"CampaingMetrics_" + index.toString() + "__ObjectiveLevel\" isdatepicker=\"true\">"

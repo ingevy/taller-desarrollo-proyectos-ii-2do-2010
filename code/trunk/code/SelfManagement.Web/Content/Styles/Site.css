@@ -306,7 +306,7 @@ div.panel div.subheader {
 div.panel div.items ul.activities li { position: relative; padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #ccc; border-top: 1px solid transparent }
 div.panel div.items ul.activities h3 span.rating { float: right; font-weight: normal; }
 div.panel div.items ul.activities p { margin: 0; padding: 0; line-height: 25px; }
-div.panel div.items ul.activities p.options { float: right; position: absolute; top: 25px; right: 0; font-size: 12px; }
+div.panel div.items ul.activities p.options { float: right; position: absolute; top: 0.5em; right: 0; font-size: 12px; }
 div.panel div.items ul.activities p.options .btn { height: 37px; display: inline-block; line-height: 0px; }
 div.panel div.items ul.activities p.options .handler {
 	display: inline-block;
@@ -350,7 +350,7 @@ div.panel div.items ul.itineraries li ul.activities  {
 	line-height: 0px; text-indent: -1000px; overflow: hidden;
     }
 
-input.estimatedMinutes { text-align: right; }
+input.metricLevels { text-align: right; }
 
 /* campaingmetrics addin boxes */
 .itineraryAddinBox {

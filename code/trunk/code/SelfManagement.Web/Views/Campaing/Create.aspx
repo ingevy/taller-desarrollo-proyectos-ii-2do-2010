@@ -79,47 +79,49 @@
 
     <div class="panel" id="availablemetrics">
     <div class="innerPanel">
-        <h2><span id="itineraryName">Metricas Disponibles</span></h2>
+        <h2><span id="itineraryName">Metricas</span></h2>
         <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels) %>                          
         <div class="" id="itineraryDynamic">
         <div class="items">
-                <ul style="height: 315px;" class="activities ui-sortable" id="itineraryDynamicList">
+                <ul style="height: 315px;" class="activities ui-sortable" id="metricLevelsList">
                     <%
                         for (var index = 0; index < this.Model.CampaingMetricLevels.Count(); index++)
                         {
                     %>
                     <li class="ui-state-default">
-                        <span class="off id"><%: Html.HiddenFor(model => model.CampaingMetricLevels[index].Id) %></span>
+                        <span class="off id"><%: Html.HiddenFor(model => this.Model.CampaingMetricLevels[index].Id)%></span>
                         <h3><a href="#"><%= this.Model.CampaingMetricLevels[index].Name %></a></h3>
                         <p><%= this.Model.CampaingMetricLevels[index].Description %></p>
-                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].Name) %>
-                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].Description)%>
-                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].FormatType) %>
-                        <%: Html.HiddenFor(model => model.CampaingMetricLevels[index].IsHighestToLowest) %>
-                        <div class="inline estimatedMinutes">
-                            Optimo: <%: Html.TextBoxFor(model => model.CampaingMetricLevels[index].OptimalLevel, new { size = "3" }) %>
+                        <%: Html.HiddenFor(model => this.Model.CampaingMetricLevels[index].Name)%>
+                        <%: Html.HiddenFor(model => this.Model.CampaingMetricLevels[index].Description)%>
+                        <%: Html.HiddenFor(model => this.Model.CampaingMetricLevels[index].FormatType)%>
+                        <%: Html.HiddenFor(model => this.Model.CampaingMetricLevels[index].IsHighestToLowest)%>
+                        <div style="height: 12px;"></div>
+                        <div class="inline metricLevels" id="<%= this.Model.CampaingMetricLevels[index].Id %>" style="<%= this.Model.CampaingMetricLevels[index].Selected ? string.Empty : "display: none;" %>" >
+                            Optimo: <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].OptimalLevel, new { size = "4" })%>
                             <% if (this.Model.CampaingMetricLevels[index].Selected)
                                {
                             %>
-                            <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels[index].OptimalLevel)%>
+                            <%: Html.ValidationMessageFor(model => this.Model.CampaingMetricLevels[index].OptimalLevel)%>
                             <% } %>
-                            &nbsp;&nbsp;&nbsp;
-                            Objetivo: <%: Html.TextBoxFor(model => model.CampaingMetricLevels[index].ObjectiveLevel, new { size = "3" }) %>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            Objetivo: <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].ObjectiveLevel, new { size = "4" })%>
                             <% if (this.Model.CampaingMetricLevels[index].Selected)
                                {
                             %>
-                            <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels[index].ObjectiveLevel) %>
+                            <%: Html.ValidationMessageFor(model => this.Model.CampaingMetricLevels[index].ObjectiveLevel)%>
                             <% } %>
-                            &nbsp;&nbsp;&nbsp;
-                            Minimo: <%: Html.TextBoxFor(model => model.CampaingMetricLevels[index].MinimumLevel, new { size = "3" }) %>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            Minimo: <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].MinimumLevel, new { size = "4" })%>
                             <% if (this.Model.CampaingMetricLevels[index].Selected)
                                {
                             %>
-                            <%: Html.ValidationMessageFor(model => model.CampaingMetricLevels[index].MinimumLevel) %>
+                            <%: Html.ValidationMessageFor(model => this.Model.CampaingMetricLevels[index].MinimumLevel)%>
                             <% } %>
                         </div>
                         <p class="options">
-                            <%: Html.CheckBoxFor(model => model.CampaingMetricLevels[index].Selected)%>
+                            <% var metricId = this.Model.CampaingMetricLevels[index].Id; %>
+                            <%: Html.CheckBoxFor(model => this.Model.CampaingMetricLevels[index].Selected, new { onclick = "showOrHideMetricLevels(event, '" + metricId +"')" })%>
                         </p>
                     </li>
                     <%  } %>
@@ -134,10 +136,10 @@
 
     <div class="panel" id="campaingmetrics">
     <div class="innerPanel">
-        <h2><span id="Span1">Metricas de la Campaña</span></h2>
+        <h2><span id="Span1">Supervisores</span></h2>
         <div class="">
         <div class="items">
-                <ul style="height: 315px;" class="activities ui-sortable" id="metricLevelList">
+                <ul style="height: 315px;" class="activities ui-sortable" id="supervisorsList">
                     
                     
 
