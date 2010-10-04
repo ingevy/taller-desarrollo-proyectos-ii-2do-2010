@@ -29,7 +29,7 @@ input[type="text"], input[type="password"], textarea { border: 1px solid #aaa; b
 	position: absolute;
 	color: #fff !important;
 	background: url(../images/validation_field_bg.png) no-repeat left top;
-	padding: 6px 10px 8px 30px;
+	padding: 2px 6px 3px 27px;
 	line-height: 100%;
 	min-height: 4px;
 	margin-left: 5px; margin-top: 7px;
@@ -297,18 +297,18 @@ div.searchResults  { background: url(../images/halfbox_results_top.png) no-repea
 .activeActivityItinerary .linkActivities { display: none; }
 .activeActivityItinerary .linkActivityItineraries { display: block; }
 
-/* activities */
+/* campaingElement */
 div.panel div.subheader {
 	position: absolute; margin-top: -23px;
 	width: 470px; text-align: right;
 	font-size: .70em;
 	}
-div.panel div.items ul.activities li { position: relative; padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #ccc; border-top: 1px solid transparent }
-div.panel div.items ul.activities h3 span.rating { float: right; font-weight: normal; }
-div.panel div.items ul.activities p { margin: 0; padding: 0; line-height: 25px; }
-div.panel div.items ul.activities p.options { float: right; position: absolute; top: 0.5em; right: 0; font-size: 12px; }
-div.panel div.items ul.activities p.options .btn { height: 37px; display: inline-block; line-height: 0px; }
-div.panel div.items ul.activities p.options .handler {
+div.panel div.items ul.campaingElement li { position: relative; padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #ccc; border-top: 1px solid transparent }
+div.panel div.items ul.campaingElement h3 span.rating { float: right; font-weight: normal; }
+div.panel div.items ul.campaingElement p { margin: 0; padding: 0; line-height: 25px; }
+div.panel div.items ul.campaingElement p.options { float: right; position: absolute; top: 0.5em; right: 0; font-size: 12px; }
+div.panel div.items ul.campaingElement p.options .btn { height: 37px; display: inline-block; line-height: 0px; }
+div.panel div.items ul.campaingElement p.options .handler {
 	display: inline-block;
 	width: 37px; height: 37px;
 	background: url(../images/btn_drag.png) no-repeat;
@@ -328,7 +328,7 @@ div.panel div.items ul.itineraries h3 span.rating span { display: none; }
 div.panel div.items ul.itineraries li { 
 	padding-bottom: 5px; margin-bottom: 5px; border-bottom: 1px solid #ccc; border-top: 1px solid transparent
 }
-div.panel div.items ul.itineraries li ul.activities  {
+div.panel div.items ul.itineraries li ul.campaingElement  {
 	margin-top: 5px; padding: 5px;
 	background-color: #f9f9f9; border: 1px solid #eee;
 }
@@ -439,15 +439,15 @@ p.estimatedTime {
     margin: 5px 0 0 0; padding: 0; height: 45px; line-height: 40px !important; text-align: center;
     font-size: .8em;
     }
-ol.activities { list-style-type: upper-alpha }
-ol.activities p.routeEstimate {
+ol.campaingElement { list-style-type: upper-alpha }
+ol.campaingElement p.routeEstimate {
 	font-size: .85em;
 	line-height: 24px; height: 24px; 
 	padding: 0; padding-left: 12px;
 	background: url(../images/itinerary_routeicon.png) no-repeat center left;
 	color: #36c; font-size: .85em;
 }
-ol.activities p.routeEstimate:hover { text-decoration: underline; cursor: pointer;  }
+ol.campaingElement p.routeEstimate:hover { text-decoration: underline; cursor: pointer;  }
 		
 /* campaingmetrics driving directions */
 #itineraryMap {
