@@ -337,13 +337,13 @@ div.panel div.items ul.itineraries li ul.campaingElement  {
 .handler { cursor: move !important; }
 .clone { cursor: move; margin-top: -15px; margin-left: -100px  }
 .clone .options { display: none; }
-#availablemetrics .empty, #campaingmetrics .empty { position: absolute; width: 450px; }        
-#availablemetrics ul, #campaingmetrics ul { min-height: 300px; }
-#availablemetrics .items li.ui-state-highlight, #campaingmetrics .items li.ui-state-highlight { border: 1px solid #fcefa1; }
-#availablemetrics .items li.ui-state-default, #campaingmetrics .items li.ui-state-default { }
-#availablemetrics .items li.ui-sortable-helper, #campaingmetrics .items li.ui-sortable-helper { border: 1px solid #fcefa1; }
-#availablemetrics .items li .btn ,#campaingmetrics .items li .btn { height: 37px; display: inline-block; line-height: 0px; }
-#availablemetrics .items li .handler, #campaingmetrics .items li .handler {
+#campaingMetrics .empty, #campaingSupervisors .empty { position: absolute; width: 450px; }        
+#campaingMetrics ul, #campaingSupervisors ul { min-height: 300px; }
+#campaingMetrics .items li.ui-state-highlight, #campaingSupervisors .items li.ui-state-highlight { border: 1px solid #fcefa1; }
+#campaingMetrics .items li.ui-state-default, #campaingSupervisors .items li.ui-state-default { }
+#campaingMetrics .items li.ui-sortable-helper, #campaingSupervisors .items li.ui-sortable-helper { border: 1px solid #fcefa1; }
+#campaingMetrics .items li .btn ,#campaingSupervisors .items li .btn { height: 37px; display: inline-block; line-height: 0px; }
+#campaingMetrics .items li .handler, #campaingSupervisors .items li .handler {
 	display: inline-block;
 	width: 37px; height: 37px;
 	background: url(../images/btn_reorder.png) no-repeat;
@@ -352,7 +352,7 @@ div.panel div.items ul.itineraries li ul.campaingElement  {
 
 input.metricLevels { text-align: right; }
 
-/* campaingmetrics addin boxes */
+/* campaingSupervisors addin boxes */
 .itineraryAddinBox {
 	position: absolute;
 	margin: auto; margin-top: -135px; margin-bottom: 10px;
@@ -433,7 +433,7 @@ ul.reviews li  {
 		}
 		#header #navigation #myItinerariesBox ul li img { float: right; }
 		
-/* campaingmetrics details */
+/* campaingSupervisors details */
 p.estimatedTime {
     background: url(../images/estimatedtime_bg.png) no-repeat center center;
     margin: 5px 0 0 0; padding: 0; height: 45px; line-height: 40px !important; text-align: center;
@@ -449,7 +449,7 @@ ol.campaingElement p.routeEstimate {
 }
 ol.campaingElement p.routeEstimate:hover { text-decoration: underline; cursor: pointer;  }
 		
-/* campaingmetrics driving directions */
+/* campaingSupervisors driving directions */
 #itineraryMap {
 	width: 984px; height: 380px;
 	clear: both;
