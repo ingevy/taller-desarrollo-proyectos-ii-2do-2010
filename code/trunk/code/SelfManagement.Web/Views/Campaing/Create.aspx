@@ -69,7 +69,7 @@
     </div>
     <hr />
     <div class="dual">
-        <div class="panel" id="availablemetrics">
+        <div class="panel" id="campaingMetrics">
             <div class="innerPanel">
                 <h2>
                     <span id="itineraryName">Metricas</span>
@@ -133,7 +133,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel" id="campaingmetrics">
+        <div class="panel" id="campaingSupervisors">
             <div class="innerPanel">
                 <h2>
                     <span id="Span1">Supervisores</span>
@@ -187,7 +187,7 @@
             else
             {
         %>
-        <input type="submit" value="Guardar" disabled="disabled" />
+        <input type="submit" value="Guardar" />
         <%
             }
         %>

@@ -74,9 +74,11 @@
                 this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.CampaingSupervisors
                                                                                     .Where(s => s.Selected)
                                                                                     .Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
+                
 
-                return this.RedirectToAction("Index", new { msg = Url.Encode("La nueva Campaña se creó exitosamente.")});
+                return this.RedirectToAction("Index", new { msg = Server.UrlEncode("La nueva campaña se creó exitosamente.")});
             }
+
 
             //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
             //                                                        .OrderByDescending(s => s.Selected)

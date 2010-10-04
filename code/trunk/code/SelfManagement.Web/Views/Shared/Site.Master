@@ -43,7 +43,7 @@
                        {
                     %>
                         <div class="statusMessage" id="statusMessage">
-                            <%:Request.QueryString["msg"]%>
+                            <%:Server.UrlDecode(Request.QueryString["msg"])%>
                         </div>
                         <script type="text/javascript">
                             setTimeout(function () { document.getElementById("statusMessage").style.display = 'none'; }, 4250);
