@@ -41,13 +41,13 @@
                 BeginDate = DateTime.Today.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture),
                 CampaingSupervisors = this.campaingRepository
                                             .RetrieveAvailableSupervisors(DateTime.Today)
-                                            .Select(up => new SupervisorViewModel { Id = up.InnerUserId, DisplayName = GetDisplayName(up), Selected = false })
+                                            .Select(up => up.ToViewModel())
                                             .OrderByDescending(s => s.Selected)
                                             .ThenBy(s => s.Id)
                                             .ToList(),
                 CampaingMetricLevels = this.campaingRepository
                                         .RetrieveAvailableMetrics()
-                                        .Select(m => new CampaingMetricLevelViewModel { Id = m.Id, Name = m.MetricName, Description = m.ShortDescription, FormatType = m.Format, IsHighestToLowest = m.IsHighestToLowest, Selected = false })
+                                        .Select(m => m.ToViewModel())
                                         .OrderByDescending(cml => cml.Selected)
                                         .ThenBy(cml => cml.Name)
                                         .ToList()
@@ -113,10 +113,10 @@
         {
             var supervisors = this.campaingRepository
                                 .RetrieveAvailableSupervisors(beginDate, endDate)
-                                .Select(s => GetDisplayName(s));
+                                .Select(s => s.ToViewModel());
 
             // Returns raw text, one result on each line.
-            return this.Content(string.Join("\n", supervisors));
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = supervisors };
         }
 
         //
@@ -188,15 +188,5 @@
                 }
             }
         }
-
-        private static string GetDisplayName(Supervisor supervisor)
-        {
-            if (!string.IsNullOrEmpty(supervisor.Name) && !string.IsNullOrEmpty(supervisor.LastName))
-            {
-                return string.Format(CultureInfo.CurrentUICulture, "{0} {1} ({2})", supervisor.Name, supervisor.LastName, supervisor.InnerUserId);
-            }
-
-            return string.Format(CultureInfo.CurrentUICulture, "{0} ({1})", supervisor.UserName, supervisor.InnerUserId);
-        } 
     }
 }

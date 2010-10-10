@@ -82,22 +82,6 @@ namespace CallCenter.SelfManagement.Data
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<aspnet_Users> aspnet_Users
-        {
-            get
-            {
-                if ((_aspnet_Users == null))
-                {
-                    _aspnet_Users = base.CreateObjectSet<aspnet_Users>("aspnet_Users");
-                }
-                return _aspnet_Users;
-            }
-        }
-        private ObjectSet<aspnet_Users> _aspnet_Users;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<CampaingMetricLevel> CampaingMetricLevels
         {
             get
@@ -273,14 +257,6 @@ namespace CallCenter.SelfManagement.Data
 
         #endregion
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the aspnet_Users EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToaspnet_Users(aspnet_Users aspnet_Users)
-        {
-            base.AddObject("aspnet_Users", aspnet_Users);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the CampaingMetricLevels EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -662,241 +638,6 @@ namespace CallCenter.SelfManagement.Data
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="aspnet_Users")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class aspnet_Users : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new aspnet_Users object.
-        /// </summary>
-        /// <param name="applicationId">Initial value of the ApplicationId property.</param>
-        /// <param name="userId">Initial value of the UserId property.</param>
-        /// <param name="innerUserId">Initial value of the InnerUserId property.</param>
-        /// <param name="userName">Initial value of the UserName property.</param>
-        /// <param name="loweredUserName">Initial value of the LoweredUserName property.</param>
-        /// <param name="isAnonymous">Initial value of the IsAnonymous property.</param>
-        /// <param name="lastActivityDate">Initial value of the LastActivityDate property.</param>
-        public static aspnet_Users Createaspnet_Users(global::System.Guid applicationId, global::System.Guid userId, global::System.Int32 innerUserId, global::System.String userName, global::System.String loweredUserName, global::System.Boolean isAnonymous, global::System.DateTime lastActivityDate)
-        {
-            aspnet_Users aspnet_Users = new aspnet_Users();
-            aspnet_Users.ApplicationId = applicationId;
-            aspnet_Users.UserId = userId;
-            aspnet_Users.InnerUserId = innerUserId;
-            aspnet_Users.UserName = userName;
-            aspnet_Users.LoweredUserName = loweredUserName;
-            aspnet_Users.IsAnonymous = isAnonymous;
-            aspnet_Users.LastActivityDate = lastActivityDate;
-            return aspnet_Users;
-        }
-
-        #endregion
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Guid ApplicationId
-        {
-            get
-            {
-                return _ApplicationId;
-            }
-            set
-            {
-                OnApplicationIdChanging(value);
-                ReportPropertyChanging("ApplicationId");
-                _ApplicationId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ApplicationId");
-                OnApplicationIdChanged();
-            }
-        }
-        private global::System.Guid _ApplicationId;
-        partial void OnApplicationIdChanging(global::System.Guid value);
-        partial void OnApplicationIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Guid UserId
-        {
-            get
-            {
-                return _UserId;
-            }
-            set
-            {
-                if (_UserId != value)
-                {
-                    OnUserIdChanging(value);
-                    ReportPropertyChanging("UserId");
-                    _UserId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("UserId");
-                    OnUserIdChanged();
-                }
-            }
-        }
-        private global::System.Guid _UserId;
-        partial void OnUserIdChanging(global::System.Guid value);
-        partial void OnUserIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 InnerUserId
-        {
-            get
-            {
-                return _InnerUserId;
-            }
-            set
-            {
-                OnInnerUserIdChanging(value);
-                ReportPropertyChanging("InnerUserId");
-                _InnerUserId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("InnerUserId");
-                OnInnerUserIdChanged();
-            }
-        }
-        private global::System.Int32 _InnerUserId;
-        partial void OnInnerUserIdChanging(global::System.Int32 value);
-        partial void OnInnerUserIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String UserName
-        {
-            get
-            {
-                return _UserName;
-            }
-            set
-            {
-                OnUserNameChanging(value);
-                ReportPropertyChanging("UserName");
-                _UserName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("UserName");
-                OnUserNameChanged();
-            }
-        }
-        private global::System.String _UserName;
-        partial void OnUserNameChanging(global::System.String value);
-        partial void OnUserNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LoweredUserName
-        {
-            get
-            {
-                return _LoweredUserName;
-            }
-            set
-            {
-                OnLoweredUserNameChanging(value);
-                ReportPropertyChanging("LoweredUserName");
-                _LoweredUserName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LoweredUserName");
-                OnLoweredUserNameChanged();
-            }
-        }
-        private global::System.String _LoweredUserName;
-        partial void OnLoweredUserNameChanging(global::System.String value);
-        partial void OnLoweredUserNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String MobileAlias
-        {
-            get
-            {
-                return _MobileAlias;
-            }
-            set
-            {
-                OnMobileAliasChanging(value);
-                ReportPropertyChanging("MobileAlias");
-                _MobileAlias = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("MobileAlias");
-                OnMobileAliasChanged();
-            }
-        }
-        private global::System.String _MobileAlias;
-        partial void OnMobileAliasChanging(global::System.String value);
-        partial void OnMobileAliasChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean IsAnonymous
-        {
-            get
-            {
-                return _IsAnonymous;
-            }
-            set
-            {
-                OnIsAnonymousChanging(value);
-                ReportPropertyChanging("IsAnonymous");
-                _IsAnonymous = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("IsAnonymous");
-                OnIsAnonymousChanged();
-            }
-        }
-        private global::System.Boolean _IsAnonymous;
-        partial void OnIsAnonymousChanging(global::System.Boolean value);
-        partial void OnIsAnonymousChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime LastActivityDate
-        {
-            get
-            {
-                return _LastActivityDate;
-            }
-            set
-            {
-                OnLastActivityDateChanging(value);
-                ReportPropertyChanging("LastActivityDate");
-                _LastActivityDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LastActivityDate");
-                OnLastActivityDateChanged();
-            }
-        }
-        private global::System.DateTime _LastActivityDate;
-        partial void OnLastActivityDateChanging(global::System.DateTime value);
-        partial void OnLastActivityDateChanged();
-
-        #endregion
-    
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="Campaing")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -911,14 +652,20 @@ namespace CallCenter.SelfManagement.Data
         /// <param name="customerId">Initial value of the CustomerId property.</param>
         /// <param name="name">Initial value of the Name property.</param>
         /// <param name="beginDate">Initial value of the BeginDate property.</param>
+        /// <param name="optimalHourlyValue">Initial value of the OptimalHourlyValue property.</param>
+        /// <param name="objectiveHourlyValue">Initial value of the ObjectiveHourlyValue property.</param>
+        /// <param name="minimumHourlyValue">Initial value of the MinimumHourlyValue property.</param>
         /// <param name="campaingType">Initial value of the CampaingType property.</param>
-        public static Campaing CreateCampaing(global::System.Int32 id, global::System.Int32 customerId, global::System.String name, global::System.DateTime beginDate, global::System.Int32 campaingType)
+        public static Campaing CreateCampaing(global::System.Int32 id, global::System.Int32 customerId, global::System.String name, global::System.DateTime beginDate, global::System.Decimal optimalHourlyValue, global::System.Decimal objectiveHourlyValue, global::System.Decimal minimumHourlyValue, global::System.Int32 campaingType)
         {
             Campaing campaing = new Campaing();
             campaing.Id = id;
             campaing.CustomerId = customerId;
             campaing.Name = name;
             campaing.BeginDate = beginDate;
+            campaing.OptimalHourlyValue = optimalHourlyValue;
+            campaing.ObjectiveHourlyValue = objectiveHourlyValue;
+            campaing.MinimumHourlyValue = minimumHourlyValue;
             campaing.CampaingType = campaingType;
             return campaing;
         }
@@ -1072,6 +819,78 @@ namespace CallCenter.SelfManagement.Data
         private Nullable<global::System.DateTime> _EndDate;
         partial void OnEndDateChanging(Nullable<global::System.DateTime> value);
         partial void OnEndDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal OptimalHourlyValue
+        {
+            get
+            {
+                return _OptimalHourlyValue;
+            }
+            set
+            {
+                OnOptimalHourlyValueChanging(value);
+                ReportPropertyChanging("OptimalHourlyValue");
+                _OptimalHourlyValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("OptimalHourlyValue");
+                OnOptimalHourlyValueChanged();
+            }
+        }
+        private global::System.Decimal _OptimalHourlyValue;
+        partial void OnOptimalHourlyValueChanging(global::System.Decimal value);
+        partial void OnOptimalHourlyValueChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal ObjectiveHourlyValue
+        {
+            get
+            {
+                return _ObjectiveHourlyValue;
+            }
+            set
+            {
+                OnObjectiveHourlyValueChanging(value);
+                ReportPropertyChanging("ObjectiveHourlyValue");
+                _ObjectiveHourlyValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ObjectiveHourlyValue");
+                OnObjectiveHourlyValueChanged();
+            }
+        }
+        private global::System.Decimal _ObjectiveHourlyValue;
+        partial void OnObjectiveHourlyValueChanging(global::System.Decimal value);
+        partial void OnObjectiveHourlyValueChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal MinimumHourlyValue
+        {
+            get
+            {
+                return _MinimumHourlyValue;
+            }
+            set
+            {
+                OnMinimumHourlyValueChanging(value);
+                ReportPropertyChanging("MinimumHourlyValue");
+                _MinimumHourlyValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MinimumHourlyValue");
+                OnMinimumHourlyValueChanged();
+            }
+        }
+        private global::System.Decimal _MinimumHourlyValue;
+        partial void OnMinimumHourlyValueChanging(global::System.Decimal value);
+        partial void OnMinimumHourlyValueChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
