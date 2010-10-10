@@ -10,7 +10,8 @@
     {
         public static double CalculateMetricValue(int cantLlamadas, int cantLlamadasTransferidas)
         {
-            return ((cantLlamadas - cantLlamadasTransferidas) / cantLlamadas);
+            double result = ((Convert.ToDouble(cantLlamadas) - Convert.ToDouble(cantLlamadasTransferidas)) / Convert.ToDouble(cantLlamadas));
+            return result;
         }
    
         private IDictionary<int, double> calculatedValues = new Dictionary<int, double>();
