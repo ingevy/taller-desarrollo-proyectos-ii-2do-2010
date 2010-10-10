@@ -8,9 +8,12 @@
 
     public class CampaingViewModel
     {
+        private const NumberStyles NumberStyle = NumberStyles.Float | NumberStyles.Integer | NumberStyles.Number;
+
         public int Id { get; set; }
 
         [Required(ErrorMessage="El nombre de la campaña es requerido.")]
+        [StringLength(100, ErrorMessage="El nombre de la campaña debe tener menos de 100 caracteres.")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "El cliente es requerido.")]
@@ -27,17 +30,26 @@
         [CustomValidation(typeof(CampaingViewModel), "ValidateDate")]
         public string EndDate { get; set; }
 
+        [StringLength(750, ErrorMessage = "La descripcion de la campaña debe tener menos de 750 caracteres.")]
         public string Description { get; set; }
 
-        public IList<CampaingMetricLevelViewModel> CampaingMetricLevels { get; set; }
+        [CustomValidation(typeof(CampaingViewModel), "ValidateNumber")]
+        [Required(ErrorMessage = "El valor de la hora del nivel optimo es requerido.")]
+        public string OptimalHourlyValue { get; set; }
+
+        [CustomValidation(typeof(CampaingViewModel), "ValidateNumber")]
+        [Required(ErrorMessage = "El valor de la hora del nivel objetivo es requerido.")]
+        public string ObjectiveHourlyValue { get; set; }
+
+        [CustomValidation(typeof(CampaingViewModel), "ValidateNumber")]
+        [Required(ErrorMessage = "El valor de la hora del nivel mínimo es requerido.")]
+        public string MinimumHourlyValue { get; set; } 
 
         [Range(3, 3, ErrorMessage = "Se requiere definir tres metricas para cada Campaña.")]
         public int CampaingMetricLevelsCount
         {
             get { return this.CampaingMetricLevels.Where(cml => cml.Selected).Count(); }
         }
-
-        public IList<SupervisorViewModel> CampaingSupervisors { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Se requiere al menos un Supervisor para cada Campaña.")]
         public int CampaingSupervisorsCount
@@ -52,6 +64,52 @@
                 return 0;
             }
         }
+
+        [Range(1, 1, ErrorMessage = "El valor de la hora para el nivel optimo debe ser el mayor.")]
+        public int OptimalHourlyValueValid
+        {
+            get
+            {
+                decimal optimalHourlyValue;
+                decimal objectiveHourlyValue;
+                decimal minimumHourlyValue;
+
+                if (decimal.TryParse(this.OptimalHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out optimalHourlyValue) &&
+                    decimal.TryParse(this.ObjectiveHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out objectiveHourlyValue) &&
+                    decimal.TryParse(this.MinimumHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out minimumHourlyValue))
+                {
+                    return (optimalHourlyValue > objectiveHourlyValue) && (optimalHourlyValue > minimumHourlyValue)
+                           ? 1
+                           : 0;
+                }
+
+                return 1;
+            }
+        }
+
+        [Range(1, 1, ErrorMessage = "El valor de la hora para el nivel objetivo debe ser el mayor al minimo.")]
+        public int ObjectiveHourlyValueValid
+        {
+            get
+            {
+                decimal objectiveHourlyValue;
+                decimal minimumHourlyValue;
+
+                if (decimal.TryParse(this.ObjectiveHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out objectiveHourlyValue) &&
+                    decimal.TryParse(this.MinimumHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out minimumHourlyValue))
+                {
+                    return objectiveHourlyValue > minimumHourlyValue
+                           ? 1
+                           : 0;
+                }
+
+                return 1;
+            }
+        }
+
+        public IList<CampaingMetricLevelViewModel> CampaingMetricLevels { get; set; }
+
+        public IList<SupervisorViewModel> CampaingSupervisors { get; set; }
 
         public bool AreDatesValid()
         {
@@ -86,6 +144,23 @@
                 {
                     return new ValidationResult("Formato de fecha invalido", new List<string> { "BeginDate" });
                 }
+            }
+
+            return ValidationResult.Success;
+        }
+
+        public static ValidationResult ValidateNumber(string number, ValidationContext validationContext)
+        {
+            double result = 0;
+
+            if (!double.TryParse(number, NumberStyle, CultureInfo.InvariantCulture, out result))
+            {
+                return new ValidationResult("Formato inválido.");
+            }
+
+            if (result < 0)
+            {
+                return new ValidationResult("El valor de hora no puede ser negativo.");
             }
 
             return ValidationResult.Success;

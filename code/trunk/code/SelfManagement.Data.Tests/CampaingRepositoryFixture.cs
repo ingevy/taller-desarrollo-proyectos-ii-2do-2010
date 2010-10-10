@@ -104,6 +104,9 @@
                 CampaingType = 0,
                 BeginDate = DateTime.Now,
                 EndDate = DateTime.Now.AddDays(15),
+                OptimalHourlyValue = 7.91M,
+                ObjectiveHourlyValue = 3.24M,
+                MinimumHourlyValue = 1.66M,
                 CustomerId = 1
             };
             Campaing campaingResult = null;
@@ -132,6 +135,9 @@
             Assert.AreEqual(campaing.EndDate.Value.Day, campaingResult.EndDate.Value.Day);
             Assert.AreEqual(campaing.EndDate.Value.Hour, campaingResult.EndDate.Value.Hour);
             Assert.AreEqual(campaing.EndDate.Value.Minute, campaingResult.EndDate.Value.Minute);
+            Assert.AreEqual(campaing.OptimalHourlyValue, 7.91M);
+            Assert.AreEqual(campaing.ObjectiveHourlyValue, 3.24M);
+            Assert.AreEqual(campaing.MinimumHourlyValue, 1.66M);
         }
 
         [TestMethod]
@@ -143,6 +149,9 @@
                 Name = "Test Campaing",
                 CampaingType = 0,
                 BeginDate = DateTime.Now,
+                OptimalHourlyValue = 7.91M,
+                ObjectiveHourlyValue = 3.24M,
+                MinimumHourlyValue = 1.66M,
                 CustomerId = 1
             };
             Campaing campaingResult = null;
@@ -166,6 +175,9 @@
             Assert.AreEqual(campaing.BeginDate.Minute, campaingResult.BeginDate.Minute);
             Assert.IsFalse(campaingResult.EndDate.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(campaingResult.Description));
+            Assert.AreEqual(campaing.OptimalHourlyValue, 7.91M);
+            Assert.AreEqual(campaing.ObjectiveHourlyValue, 3.24M);
+            Assert.AreEqual(campaing.MinimumHourlyValue, 1.66M);
         }
 
         [TestMethod]
@@ -224,6 +236,9 @@
                     Name = "Test Campaing",
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -251,6 +266,9 @@
                     Name = "Test Campaing",
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -280,6 +298,9 @@
                     Name = "Test Campaing",
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -311,6 +332,9 @@
                     Name = "Test Campaing 1",
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var campaingId1 = repository.CreateCampaing(campaing);
@@ -320,6 +344,9 @@
                     Name = "Test Campaing 2",
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 2
                 };
                 var campaingId2 = repository.CreateCampaing(campaing);
@@ -349,6 +376,9 @@
                     Name = "Test Campaing",
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -437,6 +467,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -476,9 +509,6 @@
         [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingSupervisorsFromDifferentCampaings()
         {
-            IList<Supervisor> campaingSupervisorsResult = null;
-            IList<Agent> campaingAgentsResult = null;
-
             using (new TransactionScope())
             {
                 var repository = new CampaingRepository();               
@@ -488,6 +518,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var campaingId1 = repository.CreateCampaing(campaing);
@@ -498,6 +531,9 @@
                     CampaingType = 1,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 2
                 };
                 var campaingId2 = repository.CreateCampaing(campaing);
@@ -517,9 +553,6 @@
         [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingSupervisorsWhenTheRolIsNotSupervisor()
         {
-            IList<Supervisor> campaingSupervisorsResult = null;
-            IList<Agent> campaingAgentsResult = null;
-
             using (new TransactionScope())
             {
                 var repository = new CampaingRepository();
@@ -529,6 +562,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var campaingId = repository.CreateCampaing(campaing);
@@ -558,6 +594,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -604,6 +643,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -644,6 +686,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -684,6 +729,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -734,6 +782,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -774,6 +825,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -814,6 +868,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
@@ -864,6 +921,9 @@
                     CampaingType = 0,
                     BeginDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(31),
+                    OptimalHourlyValue = 7.91M,
+                    ObjectiveHourlyValue = 3.24M,
+                    MinimumHourlyValue = 1.66M,
                     CustomerId = 1
                 };
                 var repository = new CampaingRepository();
