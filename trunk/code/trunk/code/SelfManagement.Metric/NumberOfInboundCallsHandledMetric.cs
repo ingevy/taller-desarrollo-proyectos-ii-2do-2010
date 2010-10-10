@@ -6,7 +6,7 @@
     using System;
     using System.Globalization;
 
-    public class NumberOfInboundCallsHandled : IMetric
+    public class NumberOfInboundCallsHandledMetric : IMetric
     {
         public static double CalculateMetricValue(int cantLlamadas)
         {
@@ -17,7 +17,7 @@
         private ExternalSystemFiles externalFileNeeded = ExternalSystemFiles.SUMMARY;
         private DateTime metricDate;
 
-        public NumberOfInboundCallsHandled(DateTime metricDate)
+        public NumberOfInboundCallsHandledMetric(DateTime metricDate)
         {
             this.metricDate = metricDate;
         }
@@ -54,7 +54,7 @@
             {
                 var agentId = Convert.ToInt32(line["Legajo"]);
                 var cantLlamadas = Convert.ToInt32(line["Cantidad Llamadas"]);
-                var metricValue = NumberOfInboundCallsHandled.CalculateMetricValue(cantLlamadas);
+                var metricValue = NumberOfInboundCallsHandledMetric.CalculateMetricValue(cantLlamadas);
 
                 this.calculatedValues.Add(agentId, metricValue);
             }

@@ -6,18 +6,19 @@
     using System;
     using System.Globalization;
 
-    public class PercentageOfTimeSpentInBillableMode : IMetric
+    public class PercentageOfTimeSpentInBillableModeMetric : IMetric
     {
         public static double CalculateMetricValue(int tiempoInCallMinutos, int tiempoEnEsperaMinutos, int tiempoEnAfterCallWorkMinutos, int tiempoLoggeadoMinutos)
         {
-            return ((tiempoInCallMinutos + tiempoEnEsperaMinutos + tiempoEnAfterCallWorkMinutos) / tiempoLoggeadoMinutos);
+            double result = (Convert.ToDouble(tiempoInCallMinutos) + Convert.ToDouble(tiempoEnEsperaMinutos) + Convert.ToDouble(tiempoEnAfterCallWorkMinutos)) / Convert.ToDouble(tiempoLoggeadoMinutos);
+            return result;
         }
    
         private IDictionary<int, double> calculatedValues = new Dictionary<int, double>();
         private ExternalSystemFiles externalFileNeeded = ExternalSystemFiles.SUMMARY;
         private DateTime metricDate;
 
-        public PercentageOfTimeSpentInBillableMode(DateTime metricDate)
+        public PercentageOfTimeSpentInBillableModeMetric(DateTime metricDate)
         {
             this.metricDate = metricDate;
         }
@@ -57,7 +58,7 @@
                 var tiempoEnEsperaMinutos = Convert.ToInt32(line["Tiempo en espera (min)"]);
                 var tiempoEnAfterCallWorkMinutos = Convert.ToInt32(line["Tiempo en after call work (min)"]);
                 var tiempoLoggeadoMinutos = Convert.ToInt32(line["Tiempo Loggeado (min)"]);
-                var metricValue = PercentageOfTimeSpentInBillableMode.CalculateMetricValue(tiempoInCallMinutos, tiempoEnEsperaMinutos, tiempoEnAfterCallWorkMinutos, tiempoLoggeadoMinutos);
+                var metricValue = PercentageOfTimeSpentInBillableModeMetric.CalculateMetricValue(tiempoInCallMinutos, tiempoEnEsperaMinutos, tiempoEnAfterCallWorkMinutos, tiempoLoggeadoMinutos);
 
                 this.calculatedValues.Add(agentId, metricValue);
             }
