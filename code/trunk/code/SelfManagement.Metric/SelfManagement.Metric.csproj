@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="DataFile.cs" />
     <Compile Include="InteractionToCallPercentMetric.cs" />
+    <Compile Include="NumberOfInboundCallsHandled.cs" />
+    <Compile Include="PercentageOfTimeSpentInBillableMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
