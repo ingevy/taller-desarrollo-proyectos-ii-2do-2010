@@ -4,16 +4,33 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Text.RegularExpressions;
 
-    class DataFile : IDataFile
+    public class DataFile : IDataFile
     {
         private ExternalSystemFiles externalSystemFile;
         private DateTime fileDate;
         private string filePath;
 
-        public DataFile(ExternalSystemFiles externalSystemFile, DateTime fileDate, string filePath)
+        public static ExternalSystemFiles GetDataFileTypeByFileName(string fileName)
         {
-            this.externalSystemFile = externalSystemFile;
+            var dateStrRegex = "[1-9][0-9]{3}[0-1][[0-9][0-3][0-9]";
+            var summaryRegex = new Regex("^Summary_" + dateStrRegex + ".csv$");
+            var ttsRegex = new Regex("^TTS_" + dateStrRegex + ".csv$");
+            var qaRegex = new Regex("^QA_" + dateStrRegex + ".csv$");
+            var stsRegex = new Regex("^STS_[Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre][1-9][0-9]{3}.csv$");
+
+            if (summaryRegex.IsMatch(fileName)) { return ExternalSystemFiles.SUMMARY; }
+            if (ttsRegex.IsMatch(fileName)) { return ExternalSystemFiles.TTS; }
+            if (qaRegex.IsMatch(fileName)) { return ExternalSystemFiles.QA; }
+            if (stsRegex.IsMatch(fileName)) { return ExternalSystemFiles.STS; }
+
+            throw new System.ArgumentException("Unexpected file name");
+        }
+
+        public DataFile(DateTime fileDate, string filePath)
+        {
+            this.externalSystemFile = DataFile.GetDataFileTypeByFileName(Path.GetFileName(filePath));
             this.fileDate = fileDate;
             this.filePath = filePath;
         }
