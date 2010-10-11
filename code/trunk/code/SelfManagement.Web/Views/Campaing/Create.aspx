@@ -123,15 +123,15 @@
                                 <div class="inline metricLevels" id="<%= this.Model.CampaingMetricLevels[index].Id %>"
                                     style="<%= this.Model.CampaingMetricLevels[index].Selected ? string.Empty: "display: none;" %>">
                                     Optimo:
-                                    <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].OptimalLevel, new { size = "4" })%>
+                                    <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].OptimalLevel, new { size = "3" })%>
                                     <% if (this.Model.CampaingMetricLevels[index].Selected)
                                        {
                                     %>
                                     <%: Html.ValidationMessageFor(model => this.Model.CampaingMetricLevels[index].OptimalLevel)%>
                                     <%: Html.ValidationMessageFor(model => this.Model.CampaingMetricLevels[index].OptimalLevelValid)%>
                                     <% } %>
-                                    &nbsp;&nbsp;&nbsp;&nbsp; Objetivo:
-                                    <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].ObjectiveLevel, new { size = "4" })%>
+                                    <span style="margin-left:24px">Objetivo:</span>
+                                    <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].ObjectiveLevel, new { size = "3" })%>
                                     <% if (this.Model.CampaingMetricLevels[index].Selected)
                                        {
                                     %>
@@ -139,8 +139,8 @@
                                     <%: Html.ValidationMessageFor(model => this.Model.CampaingMetricLevels[index].ObjectiveLevelValid)%>
 
                                     <% } %>
-                                    &nbsp;&nbsp;&nbsp;&nbsp; Minimo:
-                                    <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].MinimumLevel, new { size = "4" })%>
+                                    <span style="margin-left:24px">Minimo:</span>
+                                    <%: Html.TextBoxFor(model => this.Model.CampaingMetricLevels[index].MinimumLevel, new { size = "3", style = "margin-right: 3px;" })%>
                                     <% if (this.Model.CampaingMetricLevels[index].Selected)
                                        {
                                     %>
