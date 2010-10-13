@@ -168,9 +168,9 @@
                     <%: Html.ValidationMessageFor(model => model.CampaingSupervisorsCount)%>
                 </h2>
                 <div class="">
-                    <div class="items">
+                    <div class="items" id="supervisors">
                     <%
-                        if (this.Model.CampaingSupervisors.Count() == 0)
+                        if (this.Model.CampaingSupervisors == null || (this.Model.CampaingSupervisors.Count() == 0))
                         {
                     %>
                         <h3>No hay supervisores disponibles en el rango de fechas elegido...</h3>
@@ -205,21 +205,17 @@
         </div>
     </div>
     <div id="buttonsPanel">
-        <%
-                        if (this.Model.CampaingSupervisors.Count() == 0)
-                        {
-        %>
-        <input type="submit" value="Guardar" disabled="disabled" />
-        <%
-                        }
-                        else
-                        {
-        %>
         <input type="submit" value="Guardar" />
-        <%
-                        }
-        %>
         <input type="reset" value="Cancelar" />
     </div>
     <% } %>
+
+    <script type="text/javascript">
+        DatePickerControl.onSelect = function (inputid) {
+            var beginDate = document.getElementById("BeginDate");
+            var endDate = document.getElementById("EndDate");
+
+            updateSupervisorsList(beginDate.value, endDate.value);
+        }
+  </script>
 </asp:Content>
