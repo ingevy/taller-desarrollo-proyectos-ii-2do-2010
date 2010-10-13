@@ -9,74 +9,82 @@ function showOrHideMetricLevels(event, id) {
     }
 }
 
-function removeMetricLevel(id) {
-    if ($("#" + id + " > input")[0].value == "New") {
-        $("#" + id + " > input")[0].value = "None";
+function updateSupervisorsList(beginDate, endDate) {
+    var supervisors = $("#supervisors");
+
+    if (!beginDate || (beginDate == "")) {
+        supervisors[0].innerHTML = "<h3>No hay supervisores disponibles en el rango de fechas elegido...</h3>";
+    }
+    else if (endDate && (endDate != "") && (endDate <= beginDate)) {
+        supervisors[0].innerHTML = "<h3>La fecha de inicio tiene que ser menor que la de fin para determinar los Supervisores disponibles...</h3>";
     }
     else {
-        $("#" + id + " > input")[0].value = "Remove";
-    }
+        supervisors[0].innerHTML = " ";
+        supervisors.addClass("loading");
 
-    $("#" + id)[0].style.display = "none";
+        var url = getBaseUrl() + "AvailableSupervisores?beginDate=" + encodeURIComponent(beginDate);
+        if (endDate && (endDate != "")) {
+            url += "&endDate=" + encodeURIComponent(endDate);
+        }
+
+        $.ajax({
+            url: url,
+            method: "GET",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function (xhr) { xhr.setRequestHeader("Content-Type", "application/json"); },
+            success: function (json) {
+                var supervisors = $("#supervisors");
+                if (json.Status && json.Status == "error") {
+                    supervisors[0].innerHTML = "<h3>Ups! Ocurrió un error...</h3>";
+                } else if (json.Supervisors.length == 0) {
+                    supervisors[0].innerHTML = "<h3>No hay supervisores disponibles en el rango de fechas elegido...</h3>";
+                } else {
+                    var html = "<ul class=\"campaingElement ui-sortable\" id=\"supervisorsList\">";
+                    for (var i = 0; i < json.Supervisors.length; i++) {
+                        var supervisor = json.Supervisors[i];
+
+                        html += "<li class=\"ui-state-default\"><span class=\"off id\">";
+                        html += "<input id=\"CampaingSupervisors_" + i.toString() +"__Id\" name=\"CampaingSupervisors[" + i.toString() + "].Id\" type=\"hidden\" value=\"" + supervisor.Id + "\" /></span>";
+                        html += "<h3>";
+                        html += "<a href=\"#\">" + supervisor.DisplayName  + "</a></h3>";
+                        html += "<input id=\"CampaingSupervisors_" + i.toString() +"__DisplayName\" name=\"CampaingSupervisors[" + i.toString() + "].DisplayName\" type=\"hidden\" value=\"" + supervisor.DisplayName + "\" />";
+                        html += "<p class=\"options\">";
+                        html += "<input id=\"CampaingSupervisors_" + i.toString() + "__Selected\" name=\"CampaingSupervisors[" + i.toString() + "].Selected\" onclick=\"\" type=\"checkbox\" value=\"true\" /><input name=\"CampaingSupervisors[" + i.toString() + "].Selected\" type=\"hidden\" value=\"" + supervisor.Selected + "\" />";
+                        html += "</p>";
+                        html += "</li>";
+                    }
+                    
+                    html += "</ul>";                    
+                    supervisors[0].innerHTML = html;
+                }
+
+                supervisors.removeClass("loading");
+            }
+        });
+    }
 }
 
-function addMetricLevel(listId, metricId, metricName, metricDescription, metricFormatType) {
-    var metricElement = $("#" + metricId)[0];
+function getBaseUrl() {
+    var baseUrl = "";
+    var baseElement = document.getElementsByTagName('base')[0];
 
-    if (metricElement == undefined) {
-        var index = $("#" + listId)[0].children.length;
-
-        var html = "<li style=\"display: block;\" id=\"" + metricId.toString() + "\" class=\"ui-state-default\">"
-+ "<input type=\"hidden\" value=\"New\" name=\"CampaingMetrics[" + index.toString() + "].MetricLevelStatus\" id=\"CampaingMetrics_" + index.toString() + "__MetricLevelStatus\">"
-+ "<input type=\"hidden\" value=" + metricId.toString() + " name=\"CampaingMetrics[" + index.toString() + "].MetricId\" id=\"CampaingMetrics_" + index.toString() + "__MetricId\">"
-+ "<input type=\"hidden\" value=" + metricName.toString() + " name=\"CampaingMetrics[" + index.toString() + "].Name\" id=\"CampaingMetrics_" + index.toString() + "__Name\">"
-+ "<input type=\"hidden\" value=" + metricDescription + " name=\"CampaingMetrics[" + index.toString() + "].Description\" id=\"CampaingMetrics_" + index.toString() + "__Description\">"
-+ "<h3><a href=\"#\">" + metricName.toString() + "</a></h3>"
-+ "<p>" + metricDescription + "</p>"
-+ "<input type=\"hidden\" value=\"" + metricFormatType.toString() + "\" name=\"CampaingMetrics[" + index.toString() + "].FormatType\" id= \"CampaingMetrics_" + index.toString() + "__FormatType\">"
-+ "<div class=\"inline metricLevels\">"
-+ "Optimo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].OptimalLevel\" id=\"CampaingMetrics_" + index.toString() + "__OptimalLevel\" isdatepicker=\"true\">"
-+ "&nbsp;&nbsp;&nbsp;"
-+ "Objetivo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].ObjectiveLevel\" id=\"CampaingMetrics_" + index.toString() + "__ObjectiveLevel\" isdatepicker=\"true\">"
-+ "&nbsp;&nbsp;&nbsp;"
-+ "Minimo: <input type=\"text\" value=\"0\" size=\"3\" name=\"CampaingMetrics[" + index.toString() + "].MinimumLevel\" id=\"CampaingMetrics_" + index.toString() + "__MinimumLevel\" isdatepicker=\"true\">"
-+ "</div>"
-+ "<p class=\"options\">"
-+ "<a href=\"JavaScript:removeMetricLevel('" + metricId.toString() + "')\" title=\"Remover Métrica\" class=\"btn remove\">Remover Métrica</a>"
-+ "</p>"
-+ "</li>";
-
-        $("#" + listId)[0].innerHTML += html;
+    if (baseElement && baseElement.href && baseElement.href.length > 0) {
+        baseUrl = baseElement.href;
     }
-    else if (metricElement.children[0].value == "Remove") {
-        metricElement.children[0].value == "New"
-        metricElement.display = "block";
-    }
-    else if (metricElement.children[0].value == "None") {
-        metricElement.display = "block";
+    else {
+        baseUrl = document.URL;
     }
 
+    var qsStart = baseUrl.indexOf('?');
+    if (qsStart !== -1) {
+        baseUrl = baseUrl.substr(0, qsStart);
+    }
 
+    qsStart = baseUrl.indexOf('#');
+    if (qsStart !== -1) {
+        baseUrl = baseUrl.substr(0, qsStart);
+    }
 
-//    var textSelected = $("#" + comboId).children()[index].text;
-//    var valueSelected = $("#" + comboId).children()[index].value;
-//    var newIndex = $("#" + listId)[0].children.length;
-
-//    if (valueSelected != null && valueSelected != "") {
-//        if ($("#" + valueSelected).length == 0) {
-//            var html = "<li id=\"" + valueSelected + "\">"
-//              + "<label>" + textSelected + "</label>"
-//              + "<a class=\"deletelink\" href=\"JavaScript:removeAnimal('" + valueSelected + "')\">Remover</a>"
-//              + "<input type=\"hidden\" value=\"New\" name=\"Animals[" + newIndex.toString() + "].AnimalStatus\" id=\"Animals[" + newIndex.toString() + "]_AnimalStatus\" />"
-//              + "<input type=\"hidden\" value=\"" + valueSelected + "\" name=\"Animals[" + newIndex.toString() + "].AnimalId\" id=\"Animals[" + newIndex.toString() + "]_AnimalId\" />"
-//              + "<div class=\"clear\"></div>"
-//              + "</li>";
-
-//            $("#" + listId)[0].innerHTML += html;
-//        }
-//        else {
-//            $("#" + valueSelected + " input")[0].value = "New";
-//            $("#" + valueSelected)[0].style.display = "";
-//        }
-//    }
+    return baseUrl.substr(0, baseUrl.lastIndexOf('/') + 1);
 }

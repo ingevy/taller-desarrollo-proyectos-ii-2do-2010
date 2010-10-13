@@ -90,7 +90,7 @@
 
             if (!datesValid)
             {
-                this.ModelState["EndDate"].Errors.Add("La fecha de inicio tiene que ser menor que la de fin");
+                this.ModelState["EndDate"].Errors.Add("La fecha de inicio tiene que ser menor que la de fin.");
             }
 
             return this.View(campaingToCreate);
@@ -109,14 +109,27 @@
         }
 
         [Authorize(Roles = "AccountManager")]
-        public ActionResult AvailableSupervisores(DateTime beginDate, DateTime? endDate)
+        public ActionResult AvailableSupervisores(string beginDate, string endDate)
         {
-            var supervisors = this.campaingRepository
-                                .RetrieveAvailableSupervisors(beginDate, endDate)
-                                .Select(s => s.ToViewModel());
+            IEnumerable<SupervisorViewModel> supervisors = new List<SupervisorViewModel>();
+            DateTime begin;
+            DateTime end;
+
+            if (DateTime.TryParseExact(beginDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out begin))
+            {
+                supervisors = DateTime.TryParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out end)
+                    ? begin < end
+                        ? this.campaingRepository
+                            .RetrieveAvailableSupervisors(begin, end)
+                            .Select(s => s.ToViewModel())
+                        : supervisors
+                    : this.campaingRepository
+                            .RetrieveAvailableSupervisors(begin)
+                            .Select(s => s.ToViewModel());                        
+            }
 
             // Returns raw text, one result on each line.
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = supervisors };
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Supervisors = supervisors } };
         }
 
         //
