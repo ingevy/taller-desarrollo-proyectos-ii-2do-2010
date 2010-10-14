@@ -6,7 +6,6 @@
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Metric;
     using CallCenter.SelfManagement.Metric.Interfaces;
-    using System.Text.RegularExpressions;
 
     public class FilesProcessor
     {

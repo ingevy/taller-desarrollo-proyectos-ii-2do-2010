@@ -13,33 +13,33 @@
     {
         [Required]
         [DataType(DataType.Password)]
-        [DisplayName("Current password")]
+        [DisplayName("Contraseña actual")]
         public string OldPassword { get; set; }
 
         [Required]
         [ValidatePasswordLength]
         [DataType(DataType.Password)]
-        [DisplayName("New password")]
+        [DisplayName("Nueva contraseña")]
         public string NewPassword { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [DisplayName("Confirm new password")]
+        [DisplayName("Confirmar nueva contraseña")]
         public string ConfirmPassword { get; set; }
     }
 
     public class LogOnModel
     {
-        [Required]
-        [DisplayName("User name")]
+        [Required(ErrorMessage="El nombre de usuario es requerido.")]
+        [DisplayName("Nombre de usuario")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "La contraseña es requerida.")]
         [DataType(DataType.Password)]
-        [DisplayName("Password")]
+        [DisplayName("Contraseña")]
         public string Password { get; set; }
 
-        [DisplayName("Remember me?")]
+        [DisplayName("Recordar mi contraseña")]
         public bool RememberMe { get; set; }
     }
 
@@ -47,23 +47,23 @@
     public class RegisterModel
     {
         [Required]
-        [DisplayName("User name")]
+        [DisplayName("Nombre de usuario")]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
-        [DisplayName("Email address")]
+        [DisplayName("Email")]
         public string Email { get; set; }
 
         [Required]
         [ValidatePasswordLength]
         [DataType(DataType.Password)]
-        [DisplayName("Password")]
+        [DisplayName("Contraseña")]
         public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [DisplayName("Confirm password")]
+        [DisplayName("Confirmar contraseña")]
         public string ConfirmPassword { get; set; }
     }
 

@@ -191,7 +191,7 @@ div.statusMessage  {
 #mainPanel fieldset div { padding-right:15px; padding-left:15px; margin-top:15px }
 #mainPanel fieldset label { width: 120px }
 #mainPanel fieldset textarea { width: 919px }
-#mainPanel fieldset .uservalue { width: 160px }
+#mainPanel fieldset .uservalue { width: 159px }
 #mainPanel fieldset nobr .uservalue { width: 138px }
 #mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
 #mainPanel label { display: inline-block; width: 70px; }
@@ -641,4 +641,8 @@ div.ac_results ul li.ac_over {
 .acSelect {
 	background-color: Highlight;
 	color: HighlightText;
+}
+
+.editor-label {
+	margin-top: 10px;
 }

@@ -1,10 +1,10 @@
 ﻿namespace CallCenter.SelfManagement.Metric
 {
-    using CallCenter.SelfManagement.Metric.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
+    using CallCenter.SelfManagement.Metric.Interfaces;
 
     public class DataFile : IDataFile
     {

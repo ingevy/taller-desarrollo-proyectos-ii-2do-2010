@@ -1,10 +1,9 @@
 ﻿namespace CallCenter.SelfManagement.Metric
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using CallCenter.SelfManagement.Metric.Interfaces;
-    using System;
-    using System.Globalization;
 
     public class PercentageOfTimeSpentInBillableModeMetric : IMetric
     {
