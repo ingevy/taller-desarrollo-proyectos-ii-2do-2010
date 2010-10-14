@@ -1,7 +1,7 @@
 ﻿namespace CallCenter.SelfManagement.Metric.Interfaces
 {
-    using System.Collections.Generic;
     using System;
+    using System.Collections.Generic;
 
     public interface IMetric
     {

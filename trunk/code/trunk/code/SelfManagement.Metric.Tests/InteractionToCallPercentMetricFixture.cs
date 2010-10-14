@@ -1,10 +1,10 @@
 ﻿namespace CallCenter.SelfManagement.Metric.Tests
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
-    using Moq;
-    using CallCenter.SelfManagement.Metric.Interfaces;
     using System.Collections.Generic;
+    using CallCenter.SelfManagement.Metric.Interfaces;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Moq;
 
     [TestClass]
     public class InteractionToCallPercentMetricFixture
