@@ -202,9 +202,9 @@
 
                 var campaingMetrics = new List<CampaingMetricLevel>
                 {
-                    new CampaingMetricLevel { CampaingId = campaingId, MetricId = 3, OptimalLevel = 30, ObjectiveLevel = 20, MinimumLevel = 10, Enabled = true },
-                    new CampaingMetricLevel { CampaingId = campaingId, MetricId = 4, OptimalLevel = 60, ObjectiveLevel = 50, MinimumLevel = 40, Enabled = true },
-                    new CampaingMetricLevel { CampaingId = campaingId, MetricId = 5, OptimalLevel = 45, ObjectiveLevel = 35, MinimumLevel = 25, Enabled = true },
+                    new CampaingMetricLevel { CampaingId = campaingId, MetricId = 1, OptimalLevel = 30, ObjectiveLevel = 20, MinimumLevel = 10, Enabled = true },
+                    new CampaingMetricLevel { CampaingId = campaingId, MetricId = 13, OptimalLevel = 60, ObjectiveLevel = 50, MinimumLevel = 40, Enabled = true },
+                    new CampaingMetricLevel { CampaingId = campaingId, MetricId = 14, OptimalLevel = 45, ObjectiveLevel = 35, MinimumLevel = 25, Enabled = true },
                 };
                 
                 repository.SaveCampaingMetricLevels(campaingMetrics);
@@ -215,7 +215,7 @@
             Assert.AreEqual(3, campaingMetricLevelsResult.Count);
             Assert.IsTrue(campaingMetricLevelsResult.All(cml => cml.CampaingId == campaingId));
 
-            var sampleCampaingMetricLevel = campaingMetricLevelsResult.FirstOrDefault(cml => cml.MetricId == 4);
+            var sampleCampaingMetricLevel = campaingMetricLevelsResult.FirstOrDefault(cml => cml.MetricId == 13);
 
             Assert.IsNotNull(sampleCampaingMetricLevel);
             Assert.AreEqual(60, sampleCampaingMetricLevel.OptimalLevel);
