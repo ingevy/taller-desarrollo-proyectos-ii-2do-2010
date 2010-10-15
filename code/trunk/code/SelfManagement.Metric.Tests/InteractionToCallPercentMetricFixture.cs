@@ -11,7 +11,7 @@
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInList()
+        public void ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricI2C()
         {
             var newDataFile1 = new Mock<IDataFile>();
             newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.HF);
@@ -31,7 +31,7 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ShouldThrowFileDateDoesNotMatchMetricDateWhenDateInDataFileDiffersFromDateInMetric()
+        public void ShouldThrowFileDateDoesNotMatchMetricDateWhenDateInDataFileDiffersFromDateInMetricI2C()
         {
             var newDataFile1 = new Mock<IDataFile>();
             newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.SUMMARY);
@@ -45,7 +45,7 @@
         }
 
         [TestMethod]
-        public void ShouldCalculateMetricValueForTheAgentsInFile()
+        public void ShouldCalculateMetricValueForTheAgentsInFileMetricI2C()
         {
             var dataLines = new List<Dictionary<string, string>>();
 

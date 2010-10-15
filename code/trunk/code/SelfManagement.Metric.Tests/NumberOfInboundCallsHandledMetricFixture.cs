@@ -7,11 +7,11 @@
     using Moq;
 
     [TestClass]
-    public class PercentageOfTimeSpentInBillableModeFixture
+    public class NumberOfInboundCallsHandledMetricFixture
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricInChairOcc()
+        public void ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricNch()
         {
             var newDataFile1 = new Mock<IDataFile>();
             newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.HF);
@@ -25,13 +25,13 @@
             dataFiles.Add(newDataFile2.Object);
             dataFiles.Add(newDataFile3.Object);
 
-            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric(new DateTime());
-            inChairOccMetric.ProcessFiles(dataFiles);
+            var nchMetric = new NumberOfInboundCallsHandledMetric(new DateTime());
+            nchMetric.ProcessFiles(dataFiles);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void ShouldThrowFileDateDoesNotMatchMetricDateWhenDateInDataFileDiffersFromDateInMetricInChairOcc()
+        public void ShouldThrowFileDateDoesNotMatchMetricDateWhenDateInDataFileDiffersFromDateInMetricNch()
         {
             var newDataFile1 = new Mock<IDataFile>();
             newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.SUMMARY);
@@ -40,12 +40,12 @@
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
 
-            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric(new DateTime(2010, 10, 3));
-            inChairOccMetric.ProcessFiles(dataFiles);
+            var nchMetric = new NumberOfInboundCallsHandledMetric(new DateTime(2010, 10, 3));
+            nchMetric.ProcessFiles(dataFiles);
         }
 
         [TestMethod]
-        public void ShouldCalculateMetricValueForTheAgentsInFileMetricInChairOcc()
+        public void ShouldCalculateMetricValueForTheAgentsInFileMetricNch()
         {
             var dataLines = new List<Dictionary<string, string>>();
 
@@ -64,18 +64,18 @@
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
 
-            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric(new DateTime());
-            inChairOccMetric.ProcessFiles(dataFiles);
+            var nchMetric = new NumberOfInboundCallsHandledMetric(new DateTime());
+            nchMetric.ProcessFiles(dataFiles);
 
-            Assert.AreEqual(3, inChairOccMetric.CalculatedValues.Count);
+            Assert.AreEqual(3, nchMetric.CalculatedValues.Count);
 
-            var inChairOcc1 = PercentageOfTimeSpentInBillableModeMetric.CalculateMetricValue(Convert.ToInt32(dic1["Tiempo InCall (min)"]), Convert.ToInt32(dic1["Tiempo en espera (min)"]), Convert.ToInt32(dic1["Tiempo en after call work (min)"]), Convert.ToInt32(dic1["Tiempo Loggeado (min)"]));
-            var inChairOcc2 = PercentageOfTimeSpentInBillableModeMetric.CalculateMetricValue(Convert.ToInt32(dic2["Tiempo InCall (min)"]), Convert.ToInt32(dic2["Tiempo en espera (min)"]), Convert.ToInt32(dic2["Tiempo en after call work (min)"]), Convert.ToInt32(dic2["Tiempo Loggeado (min)"]));
-            var inChairOcc3 = PercentageOfTimeSpentInBillableModeMetric.CalculateMetricValue(Convert.ToInt32(dic3["Tiempo InCall (min)"]), Convert.ToInt32(dic3["Tiempo en espera (min)"]), Convert.ToInt32(dic3["Tiempo en after call work (min)"]), Convert.ToInt32(dic3["Tiempo Loggeado (min)"]));
+            var nch1 = NumberOfInboundCallsHandledMetric.CalculateMetricValue(Convert.ToInt32(dic1["Cantidad Llamadas"]));
+            var nch2 = NumberOfInboundCallsHandledMetric.CalculateMetricValue(Convert.ToInt32(dic2["Cantidad Llamadas"]));
+            var nch3 = NumberOfInboundCallsHandledMetric.CalculateMetricValue(Convert.ToInt32(dic3["Cantidad Llamadas"]));
 
-            Assert.AreEqual(inChairOcc1, inChairOccMetric.CalculatedValues[Convert.ToInt32(dic1["Legajo"])]);
-            Assert.AreEqual(inChairOcc2, inChairOccMetric.CalculatedValues[Convert.ToInt32(dic2["Legajo"])]);
-            Assert.AreEqual(inChairOcc3, inChairOccMetric.CalculatedValues[Convert.ToInt32(dic3["Legajo"])]);
+            Assert.AreEqual(nch1, nchMetric.CalculatedValues[Convert.ToInt32(dic1["Legajo"])]);
+            Assert.AreEqual(nch2, nchMetric.CalculatedValues[Convert.ToInt32(dic2["Legajo"])]);
+            Assert.AreEqual(nch3, nchMetric.CalculatedValues[Convert.ToInt32(dic3["Legajo"])]);
 
             newDataFile1.VerifyAll();
         }
