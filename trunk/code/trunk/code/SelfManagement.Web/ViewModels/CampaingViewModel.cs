@@ -12,7 +12,7 @@
 
         public int Id { get; set; }
 
-        [Required(ErrorMessage="El nombre de la campaña es requerido.")]
+        [Required(ErrorMessage = "El nombre de la campaña es requerido.")]
         [StringLength(100, ErrorMessage="El nombre de la campaña debe tener menos de 100 caracteres.")]
         public string Name { get; set; }
 

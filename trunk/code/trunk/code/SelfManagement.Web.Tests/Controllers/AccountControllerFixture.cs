@@ -5,14 +5,15 @@
     using System.Web.Mvc;
     using System.Web.Routing;
     using System.Web.Security;
+    using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Web.Controllers;
-    using CallCenter.SelfManagement.Web.Models;
+    using CallCenter.SelfManagement.Web.Services;
+    using CallCenter.SelfManagement.Web.ViewModels;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class AccountControllerFixture
     {
-
         [TestMethod]
         public void ChangePassword_Get_ReturnsView()
         {
@@ -32,7 +33,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            ChangePasswordModel model = new ChangePasswordModel()
+            ChangePasswordViewModel model = new ChangePasswordViewModel()
             {
                 OldPassword = "goodOldPassword",
                 NewPassword = "goodNewPassword",
@@ -53,7 +54,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            ChangePasswordModel model = new ChangePasswordModel()
+            ChangePasswordViewModel model = new ChangePasswordViewModel()
             {
                 OldPassword = "goodOldPassword",
                 NewPassword = "badNewPassword",
@@ -76,7 +77,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            ChangePasswordModel model = new ChangePasswordModel()
+            ChangePasswordViewModel model = new ChangePasswordViewModel()
             {
                 OldPassword = "goodOldPassword",
                 NewPassword = "goodNewPassword",
@@ -142,7 +143,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            LogOnModel model = new LogOnModel()
+            LogOnViewModel model = new LogOnViewModel()
             {
                 UserName = "someUser",
                 Password = "goodPassword",
@@ -165,7 +166,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            LogOnModel model = new LogOnModel()
+            LogOnViewModel model = new LogOnViewModel()
             {
                 UserName = "someUser",
                 Password = "goodPassword",
@@ -187,7 +188,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            LogOnModel model = new LogOnModel()
+            LogOnViewModel model = new LogOnViewModel()
             {
                 UserName = "someUser",
                 Password = "goodPassword",
@@ -209,7 +210,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            LogOnModel model = new LogOnModel()
+            LogOnViewModel model = new LogOnViewModel()
             {
                 UserName = "someUser",
                 Password = "badPassword",
@@ -223,7 +224,7 @@
             Assert.IsInstanceOfType(result, typeof(ViewResult));
             ViewResult viewResult = (ViewResult)result;
             Assert.AreEqual(model, viewResult.ViewData.Model);
-            Assert.AreEqual("The user name or password provided is incorrect.", controller.ModelState[""].Errors[0].ErrorMessage);
+            Assert.AreEqual("El nombre de usuario o contraseña es inválido.", controller.ModelState["LogOnViewModel"].Errors[0].ErrorMessage);
         }
 
         [TestMethod]
@@ -245,7 +246,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            RegisterModel model = new RegisterModel()
+            RegisterViewModel model = new RegisterViewModel()
             {
                 UserName = "someUser",
                 Email = "goodEmail",
@@ -268,7 +269,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            RegisterModel model = new RegisterModel()
+            RegisterViewModel model = new RegisterViewModel()
             {
                 UserName = "duplicateUser",
                 Email = "goodEmail",
@@ -292,7 +293,7 @@
         {
             // Arrange
             AccountController controller = GetAccountController();
-            RegisterModel model = new RegisterModel()
+            RegisterViewModel model = new RegisterViewModel()
             {
                 UserName = "someUser",
                 Email = "goodEmail",
@@ -318,11 +319,13 @@
                 FormsService = new MockFormsAuthenticationService(),
                 MembershipService = new MockMembershipService()
             };
+
             controller.ControllerContext = new ControllerContext()
             {
                 Controller = controller,
                 RequestContext = new RequestContext(new MockHttpContext(), new RouteData())
             };
+
             return controller;
         }
 
@@ -394,6 +397,5 @@
                 return (userName == "someUser" && oldPassword == "goodOldPassword" && newPassword == "goodNewPassword");
             }
         }
-
     }
 }

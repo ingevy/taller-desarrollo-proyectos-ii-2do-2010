@@ -11,7 +11,8 @@
     <RootNamespace>CallCenter.SelfManagement.FilesProcessor</RootNamespace>
     <AssemblyName>SelfManagement.FilesProcessor</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -98,6 +99,9 @@
       <Project>{AF3585C4-7A1F-426B-87A1-154C298536D5}</Project>
       <Name>SelfManagement.Metric</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

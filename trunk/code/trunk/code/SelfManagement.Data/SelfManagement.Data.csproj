@@ -32,10 +32,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,9 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountMembershipService.cs" />
     <Compile Include="CampaingRepository.cs" />
     <Compile Include="FullTextSearchHelper.cs" />
     <Compile Include="ICampaingRepository.cs" />
+    <Compile Include="IMembershipService.cs" />
     <Compile Include="IMetricsRepository.cs" />
     <Compile Include="MetricsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

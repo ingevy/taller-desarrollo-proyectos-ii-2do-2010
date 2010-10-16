@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CallCenter.SelfManagement.Web.Models.LogOnModel>" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CallCenter.SelfManagement.Web.ViewModels.LogOnViewModel>" %>
 
 <asp:Content ID="loginTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Log On
+    Iniciar Sesión
 </asp:Content>
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="dual">
@@ -9,6 +9,7 @@
             <div class="innerPanel">
                 <h2>
                     <span id="itineraryName">Iniciar Sesión</span>
+                    <%: Html.ValidationMessage("LogOnViewModel")%>
                 </h2>
                 <div class="" id="itineraryDynamic">
                     <div class="items">
