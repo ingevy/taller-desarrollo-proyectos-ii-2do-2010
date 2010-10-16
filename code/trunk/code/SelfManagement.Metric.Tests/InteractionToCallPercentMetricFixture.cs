@@ -25,22 +25,7 @@
             dataFiles.Add(newDataFile2.Object);
             dataFiles.Add(newDataFile3.Object);
 
-            var ictMetric = new InteractionToCallPercentMetric(new DateTime());
-            ictMetric.ProcessFiles(dataFiles);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ShouldThrowFileDateDoesNotMatchMetricDateWhenDateInDataFileDiffersFromDateInMetricI2C()
-        {
-            var newDataFile1 = new Mock<IDataFile>();
-            newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.SUMMARY);
-            newDataFile1.Setup(f => f.FileDate).Returns(new DateTime(2010, 10, 2));
-
-            var dataFiles = new List<IDataFile>();
-            dataFiles.Add(newDataFile1.Object);
-
-            var ictMetric = new InteractionToCallPercentMetric(new DateTime(2010,10,3));
+            var ictMetric = new InteractionToCallPercentMetric();
             ictMetric.ProcessFiles(dataFiles);
         }
 
@@ -64,7 +49,7 @@
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
 
-            var i2cMetric = new InteractionToCallPercentMetric(new DateTime());
+            var i2cMetric = new InteractionToCallPercentMetric();
             i2cMetric.ProcessFiles(dataFiles);
 
             Assert.AreEqual(3, i2cMetric.CalculatedValues.Count);
