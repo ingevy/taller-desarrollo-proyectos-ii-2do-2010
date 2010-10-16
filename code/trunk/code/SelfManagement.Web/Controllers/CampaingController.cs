@@ -79,7 +79,6 @@
                 return this.RedirectToAction("Index", new { msg = Server.UrlEncode("La nueva campaña se creó exitosamente.")});
             }
 
-
             //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
             //                                                        .OrderByDescending(s => s.Selected)
             //                                                        .ToList();

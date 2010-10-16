@@ -1,24 +1,29 @@
 ﻿namespace CallCenter.SelfManagement.Web.Controllers
 {
-    using System;
     using System.Web.Mvc;
-    using System.Web.Routing;
     using System.Web.Security;
-    using CallCenter.SelfManagement.Web.Models;
+    using CallCenter.SelfManagement.Data;
+    using CallCenter.SelfManagement.Web.Helpers;
+    using CallCenter.SelfManagement.Web.Services;
+    using CallCenter.SelfManagement.Web.ViewModels;
 
     [HandleError]
     public class AccountController : Controller
     {
-        public IFormsAuthenticationService FormsService { get; set; }
-        public IMembershipService MembershipService { get; set; }
-
-        protected override void Initialize(RequestContext requestContext)
+        public AccountController()
+            : this(new RepositoryFactory().GetFormsAuthenticationService(), new RepositoryFactory().GetMembershipService())
         {
-            if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
-            if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
-
-            base.Initialize(requestContext);
         }
+
+        public AccountController(IFormsAuthenticationService formsService, IMembershipService membershipService)
+        {
+            this.FormsService = formsService;
+            this.MembershipService = membershipService;
+        }
+
+        public IFormsAuthenticationService FormsService { get; set; }
+
+        public IMembershipService MembershipService { get; set; }
 
         // **************************************
         // URL: /Account/LogOn
@@ -26,34 +31,34 @@
 
         public ActionResult LogOn()
         {
-            return View();
+            return this.View();
         }
 
         [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
+        public ActionResult LogOn(LogOnViewModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
-                    FormsService.SignIn(model.UserName, model.RememberMe);
-                    if (!String.IsNullOrEmpty(returnUrl))
+                    this.FormsService.SignIn(model.UserName, model.RememberMe);
+                    if (!string.IsNullOrEmpty(returnUrl))
                     {
-                        return Redirect(returnUrl);
+                        return this.Redirect(returnUrl);
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return this.RedirectToAction("Index", "Home");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    this.ModelState.AddModelError("LogOnViewModel", "El nombre de usuario o contraseña es inválido.");
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return this.View(model);
         }
 
         // **************************************
@@ -62,9 +67,9 @@
 
         public ActionResult LogOff()
         {
-            FormsService.SignOut();
+            this.FormsService.SignOut();
 
-            return RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Index", "Home");
         }
 
         // **************************************
@@ -73,32 +78,34 @@
 
         public ActionResult Register()
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-            return View();
+            this.ViewData["PasswordLength"] = this.MembershipService.MinPasswordLength;
+
+            return this.View();
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterModel model)
+        public ActionResult Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
+                var createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
+                    this.FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
+                    return this.RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
+                    this.ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-            return View(model);
+            this.ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+
+            return this.View(model);
         }
 
         // **************************************
@@ -108,29 +115,31 @@
         [Authorize]
         public ActionResult ChangePassword()
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-            return View();
+            this.ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            
+            return this.View();
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult ChangePassword(ChangePasswordModel model)
+        public ActionResult ChangePassword(ChangePasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
+                if (this.MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
                 {
-                    return RedirectToAction("ChangePasswordSuccess");
+                    return this.RedirectToAction("ChangePasswordSuccess");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
+                    this.ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-            return View(model);
+            this.ViewData["PasswordLength"] = this.MembershipService.MinPasswordLength;
+            
+            return this.View(model);
         }
 
         // **************************************
@@ -139,8 +148,7 @@
 
         public ActionResult ChangePasswordSuccess()
         {
-            return View();
+            return this.View();
         }
-
     }
 }

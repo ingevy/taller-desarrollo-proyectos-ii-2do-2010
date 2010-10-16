@@ -69,8 +69,8 @@
             var errors = $(".field-validation-error, .field-validation-error-wrapper span, .errorShort");
 
             for (var i = 0; i < errors.length; i++) {
-                errors[i].title = errors[i].textContent;
-                errors[i].textContent = "";
+                errors[i].title = errors[i].innerHTML;
+                errors[i].innerHTML = "";
             }
         });
 
