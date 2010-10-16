@@ -11,11 +11,10 @@
 
         Campaing RetrieveAgentActualCampaing(int innerUserId);
 
-        int SaveUserMetric(UserMetric userMetric);
+        void CreateUserMetric(UserMetric userMetric);
 
-        int SaveOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value);
+        void CreateOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value);
 
-        int SaveProcessedFile(ProcessedFile file);
-
+        int CreateProcessedFile(ProcessedFile file);
     }
 }
