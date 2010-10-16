@@ -5,6 +5,7 @@
     using System.IO;
     using System.Text.RegularExpressions;
     using CallCenter.SelfManagement.Metric.Interfaces;
+    using System.Globalization;
 
     public class DataFile : IDataFile
     {
@@ -12,13 +13,13 @@
         private DateTime fileDate;
         private string filePath;
 
-        public static ExternalSystemFiles GetDataFileTypeByFileName(string fileName)
+        public static ExternalSystemFiles GetDataFileType(string fileName)
         {
             var dateStrRegex = "[1-9][0-9]{3}[0-1][[0-9][0-3][0-9]";
             var summaryRegex = new Regex("^Summary_" + dateStrRegex + ".csv$");
             var ttsRegex = new Regex("^TTS_" + dateStrRegex + ".csv$");
             var qaRegex = new Regex("^QA_" + dateStrRegex + ".csv$");
-            var stsRegex = new Regex("^STS_[Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre][1-9][0-9]{3}.csv$");
+            var stsRegex = new Regex("^STS_(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)[1-9][0-9]{3}.csv$");
 
             if (summaryRegex.IsMatch(fileName)) { return ExternalSystemFiles.SUMMARY; }
             if (ttsRegex.IsMatch(fileName)) { return ExternalSystemFiles.TTS; }
@@ -28,10 +29,39 @@
             throw new System.ArgumentException("Unexpected file name");
         }
 
-        public DataFile(DateTime fileDate, string filePath)
+        public static DateTime GetDataFileDate(ExternalSystemFiles type, string fileName)
         {
-            this.externalSystemFile = DataFile.GetDataFileTypeByFileName(Path.GetFileName(filePath));
-            this.fileDate = fileDate;
+            DateTime fileDate;
+
+            switch (type)
+            {
+                case ExternalSystemFiles.QA:
+                    fileDate = DateTime.ParseExact(fileName.Substring(3, 8),"yyyyMMdd",null);
+                    break;
+                case ExternalSystemFiles.TTS:
+                    fileDate = DateTime.ParseExact(fileName.Substring(4, 8), "yyyyMMdd", null);
+                    break;
+                case ExternalSystemFiles.SUMMARY:
+                    fileDate = DateTime.ParseExact(fileName.Substring(8, 8), "yyyyMMdd", null);
+                    break;
+                case ExternalSystemFiles.STS:
+                    fileDate = DateTime.ParseExact("01" + fileName.Substring(4, fileName.IndexOf(".") - 4), "ddMMMMyyyy", CultureInfo.CreateSpecificCulture("es-AR"));
+                    break;
+                case ExternalSystemFiles.HF:
+                    fileDate = new DateTime();
+                    break;
+                default:
+                    fileDate = new DateTime();
+                    break;
+            }
+
+            return fileDate;
+        }
+
+        public DataFile(string filePath)
+        {
+            this.externalSystemFile = DataFile.GetDataFileType(Path.GetFileName(filePath));
+            this.fileDate = DataFile.GetDataFileDate(this.externalSystemFile, Path.GetFileName(filePath));
             this.filePath = filePath;
         }
 

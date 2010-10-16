@@ -11,8 +11,6 @@
 
         Campaing RetrieveAgentActualCampaing(int innerUserId);
 
-        int RetrieveInnerUserIdByEmployeeId(int employeeId);
-
         int SaveUserMetric(UserMetric userMetric);
 
         int SaveOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value);

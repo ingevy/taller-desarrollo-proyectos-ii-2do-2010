@@ -16,11 +16,11 @@
             this.metricsRepository = metricsRepository;
         }
 
-        private IList<IDataFile> GetFilesToProcess(DateTime actDate)
+        private IList<IDataFile> GetFilesToProcess()
         {
             var filesToProcess = new List<IDataFile>();
-            var filter = "*" + String.Format("{0:yyyyMMdd}", actDate) + ".csv"; // Incomplete. This will only take QA, TTS and Summary files
-            var paths = Directory.GetFiles(@"C:\ExternalFiles", filter);
+            var filter = "*.csv";
+            var paths = Directory.GetFiles(Environment.CurrentDirectory, filter);
 
             foreach (var path in paths)
             {
@@ -28,13 +28,16 @@
 
                 if (processedFile == null)
                 {
-                    filesToProcess.Add(new DataFile(actDate, path));
+                    filesToProcess.Add(new DataFile(path));
                 }
                 else
                 {
                     if (processedFile.HasErrors)
                     {
-                        filesToProcess.Add(new DataFile(actDate, path));
+                        if (File.GetLastWriteTime(path) != processedFile.DateLastModified)
+                        {
+                            filesToProcess.Add(new DataFile(path));
+                        }
                     }
                 }
             }
@@ -42,10 +45,9 @@
             return filesToProcess;
         }
 
-        private void Process()
+        public void Process()
         {
-            var actDate = DateTime.Now;
-            var filesToProcess = this.GetFilesToProcess(actDate);
+            var filesToProcess = this.GetFilesToProcess();
             var avMetrics = this.metricsRepository.RetrieveAvailableMetrics();
 
             foreach (var metric in avMetrics)
