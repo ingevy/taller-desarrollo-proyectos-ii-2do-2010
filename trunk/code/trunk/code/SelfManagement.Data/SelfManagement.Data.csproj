@@ -47,6 +47,7 @@
     <Compile Include="FullTextSearchHelper.cs" />
     <Compile Include="ICampaingRepository.cs" />
     <Compile Include="IMetricsRepository.cs" />
+    <Compile Include="MetricsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelfManagementModel.Designer.cs">
       <AutoGen>True</AutoGen>
