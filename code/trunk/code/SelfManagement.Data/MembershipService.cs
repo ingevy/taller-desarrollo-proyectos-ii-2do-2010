@@ -1,18 +1,20 @@
 ﻿namespace CallCenter.SelfManagement.Data
 {
     using System;
+    using System.Globalization;
+    using System.Web.Profile;
     using System.Web.Security;
 
-    public class AccountMembershipService : IMembershipService
+    public class MembershipService : IMembershipService
     {
         private readonly MembershipProvider provider;
 
-        public AccountMembershipService()
+        public MembershipService()
             : this(Membership.Provider)
         {
         }
 
-        public AccountMembershipService(MembershipProvider provider)
+        public MembershipService(MembershipProvider provider)
         {
             if (provider == null)
             {
@@ -45,6 +47,25 @@
             return provider.ValidateUser(userName, password);
         }
 
+        public void CreateProfile(string userName, string dni, string name, string lastName, decimal? grossSalary, string workday, string status, DateTime? incorporationDate)
+        {
+            var profileBase = ProfileBase.Create(userName, true);
+
+            profileBase.SetPropertyValue("DNI", dni);
+            profileBase.SetPropertyValue("Name", name);
+            profileBase.SetPropertyValue("LastName", lastName);
+            profileBase.SetPropertyValue("GrossSalary", grossSalary);
+            profileBase.SetPropertyValue("Workday", workday);
+            profileBase.SetPropertyValue("Status", status);
+
+            if (incorporationDate.HasValue)
+            {
+                profileBase.SetPropertyValue("IncorporationDate", incorporationDate);
+            }
+
+            profileBase.Save();
+        }
+
         public MembershipCreateStatus CreateUser(string userName, string password, string email)
         {
             if (string.IsNullOrEmpty(userName))
@@ -66,6 +87,21 @@
             this.provider.CreateUser(userName, password, email, null, null, true, null, out status);
 
             return status;
+        }
+
+        public void AddUserToRol(string userName, string role)
+        {
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                throw new ArgumentException(userName);
+            }
+
+            if (Roles.RoleExists(role))
+            {
+                throw new ArgumentException("role", string.Format(CultureInfo.InvariantCulture, "El rol {0} no existe.", role));
+            }
+            
+            Roles.AddUserToRole(userName, role);
         }
 
         public bool ChangePassword(string userName, string oldPassword, string newPassword)

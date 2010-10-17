@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SelfManagementModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="SelfManagementModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="SelfManagementModelStoreContainer">
           <EntitySet Name="CampaingMetricLevels" EntityType="SelfManagementModel.Store.CampaingMetricLevels" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CampaingMetrics" EntityType="SelfManagementModel.Store.CampaingMetrics" store:Type="Tables" Schema="dbo" />
@@ -26,7 +26,8 @@
       [Agents].[LastName] AS [LastName], 
       [Agents].[GrossSalary] AS [GrossSalary], 
       [Agents].[Workday] AS [Workday], 
-      [Agents].[Status] AS [Status]
+      [Agents].[Status] AS [Status], 
+      [Agents].[IncorporationDate] AS [IncorporationDate]
       FROM [dbo].[Agents] AS [Agents]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="Supervisors" EntityType="SelfManagementModel.Store.Supervisors" store:Type="Views" store:Schema="dbo" store:Name="Supervisors">
@@ -39,7 +40,8 @@
       [Supervisors].[LastName] AS [LastName], 
       [Supervisors].[GrossSalary] AS [GrossSalary], 
       [Supervisors].[Workday] AS [Workday], 
-      [Supervisors].[Status] AS [Status]
+      [Supervisors].[Status] AS [Status], 
+      [Supervisors].[IncorporationDate] AS [IncorporationDate]
       FROM [dbo].[Supervisors] AS [Supervisors]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_CampaingMetricLevels_Campaings" Association="SelfManagementModel.Store.FK_CampaingMetricLevels_Campaings">
@@ -157,6 +159,7 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="FileSystemPath" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="FileType" Type="int" Nullable="false" />
           <Property Name="DateProcessed" Type="datetime" Nullable="false" />
           <Property Name="DateLastModified" Type="datetime" Nullable="false" />
           <Property Name="Log" Type="nvarchar(max)" Nullable="false" />
@@ -198,9 +201,10 @@
           <Property Name="DNI" Type="varchar" MaxLength="500" />
           <Property Name="Name" Type="varchar" MaxLength="500" />
           <Property Name="LastName" Type="varchar" MaxLength="500" />
-          <Property Name="GrossSalary" Type="varchar" MaxLength="500" />
+          <Property Name="GrossSalary" Type="money" />
           <Property Name="Workday" Type="varchar" MaxLength="500" />
           <Property Name="Status" Type="varchar" MaxLength="500" />
+          <Property Name="IncorporationDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'SelfManagement.dbo.Supervisors' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -217,9 +221,10 @@
           <Property Name="DNI" Type="varchar" MaxLength="500" />
           <Property Name="Name" Type="varchar" MaxLength="500" />
           <Property Name="LastName" Type="varchar" MaxLength="500" />
-          <Property Name="GrossSalary" Type="varchar" MaxLength="500" />
+          <Property Name="GrossSalary" Type="money" />
           <Property Name="Workday" Type="varchar" MaxLength="500" />
           <Property Name="Status" Type="varchar" MaxLength="500" />
+          <Property Name="IncorporationDate" Type="datetime" />
         </EntityType>
         <Association Name="FK_CampaingMetricLevels_Campaings">
           <End Role="Campaings" Type="SelfManagementModel.Store.Campaings" Multiplicity="1" />
@@ -345,8 +350,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SelfManagementModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -498,6 +502,7 @@
           <Property Name="DateLastModified" Type="DateTime" Nullable="false" />
           <Property Name="Log" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="HasErrors" Type="Boolean" Nullable="false" />
+          <Property Type="Int32" Name="FileType" Nullable="false" />
         </EntityType>
         <EntityType Name="SupervisorAgent">
           <Key>
@@ -535,9 +540,10 @@
           <Property Name="DNI" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="LastName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
-          <Property Name="GrossSalary" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="GrossSalary" Type="Decimal" Nullable="true" />
           <Property Name="Workday" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="Status" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Type="DateTime" Name="IncorporationDate" Nullable="true" />
         </EntityType>
         <EntityType Name="Supervisor">
           <Key>
@@ -551,9 +557,10 @@
           <Property Name="DNI" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="LastName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
-          <Property Name="GrossSalary" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="GrossSalary" Type="Decimal" Nullable="true" />
           <Property Name="Workday" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="Status" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Type="DateTime" Name="IncorporationDate" Nullable="true" />
         </EntityType>
         <Association Name="FK_CampaingMetricLevels_Campaings">
           <End Role="Campaings" Type="SelfManagementModel.Campaing" Multiplicity="1" />
@@ -731,7 +738,8 @@
             <ScalarProperty Name="CLRType" ColumnName="CLRType" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ProcessedFiles"><EntityTypeMapping TypeName="SelfManagementModel.ProcessedFile"><MappingFragment StoreEntitySet="ProcessedFiles">
-            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="FileSystemPath" ColumnName="FileSystemPath" />
             <ScalarProperty Name="DateProcessed" ColumnName="DateProcessed" />
             <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
@@ -750,7 +758,8 @@
             <ScalarProperty Name="Value" ColumnName="Value" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Agents"><EntityTypeMapping TypeName="SelfManagementModel.Agent"><MappingFragment StoreEntitySet="Agents">
-            <ScalarProperty Name="UserId" ColumnName="UserId" />
+            <ScalarProperty Name="IncorporationDate" ColumnName="IncorporationDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
             <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
             <ScalarProperty Name="SupervisorId" ColumnName="SupervisorId" />
             <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -762,7 +771,8 @@
             <ScalarProperty Name="Status" ColumnName="Status" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Supervisors"><EntityTypeMapping TypeName="SelfManagementModel.Supervisor"><MappingFragment StoreEntitySet="Supervisors">
-            <ScalarProperty Name="UserId" ColumnName="UserId" />
+            <ScalarProperty Name="IncorporationDate" ColumnName="IncorporationDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
             <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
             <ScalarProperty Name="UserName" ColumnName="UserName" />
             <ScalarProperty Name="DNI" ColumnName="DNI" />
@@ -792,7 +802,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="SelfManagementModel">
+      <Diagram Name="SelfManagementModel" ZoomLevel="74">
         <EntityTypeShape EntityType="SelfManagementModel.CampaingMetricLevel" Width="1.5" PointX="5.25" PointY="5.75" Height="2.9417936197916674" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.CampaingMetric" Width="1.5" PointX="7.5" PointY="6" Height="2.3648893229166674" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.Campaing" Width="1.5" PointX="3" PointY="5.25" Height="3.9033007812499996" IsExpanded="true" />

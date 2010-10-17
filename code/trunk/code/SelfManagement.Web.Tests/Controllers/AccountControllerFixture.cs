@@ -396,6 +396,16 @@
             {
                 return (userName == "someUser" && oldPassword == "goodOldPassword" && newPassword == "goodNewPassword");
             }
+
+            public void CreateProfile(string userName, string dni, string name, string lastName, decimal? grossSalary, string workday, string status, System.DateTime? incorporationDate)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public void AddUserToRol(string userName, string role)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

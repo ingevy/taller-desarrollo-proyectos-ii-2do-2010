@@ -12,7 +12,7 @@
 
         public IMembershipService GetMembershipService()
         {
-            return new AccountMembershipService();
+            return new MembershipService();
         }
 
         public IFormsAuthenticationService GetFormsAuthenticationService()
