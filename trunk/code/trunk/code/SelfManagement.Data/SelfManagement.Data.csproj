@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountMembershipService.cs" />
+    <Compile Include="MembershipService.cs" />
     <Compile Include="CampaingRepository.cs" />
     <Compile Include="FullTextSearchHelper.cs" />
     <Compile Include="ICampaingRepository.cs" />

@@ -624,9 +624,10 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.LastName));
-            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.GrossSalary));
+            Assert.IsFalse(sampleSupervisor.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Status));
+            Assert.IsFalse(sampleSupervisor.IncorporationDate.HasValue);
         }
 
         [TestMethod]
@@ -984,9 +985,10 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
-            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.GrossSalary));
+            Assert.IsFalse(sampleAgent.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
+            Assert.IsFalse(sampleAgent.IncorporationDate.HasValue);
 
             sampleAgent = result.FirstOrDefault(a => a.InnerUserId == 7);
 
@@ -996,9 +998,10 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
-            Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.GrossSalary));
+            Assert.IsFalse(sampleAgent.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
+            Assert.IsFalse(sampleAgent.IncorporationDate.HasValue);
         }
 
         [TestMethod]
