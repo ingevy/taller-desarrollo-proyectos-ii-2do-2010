@@ -46,39 +46,78 @@
             return filesToProcess;
         }
 
+        private Dictionary<DateTime,IList<IDataFile>> GroupFilesToProcessByDate(IList<IDataFile> filesToProcess)
+        {
+            var groupedFiles = new Dictionary<DateTime, IList<IDataFile>>();
+
+            foreach (var file in filesToProcess)
+            {
+                groupedFiles[file.FileDate] = new List<IDataFile>();
+            }
+
+            foreach (var file in filesToProcess)
+            {
+                groupedFiles[file.FileDate].Add(file);
+            }
+
+            return groupedFiles;
+        }
+
         public void Process()
         {
             var filesToProcess = this.GetFilesToProcess();
 
             if (filesToProcess.Count > 0)
             {
-                var avMetrics = this.metricsRepository.RetrieveAvailableMetrics();
+                var groupedFiles = this.GroupFilesToProcessByDate(filesToProcess);
 
-                foreach (var metric in avMetrics)
+                foreach (var date in groupedFiles.Keys)
                 {
-                    var metricTypes = metric.CLRType.Split(',');
-                    IMetric metricProcessor = (IMetric)Activator.CreateInstance(metricTypes[1], metricTypes[0]);
-
-                    metricProcessor.ProcessFiles(filesToProcess); // TODO: Capture error event in metrics and log file error into DB
-                    var metricValues = metricProcessor.CalculatedValues;
-
-                    foreach (var legajo in metricValues.Keys)
+                    foreach (var processedFile in groupedFiles[date])
                     {
-                        Console.WriteLine("Metrica: " + metric.MetricName);
-                        Console.WriteLine(" Agente: " + legajo);
-                        Console.WriteLine("     Fecha: " + metricProcessor.MetricDate);
-                        Console.WriteLine("     Valor: " + metricValues[legajo]);
+                        this.metricsRepository.CreateProcessedFile(new ProcessedFile
+                        {
+                            FileSystemPath = processedFile.FilePath,
+                            FileType = (int)processedFile.ExternalSystemFile,
+                            DateProcessed = DateTime.Now,
+                            DateLastModified = File.GetLastWriteTime(processedFile.FilePath),
+                            Log = "",
+                            HasErrors = false
+                        });
+                    }
 
-                        /*var agentCampaing = this.metricsRepository.RetrieveAgentActualCampaing(legajo);
-                        var userMetric = new UserMetric();
-                        userMetric.CampaingId = agentCampaing.Id;
-                        userMetric.InnerUserId = legajo;
-                        userMetric.MetricId = metric.Id;
-                        userMetric.Date = metricProcessor.MetricDate;
-                        userMetric.Value = metricValues[legajo];
-                        this.metricsRepository.SaveUserMetric(userMetric);
-                        this.metricsRepository.SaveOrUpdateCampaingMetric(agentCampaing.Id, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);*/
+                    var avMetrics = this.metricsRepository.RetrieveAvailableMetrics();
 
+                    foreach (var metric in avMetrics)
+                    {
+                        var metricTypes = metric.CLRType.Split(',');
+                        IMetric metricProcessor = (IMetric)Activator.CreateInstance(metricTypes[1], metricTypes[0]).Unwrap();
+
+                        try
+                        {
+                            metricProcessor.ProcessFiles(groupedFiles[date]); // TODO: Capture error event in metrics and log file error into DB
+                            var metricValues = metricProcessor.CalculatedValues;
+
+                            foreach (var legajo in metricValues.Keys)
+                            {
+                                var agentCampaing = this.metricsRepository.RetrieveAgentActualCampaing(legajo);
+                                var userMetric = new UserMetric
+                                {
+                                    CampaingId = agentCampaing.Id,
+                                    InnerUserId = legajo,
+                                    MetricId = metric.Id,
+                                    Date = metricProcessor.MetricDate,
+                                    Value = metricValues[legajo]
+                                };
+                                this.metricsRepository.CreateUserMetric(userMetric);
+                                this.metricsRepository.CreateOrUpdateCampaingMetric(agentCampaing.Id, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);
+                                //TODO: Totalize Supervisors Metrics
+                            }
+                        }
+                        catch
+                        {
+                            // To bypass the metrics throw generated by the HF file taken from 'nuestros' dir
+                        }
                     }
                 }
             }

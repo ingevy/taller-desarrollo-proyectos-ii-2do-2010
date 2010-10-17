@@ -16,11 +16,6 @@
         private ExternalSystemFiles externalFileNeeded = ExternalSystemFiles.SUMMARY;
         private DateTime metricDate;
 
-        public NumberOfInboundCallsHandledMetric(DateTime metricDate)
-        {
-            this.metricDate = metricDate;
-        }
-
         public IDictionary<int, double> CalculatedValues
         {
             get { return this.calculatedValues; }
@@ -42,10 +37,7 @@
                 throw new System.ArgumentException("Couldn't find necessary file to process metric"); 
             }
 
-            if (metricFiles.First().FileDate != this.MetricDate)
-            {
-                throw new System.ArgumentException("File date does not match Metric date"); 
-            }
+            this.metricDate = metricFiles.First().FileDate;
 
             var dataLines = metricFiles.First().DataLines;
 
