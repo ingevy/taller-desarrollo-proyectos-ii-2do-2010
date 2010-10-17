@@ -29,23 +29,52 @@
             }
         }
 
-        public Campaing RetrieveAgentActualCampaing(int innerUserId)
+        public int RetrieveUserActualCampaingId(int innerUserId)
         {
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.Campaings
                         .Where(c => ctx.CampaingUsers.Any(cu => (cu.CampaingId == c.Id) && (cu.InnerUserId == innerUserId) 
                                                           && (cu.BeginDate <= DateTime.Now) && (cu.EndDate >= DateTime.Now)))
-                        .FirstOrDefault();
+                        .FirstOrDefault().Id;
             }
         }
 
-        public void CreateUserMetric(UserMetric userMetric)
+        public int RetrieveAgentSupervisorId(int innerUserId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.SupervisorAgents
+                        .Where(sa => sa.AgentId == innerUserId)
+                        .FirstOrDefault().SupervisorId;
+            }
+        }
+
+        public void CreateAgentMetric(UserMetric userMetric)
         {
             using (var ctx = new SelfManagementEntities())
             {
                 ctx.UserMetrics.AddObject(userMetric);
                 ctx.SaveChanges();
+            }
+        }
+
+        public void CreateOrUpdateSupervisorMetric(int innerUserId, int campaingId, int metricId, DateTime date, double value)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var original = ctx.UserMetrics
+                                  .Where(um => (um.InnerUserId == innerUserId) && (um.CampaingId == campaingId) && (um.MetricId == metricId) && (um.Date == date))
+                                  .FirstOrDefault();
+
+                if (original != null)
+                {
+                    original.Value += value;
+                }
+                else
+                {
+                    ctx.UserMetrics.AddObject(new UserMetric { InnerUserId = innerUserId, CampaingId = campaingId, MetricId = metricId, Date = date, Value = value });
+                }
             }
         }
 

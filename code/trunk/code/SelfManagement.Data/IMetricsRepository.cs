@@ -9,9 +9,13 @@
 
         IList<Metric> RetrieveAvailableMetrics();
 
-        Campaing RetrieveAgentActualCampaing(int innerUserId);
+        int RetrieveUserActualCampaingId(int innerUserId);
 
-        void CreateUserMetric(UserMetric userMetric);
+        int RetrieveAgentSupervisorId(int innerUserId);
+
+        void CreateAgentMetric(UserMetric userMetric);
+
+        void CreateOrUpdateSupervisorMetric(int innerUserId, int campaingId, int metricId, DateTime date, double value);
 
         void CreateOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value);
 

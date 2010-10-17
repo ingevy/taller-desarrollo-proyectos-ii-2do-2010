@@ -8,7 +8,7 @@
         static void Main(string[] args)
         {
             var processor = new FilesProcessor(new MetricsRepository());
-            processor.Process();
+            processor.ProcessMetrics();
             Console.Read();
         }
     }
