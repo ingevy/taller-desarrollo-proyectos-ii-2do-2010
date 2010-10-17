@@ -66,6 +66,8 @@
 
         public void ProcessMetrics()
         {
+            Console.WriteLine("Procesando Metricas...");
+
             var filesToProcess = this.GetFilesToProcess();
 
             if (filesToProcess.Count > 0)
@@ -99,6 +101,7 @@
                             metricProcessor.ProcessFiles(groupedFiles[date]); // TODO: Capture error event in metrics and log file error into DB
                             var metricValues = metricProcessor.CalculatedValues;
 
+                            Console.WriteLine("Grabando Metrica: " + metric.MetricName + " - Fecha: " + metricProcessor.MetricDate.ToString("dd/MM/yyyy"));
                             foreach (var legajo in metricValues.Keys)
                             {
                                 var agentCampaingId = this.metricsRepository.RetrieveUserActualCampaingId(legajo);
