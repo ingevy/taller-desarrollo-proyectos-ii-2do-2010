@@ -23,11 +23,31 @@
             <hr />
             <div id="navigation">
                 <ul>
-                   <% if(Request.IsAuthenticated) { %>
-                    <li><%=Html.ActionLink("Campañas", "Index", "Campaing")%></li>
-                    <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor")%></li>
-                    <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
-                    <% } %>
+                   <% if (Request.IsAuthenticated)
+                      {
+                          if (Page.User.IsInRole("AccountManager"))
+                          {
+                   %>
+                            <li><%=Html.ActionLink("Campañas", "Index", "Campaing")%></li>
+                            <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor")%></li>
+                            <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
+                       <%
+                          } 
+                          else if (Page.User.IsInRole("Supervisor"))
+                          {
+                       %>
+                            <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor")%></li>
+                            <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
+                       <%
+                          }
+                          else if (Page.User.IsInRole("Agent"))
+                          {
+                       %>
+                            <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
+                       <%
+                          }
+                       %>    
+                   <% } %>
                 </ul>
             </div>
             <div id="toolbar">
