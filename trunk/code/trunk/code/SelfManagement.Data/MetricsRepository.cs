@@ -59,7 +59,7 @@
 
                 if (original != null)
                 {
-                    original.Value = value;
+                    original.Value += value;
                 }
                 else
                 {

@@ -20,11 +20,13 @@
             var ttsRegex = new Regex("^TTS_" + dateStrRegex + ".csv$");
             var qaRegex = new Regex("^QA_" + dateStrRegex + ".csv$");
             var stsRegex = new Regex("^STS_(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)[1-9][0-9]{3}.csv$");
+            var hfRegex = new Regex("^HF System.csv$");
 
             if (summaryRegex.IsMatch(fileName)) { return ExternalSystemFiles.SUMMARY; }
             if (ttsRegex.IsMatch(fileName)) { return ExternalSystemFiles.TTS; }
             if (qaRegex.IsMatch(fileName)) { return ExternalSystemFiles.QA; }
             if (stsRegex.IsMatch(fileName)) { return ExternalSystemFiles.STS; }
+            if (hfRegex.IsMatch(fileName)) { return ExternalSystemFiles.HF; }
 
             throw new System.ArgumentException("Unexpected file name");
         }
@@ -48,10 +50,10 @@
                     fileDate = DateTime.ParseExact("01" + fileName.Substring(4, fileName.IndexOf(".") - 4), "ddMMMMyyyy", CultureInfo.CreateSpecificCulture("es-AR"));
                     break;
                 case ExternalSystemFiles.HF:
-                    fileDate = new DateTime();
+                    fileDate = DateTime.Now;
                     break;
                 default:
-                    fileDate = new DateTime();
+                    fileDate = DateTime.Now;
                     break;
             }
 

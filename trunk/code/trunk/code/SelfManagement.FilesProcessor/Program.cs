@@ -1,5 +1,6 @@
 ﻿namespace CallCenter.SelfManagement.FilesProcessor
 {
+    using System;
     using CallCenter.SelfManagement.Data;
 
     class Program
@@ -8,6 +9,7 @@
         {
             var processor = new FilesProcessor(new MetricsRepository());
             processor.Process();
+            Console.Read();
         }
     }
 }

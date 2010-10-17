@@ -25,22 +25,7 @@
             dataFiles.Add(newDataFile2.Object);
             dataFiles.Add(newDataFile3.Object);
 
-            var nchMetric = new NumberOfInboundCallsHandledMetric(new DateTime());
-            nchMetric.ProcessFiles(dataFiles);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ShouldThrowFileDateDoesNotMatchMetricDateWhenDateInDataFileDiffersFromDateInMetricNch()
-        {
-            var newDataFile1 = new Mock<IDataFile>();
-            newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.SUMMARY);
-            newDataFile1.Setup(f => f.FileDate).Returns(new DateTime(2010, 10, 2));
-
-            var dataFiles = new List<IDataFile>();
-            dataFiles.Add(newDataFile1.Object);
-
-            var nchMetric = new NumberOfInboundCallsHandledMetric(new DateTime(2010, 10, 3));
+            var nchMetric = new NumberOfInboundCallsHandledMetric();
             nchMetric.ProcessFiles(dataFiles);
         }
 
@@ -64,7 +49,7 @@
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
 
-            var nchMetric = new NumberOfInboundCallsHandledMetric(new DateTime());
+            var nchMetric = new NumberOfInboundCallsHandledMetric();
             nchMetric.ProcessFiles(dataFiles);
 
             Assert.AreEqual(3, nchMetric.CalculatedValues.Count);

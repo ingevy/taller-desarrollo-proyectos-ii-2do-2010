@@ -25,22 +25,7 @@
             dataFiles.Add(newDataFile2.Object);
             dataFiles.Add(newDataFile3.Object);
 
-            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric(new DateTime());
-            inChairOccMetric.ProcessFiles(dataFiles);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ShouldThrowFileDateDoesNotMatchMetricDateWhenDateInDataFileDiffersFromDateInMetricInChairOcc()
-        {
-            var newDataFile1 = new Mock<IDataFile>();
-            newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.SUMMARY);
-            newDataFile1.Setup(f => f.FileDate).Returns(new DateTime(2010, 10, 2));
-
-            var dataFiles = new List<IDataFile>();
-            dataFiles.Add(newDataFile1.Object);
-
-            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric(new DateTime(2010, 10, 3));
+            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric();
             inChairOccMetric.ProcessFiles(dataFiles);
         }
 
@@ -64,7 +49,7 @@
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
 
-            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric(new DateTime());
+            var inChairOccMetric = new PercentageOfTimeSpentInBillableModeMetric();
             inChairOccMetric.ProcessFiles(dataFiles);
 
             Assert.AreEqual(3, inChairOccMetric.CalculatedValues.Count);
