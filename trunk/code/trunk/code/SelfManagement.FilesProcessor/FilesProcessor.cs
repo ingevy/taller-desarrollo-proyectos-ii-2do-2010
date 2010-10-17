@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Metric;
@@ -20,7 +21,7 @@
         {
             var filesToProcess = new List<IDataFile>();
             var filter = "*.csv";
-            var paths = Directory.GetFiles(Environment.CurrentDirectory, filter);
+            var paths = Directory.GetFiles(ConfigurationManager.AppSettings["ExternalFilesLocation"].ToString(), filter);
 
             foreach (var path in paths)
             {
