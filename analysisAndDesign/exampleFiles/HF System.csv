@@ -1,7 +1,0 @@
-legajo,dni,nombre,apellido,sueldo bruto,Tipo Jornada, Status,idSupervisor, fecha ingreso, idCampania
-34,30345235,Juan,Perez,2000,PTE, activo, 121, 13/2/2009, 34
-156,32877122,Jose,Flores,1900,PTE, activo, 121, 13/2/2009,34
-345,34877111,Lorena,Garcia,2100,PTE, activo, 121, 13/2/2009,34
-128,29111333,Matias,Gonzalez,2145,PTE, activo, 131, 13/4/2009,34
-456,24129333,Juana,Liorna,2090,PTE, activo, 131, 18/2/2009,34
-79,28723090,Lorena,Gomez,3000,FTE, activo, 131, 13/7/2010,34
