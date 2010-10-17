@@ -13,22 +13,22 @@ ECHO SelfManagement Database Setup
 ECHO ==================================
 ECHO.
 
-ECHO Droping the SelfManagement database...
-@CALL SQLCMD -S %ServerAlias% -E -b -i ".\SelfManagementDB_Drop.sql"
+ECHO Droping and creating the SelfManagement database...
+@CALL SQLCMD -S %ServerAlias% -E -b -i ".\SelfManagementDB_DropAndCreate.sql"
 IF ERRORLEVEL 1 GOTO ERROR
 
-ECHO Creating the SelfManagement database...
-@CALL SQLCMD -S %ServerAlias% -E -b -i ".\SelfManagementDB_Schema.sql"
+ECHO Creating the schema of the SelfManagement database...
+@CALL SQLCMD -S %ServerAlias% -E -b -d SelfManagement -i "SelfManagementDB_Schema.sql"
 IF ERRORLEVEL 1 GOTO ERROR
 
 ECHO.
 ECHO Setting SelfManagement database permissions...
-@CALL SQLCMD -S %ServerAlias% -E -b -i ".\SelfManagementDB_Permissions.sql"
+@CALL SQLCMD -S %ServerAlias% -E -b -d SelfManagement -i ".\SelfManagementDB_Permissions.sql"
 IF ERRORLEVEL 1 GOTO ERROR
 
 ECHO.
 ECHO Populating SelfManagement database with sample data...
-@CALL SQLCMD -S %ServerAlias% -E -b -i ".\SelfManagementDB_Data.sql"
+@CALL SQLCMD -S %ServerAlias% -E -b -d SelfManagement -i ".\SelfManagementDB_Data.sql"
 IF ERRORLEVEL 1 GOTO ERROR
 
 ECHO.
