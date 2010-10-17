@@ -10,7 +10,6 @@
     public class CampaingRepositoryFixture
     {
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveCustomersByName()
         {
             IList<Customer> result = null;
@@ -30,7 +29,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveCustomerByName()
         {
             var customerName = "Banco Hipotecario";
@@ -47,7 +45,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldCreateCustomerIfDoesNotExist()
         {
             var customerName = "Este Cliente No Existe";
@@ -69,7 +66,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableMetrics()
         {
             IList<Metric> result = null;
@@ -94,7 +90,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldCreateNewCampaingWithAllFields()
         {
             var campaing = new Campaing
@@ -141,7 +136,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldCreateNewCampaingWithOnlyRequiredFields()
         {
             var campaing = new Campaing
@@ -181,7 +175,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldSaveCampaingMetricLevels()
         {
             var campaingId = 0;
@@ -226,7 +219,6 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingMetricLevelsWhenTheyAreNotThree1()
         {
             using (new TransactionScope())
@@ -256,7 +248,6 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingMetricLevelsWhenTheyAreNotThree2()
         {
             using (new TransactionScope())
@@ -288,7 +279,6 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingMetricLevelsWhenTheyAreNotThree3()
         {
             using (new TransactionScope())
@@ -320,7 +310,6 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingMetricLevelsFromDifferentCampaings()
         {
             using (new TransactionScope())
@@ -363,7 +352,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldUpdateCampaingMetricLevels()
         {
             var campaingId = 0;
@@ -453,7 +441,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldSaveCampaingSupervisors()
         {
             IList<Supervisor> campaingSupervisorsResult = null;
@@ -506,7 +493,6 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingSupervisorsFromDifferentCampaings()
         {
             using (new TransactionScope())
@@ -550,7 +536,6 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowSavingCampaingSupervisorsWhenTheRolIsNotSupervisor()
         {
             using (new TransactionScope())
@@ -581,7 +566,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginDate1()
         {
             IList<Supervisor> result = null;
@@ -631,7 +615,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginDate2()
         {
             IList<Supervisor> result = null;
@@ -674,7 +657,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginDate3()
         {
             IList<Supervisor> result = null;
@@ -717,7 +699,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginDate4()
         {
             IList<Supervisor> result = null;
@@ -770,7 +751,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates1()
         {
             IList<Supervisor> result = null;
@@ -813,7 +793,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates2()
         {
             IList<Supervisor> result = null;
@@ -856,7 +835,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates3()
         {
             IList<Supervisor> result = null;
@@ -909,7 +887,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAvailableSupervisorsByBeginAndEndDates4()
         {
             IList<Supervisor> result = null;
@@ -962,7 +939,6 @@
         }
 
         [TestMethod]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldRetrieveAgentsBySupervisorId()
         {
             IList<Agent> result = null;
@@ -1006,7 +982,6 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        [DeploymentItem("SelfManagement.mdf")]
         public void ShouldThrowRetrievingAgentsBySupervisorIdWhenItIsNotASupervisor()
         {
             IList<Agent> result = null;

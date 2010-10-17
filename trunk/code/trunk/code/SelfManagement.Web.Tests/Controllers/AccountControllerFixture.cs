@@ -406,6 +406,26 @@
             {
                 throw new System.NotImplementedException();
             }
+
+            public bool ExistsUser(string userName)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public void AddUserToRol(string userName, SelfManagementRoles role)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public Agent GetAgent(string userName)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public Supervisor GetSupervisor(string userName)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Globalization;
+    using System.Linq;
     using System.Web.Profile;
     using System.Web.Security;
 
@@ -47,23 +48,16 @@
             return provider.ValidateUser(userName, password);
         }
 
-        public void CreateProfile(string userName, string dni, string name, string lastName, decimal? grossSalary, string workday, string status, DateTime? incorporationDate)
+        public bool ExistsUser(string userName)
         {
-            var profileBase = ProfileBase.Create(userName, true);
-
-            profileBase.SetPropertyValue("DNI", dni);
-            profileBase.SetPropertyValue("Name", name);
-            profileBase.SetPropertyValue("LastName", lastName);
-            profileBase.SetPropertyValue("GrossSalary", grossSalary);
-            profileBase.SetPropertyValue("Workday", workday);
-            profileBase.SetPropertyValue("Status", status);
-
-            if (incorporationDate.HasValue)
+            if (string.IsNullOrWhiteSpace(userName))
             {
-                profileBase.SetPropertyValue("IncorporationDate", incorporationDate);
+                return false;
             }
 
-            profileBase.Save();
+            var user = this.provider.GetUser(userName, false);
+
+            return user != null;
         }
 
         public MembershipCreateStatus CreateUser(string userName, string password, string email)
@@ -89,19 +83,39 @@
             return status;
         }
 
-        public void AddUserToRol(string userName, string role)
+        public void AddUserToRol(string userName, SelfManagementRoles role)
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
                 throw new ArgumentException(userName);
             }
 
-            if (Roles.RoleExists(role))
+            var roleName = role.ToString();
+            if (!Roles.RoleExists(roleName))
             {
-                throw new ArgumentException("role", string.Format(CultureInfo.InvariantCulture, "El rol {0} no existe.", role));
+                throw new ArgumentException("role", string.Format(CultureInfo.InvariantCulture, "El rol {0} no existe.", roleName));
             }
-            
-            Roles.AddUserToRole(userName, role);
+
+            Roles.AddUserToRole(userName, roleName);
+        }
+
+        public void CreateProfile(string userName, string dni, string name, string lastName, decimal? grossSalary, string workday, string status, DateTime? incorporationDate)
+        {
+            var profileBase = ProfileBase.Create(userName, true);
+
+            profileBase.SetPropertyValue("DNI", dni);
+            profileBase.SetPropertyValue("Name", name);
+            profileBase.SetPropertyValue("LastName", lastName);
+            profileBase.SetPropertyValue("GrossSalary", grossSalary);
+            profileBase.SetPropertyValue("Workday", workday);
+            profileBase.SetPropertyValue("Status", status);
+
+            if (incorporationDate.HasValue)
+            {
+                profileBase.SetPropertyValue("IncorporationDate", incorporationDate);
+            }
+
+            profileBase.Save();
         }
 
         public bool ChangePassword(string userName, string oldPassword, string newPassword)
@@ -136,6 +150,26 @@
             catch (MembershipPasswordException)
             {
                 return false;
+            }
+        }
+
+        public Agent GetAgent(string userName)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Agents
+                    .Where(a => a.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault();
+            }
+        }
+
+        public Supervisor GetSupervisor(string userName)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors
+                    .Where(s => s.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault();
             }
         }
     }
