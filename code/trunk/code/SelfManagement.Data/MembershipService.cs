@@ -104,15 +104,19 @@
             var profileBase = ProfileBase.Create(userName, true);
 
             profileBase.SetPropertyValue("DNI", dni);
-            profileBase.SetPropertyValue("Name", name);
-            profileBase.SetPropertyValue("LastName", lastName);
-            profileBase.SetPropertyValue("GrossSalary", grossSalary);
+            profileBase.SetPropertyValue("Names", name);
+            profileBase.SetPropertyValue("Surname", lastName);
             profileBase.SetPropertyValue("Workday", workday);
             profileBase.SetPropertyValue("Status", status);
 
+            if (grossSalary.HasValue)
+            {
+                profileBase.SetPropertyValue("GrossSalary", grossSalary.Value.ToString(CultureInfo.InvariantCulture));
+            }
+
             if (incorporationDate.HasValue)
             {
-                profileBase.SetPropertyValue("IncorporationDate", incorporationDate);
+                profileBase.SetPropertyValue("IncorporationDate", incorporationDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
             }
 
             profileBase.Save();
