@@ -1,10 +1,10 @@
 ﻿namespace CallCenter.SelfManagement.Data.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Transactions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
 
     [TestClass]
     public class CampaingRepositoryFixture
@@ -51,7 +51,7 @@
         public void ShouldCreateCustomerIfDoesNotExist()
         {
             var customerName = "Este Cliente No Existe";
-            var customerId = 0;     
+            var customerId = 0;
             IList<Customer> result = null;
 
             using (new TransactionScope())
@@ -77,7 +77,7 @@
             using (new TransactionScope())
             {
                 var repository = new CampaingRepository();
-                
+
                 result = repository.RetrieveAvailableMetrics();
             }
 
@@ -206,7 +206,7 @@
                     new CampaingMetricLevel { CampaingId = campaingId, MetricId = 13, OptimalLevel = 60, ObjectiveLevel = 50, MinimumLevel = 40, Enabled = true },
                     new CampaingMetricLevel { CampaingId = campaingId, MetricId = 14, OptimalLevel = 45, ObjectiveLevel = 35, MinimumLevel = 25, Enabled = true },
                 };
-                
+
                 repository.SaveCampaingMetricLevels(campaingMetrics);
                 campaingMetricLevelsResult = repository.RetrieveCampaingMetricLevels(campaingId);
             }
@@ -419,7 +419,7 @@
             sampleCampaingMetricLevel = campaingMetricLevelsResult.FirstOrDefault(cml => cml.MetricId == 5);
             Assert.IsNotNull(sampleCampaingMetricLevel);
             Assert.IsFalse(sampleCampaingMetricLevel.Enabled);
-            
+
             sampleCampaingMetricLevel = campaingMetricLevelsResult.FirstOrDefault(cml => cml.MetricId == 6);
             Assert.IsNotNull(sampleCampaingMetricLevel);
             Assert.IsFalse(sampleCampaingMetricLevel.Enabled);
@@ -511,7 +511,7 @@
         {
             using (new TransactionScope())
             {
-                var repository = new CampaingRepository();               
+                var repository = new CampaingRepository();
                 var campaing = new Campaing
                 {
                     Name = "Test Campaing 3",
@@ -624,10 +624,10 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.LastName));
-            Assert.IsFalse(sampleSupervisor.GrossSalary.HasValue);
+            Assert.IsTrue(sampleSupervisor.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Status));
-            Assert.IsFalse(sampleSupervisor.IncorporationDate.HasValue);
+            Assert.IsTrue(sampleSupervisor.IncorporationDate.HasValue);
         }
 
         [TestMethod]
@@ -985,10 +985,10 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
-            Assert.IsFalse(sampleAgent.GrossSalary.HasValue);
+            Assert.IsTrue(sampleAgent.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
-            Assert.IsFalse(sampleAgent.IncorporationDate.HasValue);
+            Assert.IsTrue(sampleAgent.IncorporationDate.HasValue);
 
             sampleAgent = result.FirstOrDefault(a => a.InnerUserId == 7);
 
@@ -998,10 +998,10 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
-            Assert.IsFalse(sampleAgent.GrossSalary.HasValue);
+            Assert.IsTrue(sampleAgent.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
-            Assert.IsFalse(sampleAgent.IncorporationDate.HasValue);
+            Assert.IsTrue(sampleAgent.IncorporationDate.HasValue);
         }
 
         [TestMethod]
