@@ -75,6 +75,8 @@
                 {
                     ctx.UserMetrics.AddObject(new UserMetric { InnerUserId = innerUserId, CampaingId = campaingId, MetricId = metricId, Date = date, Value = value });
                 }
+
+                ctx.SaveChanges();
             }
         }
 
@@ -94,6 +96,8 @@
                 {
                     ctx.CampaingMetrics.AddObject(new CampaingMetric { CampaingId = campaingId, MetricId = metricId, Date = date, Value = value });
                 }
+
+                ctx.SaveChanges();
             }
         }
 
