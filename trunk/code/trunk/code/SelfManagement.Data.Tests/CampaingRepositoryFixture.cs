@@ -599,19 +599,19 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.IsTrue(result.Count >= 1);
 
-            var sampleSupervisor = result.FirstOrDefault();
+            var sampleSupervisor = result
+                                    .OrderBy(s => s.InnerUserId)
+                                    .FirstOrDefault();
 
             Assert.IsNotNull(sampleSupervisor);
             Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.LastName));
-            Assert.IsTrue(sampleSupervisor.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleSupervisor.Status));
-            Assert.IsTrue(sampleSupervisor.IncorporationDate.HasValue);
         }
 
         [TestMethod]
@@ -648,9 +648,11 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.IsTrue(result.Count >= 1);
 
-            var sampleSupervisor = result.FirstOrDefault();
+            var sampleSupervisor = result
+                                    .OrderBy(s => s.InnerUserId)
+                                    .FirstOrDefault();
 
             Assert.IsNotNull(sampleSupervisor);
             Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
@@ -690,9 +692,11 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.IsTrue(result.Count >= 1);
 
-            var sampleSupervisor = result.FirstOrDefault();
+            var sampleSupervisor = result
+                                    .OrderBy(s => s.InnerUserId)
+                                    .FirstOrDefault();
 
             Assert.IsNotNull(sampleSupervisor);
             Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
@@ -732,7 +736,7 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result.Count >= 3);
 
             var sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 3);
 
@@ -784,9 +788,11 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.IsTrue(result.Count >= 1);
 
-            var sampleSupervisor = result.FirstOrDefault();
+            var sampleSupervisor = result
+                                    .OrderBy(s => s.InnerUserId)
+                                    .FirstOrDefault();
 
             Assert.IsNotNull(sampleSupervisor);
             Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
@@ -826,9 +832,11 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.IsTrue(result.Count >= 1);
 
-            var sampleSupervisor = result.FirstOrDefault();
+            var sampleSupervisor = result
+                                    .OrderBy(s => s.InnerUserId)
+                                    .FirstOrDefault();
 
             Assert.IsNotNull(sampleSupervisor);
             Assert.AreEqual("Supervisor2", sampleSupervisor.UserName);
@@ -868,7 +876,7 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result.Count >= 3);
 
             var sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 3);
 
@@ -920,7 +928,7 @@
             }
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result.Count >= 3);
 
             var sampleSupervisor = result.FirstOrDefault(s => s.InnerUserId == 3);
 
@@ -961,10 +969,8 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
-            Assert.IsTrue(sampleAgent.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
-            Assert.IsTrue(sampleAgent.IncorporationDate.HasValue);
 
             sampleAgent = result.FirstOrDefault(a => a.InnerUserId == 7);
 
@@ -974,10 +980,8 @@
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.DNI));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Name));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.LastName));
-            Assert.IsTrue(sampleAgent.GrossSalary.HasValue);
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Workday));
             Assert.IsTrue(string.IsNullOrWhiteSpace(sampleAgent.Status));
-            Assert.IsTrue(sampleAgent.IncorporationDate.HasValue);
         }
 
         [TestMethod]
