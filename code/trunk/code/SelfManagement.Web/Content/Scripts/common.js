@@ -57,6 +57,57 @@ function refreshMetricValues() {
     });
 }
 
+function refreshSalary() {
+    var index = $("#CurrentMonth")[0].selectedIndex;
+    var month = $("#CurrentMonth").children()[index].text;
+    var innerUserId = $("#AgentId")[0].value;
+
+    var labels = $("#mainPanel .content label");
+    var inputs = $("#mainPanel .content input");
+
+    labels.addClass("loadingLabel");
+
+    var url = getBaseUrl() + "Agent/Salary?innerUserId=" + encodeURIComponent(innerUserId) + "&month=" + encodeURIComponent(month);
+
+    $.ajax({
+        url: url,
+        method: "GET",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function (xhr) { xhr.setRequestHeader("Content-Type", "application/json"); },
+        success: function (json) {
+            var labels = $("#mainPanel .content label");
+            var inputs = $("#mainPanel .content input");
+
+            if (json.Status && json.Status == "error") {
+                inputs[0].value = "Ups! Ocurrió un error...";
+                inputs[1].value = "Ups! Ocurrió un error...";
+                inputs[2].value = "Ups! Ocurrió un error...";
+            } else if (json.Salary == null) {
+                inputs[0].value = "No se encontraron datos";
+                inputs[1].value = "No se encontraron datos";
+                inputs[2].value = "No se encontraron datos";
+            } else {
+                inputs[0].value = json.Salary.GrossSalary;
+                inputs[1].value = json.Salary.VariableSalary;
+                inputs[2].value = json.Salary.TotalSalary;
+
+                var index = $("#CurrentMonth")[0].selectedIndex;
+                if (index + 1 == $("#CurrentMonth").children().length) {
+                    labels[2].innerHTML = "Parte Variable Proyectada";
+                    labels[3].innerHTML = "Sueld Total Proyectada";
+                }
+                else {
+                    labels[2].innerHTML = "Parte Variable";
+                    labels[3].innerHTML = "Sueld Total";
+                }
+            }
+
+            labels.removeClass("loadingLabel");
+        }
+    });
+}
+
 function showOrHideMetricLevels(event, id) {
     metricLevelsElement = $("#" + id);
 
