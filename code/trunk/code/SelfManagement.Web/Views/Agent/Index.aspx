@@ -59,7 +59,7 @@
                 </div>
                 <div style="clear: both; height: 1px"></div>
 
-                <table cellpadding="0" cellspacing="0">
+                <table cellpadding="0" cellspacing="0" id="metricvalues">
                     <tbody>
                         <tr>
                             <th>Métrica</th>
@@ -77,11 +77,11 @@
                         <tr>
                             <td><%= metricValues.MetricName %></td>
                             <td><%= metricValues.Format %></td>
-                            <td><%= metricValues.OptimalValue %></td>
-                            <td><%= metricValues.ObjectiveValue %></td>
-                            <td><%= metricValues.MinimumValue %></td>
-                            <td><%= metricValues.CurrentValue %></td>
-                            <td><%= metricValues.ProjectedValue %></td>
+                            <td style="text-align: right;"><%= metricValues.OptimalValue %></td>
+                            <td style="text-align: right;"><%= metricValues.ObjectiveValue %></td>
+                            <td style="text-align: right;"><%= metricValues.MinimumValue %></td>
+                            <td style="text-align: right;"><%= metricValues.CurrentValue %></td>
+                            <td style="text-align: right;"><%= metricValues.ProjectedValue %></td>
                         </tr>
                         <% 
                             }

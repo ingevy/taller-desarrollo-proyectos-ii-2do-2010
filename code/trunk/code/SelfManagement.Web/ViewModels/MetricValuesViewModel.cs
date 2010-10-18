@@ -10,14 +10,14 @@
 
         public string MetricName { get; set; }
 
-        public double OptimalValue { get; set; }
+        public string OptimalValue { get; set; }
 
-        public double ObjectiveValue { get; set; }
+        public string ObjectiveValue { get; set; }
 
-        public double MinimumValue { get; set; }
+        public string MinimumValue { get; set; }
 
-        public double CurrentValue { get; set; }
+        public string CurrentValue { get; set; }
 
-        public double ProjectedValue { get; set; }
+        public string ProjectedValue { get; set; }
     }
 }
