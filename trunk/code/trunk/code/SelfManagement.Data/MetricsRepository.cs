@@ -50,6 +50,53 @@
             }
         }
 
+        public double GetUserMetricValue(string userName, DateTime date, int metricId)
+        {
+            if (date <= DateTime.Now)
+            {
+                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+
+                using (var ctx = new SelfManagementEntities())
+                {
+                    var innerUserId = (from u in ctx.aspnet_Users
+                                       where u.UserName == userName
+                                       select u.InnerUserId).ToList().FirstOrDefault();
+
+                    var campaingId = this.RetrieveUserActualCampaingId(innerUserId);
+                    var campaing = ctx.Campaings.Where(c => c.Id == campaingId).ToList().FirstOrDefault();
+                    var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
+
+                    var lowLimitDate = (campaing.BeginDate < firstDayOfMonth) ? firstDayOfMonth : campaing.BeginDate;
+
+                    var query = from m in ctx.UserMetrics
+                                where m.InnerUserId == innerUserId && m.Date >= lowLimitDate && m.Date <= date
+                                      && m.MetricId == metricId && m.CampaingId == campaing.Id
+                                select m;
+
+                    var metricValue = 0.0;
+
+                    if (query.Count() > 0)
+                    {
+                        foreach (var um in query)
+                        {
+                            metricValue += um.Value;
+                        }
+
+                        if (metric.Format == 0)
+                        {
+                            metricValue = metricValue / Convert.ToDouble(query.Count());
+                        }
+                    }
+
+                    return metricValue;
+                }
+            }
+            else
+            {
+                return 0.0;
+            }
+        }
+
         public void CreateAgentMetric(UserMetric userMetric)
         {
             using (var ctx = new SelfManagementEntities())
