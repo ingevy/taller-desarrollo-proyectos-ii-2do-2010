@@ -51,7 +51,7 @@
             }
         }
 
-        public double GetUserMetricValue(string userName, DateTime date, int metricId)
+        public double GetUserMetricValue(string userName, DateTime date, int metricId, int campaingId)
         {
             using (var ctx = new SelfManagementEntities())
             {
@@ -59,7 +59,7 @@
                                     where u.UserName == userName
                                     select u.InnerUserId).ToList().FirstOrDefault();
 
-                var campaingId = this.RetrieveUserActualCampaingId(innerUserId);
+                //var campaingId = this.RetrieveUserActualCampaingId(innerUserId);
                 var campaing = ctx.Campaings.Where(c => c.Id == campaingId).ToList().FirstOrDefault();
                 var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
 

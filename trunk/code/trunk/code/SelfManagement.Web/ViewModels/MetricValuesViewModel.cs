@@ -2,7 +2,11 @@
 {
     public class MetricValuesViewModel
     {
+        public int CampaingId { get; set; }
+
         public int MetricId { get; set; }
+
+        public string Format { get; set; }
 
         public string MetricName { get; set; }
 

@@ -98,6 +98,7 @@
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.CampaingMetricLevels
+                    .Include("Metric")
                     .Where(cml => cml.CampaingId == campaingId)
                     .ToList();
             }
