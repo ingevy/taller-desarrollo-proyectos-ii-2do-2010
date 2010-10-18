@@ -3,13 +3,16 @@
     using System;
     using CallCenter.SelfManagement.Data;
 
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var processor = new FilesProcessor(new MetricsRepository());
+
             processor.ProcessMetrics();
-            Console.Read();
+
+            Console.WriteLine("El procesamiento de las Métricas finalizó. Presione un tecla para finalizar...");
+            Console.ReadKey();
         }
     }
 }
