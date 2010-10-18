@@ -45,7 +45,7 @@
                 AgentId = agent.InnerUserId,
                 // Update
                 Salary = new SalaryViewModel { GrossSalary = 2000, VariableSalary = 554.5, TotalSalary = 2554.5 },
-                AvailableMonths = new List<string> { "2010-07", "2010-08", "2010-09", "2010-10" },
+                AvailableMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
                 // Update
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
                 CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),

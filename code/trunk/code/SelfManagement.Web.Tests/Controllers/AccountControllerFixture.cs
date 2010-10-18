@@ -441,6 +441,11 @@
             {
                 throw new System.NotImplementedException();
             }
+
+            public System.Collections.Generic.IList<string> RetrieveAvailableMonthsByUser(int innerUserId)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }
