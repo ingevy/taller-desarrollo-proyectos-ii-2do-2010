@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\LeastSquareQuadraticRegression.cs" />
     <Compile Include="MembershipService.cs" />
     <Compile Include="CampaingRepository.cs" />
     <Compile Include="FullTextSearchHelper.cs" />

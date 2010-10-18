@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
-
-namespace LeastSquares
+﻿namespace CallCenter.SelfManagement.Data.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Collections;
+
     public class LeastSquareQuadraticRegression
     {
         /* instance variables */
