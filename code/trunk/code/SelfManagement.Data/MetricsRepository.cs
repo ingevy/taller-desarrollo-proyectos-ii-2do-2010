@@ -106,7 +106,15 @@
 
                 if (original != null)
                 {
-                    original.Value += value;
+                    var metric = ctx.Metrics.Where(m => m.Id == original.MetricId).FirstOrDefault();
+                    if (metric.Format == 0)
+                    {
+                        original.Value = (original.Value + value) / Convert.ToDouble(2);
+                    }
+                    else
+                    {
+                        original.Value += value;
+                    }
                 }
                 else
                 {
@@ -127,7 +135,15 @@
 
                 if (original != null)
                 {
-                    original.Value += value;
+                    var metric = ctx.Metrics.Where(m => m.Id == original.MetricId).FirstOrDefault();
+                    if (metric.Format == 0)
+                    {
+                        original.Value = (original.Value + value) / Convert.ToDouble(2);
+                    }
+                    else
+                    {
+                        original.Value += value;
+                    }
                 }
                 else
                 {
