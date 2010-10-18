@@ -1,6 +1,7 @@
 ﻿namespace CallCenter.SelfManagement.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Web.Profile;
@@ -157,6 +158,26 @@
             }
         }
 
+        public IList<string> RetrieveAvailableMonthsByUser(int innerUserId)
+        {
+            var today = DateTime.Now;
+            var agent = this.RetrieveAgent(innerUserId);
+
+            if (agent != null)
+            {
+                return GetMonthsList(DateTime.ParseExact(agent.IncorporationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None), today);            
+            }
+
+            var supervisor = this.RetrieveSupervisor(innerUserId);
+
+            if (supervisor != null)
+            {
+                return GetMonthsList(DateTime.ParseExact(supervisor.IncorporationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None), today);
+            }
+
+            throw new ArgumentException("innerUserId");
+        }
+
         public Agent RetrieveAgent(string userName)
         {
             using (var ctx = new SelfManagementEntities())
@@ -207,6 +228,19 @@
 
                 return user.InnerUserId;
             }
+        }
+
+        private static IList<string> GetMonthsList(DateTime from, DateTime to)
+        {
+            var months = new List<string>();
+
+            while (from.Date <= to.Date)
+            {
+                months.Add(string.Format(CultureInfo.InvariantCulture, "{0}-{1}", from.Year, from.Month.ToString("D2", CultureInfo.InvariantCulture)));
+                from = from.AddMonths(1);
+            }
+
+            return months;
         }
     }
 }
