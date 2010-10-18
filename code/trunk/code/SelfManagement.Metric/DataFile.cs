@@ -50,10 +50,10 @@
                     fileDate = DateTime.ParseExact("01" + fileName.Substring(4, fileName.IndexOf(".") - 4), "ddMMMMyyyy", CultureInfo.CreateSpecificCulture("es-AR"));
                     break;
                 case ExternalSystemFiles.HF:
-                    fileDate = DateTime.Now;
+                    fileDate = new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day);
                     break;
                 default:
-                    fileDate = DateTime.Now;
+                    fileDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                     break;
             }
 
