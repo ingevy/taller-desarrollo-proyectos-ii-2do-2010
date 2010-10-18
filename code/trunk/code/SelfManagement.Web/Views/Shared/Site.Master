@@ -12,7 +12,7 @@
     <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery-1.4.1.js")%>"></script>
     <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery.autocomplete.js")%>"></script>
     <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/datepickercontrol.js")%>"></script>
-    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/campaingmetrics.js")%>"></script>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/common.js")%>"></script>
 </head>
 <body>
     <div id="container">

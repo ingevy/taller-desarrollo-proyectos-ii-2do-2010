@@ -57,14 +57,15 @@
                     <% 
                         var availableCampaings = this.Model.AgentCampaings.Select(ac => new SelectListItem { Text = ac.DisplayName, Value = ac.Id.ToString() });
                     %>
-                    <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings) %>
+                    <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onclick = "refreshMetricValues()" })%>
                 </div>
                 <div style="clear: both; height: 1px"></div>
 
-                <table cellpadding="0" cellspacing="0" id="metricvalues">
+                <div id="metricvaluescontainer" style="padding: 0px; margin: 20px 0px 0px 0px;" >
+                 <table cellpadding="0" cellspacing="0" id="metricvalues">
                     <tbody>
                         <tr>
-                            <th>Métrica</th>
+                            <th>Metrica</th>
                             <th>Tipo</th>
                             <th>Nivel Optimo</th>
                             <th>Nivel Objectivo</th>
@@ -90,6 +91,7 @@
                         %>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>

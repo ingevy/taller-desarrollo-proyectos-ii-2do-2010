@@ -60,6 +60,16 @@
             return this.View(model);
         }
 
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
+        public ActionResult CampaingMetricValues(int campaingId)
+        {
+            // TODO: Refactor this to receive a date range or month
+            var campaingMetricValues = this.CalculateCampaingMetricValues(campaingId, DateTime.Now);
+            
+            // Returns raw text, one result on each line.
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { CampaingMetricValues = campaingMetricValues } };
+        }
+
         //
         // GET: /Agent/Create
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
