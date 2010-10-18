@@ -3,6 +3,8 @@
     using System.Web.Mvc;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Web.Helpers;
+    using CallCenter.SelfManagement.Web.ViewModels;
+    using System.Collections.Generic;
 
     public class AgentController : Controller
     {
@@ -22,7 +24,19 @@
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Index()
         {
-            return View();
+            // TODO: implement this action for AccountManager and Supervisor roles
+            if (User.IsInRole("AccountManager") || User.IsInRole("Supervisor"))
+            {
+                return this.View("IndexToDo");
+            }
+
+            var model = new AgentDetailsViewModel
+            {
+                Salary = new SalaryViewModel { GrossSalary = 2000, VariableSalary = 554.5, TotalSalary = 2554.5 },
+                AvailableMonths = new List<string> { "2010-07", "2010-08", "2010-09", "2010-10" }
+            };
+
+            return this.View(model);
         }
 
         //
@@ -30,7 +44,7 @@
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Create()
         {
-            return View();
+            return this.View();
         } 
 
         //
@@ -43,11 +57,11 @@
             {
                 // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
+                return this.RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return this.View();
             }
         }
         
@@ -56,7 +70,7 @@
         [Authorize(Roles = "AccountManager, Supervisor, Agent")] 
         public ActionResult Edit(int id)
         {
-            return View();
+            return this.View();
         }
 
         //
@@ -68,12 +82,12 @@
             try
             {
                 // TODO: Add update logic here
- 
-                return RedirectToAction("Index");
+
+                return this.RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return this.View();
             }
         }
 
@@ -82,7 +96,7 @@
         [Authorize(Roles = "AccountManager, Supervisor, Agent")] 
         public ActionResult Delete(int id)
         {
-            return View();
+            return this.View();
         }
 
         //
@@ -95,12 +109,12 @@
             try
             {
                 // TODO: Add delete logic here
- 
-                return RedirectToAction("Index");
+
+                return this.RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return this.View();
             }
         }
     }
