@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\LeastSquareQuadraticRegression.cs" />
+    <Compile Include="Helpers\MetricsCalculator.cs" />
     <Compile Include="MembershipService.cs" />
     <Compile Include="CampaingRepository.cs" />
     <Compile Include="FullTextSearchHelper.cs" />
