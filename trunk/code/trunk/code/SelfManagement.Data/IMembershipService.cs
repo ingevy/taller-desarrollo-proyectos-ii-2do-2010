@@ -19,9 +19,15 @@
 
         bool ChangePassword(string userName, string oldPassword, string newPassword);
 
-        Agent GetAgent(string userName);
+        Agent RetrieveAgent(string userName);
 
-        Supervisor GetSupervisor(string userName);
+        Agent RetrieveAgent(int innerUserId);
+
+        Supervisor RetrieveSupervisor(string userName);
+
+        Supervisor RetrieveSupervisor(int innerUserId);
+
+        int RetrieveInnerUserIdByUserName(string userName);
     }
 
     public enum SelfManagementRoles

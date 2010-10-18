@@ -71,8 +71,8 @@
             service.CreateUser(userName, "password", string.Format(CultureInfo.InvariantCulture, "{0}@tests.com", userName));
             service.AddUserToRol(userName, SelfManagementRoles.Agent);
 
-            var agent = service.GetAgent(userName);
-            var supervisor = service.GetSupervisor(userName);
+            var agent = service.RetrieveAgent(userName);
+            var supervisor = service.RetrieveSupervisor(userName);
 
             Assert.IsNotNull(agent);
             Assert.IsNull(supervisor);
@@ -153,8 +153,8 @@
             service.AddUserToRol(userName, SelfManagementRoles.Agent);
             service.CreateProfile(userName, "26050210", "Carlos", "Abate", 1700M, "PTE", "activo", new DateTime(2009, 8, 1));
 
-            var supervisor = service.GetSupervisor(supervisorUserName);           
-            var agent = service.GetAgent(agentUserName);
+            var supervisor = service.RetrieveSupervisor(supervisorUserName);           
+            var agent = service.RetrieveAgent(agentUserName);
 
             Assert.IsNotNull(supervisor);
             Assert.IsNotNull(agent);
@@ -192,8 +192,8 @@
             service.CreateUser(userName, "password", string.Format(CultureInfo.InvariantCulture, "{0}@callcenter.com", userName));
             service.AddUserToRol(userName, SelfManagementRoles.Supervisor);
 
-            var agent = service.GetAgent(userName);
-            var supervisor = service.GetSupervisor(userName);
+            var agent = service.RetrieveAgent(userName);
+            var supervisor = service.RetrieveSupervisor(userName);
 
             Assert.IsNull(agent);
             Assert.IsNotNull(supervisor);

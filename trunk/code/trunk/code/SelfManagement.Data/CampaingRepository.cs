@@ -27,6 +27,33 @@
             }
         }
 
+        public Campaing RetrieveUserCurrentCampaing(int innerUserId)
+        {
+            var today = DateTime.Now;
+
+            using (var ctx = new SelfManagementEntities())
+            {
+                var campingUser = ctx.CampaingUsers
+                    .Include("Campaing")
+                    .Where(cu => cu.InnerUserId == innerUserId)
+                    .FirstOrDefault(cu => (cu.BeginDate <= today) && (cu.EndDate >= today));
+
+                return campingUser != null ? campingUser.Campaing : null;
+            }
+        }
+
+        public IList<Campaing> RetrieveCampaingsByUserId(int innerUserId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.CampaingUsers
+                    .Include("Campaing")
+                    .Where(cu => cu.InnerUserId == innerUserId)
+                    .Select(cu => cu.Campaing)
+                    .ToList();
+            }
+        }
+
         public IList<Supervisor> RetrieveAvailableSupervisors(DateTime beginDate, DateTime? endDate = null)
         {
             using (var ctx = new SelfManagementEntities())

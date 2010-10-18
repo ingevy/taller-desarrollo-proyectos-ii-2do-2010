@@ -82,6 +82,15 @@
             return model;
         }
 
+        public static UserCampaingInfo ToUserCampaingInfo(this Campaing entity)
+        {
+            return new UserCampaingInfo
+            {
+                Id = entity.Id,
+                DisplayName = GetDisplayName(entity)
+            };
+        }
+
         private static string GetDisplayName(Supervisor supervisor)
         {
             if (!string.IsNullOrEmpty(supervisor.Name) && !string.IsNullOrEmpty(supervisor.LastName))
@@ -90,6 +99,11 @@
             }
 
             return string.Format(CultureInfo.CurrentUICulture, "{0} ({1})", supervisor.UserName, supervisor.InnerUserId);
-        } 
+        }
+
+        private static string GetDisplayName(Campaing campaing)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0} ({1})", campaing.Name, campaing.Id);
+        }
     }
 }

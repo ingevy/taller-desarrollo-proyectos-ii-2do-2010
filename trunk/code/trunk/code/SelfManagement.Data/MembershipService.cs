@@ -157,23 +157,55 @@
             }
         }
 
-        public Agent GetAgent(string userName)
+        public Agent RetrieveAgent(string userName)
         {
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.Agents
-                    .Where(a => a.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase))
-                    .FirstOrDefault();
+                    .FirstOrDefault(a => a.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase));
             }
         }
 
-        public Supervisor GetSupervisor(string userName)
+        public Agent RetrieveAgent(int innerUserId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Agents
+                    .FirstOrDefault(a => a.InnerUserId == innerUserId);
+            }
+        }
+
+        public Supervisor RetrieveSupervisor(string userName)
         {
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.Supervisors
-                    .Where(s => s.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase))
-                    .FirstOrDefault();
+                    .FirstOrDefault(s => s.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase));
+            }
+        }
+
+        public Supervisor RetrieveSupervisor(int innerUserId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors
+                    .FirstOrDefault(s => s.InnerUserId == innerUserId);
+            }
+        }
+
+        public int RetrieveInnerUserIdByUserName(string userName)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var user = ctx.aspnet_Users
+                    .FirstOrDefault(u => u.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase));
+
+                if (user == null)
+                {
+                    throw new ArgumentException("userName", "El nombre de usuario no existe.");
+                }
+
+                return user.InnerUserId;
             }
         }
     }
