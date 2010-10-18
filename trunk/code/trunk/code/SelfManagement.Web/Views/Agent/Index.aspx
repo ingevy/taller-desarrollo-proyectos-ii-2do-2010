@@ -11,6 +11,8 @@
                 <a href="#">
                     <%= this.Model.CurrentSupervisor %></a> </span>
     </h1>
+    <%: Html.HiddenFor(model => model.AgentId) %>
+
     <div style="clear: both; height: 1px">
     </div>
     <div id="mainPanel" class="panel">

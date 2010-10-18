@@ -44,10 +44,7 @@
             var model = new AgentDetailsViewModel
             {
                 AgentId = agent.InnerUserId,
-                // Update
-                Salary = new SalaryViewModel { GrossSalary = 2000, VariableSalary = 554.5, TotalSalary = 2554.5 },
                 AvailableMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
-                // Update
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
                 CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
                 CurrentCampaingId = currentCampaing != null ? currentCampaing.Id : 0,
@@ -57,7 +54,8 @@
                                         .ToList(),
             };
 
-            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(model.CurrentCampaingId);
+            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(model.CurrentCampaingId, DateTime.Now);
+            model.Salary = this.CalculateSalary(agent.InnerUserId, model.CurrentCampaingId, model.CurrentCampaingMetricValues);
 
             return this.View(model);
         }
@@ -141,10 +139,9 @@
             }
         }
 
-        private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int campaingId)
+        private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int campaingId, DateTime date)
         {
             var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId);
-            var today = DateTime.Now;
             var end = this.GetEndDate(campaingId);
 
             return campaingMetrics
@@ -157,7 +154,7 @@
                                             OptimalValue = cml.OptimalLevel.ToString("F", CultureInfo.InvariantCulture),
                                             ObjectiveValue = cml.ObjectiveLevel.ToString("F", CultureInfo.InvariantCulture),
                                             MinimumValue = cml.MinimumLevel.ToString("F", CultureInfo.InvariantCulture),
-                                            CurrentValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, today, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture),
+                                            CurrentValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, date, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture),
                                             ProjectedValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, end, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture)
                                         })
                             .ToList();
@@ -184,6 +181,68 @@
             }
 
             return today.AddDays(30 - today.Day);
+        }
+
+        private SalaryViewModel CalculateSalary(int innerUserId, int campaingId, IList<MetricValuesViewModel> metricValues)
+        {
+            var agent = this.membershipService.RetrieveAgent(innerUserId);
+            var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
+            var hours = agent.Workday.Equals("PTE", StringComparison.OrdinalIgnoreCase) ? 120 : 160;
+            var salaryViewModel = new SalaryViewModel();
+
+            var optimalCount = 0;
+            var objectiveCount = 0;
+            var minimumCount = 0;
+
+            foreach (var metricValue in metricValues)
+            {
+                var optimal = double.Parse(metricValue.OptimalValue, NumberStyles.Any, CultureInfo.InvariantCulture);
+                var objective = double.Parse(metricValue.ObjectiveValue, NumberStyles.Any, CultureInfo.InvariantCulture);
+                var minimum = double.Parse(metricValue.MinimumValue, NumberStyles.Any, CultureInfo.InvariantCulture);
+                var projected = double.Parse(metricValue.ProjectedValue, NumberStyles.Any, CultureInfo.InvariantCulture);
+
+                if (optimal <= projected) { optimalCount++; }
+                if (objective <= projected) { objectiveCount++; }
+                if (minimum <= projected) { minimumCount++; }
+            }
+
+            var gross = double.Parse(agent.GrossSalary, NumberStyles.Any, CultureInfo.InvariantCulture);
+            salaryViewModel.GrossSalary = gross.ToString("C", CultureInfo.CurrentUICulture);
+
+            if (optimalCount == metricValues.Count)
+            {
+                var variable = campaing.OptimalHourlyValue * hours;
+
+                salaryViewModel.VariableSalary = variable.ToString("C", CultureInfo.CurrentUICulture);
+                salaryViewModel.TotalSalary = (gross + Convert.ToDouble(variable)).ToString("C", CultureInfo.CurrentUICulture);
+
+                return salaryViewModel;
+            }
+
+            if (objectiveCount == metricValues.Count)
+            {
+                var variable = campaing.ObjectiveHourlyValue * hours;
+
+                salaryViewModel.VariableSalary = variable.ToString("C", CultureInfo.CurrentUICulture);
+                salaryViewModel.TotalSalary = (gross + Convert.ToDouble(variable)).ToString("C", CultureInfo.CurrentUICulture);
+
+                return salaryViewModel;
+            }
+
+            if (minimumCount == metricValues.Count)
+            {
+                var variable = campaing.MinimumHourlyValue * hours;
+
+                salaryViewModel.VariableSalary = variable.ToString("C", CultureInfo.CurrentUICulture);
+                salaryViewModel.TotalSalary = (gross + Convert.ToDouble(variable)).ToString("F", CultureInfo.CurrentUICulture);
+
+                return salaryViewModel;
+            }
+
+            salaryViewModel.VariableSalary = "0";
+            salaryViewModel.TotalSalary = salaryViewModel.GrossSalary;
+
+            return salaryViewModel;
         }
     }
 }
