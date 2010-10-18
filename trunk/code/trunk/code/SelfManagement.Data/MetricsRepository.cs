@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using CallCenter.SelfManagement.Data.Helpers;
 
     public class MetricsRepository : IMetricsRepository
     {
@@ -52,48 +53,37 @@
 
         public double GetUserMetricValue(string userName, DateTime date, int metricId)
         {
-            if (date <= DateTime.Now)
+            using (var ctx = new SelfManagementEntities())
             {
+                var innerUserId = (from u in ctx.aspnet_Users
+                                    where u.UserName == userName
+                                    select u.InnerUserId).ToList().FirstOrDefault();
+
+                var campaingId = this.RetrieveUserActualCampaingId(innerUserId);
+                var campaing = ctx.Campaings.Where(c => c.Id == campaingId).ToList().FirstOrDefault();
+                var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
+
                 var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lowLimitDate = (campaing.BeginDate < firstDayOfMonth) ? firstDayOfMonth : campaing.BeginDate;
 
-                using (var ctx = new SelfManagementEntities())
+                var userMetrics = (from m in ctx.UserMetrics
+                                   where m.InnerUserId == innerUserId && m.Date >= lowLimitDate && m.Date <= date
+                                         && m.MetricId == metricId && m.CampaingId == campaing.Id
+                                   select m).ToList();
+                
+                var metricsCalculator = new MetricsCalculator();
+                var metricValue = 0.0;
+
+                if (metric.Format == 0)
                 {
-                    var innerUserId = (from u in ctx.aspnet_Users
-                                       where u.UserName == userName
-                                       select u.InnerUserId).ToList().FirstOrDefault();
-
-                    var campaingId = this.RetrieveUserActualCampaingId(innerUserId);
-                    var campaing = ctx.Campaings.Where(c => c.Id == campaingId).ToList().FirstOrDefault();
-                    var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
-
-                    var lowLimitDate = (campaing.BeginDate < firstDayOfMonth) ? firstDayOfMonth : campaing.BeginDate;
-
-                    var query = from m in ctx.UserMetrics
-                                where m.InnerUserId == innerUserId && m.Date >= lowLimitDate && m.Date <= date
-                                      && m.MetricId == metricId && m.CampaingId == campaing.Id
-                                select m;
-
-                    var metricValue = 0.0;
-
-                    if (query.Count() > 0)
-                    {
-                        foreach (var um in query)
-                        {
-                            metricValue += um.Value;
-                        }
-
-                        if (metric.Format == 0)
-                        {
-                            metricValue = metricValue / Convert.ToDouble(query.Count());
-                        }
-                    }
-
-                    return metricValue;
+                    metricValue = metricsCalculator.CalculateAverageMetricValue(userMetrics, date);
                 }
-            }
-            else
-            {
-                return 0.0;
+                else
+                {
+                    metricValue = metricsCalculator.CalculateAcumulatedMetricValue(userMetrics, date);
+                }
+
+                return metricValue;
             }
         }
 
