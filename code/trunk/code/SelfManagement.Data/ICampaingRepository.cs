@@ -15,6 +15,8 @@
         
         Campaing RetrieveCampaingById(int campaingId);
 
+        IList<Campaing> RetrieveCampaingsByUserIdAndDate(int innerUserId, DateTime date);
+
         IList<Campaing> RetrieveCampaingsByUserId(int innerUserId);
 
         IList<CampaingMetricLevel> RetrieveCampaingMetricLevels(int campaingId);

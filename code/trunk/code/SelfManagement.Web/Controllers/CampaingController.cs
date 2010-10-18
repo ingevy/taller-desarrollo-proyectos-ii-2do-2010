@@ -127,7 +127,6 @@
                             .Select(s => s.ToViewModel());                        
             }
 
-            // Returns raw text, one result on each line.
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Supervisors = supervisors } };
         }
 
