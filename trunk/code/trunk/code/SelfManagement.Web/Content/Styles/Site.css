@@ -655,3 +655,27 @@ div.ac_results ul li.ac_over {
 .editor-label {
 	margin-top: 10px;
 }
+
+#metricvalues {
+	margin-top: 18px;
+	padding: 3px;
+	width: 955px;
+}
+
+#metricvalues tbody  th 
+{
+	background-color: #DDDDEE;
+	padding: 2px 7px;
+}
+
+#metricvalues tbody  td
+{
+	padding: 2px 7px;
+	border-bottom: 1px solid #DDDDEE;
+}
+
+#metricvalues tbody tr
+{
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+}

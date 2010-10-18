@@ -152,13 +152,13 @@
                                         {
                                             CampaingId = cml.CampaingId,
                                             MetricId = cml.MetricId,
-                                            Format = cml.Metric.Format == 0 ? "Porcentual" : "Acumulada",
-                                            OptimalValue = cml.OptimalLevel,
-                                            ObjectiveValue = cml.ObjectiveLevel,
-                                            MinimumValue = cml.MinimumLevel,
                                             MetricName = cml.Metric.MetricName,
-                                            CurrentValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, today, cml.MetricId, campaingId),
-                                            ProjectedValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, end, cml.MetricId, campaingId)
+                                            Format = cml.Metric.Format == 0 ? "Porcentual" : "Acumulada",
+                                            OptimalValue = cml.OptimalLevel.ToString("F", CultureInfo.InvariantCulture),
+                                            ObjectiveValue = cml.ObjectiveLevel.ToString("F", CultureInfo.InvariantCulture),
+                                            MinimumValue = cml.MinimumLevel.ToString("F", CultureInfo.InvariantCulture),
+                                            CurrentValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, today, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture),
+                                            ProjectedValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, end, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture)
                                         })
                             .ToList();
         }
