@@ -33,7 +33,9 @@
             var model = new AgentDetailsViewModel
             {
                 Salary = new SalaryViewModel { GrossSalary = 2000, VariableSalary = 554.5, TotalSalary = 2554.5 },
-                AvailableMonths = new List<string> { "2010-07", "2010-08", "2010-09", "2010-10" }
+                AvailableMonths = new List<string> { "2010-07", "2010-08", "2010-09", "2010-10" },
+                DisplayName = "Jose García (3)",
+                CurrentSupervisor = "Jorge Lopez (6)",
             };
 
             return this.View(model);

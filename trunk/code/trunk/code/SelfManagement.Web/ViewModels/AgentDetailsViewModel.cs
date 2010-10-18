@@ -7,7 +7,9 @@
     {
         public int AgentId { get; set; }
 
-        [DisplayName("Supervisor actual")]
+        public string DisplayName { get; set; }
+
+        [DisplayName("Supervisor Actual")]
         public string CurrentSupervisor { get; set; }
 
         public int CurrentCampaingId { get; set; }
