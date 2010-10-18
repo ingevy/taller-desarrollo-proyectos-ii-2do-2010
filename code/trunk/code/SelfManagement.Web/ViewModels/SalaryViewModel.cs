@@ -8,13 +8,13 @@ namespace CallCenter.SelfManagement.Web.ViewModels
 {
     public class SalaryViewModel
     {
-        [DisplayName("Sueldo bruto")]
+        [DisplayName("Sueldo Bruto")]
         public double GrossSalary { get; set; }
 
-        [DisplayName("Parte variable proyectada")]
+        [DisplayName("Parte Variable Proyectada")]
         public double VariableSalary { get; set; }
 
-        [DisplayName("Sueldo total proyectado")]
+        [DisplayName("Sueldo Total Proyectado")]
         public double TotalSalary { get; set; }
     }
 }

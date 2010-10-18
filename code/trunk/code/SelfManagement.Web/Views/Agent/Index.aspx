@@ -5,6 +5,16 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
+    <h1 class="info">
+        <span style="float: left;"><%= this.Model.DisplayName %></span>
+        <span style="float: right;">
+            <%: Html.LabelFor(model => model.CurrentSupervisor) %>
+            <a href="#"><%= this.Model.CurrentSupervisor %></a>
+        </span>
+    </h1>
+
+    <div style="clear: both; height: 1px"></div>
+
     <div id="mainPanel" class="panel">
         <div class="innerPanel">
             <h2><span>Liquidación de Sueldo</span></h2>
