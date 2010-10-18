@@ -1,3 +1,63 @@
+function refreshMetricValues() {
+    var index = $("#CurrentCampaingId")[0].selectedIndex;
+    var campaingId = $("#CurrentCampaingId").children()[index].value;
+    var metricValues = $("#metricvaluescontainer");
+
+    metricValues[0].innerHTML = " ";
+    metricValues.addClass("loading");
+
+    var url = getBaseUrl() + "Agent/CampaingMetricValues?campaingId=" + encodeURIComponent(campaingId);
+
+    $.ajax({
+        url: url,
+        method: "GET",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function (xhr) { xhr.setRequestHeader("Content-Type", "application/json"); },
+        success: function (json) {
+            var metricValues = $("#metricvaluescontainer");
+            if (json.Status && json.Status == "error") {
+                metricValues[0].innerHTML = "<h3>Ups! Ocurrió un error...</h3>";
+            } else if (json.CampaingMetricValues.length == 0) {
+                metricValues[0].innerHTML = "<h3>No metricas disponibles para la Campaña elegida...</h3>";
+            } else {
+
+                var html = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"metricvalues\">";
+                html += "<tbody>";
+                html += "<tr>";
+                html += "<th>Metrica</th>";
+                html += "<th>Tipo</th>";
+                html += "<th>Nivel Optimo</th>";
+                html += "<th>Nivel Objectivo</th>";
+                html += "<th>Nivel Minimo</th>";
+                html += "<th>Valor Actual</th>";
+                html += "<th>Valor Proyectado</th>";
+                html += "</tr>";
+
+                for (var i = 0; i < json.CampaingMetricValues.length; i++) {
+                    var campaingMetricValue = json.CampaingMetricValues[i];
+                    html += "<tr>";
+                    html += "<td>" + campaingMetricValue.MetricName + "</td>";
+                    html += "<td>" + campaingMetricValue.Format + "</td>";
+                    html += "<td>" + campaingMetricValue.OptimalValue + "</td>";
+                    html += "<td>" + campaingMetricValue.ObjectiveValue + "</td>";
+                    html += "<td>" + campaingMetricValue.MinimumValue + "</td>";
+                    html += "<td>" + campaingMetricValue.CurrentValue + "</td>";
+                    html += "<td>" + campaingMetricValue.ProjectedValue + "</td>";
+                    html += "</tr>";
+                }
+                html += "</tbody>";
+                html += "</table>";
+
+
+                metricValues[0].innerHTML = html;
+            }
+
+            metricValues.removeClass("loading");
+        }
+    });
+}
+
 function showOrHideMetricLevels(event, id) {
     metricLevelsElement = $("#" + id);
 

@@ -656,10 +656,10 @@ div.ac_results ul li.ac_over {
 	margin-top: 10px;
 }
 
-#metricvalues {
-	margin-top: 18px;
+#metricvalues 
+{
 	padding: 3px;
-	width: 955px;
+	width: 952px;
 }
 
 #metricvalues tbody  th 
@@ -678,4 +678,9 @@ div.ac_results ul li.ac_over {
 {
 	border-top: 1px solid;
 	border-bottom: 1px solid;
+}
+
+#metricvaluescontainer
+{
+	min-height: 35px;
 }
