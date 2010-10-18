@@ -12,6 +12,7 @@
         [DisplayName("Supervisor Actual")]
         public string CurrentSupervisor { get; set; }
 
+        [DisplayName("Campañas")]
         public int CurrentCampaingId { get; set; }
 
         [DisplayName("Mes")]

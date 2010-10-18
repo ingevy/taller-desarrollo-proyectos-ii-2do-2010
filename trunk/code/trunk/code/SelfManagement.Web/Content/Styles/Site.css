@@ -182,11 +182,11 @@ div.statusMessage  {
 }
 
 /* search form */
-#mainPanel {
+#secondPanel, #mainPanel {
 	width: 984px;
 	background: url(../images/mainbox_bg_top.png) no-repeat top left;
 }
-#mainPanel .innerPanel {
+#secondPanel .innerPanel, #mainPanel .innerPanel {
 	width: 984px;
 	background: url(../images/mainbox_bg_bottom.png) no-repeat bottom left;
 }
@@ -196,15 +196,15 @@ div.statusMessage  {
 #mainPanel fieldset textarea { width: 919px }
 #mainPanel fieldset .uservalue { width: 159px }
 #mainPanel fieldset nobr .uservalue { width: 138px }
-#mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
-#mainPanel label { display: inline-block; width: 70px; }
+
+#secondPanel p, #mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
+#secondPanel label, #mainPanel label { display: inline-block; width: 70px; }
 /*#mainPanel select { width: 110px; }*/
 
-#mainPanel #content { padding: 5px 15px 15px 15px; }
-#mainPanel #content label { width: 205px }
-#mainPanel #content .uservalue { width: 159px; text-align: right;}
-#mainPanel #content div { padding-right:15px; padding-left:15px; margin-top:15px }
-
+#secondPanel .content, #mainPanel .content { padding: 5px 15px 15px 15px; }
+#secondPanel .content label { width: 105px } #mainPanel .content label { width: 205px }
+#secondPanel .content .uservalue, #mainPanel .content .uservalue { width: 159px; text-align: right; }
+#secondPanel .content div, #mainPanel .content div { padding-right:15px; padding-left:15px; margin-top:15px }
 
 #buttonsPanel {
 	 text-align:right;

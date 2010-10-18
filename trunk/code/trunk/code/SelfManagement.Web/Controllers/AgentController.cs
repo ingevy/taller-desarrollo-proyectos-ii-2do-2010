@@ -36,6 +36,13 @@
                 AvailableMonths = new List<string> { "2010-07", "2010-08", "2010-09", "2010-10" },
                 DisplayName = "Jose García (3)",
                 CurrentSupervisor = "Jorge Lopez (6)",
+                CurrentCampaingId = 5,
+                AgentCampaings = new List<UserCampaingInfo>
+                    {
+                        new UserCampaingInfo { DisplayName = "Nueva Tarjeta Naranja (1)", Id = 1 },
+                        new UserCampaingInfo { DisplayName = "Promocion Seguros (5)", Id = 5 },
+                        new UserCampaingInfo { DisplayName = "Descuentos Banco Frances (7)", Id = 7 }
+                    }
             };
 
             return this.View(model);

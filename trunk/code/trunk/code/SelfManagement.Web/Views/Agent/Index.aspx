@@ -18,14 +18,13 @@
     <div id="mainPanel" class="panel">
         <div class="innerPanel">
             <h2><span>Liquidación de Sueldo</span></h2>
-            <div id="content">
+            <div class="content">
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.Salary.GrossSalary) %>
                     <%: Html.TextBoxFor(model => model.Salary.GrossSalary, new { Class = "uservalue", disabled = "true" })%>
                 </div>
                 <div style="float: right;">
                     <%: Html.LabelFor(model => model.CurrentMonth) %>
-                    
                     <% 
                         var id = 0;
                         var availableMonths = this.Model.AvailableMonths.Select(am => new SelectListItem { Text = am, Value = (id++).ToString() });
@@ -46,5 +45,24 @@
 
         </div>
     </div>
+    
+    <div id="secondPanel" class="panel">
+        <div class="innerPanel">
+            <h2><span>Métricas de Campañas</span></h2>
+            <div class="content">
+                <div style="float: right;">
+                    <%: Html.LabelFor(model => model.CurrentCampaingId) %>
+                    <% 
+                        var availableCampaings = this.Model.AgentCampaings.Select(ac => new SelectListItem { Text = ac.DisplayName, Value = ac.Id.ToString() });
+                    %>            
+                    <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings) %>
+                </div>
+                <div style="clear: both; height: 1px"></div>
+                <p><strong>TODO</strong></p>
+            </div>
+
+        </div>
+    </div>
+
 
 </asp:Content>
