@@ -417,12 +417,27 @@
                 throw new System.NotImplementedException();
             }
 
-            public Agent GetAgent(string userName)
+            public Agent RetrieveAgent(string userName)
             {
                 throw new System.NotImplementedException();
             }
 
-            public Supervisor GetSupervisor(string userName)
+            public Supervisor RetrieveSupervisor(string userName)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public Agent RetrieveAgent(int innerUserId)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public Supervisor RetrieveSupervisor(int innerUserId)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public int RetrieveInnerUserIdByUserName(string userName)
             {
                 throw new System.NotImplementedException();
             }

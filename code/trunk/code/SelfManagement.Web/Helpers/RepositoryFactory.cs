@@ -10,6 +10,11 @@
             return new CampaingRepository();
         }
 
+        public IMetricsRepository GetMetricsRepository()
+        {
+            return new MetricsRepository();
+        }
+
         public IMembershipService GetMembershipService()
         {
             return new MembershipService();

@@ -11,7 +11,11 @@
 
         IList<Supervisor> RetrieveAvailableSupervisors(DateTime beginDate, DateTime? endDate = null);
 
+        Campaing RetrieveUserCurrentCampaing(int innerUserId);
+        
         Campaing RetrieveCampaingById(int campaingId);
+
+        IList<Campaing> RetrieveCampaingsByUserId(int innerUserId);
 
         IList<CampaingMetricLevel> RetrieveCampaingMetricLevels(int campaingId);
 
