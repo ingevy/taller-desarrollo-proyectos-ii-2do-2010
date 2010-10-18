@@ -61,13 +61,32 @@
         }
 
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
+        public ActionResult Salary(int innerUserId, string month)
+        {
+            var date = DateTime.ParseExact(month, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None);
+            var campaing = this.campaingRepository.RetrieveCampaingsByUserIdAndDate(innerUserId, date).FirstOrDefault();
+
+            if (campaing != null)
+            {
+                var campaingMetricValues = this.CalculateCampaingMetricValues(campaing.Id, date);
+                var model = this.CalculateSalary(innerUserId, campaing.Id, campaingMetricValues);
+
+                return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = model } };
+            }
+
+            var grossSalary = this.membershipService.RetrieveAgent(innerUserId).GrossSalary;
+            var emptyModel = new SalaryViewModel { GrossSalary = "$" + grossSalary, VariableSalary = "$0", TotalSalary = "$" + grossSalary };
+
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = emptyModel } };           
+        }
+
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult CampaingMetricValues(int campaingId)
         {
             // TODO: Refactor this to receive a date range or month
-            var campaingMetricValues = this.CalculateCampaingMetricValues(campaingId, DateTime.Now);
+            var model = this.CalculateCampaingMetricValues(campaingId, DateTime.Now);
             
-            // Returns raw text, one result on each line.
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { CampaingMetricValues = campaingMetricValues } };
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { CampaingMetricValues = model } };
         }
 
         //

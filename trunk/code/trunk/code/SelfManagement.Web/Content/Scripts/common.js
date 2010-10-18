@@ -49,7 +49,6 @@ function refreshMetricValues() {
                 html += "</tbody>";
                 html += "</table>";
 
-
                 metricValues[0].innerHTML = html;
             }
 

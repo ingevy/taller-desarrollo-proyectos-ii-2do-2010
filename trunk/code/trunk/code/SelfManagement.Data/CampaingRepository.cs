@@ -93,6 +93,19 @@
             }
         }
 
+        public IList<Campaing> RetrieveCampaingsByUserIdAndDate(int innerUserId, DateTime date)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.CampaingUsers
+                    .Include("Campaing")
+                    .Where(cu => cu.InnerUserId == innerUserId)
+                    .Where(cu => ((cu.BeginDate <= date) && (cu.EndDate >= date)) || ((cu.BeginDate.Year == date.Year) && (cu.BeginDate.Month == date.Month)) || ((cu.EndDate.Year == date.Year) && (cu.EndDate.Month == date.Month)))
+                    .Select(cu => cu.Campaing)
+                    .ToList();
+            }
+        }
+
         public IList<CampaingMetricLevel> RetrieveCampaingMetricLevels(int campaingId)
         {
             using (var ctx = new SelfManagementEntities())
