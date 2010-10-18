@@ -234,7 +234,7 @@
         {
             var months = new List<string>();
 
-            while (from.Date <= to.Date)
+            while ((from.Date <= to.Date) || ((from.Date.Year <= to.Date.Year) && (from.Date.Month <= to.Date.Month)))
             {
                 months.Add(string.Format(CultureInfo.InvariantCulture, "{0}-{1}", from.Year, from.Month.ToString("D2", CultureInfo.InvariantCulture)));
                 from = from.AddMonths(1);
