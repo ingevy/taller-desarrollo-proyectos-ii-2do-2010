@@ -21,6 +21,7 @@ hr, .sep { display: none; }
 .inline { display: inline; }
 .clear { clear: both; }
 .loading { background: url(../images/preloader.gif) no-repeat center center; }
+.loadingLabel { background: url(../images/preloader.gif) no-repeat right center  }
 .loading * { display: none !important; }
 .disabled * { color: #aaa !important;  }
 a.loading { background-position: 100% 50% !important; padding-right: 30px; }
@@ -202,7 +203,7 @@ div.statusMessage  {
 /*#mainPanel select { width: 110px; }*/
 
 #secondPanel .content, #mainPanel .content { padding: 5px 15px 15px 15px; }
-#secondPanel .content label { width: 105px } #mainPanel .content label { width: 205px }
+#secondPanel .content label { width: 105px } #mainPanel .content label { width: 235px }
 #secondPanel .content .uservalue, #mainPanel .content .uservalue { width: 159px; text-align: right; }
 #secondPanel .content div, #mainPanel .content div { padding-right:15px; padding-left:15px; margin-top:15px }
 
