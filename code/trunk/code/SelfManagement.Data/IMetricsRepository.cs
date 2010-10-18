@@ -13,7 +13,7 @@
 
         int RetrieveAgentSupervisorId(int innerUserId);
 
-        double GetUserMetricValue(string userName, DateTime date, int metricId);
+        double GetUserMetricValue(string userName, DateTime date, int metricId, int campaingId);
 
         void CreateAgentMetric(UserMetric userMetric);
 
