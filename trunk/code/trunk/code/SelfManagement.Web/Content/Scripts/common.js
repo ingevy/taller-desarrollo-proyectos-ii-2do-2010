@@ -96,11 +96,11 @@ function refreshSalary() {
                 var index = $("#CurrentMonth")[0].selectedIndex;
                 if (index + 1 == $("#CurrentMonth").children().length) {
                     labels[2].innerHTML = "Parte Variable Proyectada";
-                    labels[3].innerHTML = "Sueld Total Proyectada";
+                    labels[3].innerHTML = "Sueldo Total Proyectado";
                 }
                 else {
                     labels[2].innerHTML = "Parte Variable";
-                    labels[3].innerHTML = "Sueld Total";
+                    labels[3].innerHTML = "Sueldo Total";
                 }
             }
 
