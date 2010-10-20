@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="en-US" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <meta name="description" content="Sistema SelfManagement para control de métricas de Campañas del Call Center y seguimiento de la parte variable del sueldo" />
+    <link href="<%=Url.Content("~/Content/Styles/Site.css")%>" rel="stylesheet" type="text/css" media="screen" />
+    <link href="<%=Url.Content("~/Content/Styles/datepickercontrol.css")%>" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery-1.4.1.js")%>"></script>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery.autocomplete.js")%>"></script>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/datepickercontrol.js")%>"></script>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/common.js")%>"></script>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <div id="logo">
+                <h1><a href="<%= Url.Content("~/")%>">SelfManagement</a></h1>
+            </div>
+            <hr />
+            <div id="navigation">
+                <ul>
+                   <% if (Request.IsAuthenticated)
+                      {
+                          if (Page.User.IsInRole("AccountManager"))
+                          {
+                   %>
+                            <li><%=Html.ActionLink("Campañas", "Index", "Campaing")%></li>
+                            <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor")%></li>
+                            <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
+                       <%
+                          } 
+                          else if (Page.User.IsInRole("Supervisor"))
+                          {
+                       %>
+                            <li><%=Html.ActionLink("Supervisores", "Index", "Supervisor")%></li>
+                            <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
+                       <%
+                          }
+                          else if (Page.User.IsInRole("Agent"))
+                          {
+                       %>
+                            <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
+                       <%
+                          }
+                       %>    
+                   <% } %>
+                </ul>
+            </div>
+            <div id="toolbar">
+                <% Html.RenderPartial("LogOnUserControl"); %>
+            </div>
+        </div>
+        <div id="pageWrapper">
+            <div id="page">
+                <hr />
+                <div id="main">
+                    <%
+                       if(!string.IsNullOrEmpty(Request.QueryString["msg"]))
+                       {
+                    %>
+                        <div class="statusMessage" id="statusMessage">
+                            <%:Server.UrlDecode(Request.QueryString["msg"])%>
+                        </div>
+                        <script type="text/javascript">
+                            setTimeout(function () { document.getElementById("statusMessage").style.display = 'none'; }, 4250);
+                        </script>
+                    <% } %>
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                </div>
+            </div>
+        </div>
+        <br />
+        <div id="footer">
+            <hr />
+            <p class="fiuba"><img src="<%=Url.Content("~/Content/Images/fiuba_logo.png")%>" alt="Facultad de Ingeniería" /></p>
+            <p class="copyright">
+                Todos los derechos reservados | <a href="#">Términos de Uso</a> | <a href="#">Política de Privacidad</a><br />
+                &copy; 2010 FIUBA
+            </p>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var errors = $(".field-validation-error, .field-validation-error-wrapper span, .errorShort");
+
+            for (var i = 0; i < errors.length; i++) {
+                errors[i].title = errors[i].innerHTML;
+                errors[i].innerHTML = "";
+            }
+        });
+
+    </script>
+</body>
+</html>
