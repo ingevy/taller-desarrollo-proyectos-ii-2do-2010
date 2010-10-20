@@ -12,7 +12,9 @@
           <EntitySet Name="Campaings" EntityType="SelfManagementModel.Store.Campaings" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CampaingUsers" EntityType="SelfManagementModel.Store.CampaingUsers" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Customers" EntityType="SelfManagementModel.Store.Customers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Holidays" EntityType="SelfManagementModel.Store.Holidays" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Metrics" EntityType="SelfManagementModel.Store.Metrics" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MonthlySchedule" EntityType="SelfManagementModel.Store.MonthlySchedule" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ProcessedFiles" EntityType="SelfManagementModel.Store.ProcessedFiles" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SupervisorAgents" EntityType="SelfManagementModel.Store.SupervisorAgents" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserMetrics" EntityType="SelfManagementModel.Store.UserMetrics" store:Type="Tables" Schema="dbo" />
@@ -155,6 +157,13 @@
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
         </EntityType>
+        <EntityType Name="Holidays">
+          <Key>
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="250" />
+        </EntityType>
         <EntityType Name="Metrics">
           <Key>
             <PropertyRef Name="Id" />
@@ -166,6 +175,21 @@
           <Property Name="Format" Type="int" Nullable="false" />
           <Property Name="IsHighestToLowest" Type="bit" Nullable="false" />
           <Property Name="CLRType" Type="nvarchar" Nullable="false" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="MonthlySchedule">
+          <Key>
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="Year" />
+            <PropertyRef Name="Month" />
+          </Key>
+          <Property Name="InnerUserId" Type="int" Nullable="false" />
+          <Property Name="Year" Type="smallint" Nullable="false" />
+          <Property Name="Month" Type="tinyint" Nullable="false" />
+          <Property Name="EntranceTime" Type="time" Nullable="false" />
+          <Property Name="DepartureTime" Type="time" Nullable="false" />
+          <Property Name="ExtraHoursWorked50" Type="int" Nullable="false" />
+          <Property Name="ExtraHoursWorked100" Type="int" Nullable="false" />
+          <Property Name="TotalHoursWorked" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ProcessedFiles">
           <Key>
@@ -376,7 +400,9 @@
           <EntitySet Name="Campaings" EntityType="SelfManagementModel.Campaing" />
           <EntitySet Name="CampaingUsers" EntityType="SelfManagementModel.CampaingUser" />
           <EntitySet Name="Customers" EntityType="SelfManagementModel.Customer" />
+          <EntitySet Name="Holidays" EntityType="SelfManagementModel.Holiday" />
           <EntitySet Name="Metrics" EntityType="SelfManagementModel.Metric" />
+          <EntitySet Name="MonthlySchedules" EntityType="SelfManagementModel.MonthlySchedule" />
           <EntitySet Name="ProcessedFiles" EntityType="SelfManagementModel.ProcessedFile" />
           <EntitySet Name="SupervisorAgents" EntityType="SelfManagementModel.SupervisorAgent" />
           <EntitySet Name="UserMetrics" EntityType="SelfManagementModel.UserMetric" />
@@ -506,6 +532,13 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Campaings" Relationship="SelfManagementModel.FK_Campaings_Customers" FromRole="Customers" ToRole="Campaings" />
         </EntityType>
+        <EntityType Name="Holiday">
+          <Key>
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+        </EntityType>
         <EntityType Name="Metric">
           <Key>
             <PropertyRef Name="Id" />
@@ -520,6 +553,21 @@
           <NavigationProperty Name="CampaingMetricLevels" Relationship="SelfManagementModel.FK_CampaingMetricLevels_Metrics" FromRole="Metrics" ToRole="CampaingMetricLevels" />
           <NavigationProperty Name="CampaingMetrics" Relationship="SelfManagementModel.FK_CampaingMetrics_Metrics" FromRole="Metrics" ToRole="CampaingMetrics" />
           <NavigationProperty Name="UserMetrics" Relationship="SelfManagementModel.FK_UserMetrics_Metrics" FromRole="Metrics" ToRole="UserMetrics" />
+        </EntityType>
+        <EntityType Name="MonthlySchedule">
+          <Key>
+            <PropertyRef Name="InnerUserId" />
+            <PropertyRef Name="Year" />
+            <PropertyRef Name="Month" />
+          </Key>
+          <Property Name="InnerUserId" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int16" Nullable="false" />
+          <Property Name="Month" Type="Byte" Nullable="false" />
+          <Property Name="EntranceTime" Type="Time" Nullable="false" />
+          <Property Name="DepartureTime" Type="Time" Nullable="false" />
+          <Property Name="ExtraHoursWorked50" Type="Int32" Nullable="false" />
+          <Property Name="ExtraHoursWorked100" Type="Int32" Nullable="false" />
+          <Property Name="TotalHoursWorked" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="ProcessedFile">
           <Key>
@@ -767,6 +815,10 @@
             <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="Name" ColumnName="Name" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Holidays"><EntityTypeMapping TypeName="SelfManagementModel.Holiday"><MappingFragment StoreEntitySet="Holidays">
+            <ScalarProperty Name="Date" ColumnName="Date" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Metrics"><EntityTypeMapping TypeName="SelfManagementModel.Metric"><MappingFragment StoreEntitySet="Metrics">
             <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="MetricName" ColumnName="MetricName" />
@@ -775,6 +827,16 @@
             <ScalarProperty Name="Format" ColumnName="Format" />
             <ScalarProperty Name="IsHighestToLowest" ColumnName="IsHighestToLowest" />
             <ScalarProperty Name="CLRType" ColumnName="CLRType" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="MonthlySchedules"><EntityTypeMapping TypeName="SelfManagementModel.MonthlySchedule"><MappingFragment StoreEntitySet="MonthlySchedule">
+            <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
+            <ScalarProperty Name="Year" ColumnName="Year" />
+            <ScalarProperty Name="Month" ColumnName="Month" />
+            <ScalarProperty Name="EntranceTime" ColumnName="EntranceTime" />
+            <ScalarProperty Name="DepartureTime" ColumnName="DepartureTime" />
+            <ScalarProperty Name="ExtraHoursWorked50" ColumnName="ExtraHoursWorked50" />
+            <ScalarProperty Name="ExtraHoursWorked100" ColumnName="ExtraHoursWorked100" />
+            <ScalarProperty Name="TotalHoursWorked" ColumnName="TotalHoursWorked" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ProcessedFiles"><EntityTypeMapping TypeName="SelfManagementModel.ProcessedFile"><MappingFragment StoreEntitySet="ProcessedFiles">
             <ScalarProperty Name="Id" ColumnName="Id" />
@@ -848,12 +910,14 @@
         <EntityTypeShape EntityType="SelfManagementModel.Campaing" Width="1.5" PointX="3" PointY="5.25" Height="3.9033007812499996" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.CampaingUser" Width="1.5" PointX="5.25" PointY="9.875" Height="1.9802864583333317" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.Customer" Width="1.5" PointX="0.75" PointY="6.375" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Holiday" Width="1.5" PointX="7.75" PointY="9.5" Height="1.4033821614583317" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.Metric" Width="1.5" PointX="3" PointY="0.75" Height="2.9417936197916674" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.ProcessedFile" Width="1.5" PointX="7.75" PointY="9.5" Height="2.3648893229166674" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.SupervisorAgent" Width="1.5" PointX="0.75" PointY="10.5" Height="1.4033821614583317" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.UserMetric" Width="1.5" PointX="10.5" PointY="6" Height="2.5571907552083353" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.Agent" Width="1.5" PointX="9.75" PointY="9.5" Height="3.1340950520833317" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.Supervisor" Width="1.5" PointX="0.75" PointY="13.5" Height="2.9417936197916674" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.MonthlySchedule" Width="1.5" PointX="0.75" PointY="10.5" Height="2.5571907552083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.ProcessedFile" Width="1.5" PointX="9.75" PointY="2.5" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.SupervisorAgent" Width="1.5" PointX="9.75" PointY="9.5" Height="1.4033821614583353" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.UserMetric" Width="1.5" PointX="10.5" PointY="6" Height="2.5571907552083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Agent" Width="1.5" PointX="7.75" PointY="12.5" Height="3.1340950520833388" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.Supervisor" Width="1.5" PointX="9.75" PointY="12.5" Height="2.9417936197916674" IsExpanded="true" />
         <AssociationConnector Association="SelfManagementModel.FK_CampaingMetricLevels_Campaings" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="7.2208968098958337" />
           <ConnectorPoint PointX="5.25" PointY="7.2208968098958337" />
@@ -868,10 +932,10 @@
           <ConnectorPoint PointX="7.5" PointY="7.1824446614583337" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_UserMetrics_CampaingMetricLevels" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="8.4922900390625014" />
-          <ConnectorPoint PointX="8.1666666666666661" PointY="8.4922900390625014" />
-          <ConnectorPoint PointX="8.3333333333333339" PointY="8.4922900390625014" />
-          <ConnectorPoint PointX="10.5" PointY="8.4922900390625014" />
+          <ConnectorPoint PointX="6.75" PointY="8.4922900390625" />
+          <ConnectorPoint PointX="8.1666666666666661" PointY="8.4922900390625" />
+          <ConnectorPoint PointX="8.3333333333333339" PointY="8.4922900390625" />
+          <ConnectorPoint PointX="10.5" PointY="8.4922900390625" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_CampaingMetrics_Campaings" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="8.9537972005208335" />
@@ -897,14 +961,14 @@
           <ConnectorPoint PointX="8.1666666666666661" PointY="8.8227929101562488" />
           <ConnectorPoint PointX="8.3333333333333339" PointY="8.8227929101562488" />
           <ConnectorPoint PointX="11.25" PointY="8.8227929101562488" />
-          <ConnectorPoint PointX="11.25" PointY="8.5571907552083353" />
+          <ConnectorPoint PointX="11.25" PointY="8.5571907552083317" />
         </AssociationConnector>
         <AssociationConnector Association="SelfManagementModel.FK_UserMetrics_Metrics" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="1.8375463574218749" />
           <ConnectorPoint PointX="7.510416666666667" PointY="1.8375463574218742" />
           <ConnectorPoint PointX="7.677083333333333" PointY="1.8375463574218749" />
-          <ConnectorPoint PointX="11.25" PointY="1.8375463574218749" />
-          <ConnectorPoint PointX="11.25" PointY="6" />
+          <ConnectorPoint PointX="11.65625" PointY="1.8375463574218749" />
+          <ConnectorPoint PointX="11.65625" PointY="6" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

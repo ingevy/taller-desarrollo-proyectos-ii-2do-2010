@@ -2,11 +2,12 @@ function refreshMetricValues() {
     var index = $("#CurrentCampaingId")[0].selectedIndex;
     var campaingId = $("#CurrentCampaingId").children()[index].value;
     var metricValues = $("#metricvaluescontainer");
+    var innerUserId = $("#AgentId")[0].value;
 
     metricValues[0].innerHTML = " ";
     metricValues.addClass("loading");
 
-    var url = getBaseUrl() + "Agent/CampaingMetricValues?campaingId=" + encodeURIComponent(campaingId);
+    var url = getBaseUrl() + "Agent/CampaingMetricValues?innerUserId=" + encodeURIComponent(innerUserId) + "&campaingId=" + encodeURIComponent(campaingId)
 
     $.ajax({
         url: url,

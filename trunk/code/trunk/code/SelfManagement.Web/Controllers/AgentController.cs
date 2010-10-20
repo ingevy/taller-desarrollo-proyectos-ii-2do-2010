@@ -54,7 +54,7 @@
                                         .ToList(),
             };
 
-            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(model.CurrentCampaingId, DateTime.Now);
+            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, DateTime.Now);
             model.Salary = this.CalculateSalary(agent.InnerUserId, model.CurrentCampaingId, model.CurrentCampaingMetricValues);
 
             return this.View(model);
@@ -68,7 +68,7 @@
 
             if (campaing != null)
             {
-                var campaingMetricValues = this.CalculateCampaingMetricValues(campaing.Id, date);
+                var campaingMetricValues = this.CalculateCampaingMetricValues(innerUserId, campaing.Id, date);
                 var model = this.CalculateSalary(innerUserId, campaing.Id, campaingMetricValues);
 
                 return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = model } };
@@ -81,10 +81,10 @@
         }
 
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
-        public ActionResult CampaingMetricValues(int campaingId)
+        public ActionResult CampaingMetricValues(int innerUserId, int campaingId)
         {
             // TODO: Refactor this to receive a date range or month
-            var model = this.CalculateCampaingMetricValues(campaingId, DateTime.Now);
+            var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, DateTime.Now);
             
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { CampaingMetricValues = model } };
         }
@@ -168,7 +168,7 @@
             }
         }
 
-        private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int campaingId, DateTime date)
+        private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int innerUserId ,int campaingId, DateTime date)
         {
             var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId);
             var end = this.GetEndDate(campaingId);
@@ -183,8 +183,8 @@
                                             OptimalValue = cml.OptimalLevel.ToString("F", CultureInfo.InvariantCulture),
                                             ObjectiveValue = cml.ObjectiveLevel.ToString("F", CultureInfo.InvariantCulture),
                                             MinimumValue = cml.MinimumLevel.ToString("F", CultureInfo.InvariantCulture),
-                                            CurrentValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, date, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture),
-                                            ProjectedValue = this.metricsRepository.GetUserMetricValue(this.User.Identity.Name, end, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture)
+                                            CurrentValue = this.metricsRepository.GetUserMetricValue(innerUserId, date, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture),
+                                            ProjectedValue = this.metricsRepository.GetUserMetricValue(innerUserId, end, cml.MetricId, campaingId).ToString("F", CultureInfo.InvariantCulture)
                                         })
                             .ToList();
         }

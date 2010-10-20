@@ -30,7 +30,7 @@
                         var id = 0;
                         var availableMonths = this.Model.AvailableMonths.Select(am => new SelectListItem { Text = am, Value = (id++).ToString() });
                     %>
-                    <%: Html.DropDownListFor(model => model.CurrentMonth, availableMonths, new { Class = "uservalue", onchange="refreshSalary()" })%>
+                    <%: Html.DropDownListFor(model => model.CurrentMonth, availableMonths, new { Class = "uservalue", onchange = "refreshSalary()" })%>
                 </div>
                 <div style="clear: both; height: 1px">
                 </div>
@@ -57,7 +57,7 @@
                     <% 
                         var availableCampaings = this.Model.AgentCampaings.Select(ac => new SelectListItem { Text = ac.DisplayName, Value = ac.Id.ToString() });
                     %>
-                    <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onclick = "refreshMetricValues()" })%>
+                    <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onchange = "refreshMetricValues()" })%>
                 </div>
                 <div style="clear: both; height: 1px"></div>
 
