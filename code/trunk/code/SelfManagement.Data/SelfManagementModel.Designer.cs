@@ -178,6 +178,22 @@ namespace CallCenter.SelfManagement.Data
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<Holiday> Holidays
+        {
+            get
+            {
+                if ((_Holidays == null))
+                {
+                    _Holidays = base.CreateObjectSet<Holiday>("Holidays");
+                }
+                return _Holidays;
+            }
+        }
+        private ObjectSet<Holiday> _Holidays;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<Metric> Metrics
         {
             get
@@ -190,6 +206,22 @@ namespace CallCenter.SelfManagement.Data
             }
         }
         private ObjectSet<Metric> _Metrics;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<MonthlySchedule> MonthlySchedules
+        {
+            get
+            {
+                if ((_MonthlySchedules == null))
+                {
+                    _MonthlySchedules = base.CreateObjectSet<MonthlySchedule>("MonthlySchedules");
+                }
+                return _MonthlySchedules;
+            }
+        }
+        private ObjectSet<MonthlySchedule> _MonthlySchedules;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -323,11 +355,27 @@ namespace CallCenter.SelfManagement.Data
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the Holidays EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToHolidays(Holiday holiday)
+        {
+            base.AddObject("Holidays", holiday);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the Metrics EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToMetrics(Metric metric)
         {
             base.AddObject("Metrics", metric);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the MonthlySchedules EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToMonthlySchedules(MonthlySchedule monthlySchedule)
+        {
+            base.AddObject("MonthlySchedules", monthlySchedule);
         }
     
         /// <summary>
@@ -2188,6 +2236,87 @@ namespace CallCenter.SelfManagement.Data
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="Holiday")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Holiday : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Holiday object.
+        /// </summary>
+        /// <param name="date">Initial value of the Date property.</param>
+        /// <param name="description">Initial value of the Description property.</param>
+        public static Holiday CreateHoliday(global::System.DateTime date, global::System.String description)
+        {
+            Holiday holiday = new Holiday();
+            holiday.Date = date;
+            holiday.Description = description;
+            return holiday;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Date
+        {
+            get
+            {
+                return _Date;
+            }
+            set
+            {
+                if (_Date != value)
+                {
+                    OnDateChanging(value);
+                    ReportPropertyChanging("Date");
+                    _Date = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Date");
+                    OnDateChanged();
+                }
+            }
+        }
+        private global::System.DateTime _Date;
+        partial void OnDateChanging(global::System.DateTime value);
+        partial void OnDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="Metric")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -2459,6 +2588,249 @@ namespace CallCenter.SelfManagement.Data
         }
 
         #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="SelfManagementModel", Name="MonthlySchedule")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class MonthlySchedule : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new MonthlySchedule object.
+        /// </summary>
+        /// <param name="innerUserId">Initial value of the InnerUserId property.</param>
+        /// <param name="year">Initial value of the Year property.</param>
+        /// <param name="month">Initial value of the Month property.</param>
+        /// <param name="entranceTime">Initial value of the EntranceTime property.</param>
+        /// <param name="departureTime">Initial value of the DepartureTime property.</param>
+        /// <param name="extraHoursWorked50">Initial value of the ExtraHoursWorked50 property.</param>
+        /// <param name="extraHoursWorked100">Initial value of the ExtraHoursWorked100 property.</param>
+        /// <param name="totalHoursWorked">Initial value of the TotalHoursWorked property.</param>
+        public static MonthlySchedule CreateMonthlySchedule(global::System.Int32 innerUserId, global::System.Int16 year, global::System.Byte month, global::System.TimeSpan entranceTime, global::System.TimeSpan departureTime, global::System.Int32 extraHoursWorked50, global::System.Int32 extraHoursWorked100, global::System.Int32 totalHoursWorked)
+        {
+            MonthlySchedule monthlySchedule = new MonthlySchedule();
+            monthlySchedule.InnerUserId = innerUserId;
+            monthlySchedule.Year = year;
+            monthlySchedule.Month = month;
+            monthlySchedule.EntranceTime = entranceTime;
+            monthlySchedule.DepartureTime = departureTime;
+            monthlySchedule.ExtraHoursWorked50 = extraHoursWorked50;
+            monthlySchedule.ExtraHoursWorked100 = extraHoursWorked100;
+            monthlySchedule.TotalHoursWorked = totalHoursWorked;
+            return monthlySchedule;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 InnerUserId
+        {
+            get
+            {
+                return _InnerUserId;
+            }
+            set
+            {
+                if (_InnerUserId != value)
+                {
+                    OnInnerUserIdChanging(value);
+                    ReportPropertyChanging("InnerUserId");
+                    _InnerUserId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("InnerUserId");
+                    OnInnerUserIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _InnerUserId;
+        partial void OnInnerUserIdChanging(global::System.Int32 value);
+        partial void OnInnerUserIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Year
+        {
+            get
+            {
+                return _Year;
+            }
+            set
+            {
+                if (_Year != value)
+                {
+                    OnYearChanging(value);
+                    ReportPropertyChanging("Year");
+                    _Year = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Year");
+                    OnYearChanged();
+                }
+            }
+        }
+        private global::System.Int16 _Year;
+        partial void OnYearChanging(global::System.Int16 value);
+        partial void OnYearChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte Month
+        {
+            get
+            {
+                return _Month;
+            }
+            set
+            {
+                if (_Month != value)
+                {
+                    OnMonthChanging(value);
+                    ReportPropertyChanging("Month");
+                    _Month = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Month");
+                    OnMonthChanged();
+                }
+            }
+        }
+        private global::System.Byte _Month;
+        partial void OnMonthChanging(global::System.Byte value);
+        partial void OnMonthChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.TimeSpan EntranceTime
+        {
+            get
+            {
+                return _EntranceTime;
+            }
+            set
+            {
+                OnEntranceTimeChanging(value);
+                ReportPropertyChanging("EntranceTime");
+                _EntranceTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EntranceTime");
+                OnEntranceTimeChanged();
+            }
+        }
+        private global::System.TimeSpan _EntranceTime;
+        partial void OnEntranceTimeChanging(global::System.TimeSpan value);
+        partial void OnEntranceTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.TimeSpan DepartureTime
+        {
+            get
+            {
+                return _DepartureTime;
+            }
+            set
+            {
+                OnDepartureTimeChanging(value);
+                ReportPropertyChanging("DepartureTime");
+                _DepartureTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DepartureTime");
+                OnDepartureTimeChanged();
+            }
+        }
+        private global::System.TimeSpan _DepartureTime;
+        partial void OnDepartureTimeChanging(global::System.TimeSpan value);
+        partial void OnDepartureTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ExtraHoursWorked50
+        {
+            get
+            {
+                return _ExtraHoursWorked50;
+            }
+            set
+            {
+                OnExtraHoursWorked50Changing(value);
+                ReportPropertyChanging("ExtraHoursWorked50");
+                _ExtraHoursWorked50 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExtraHoursWorked50");
+                OnExtraHoursWorked50Changed();
+            }
+        }
+        private global::System.Int32 _ExtraHoursWorked50;
+        partial void OnExtraHoursWorked50Changing(global::System.Int32 value);
+        partial void OnExtraHoursWorked50Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ExtraHoursWorked100
+        {
+            get
+            {
+                return _ExtraHoursWorked100;
+            }
+            set
+            {
+                OnExtraHoursWorked100Changing(value);
+                ReportPropertyChanging("ExtraHoursWorked100");
+                _ExtraHoursWorked100 = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExtraHoursWorked100");
+                OnExtraHoursWorked100Changed();
+            }
+        }
+        private global::System.Int32 _ExtraHoursWorked100;
+        partial void OnExtraHoursWorked100Changing(global::System.Int32 value);
+        partial void OnExtraHoursWorked100Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TotalHoursWorked
+        {
+            get
+            {
+                return _TotalHoursWorked;
+            }
+            set
+            {
+                OnTotalHoursWorkedChanging(value);
+                ReportPropertyChanging("TotalHoursWorked");
+                _TotalHoursWorked = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TotalHoursWorked");
+                OnTotalHoursWorkedChanged();
+            }
+        }
+        private global::System.Int32 _TotalHoursWorked;
+        partial void OnTotalHoursWorkedChanging(global::System.Int32 value);
+        partial void OnTotalHoursWorkedChanged();
+
+        #endregion
+    
     }
     
     /// <summary>
