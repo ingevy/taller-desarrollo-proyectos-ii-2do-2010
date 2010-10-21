@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SelfManagementModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="SelfManagementModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="SelfManagementModelStoreContainer">
           <EntitySet Name="aspnet_Users" EntityType="SelfManagementModel.Store.aspnet_Users" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CampaingMetricLevels" EntityType="SelfManagementModel.Store.CampaingMetricLevels" store:Type="Tables" Schema="dbo" />
@@ -190,6 +190,7 @@
           <Property Name="ExtraHoursWorked50" Type="int" Nullable="false" />
           <Property Name="ExtraHoursWorked100" Type="int" Nullable="false" />
           <Property Name="TotalHoursWorked" Type="int" Nullable="false" />
+          <Property Name="LastDayModified" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="ProcessedFiles">
           <Key>
@@ -388,8 +389,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SelfManagementModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -568,6 +568,7 @@
           <Property Name="ExtraHoursWorked50" Type="Int32" Nullable="false" />
           <Property Name="ExtraHoursWorked100" Type="Int32" Nullable="false" />
           <Property Name="TotalHoursWorked" Type="Int32" Nullable="false" />
+          <Property Type="Byte" Name="LastDayModified" Nullable="false" />
         </EntityType>
         <EntityType Name="ProcessedFile">
           <Key>
@@ -829,7 +830,8 @@
             <ScalarProperty Name="CLRType" ColumnName="CLRType" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="MonthlySchedules"><EntityTypeMapping TypeName="SelfManagementModel.MonthlySchedule"><MappingFragment StoreEntitySet="MonthlySchedule">
-            <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
+            <ScalarProperty Name="LastDayModified" ColumnName="LastDayModified" />
+                <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
             <ScalarProperty Name="Year" ColumnName="Year" />
             <ScalarProperty Name="Month" ColumnName="Month" />
             <ScalarProperty Name="EntranceTime" ColumnName="EntranceTime" />
