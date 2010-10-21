@@ -2611,7 +2611,8 @@ namespace CallCenter.SelfManagement.Data
         /// <param name="extraHoursWorked50">Initial value of the ExtraHoursWorked50 property.</param>
         /// <param name="extraHoursWorked100">Initial value of the ExtraHoursWorked100 property.</param>
         /// <param name="totalHoursWorked">Initial value of the TotalHoursWorked property.</param>
-        public static MonthlySchedule CreateMonthlySchedule(global::System.Int32 innerUserId, global::System.Int16 year, global::System.Byte month, global::System.TimeSpan entranceTime, global::System.TimeSpan departureTime, global::System.Int32 extraHoursWorked50, global::System.Int32 extraHoursWorked100, global::System.Int32 totalHoursWorked)
+        /// <param name="lastDayModified">Initial value of the LastDayModified property.</param>
+        public static MonthlySchedule CreateMonthlySchedule(global::System.Int32 innerUserId, global::System.Int16 year, global::System.Byte month, global::System.TimeSpan entranceTime, global::System.TimeSpan departureTime, global::System.Int32 extraHoursWorked50, global::System.Int32 extraHoursWorked100, global::System.Int32 totalHoursWorked, global::System.Byte lastDayModified)
         {
             MonthlySchedule monthlySchedule = new MonthlySchedule();
             monthlySchedule.InnerUserId = innerUserId;
@@ -2622,6 +2623,7 @@ namespace CallCenter.SelfManagement.Data
             monthlySchedule.ExtraHoursWorked50 = extraHoursWorked50;
             monthlySchedule.ExtraHoursWorked100 = extraHoursWorked100;
             monthlySchedule.TotalHoursWorked = totalHoursWorked;
+            monthlySchedule.LastDayModified = lastDayModified;
             return monthlySchedule;
         }
 
@@ -2828,6 +2830,30 @@ namespace CallCenter.SelfManagement.Data
         private global::System.Int32 _TotalHoursWorked;
         partial void OnTotalHoursWorkedChanging(global::System.Int32 value);
         partial void OnTotalHoursWorkedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte LastDayModified
+        {
+            get
+            {
+                return _LastDayModified;
+            }
+            set
+            {
+                OnLastDayModifiedChanging(value);
+                ReportPropertyChanging("LastDayModified");
+                _LastDayModified = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LastDayModified");
+                OnLastDayModifiedChanged();
+            }
+        }
+        private global::System.Byte _LastDayModified;
+        partial void OnLastDayModifiedChanging(global::System.Byte value);
+        partial void OnLastDayModifiedChanged();
 
         #endregion
     
