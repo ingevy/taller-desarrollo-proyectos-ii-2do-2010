@@ -2612,7 +2612,8 @@ namespace CallCenter.SelfManagement.Data
         /// <param name="extraHoursWorked100">Initial value of the ExtraHoursWorked100 property.</param>
         /// <param name="totalHoursWorked">Initial value of the TotalHoursWorked property.</param>
         /// <param name="lastDayModified">Initial value of the LastDayModified property.</param>
-        public static MonthlySchedule CreateMonthlySchedule(global::System.Int32 innerUserId, global::System.Int16 year, global::System.Byte month, global::System.TimeSpan entranceTime, global::System.TimeSpan departureTime, global::System.Int32 extraHoursWorked50, global::System.Int32 extraHoursWorked100, global::System.Int32 totalHoursWorked, global::System.Byte lastDayModified)
+        /// <param name="grossSalary">Initial value of the GrossSalary property.</param>
+        public static MonthlySchedule CreateMonthlySchedule(global::System.Int32 innerUserId, global::System.Int16 year, global::System.Byte month, global::System.TimeSpan entranceTime, global::System.TimeSpan departureTime, global::System.Int32 extraHoursWorked50, global::System.Int32 extraHoursWorked100, global::System.Int32 totalHoursWorked, global::System.Byte lastDayModified, global::System.Decimal grossSalary)
         {
             MonthlySchedule monthlySchedule = new MonthlySchedule();
             monthlySchedule.InnerUserId = innerUserId;
@@ -2624,6 +2625,7 @@ namespace CallCenter.SelfManagement.Data
             monthlySchedule.ExtraHoursWorked100 = extraHoursWorked100;
             monthlySchedule.TotalHoursWorked = totalHoursWorked;
             monthlySchedule.LastDayModified = lastDayModified;
+            monthlySchedule.GrossSalary = grossSalary;
             return monthlySchedule;
         }
 
@@ -2854,6 +2856,30 @@ namespace CallCenter.SelfManagement.Data
         private global::System.Byte _LastDayModified;
         partial void OnLastDayModifiedChanging(global::System.Byte value);
         partial void OnLastDayModifiedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal GrossSalary
+        {
+            get
+            {
+                return _GrossSalary;
+            }
+            set
+            {
+                OnGrossSalaryChanging(value);
+                ReportPropertyChanging("GrossSalary");
+                _GrossSalary = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("GrossSalary");
+                OnGrossSalaryChanged();
+            }
+        }
+        private global::System.Decimal _GrossSalary;
+        partial void OnGrossSalaryChanging(global::System.Decimal value);
+        partial void OnGrossSalaryChanged();
 
         #endregion
     

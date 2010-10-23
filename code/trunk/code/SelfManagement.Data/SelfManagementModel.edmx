@@ -190,6 +190,7 @@
           <Property Name="ExtraHoursWorked50" Type="int" Nullable="false" />
           <Property Name="ExtraHoursWorked100" Type="int" Nullable="false" />
           <Property Name="TotalHoursWorked" Type="int" Nullable="false" />
+          <Property Name="GrossSalary" Type="money" Nullable="false" />
           <Property Name="LastDayModified" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="ProcessedFiles">
@@ -569,6 +570,7 @@
           <Property Name="ExtraHoursWorked100" Type="Int32" Nullable="false" />
           <Property Name="TotalHoursWorked" Type="Int32" Nullable="false" />
           <Property Type="Byte" Name="LastDayModified" Nullable="false" />
+          <Property Type="Decimal" Name="GrossSalary" Nullable="false" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="ProcessedFile">
           <Key>
@@ -830,7 +832,8 @@
             <ScalarProperty Name="CLRType" ColumnName="CLRType" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="MonthlySchedules"><EntityTypeMapping TypeName="SelfManagementModel.MonthlySchedule"><MappingFragment StoreEntitySet="MonthlySchedule">
-            <ScalarProperty Name="LastDayModified" ColumnName="LastDayModified" />
+            <ScalarProperty Name="GrossSalary" ColumnName="GrossSalary" />
+                <ScalarProperty Name="LastDayModified" ColumnName="LastDayModified" />
                 <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
             <ScalarProperty Name="Year" ColumnName="Year" />
             <ScalarProperty Name="Month" ColumnName="Month" />
@@ -905,7 +908,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="SelfManagementModel">
+      <Diagram Name="SelfManagementModel" ZoomLevel="86">
         <EntityTypeShape EntityType="SelfManagementModel.aspnet_Users" Width="1.5" PointX="7.75" PointY="2.5" Height="2.5571907552083335" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.CampaingMetricLevel" Width="1.5" PointX="5.25" PointY="5.75" Height="2.9417936197916674" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.CampaingMetric" Width="1.5" PointX="7.5" PointY="6" Height="2.3648893229166665" IsExpanded="true" />
