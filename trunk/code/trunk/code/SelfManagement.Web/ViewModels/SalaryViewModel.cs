@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.ComponentModel;
-
-namespace CallCenter.SelfManagement.Web.ViewModels
+﻿namespace CallCenter.SelfManagement.Web.ViewModels
 {
+    using System.ComponentModel;
+
     public class SalaryViewModel
     {
         [DisplayName("Sueldo Bruto")]
@@ -17,19 +13,25 @@ namespace CallCenter.SelfManagement.Web.ViewModels
         [DisplayName("Sueldo Total Proyectado")]
         public string TotalSalary { get; set; }
 
-        [DisplayName("Horas Extra 50% Proyectadas")]
+        [DisplayName("Sueldo Horas Extra 50% Proyectado")]
         public string Extra50Salary { get; set; }
 
-        [DisplayName("Horas Extra 100% Proyectadas")]
+        [DisplayName("Sueldo Horas Extra 100% Proyectado")]
         public string Extra100Salary { get; set; }
 
-        [DisplayName("Total Horas")]
+        [DisplayName("Total Horas Proyectadas")]
         public int TotalHoursWorked { get; set; }
 
-        [DisplayName("Horas Extra 50%")]
+        [DisplayName("Horas Extra 50% Proyectadas")]
         public int ExtraHours50Worked { get; set; }
 
-        [DisplayName("Horas Extra 100%")]
+        [DisplayName("Horas Extra 100% Proyectadas")]
         public int ExtraHours100Worked { get; set; }
+
+        [DisplayName("Horas Extra 50% Trabajadas")]
+        public int CurrentExtraHours50Worked { get; set; }
+
+        [DisplayName("Horas Extra 100% Trabajadas")]
+        public int CurrentExtraHours100Worked { get; set; }
     }
 }

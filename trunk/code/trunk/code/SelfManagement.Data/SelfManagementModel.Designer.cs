@@ -2606,21 +2606,17 @@ namespace CallCenter.SelfManagement.Data
         /// <param name="innerUserId">Initial value of the InnerUserId property.</param>
         /// <param name="year">Initial value of the Year property.</param>
         /// <param name="month">Initial value of the Month property.</param>
-        /// <param name="entranceTime">Initial value of the EntranceTime property.</param>
-        /// <param name="departureTime">Initial value of the DepartureTime property.</param>
         /// <param name="extraHoursWorked50">Initial value of the ExtraHoursWorked50 property.</param>
         /// <param name="extraHoursWorked100">Initial value of the ExtraHoursWorked100 property.</param>
         /// <param name="totalHoursWorked">Initial value of the TotalHoursWorked property.</param>
         /// <param name="lastDayModified">Initial value of the LastDayModified property.</param>
         /// <param name="grossSalary">Initial value of the GrossSalary property.</param>
-        public static MonthlySchedule CreateMonthlySchedule(global::System.Int32 innerUserId, global::System.Int16 year, global::System.Byte month, global::System.TimeSpan entranceTime, global::System.TimeSpan departureTime, global::System.Int32 extraHoursWorked50, global::System.Int32 extraHoursWorked100, global::System.Int32 totalHoursWorked, global::System.Byte lastDayModified, global::System.Decimal grossSalary)
+        public static MonthlySchedule CreateMonthlySchedule(global::System.Int32 innerUserId, global::System.Int16 year, global::System.Byte month, global::System.Int32 extraHoursWorked50, global::System.Int32 extraHoursWorked100, global::System.Int32 totalHoursWorked, global::System.Byte lastDayModified, global::System.Decimal grossSalary)
         {
             MonthlySchedule monthlySchedule = new MonthlySchedule();
             monthlySchedule.InnerUserId = innerUserId;
             monthlySchedule.Year = year;
             monthlySchedule.Month = month;
-            monthlySchedule.EntranceTime = entranceTime;
-            monthlySchedule.DepartureTime = departureTime;
             monthlySchedule.ExtraHoursWorked50 = extraHoursWorked50;
             monthlySchedule.ExtraHoursWorked100 = extraHoursWorked100;
             monthlySchedule.TotalHoursWorked = totalHoursWorked;
@@ -2712,54 +2708,6 @@ namespace CallCenter.SelfManagement.Data
         private global::System.Byte _Month;
         partial void OnMonthChanging(global::System.Byte value);
         partial void OnMonthChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.TimeSpan EntranceTime
-        {
-            get
-            {
-                return _EntranceTime;
-            }
-            set
-            {
-                OnEntranceTimeChanging(value);
-                ReportPropertyChanging("EntranceTime");
-                _EntranceTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EntranceTime");
-                OnEntranceTimeChanged();
-            }
-        }
-        private global::System.TimeSpan _EntranceTime;
-        partial void OnEntranceTimeChanging(global::System.TimeSpan value);
-        partial void OnEntranceTimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.TimeSpan DepartureTime
-        {
-            get
-            {
-                return _DepartureTime;
-            }
-            set
-            {
-                OnDepartureTimeChanging(value);
-                ReportPropertyChanging("DepartureTime");
-                _DepartureTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("DepartureTime");
-                OnDepartureTimeChanged();
-            }
-        }
-        private global::System.TimeSpan _DepartureTime;
-        partial void OnDepartureTimeChanging(global::System.TimeSpan value);
-        partial void OnDepartureTimeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
