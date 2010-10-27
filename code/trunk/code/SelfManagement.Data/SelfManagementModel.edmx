@@ -185,8 +185,6 @@
           <Property Name="InnerUserId" Type="int" Nullable="false" />
           <Property Name="Year" Type="smallint" Nullable="false" />
           <Property Name="Month" Type="tinyint" Nullable="false" />
-          <Property Name="EntranceTime" Type="time" Nullable="false" />
-          <Property Name="DepartureTime" Type="time" Nullable="false" />
           <Property Name="ExtraHoursWorked50" Type="int" Nullable="false" />
           <Property Name="ExtraHoursWorked100" Type="int" Nullable="false" />
           <Property Name="TotalHoursWorked" Type="int" Nullable="false" />
@@ -564,8 +562,6 @@
           <Property Name="InnerUserId" Type="Int32" Nullable="false" />
           <Property Name="Year" Type="Int16" Nullable="false" />
           <Property Name="Month" Type="Byte" Nullable="false" />
-          <Property Name="EntranceTime" Type="Time" Nullable="false" />
-          <Property Name="DepartureTime" Type="Time" Nullable="false" />
           <Property Name="ExtraHoursWorked50" Type="Int32" Nullable="false" />
           <Property Name="ExtraHoursWorked100" Type="Int32" Nullable="false" />
           <Property Name="TotalHoursWorked" Type="Int32" Nullable="false" />
@@ -837,8 +833,6 @@
                 <ScalarProperty Name="InnerUserId" ColumnName="InnerUserId" />
             <ScalarProperty Name="Year" ColumnName="Year" />
             <ScalarProperty Name="Month" ColumnName="Month" />
-            <ScalarProperty Name="EntranceTime" ColumnName="EntranceTime" />
-            <ScalarProperty Name="DepartureTime" ColumnName="DepartureTime" />
             <ScalarProperty Name="ExtraHoursWorked50" ColumnName="ExtraHoursWorked50" />
             <ScalarProperty Name="ExtraHoursWorked100" ColumnName="ExtraHoursWorked100" />
             <ScalarProperty Name="TotalHoursWorked" ColumnName="TotalHoursWorked" />
@@ -917,7 +911,7 @@
         <EntityTypeShape EntityType="SelfManagementModel.Customer" Width="1.5" PointX="0.75" PointY="6.375" Height="1.5956835937499996" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.Holiday" Width="1.5" PointX="7.75" PointY="9.5" Height="1.4033821614583317" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.Metric" Width="1.5" PointX="3" PointY="0.75" Height="2.9417936197916674" IsExpanded="true" />
-        <EntityTypeShape EntityType="SelfManagementModel.MonthlySchedule" Width="1.5" PointX="0.75" PointY="10.5" Height="2.5571907552083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="SelfManagementModel.MonthlySchedule" Width="1.5" PointX="0.75" PointY="10.625" Height="2.5571907552083335" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.ProcessedFile" Width="1.5" PointX="9.75" PointY="2.5" Height="2.3648893229166674" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.SupervisorAgent" Width="1.5" PointX="9.75" PointY="9.5" Height="1.4033821614583353" IsExpanded="true" />
         <EntityTypeShape EntityType="SelfManagementModel.UserMetric" Width="1.5" PointX="10.5" PointY="6" Height="2.5571907552083317" IsExpanded="true" />

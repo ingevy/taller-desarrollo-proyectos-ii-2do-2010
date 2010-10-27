@@ -19,5 +19,11 @@
         public string CurrentValue { get; set; }
 
         public string ProjectedValue { get; set; }
+
+        public string OptimalHourlyValue { get; set; }
+
+        public string ObjectiveHourlyValue { get; set; }
+
+        public string MinimumHourlyValue { get; set; } 
     }
 }
