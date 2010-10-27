@@ -84,23 +84,54 @@ function refreshSalary() {
                 inputs[0].value = "Ups! Ocurrió un error...";
                 inputs[1].value = "Ups! Ocurrió un error...";
                 inputs[2].value = "Ups! Ocurrió un error...";
+                inputs[3].value = "Ups! Ocurrió un error...";
+                inputs[4].value = "Ups! Ocurrió un error...";
+                inputs[5].value = "Ups! Ocurrió un error...";
+                inputs[6].value = "Ups! Ocurrió un error...";
+                inputs[7].value = "Ups! Ocurrió un error...";
+                inputs[8].value = "Ups! Ocurrió un error...";
+                inputs[9].value = "Ups! Ocurrió un error...";
             } else if (json.Salary == null) {
                 inputs[0].value = "No se encontraron datos";
                 inputs[1].value = "No se encontraron datos";
                 inputs[2].value = "No se encontraron datos";
+                inputs[3].value = "No se encontraron datos";
+                inputs[4].value = "No se encontraron datos";
+                inputs[5].value = "No se encontraron datos";
+                inputs[6].value = "No se encontraron datos";
+                inputs[7].value = "No se encontraron datos";
+                inputs[8].value = "No se encontraron datos";
+                inputs[9].value = "No se encontraron datos";
             } else {
                 inputs[0].value = json.Salary.GrossSalary;
                 inputs[1].value = json.Salary.VariableSalary;
-                inputs[2].value = json.Salary.TotalSalary;
+                inputs[2].value = json.Salary.TotalHoursWorked;
+                inputs[3].value = json.Salary.Extra50Salary;
+                inputs[4].value = json.Salary.ExtraHours50Worked;
+                inputs[5].value = json.Salary.Extra100Salary;
+                inputs[6].value = json.Salary.ExtraHours100Worked;
+                inputs[7].value = json.Salary.CurrentExtraHours50Worked;
+                inputs[8].value = json.Salary.CurrentExtraHours100Worked;
+                inputs[9].value = json.Salary.TotalSalary;
 
                 var index = $("#CurrentMonth")[0].selectedIndex;
                 if (index + 1 == $("#CurrentMonth").children().length) {
                     labels[2].innerHTML = "Parte Variable Proyectada";
-                    labels[3].innerHTML = "Sueldo Total Proyectado";
+                    labels[3].innerHTML = "Total Horas Proyectadas";
+                    labels[4].innerHTML = "Sueldo Horas Extra 50% Proyectado";
+                    labels[5].innerHTML = "Horas Extra 50% Proyectadas";
+                    labels[6].innerHTML = "Sueldo Horas Extra 100% Proyectado";
+                    labels[7].innerHTML = "Horas Extra 100% Proyectadas";
+                    labels[10].innerHTML = "Sueldo Total Proyectado";
                 }
                 else {
                     labels[2].innerHTML = "Parte Variable";
-                    labels[3].innerHTML = "Sueldo Total";
+                    labels[3].innerHTML = "Total Horas";
+                    labels[4].innerHTML = "Sueldo Horas Extra 50%";
+                    labels[5].innerHTML = "Horas Extra 50%";
+                    labels[6].innerHTML = "Sueldo Horas Extra 100%";
+                    labels[7].innerHTML = "Horas Extra 100%";
+                    labels[10].innerHTML = "Sueldo Total";
                 }
             }
 

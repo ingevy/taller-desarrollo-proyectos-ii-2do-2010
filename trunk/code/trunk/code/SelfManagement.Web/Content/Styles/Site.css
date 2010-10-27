@@ -203,8 +203,8 @@ div.statusMessage  {
 /*#mainPanel select { width: 110px; }*/
 
 #secondPanel .content, #mainPanel .content { padding: 5px 15px 15px 15px; }
-#secondPanel .content label { width: 105px } #mainPanel .content label { width: 235px }
-#secondPanel .content .uservalue, #mainPanel .content .uservalue { width: 159px; text-align: right; }
+#secondPanel .content label { width: 105px } #mainPanel .content label { width: 330px }
+#secondPanel .content .uservalue, #mainPanel .content .uservalue { width: 108px; text-align: right; }
 #secondPanel .content div, #mainPanel .content div { padding-right:15px; padding-left:15px; margin-top:15px }
 
 #buttonsPanel {
