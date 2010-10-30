@@ -14,7 +14,7 @@
         [DisplayName("Contraseña")]
         public string Password { get; set; }
 
-        [DisplayName("Recordar mi contraseña.")]
+        [DisplayName("Recordar mi contraseña")]
         public bool RememberMe { get; set; }
     }
 

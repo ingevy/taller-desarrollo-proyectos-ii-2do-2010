@@ -7,7 +7,7 @@
         [DisplayName("Sueldo Bruto")]
         public string GrossSalary { get; set; }
 
-        [DisplayName("Parte Variable Proyectada")]
+        [DisplayName("Sueldo Variable Proyectado")]
         public string VariableSalary { get; set; }
 
         [DisplayName("Sueldo Total Proyectado")]

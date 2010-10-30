@@ -79,6 +79,7 @@ function refreshSalary() {
         success: function (json) {
             var labels = $("#mainPanel .content label");
             var inputs = $("#mainPanel .content input");
+            var hrs = $("#mainPanel .content hr");
 
             if (json.Status && json.Status == "error") {
                 inputs[0].value = "Ups! Ocurrió un error...";
@@ -110,28 +111,38 @@ function refreshSalary() {
                 inputs[4].value = json.Salary.ExtraHours50Worked;
                 inputs[5].value = json.Salary.Extra100Salary;
                 inputs[6].value = json.Salary.ExtraHours100Worked;
-                inputs[7].value = json.Salary.CurrentExtraHours50Worked;
-                inputs[8].value = json.Salary.CurrentExtraHours100Worked;
-                inputs[9].value = json.Salary.TotalSalary;
+                inputs[7].value = json.Salary.TotalSalary;
+                inputs[8].value = json.Salary.CurrentExtraHours50Worked;
+                inputs[9].value = json.Salary.CurrentExtraHours100Worked;
 
                 var index = $("#CurrentMonth")[0].selectedIndex;
                 if (index + 1 == $("#CurrentMonth").children().length) {
-                    labels[2].innerHTML = "Parte Variable Proyectada";
+                    labels[2].innerHTML = "Sueldo Variable Proyectado";
                     labels[3].innerHTML = "Total Horas Proyectadas";
                     labels[4].innerHTML = "Sueldo Horas Extra 50% Proyectado";
                     labels[5].innerHTML = "Horas Extra 50% Proyectadas";
                     labels[6].innerHTML = "Sueldo Horas Extra 100% Proyectado";
                     labels[7].innerHTML = "Horas Extra 100% Proyectadas";
-                    labels[10].innerHTML = "Sueldo Total Proyectado";
+                    labels[8].innerHTML = "Sueldo Total Proyectado";
+                    hrs[1].style.display = "block";
+                    labels[9].style.display = "inline-block";
+                    inputs[8].style.display = "inline-block";
+                    labels[10].style.display = "inline-block";
+                    inputs[9].style.display = "inline-block";
                 }
                 else {
-                    labels[2].innerHTML = "Parte Variable";
+                    labels[2].innerHTML = "Sueldo Variable";
                     labels[3].innerHTML = "Total Horas";
                     labels[4].innerHTML = "Sueldo Horas Extra 50%";
                     labels[5].innerHTML = "Horas Extra 50%";
                     labels[6].innerHTML = "Sueldo Horas Extra 100%";
                     labels[7].innerHTML = "Horas Extra 100%";
-                    labels[10].innerHTML = "Sueldo Total";
+                    labels[8].innerHTML = "Sueldo Total";
+                    hrs[1].style.display = "none";
+                    labels[9].style.display = "none";
+                    inputs[8].style.display = "none";
+                    labels[10].style.display = "none";
+                    inputs[9].style.display = "none";
                 }
             }
 
