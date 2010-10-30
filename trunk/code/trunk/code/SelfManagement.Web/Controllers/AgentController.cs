@@ -107,25 +107,31 @@
             }
 
             // Define the Chart
-            Chart Chart2 = new Chart()
+            var chart = new Chart()
             {
                 Width = 952,
                 Height = 350,
                 RenderType = RenderType.BinaryStreaming,
                 Palette = ChartColorPalette.BrightPastel,
                 BorderlineDashStyle = ChartDashStyle.Solid,
+                ToolTip = "Metric Name",
                 BorderWidth = 2,
                 BorderColor = color
             };
-            Chart2.BorderSkin.SkinStyle = BorderSkinStyle.Emboss;
+            chart.BorderSkin.SkinStyle = BorderSkinStyle.Emboss;
 
-            Chart2.Titles.Add(new Title("TODO", Docking.Top, font, color));
-            Chart2.ChartAreas.Add("Waves");
-            Chart2.Legends.Add("Legend");
+            chart.Titles.Add(new Title("TODO", Docking.Top, font, color));
+            chart.ChartAreas.Add("Waves");
+            chart.Legends.Add("Legend");
 
             //Bind the model data to the chart
-            var series1 = Chart2.Series.Add("Sin");
-            var series2 = Chart2.Series.Add("Cos");
+            var series1 = chart.Series.Add("Sin");
+            var series2 = chart.Series.Add("Cos");
+
+            series1.ToolTip = "Seno";
+            series1.ChartType = SeriesChartType.Line;
+            series2.ToolTip = "Coseno";
+            series2.ChartType = SeriesChartType.Line;
 
             foreach (int value in values)
             {
@@ -139,7 +145,7 @@
 
             // Stream the image to the browser
             MemoryStream stream = new MemoryStream();
-            Chart2.SaveImage(stream, ChartImageFormat.Png);
+            chart.SaveImage(stream, ChartImageFormat.Png);
             stream.Seek(0, SeekOrigin.Begin);
 
             return this.File(stream.ToArray(), "image/png");

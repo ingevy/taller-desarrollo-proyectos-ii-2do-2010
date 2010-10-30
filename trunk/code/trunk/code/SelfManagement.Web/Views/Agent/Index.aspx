@@ -60,7 +60,7 @@
                     <%: Html.TextBoxFor(model => model.Salary.ExtraHours100Worked, new { Class = "uservalue", disabled = "true" })%>
                 </div>
                 <div style="clear: both; height: 1px"></div>
-                <hr style="border-color:#DDDDEE;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
+                <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
                 <div style="float: right;">
                     <strong>
                     <%: Html.LabelFor(model => model.Salary.TotalSalary) %>
@@ -68,7 +68,7 @@
                     </strong>
                 </div>
                 <div style="clear: both; height: 1px"></div>
-                <hr style="border-color:#DDDDEE;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
+                <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.Salary.CurrentExtraHours50Worked) %>
                     <%: Html.TextBoxFor(model => model.Salary.CurrentExtraHours50Worked, new { Class = "uservalue", disabled = "true" })%>
