@@ -2,9 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.UI.DataVisualization.Charting;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
@@ -88,6 +91,60 @@
             
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { CampaingMetricValues = model } };
         }
+
+
+
+        private Font font = new Font("Trebuchet MS", 14, FontStyle.Bold);
+        private Color color = Color.FromArgb(26, 59, 105);
+
+        public ActionResult MetricsChart()
+        {
+            // Define the Data ... this simple example is just a list of values from 0 to 50
+            List<float> values = new List<float>();
+            for (int i = 0; i < 50; i++)
+            {
+                values.Add(i);
+            }
+
+            // Define the Chart
+            Chart Chart2 = new Chart()
+            {
+                Width = 952,
+                Height = 350,
+                RenderType = RenderType.BinaryStreaming,
+                Palette = ChartColorPalette.BrightPastel,
+                BorderlineDashStyle = ChartDashStyle.Solid,
+                BorderWidth = 2,
+                BorderColor = color
+            };
+            Chart2.BorderSkin.SkinStyle = BorderSkinStyle.Emboss;
+
+            Chart2.Titles.Add(new Title("TODO", Docking.Top, font, color));
+            Chart2.ChartAreas.Add("Waves");
+            Chart2.Legends.Add("Legend");
+
+            //Bind the model data to the chart
+            var series1 = Chart2.Series.Add("Sin");
+            var series2 = Chart2.Series.Add("Cos");
+
+            foreach (int value in values)
+            {
+                series1.Points.AddY((float)Math.Sin(value * .5) * 100f);
+            }
+
+            foreach (int value in values)
+            {
+                series2.Points.AddY((float)Math.Cos(value * .5) * 100f);
+            }
+
+            // Stream the image to the browser
+            MemoryStream stream = new MemoryStream();
+            Chart2.SaveImage(stream, ChartImageFormat.Png);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return this.File(stream.ToArray(), "image/png");
+        }
+
 
         //
         // GET: /Agent/Create
