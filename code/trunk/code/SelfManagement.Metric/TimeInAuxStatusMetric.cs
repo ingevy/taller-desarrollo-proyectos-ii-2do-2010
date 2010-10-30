@@ -14,9 +14,14 @@
             this.externalFilesNeeded.Add(ExternalSystemFiles.SUMMARY);
         }
         
-        public static double CalculateMetricValue(DateTime fechaSalida, DateTime horarioSalida, DateTime fechaEntrada, DateTime horarioEntrada, int tiempoLoggeadoMinutos)
+        public static double CalculateMetricValue(DateTime dateTimeSalida, DateTime dateTimeEntrada, int tiempoLoggeadoMinutos)
         {
-            double result = 1000;
+            double result = -1; 
+            
+            TimeSpan span = dateTimeSalida.Subtract ( dateTimeEntrada );
+
+            result = span.TotalMinutes - Convert.ToDouble(tiempoLoggeadoMinutos);
+             
             return result;
         }
    
@@ -98,16 +103,79 @@
                     throw new System.ArgumentException("The agentID " + agentIdSummary + " in Summary File, was not found in TTS File");
                 }
 
-                var fechaSalida = DateTime.ParseExact(lineTTS.First()["fecha Salida"], "dd/MM/yyyy", null);
-                var horarioSalida = DateTime.ParseExact(lineTTS.First()["Horario Salida"], "HH:mm", null);
-                var fechaEntrada = DateTime.ParseExact(lineTTS.First()["fecha Entrada"], "dd/MM/yyyy", null);
-                var horarioEntrada = DateTime.ParseExact(lineTTS.First()["Horario Entrada"], "HH:mm", null);
+                //Parseo fechas
+                Int32[] fechaSalida = parseFechas(lineTTS.First(), "fecha Salida", '/', agentIdSummary);
+                Int32 diaSalida = Convert.ToInt32(fechaSalida[0]);
+                Int32 mesSalida = Convert.ToInt32(fechaSalida[1]);
+                Int32 anioSalida = Convert.ToInt32(fechaSalida[2]);
+                Int32[] horarioSalida = parseHorarios(lineTTS.First(), "Horario Salida", ':', agentIdSummary);
+                Int32 horaSalida = Convert.ToInt32(horarioSalida[0]);
+                Int32 minutosSalida = Convert.ToInt32(horarioSalida[1]);
+
+                DateTime dateTimeSalida = new DateTime(anioSalida, mesSalida, diaSalida, horaSalida, minutosSalida, Convert.ToInt32(0));
                 
-                var metricValue = TimeInAuxStatusMetric.CalculateMetricValue(fechaSalida, horarioSalida, fechaEntrada, horarioEntrada, tiempoLoggeadoMinutos);
+                Int32[] fechaEntrada = parseFechas(lineTTS.First(), "fecha Entrada", '/', agentIdSummary);
+                Int32 diaEntrada = Convert.ToInt32(fechaEntrada[0]);
+                Int32 mesEntrada = Convert.ToInt32(fechaEntrada[1]);
+                Int32 anioEntrada = Convert.ToInt32(fechaEntrada[2]);
+                Int32[] horarioEntrada = parseHorarios(lineTTS.First(), "Horario Entrada", ':', agentIdSummary);
+                Int32 horaEntrada = Convert.ToInt32(horarioEntrada[0]);
+                Int32 minutosEntrada = Convert.ToInt32(horarioEntrada[1]);
+
+                DateTime dateTimeEntrada = new DateTime(anioEntrada, mesEntrada, diaEntrada, horaEntrada, minutosEntrada, Convert.ToInt32(0));
+
+                var metricValue = TimeInAuxStatusMetric.CalculateMetricValue(dateTimeSalida, dateTimeEntrada, tiempoLoggeadoMinutos);
 
                 this.calculatedValues.Add(agentIdSummary, metricValue);
             }
             
         }
+
+        /*
+         * Retorna Int32[] con dia, mes, anio en este orden
+         * 
+         */
+        public static Int32[] parseFechas(Dictionary<string,string> lineTTS, string nombreCampo, char separador, int agentId)
+        {
+            Int32[] result = new Int32[3];
+
+            string[] fechaStr = null;
+            fechaStr = lineTTS[nombreCampo].Split(separador);
+
+            if (fechaStr.Length != 3)
+            {
+                throw new System.ArgumentException("Formato " + nombreCampo + " para agente " + agentId + " distinto a dd/MM/yyyy en archivo TTS.");
+            }
+                        
+            result[0] = Convert.ToInt32(fechaStr[0]); //dia
+            result[1] = Convert.ToInt32(fechaStr[1]); //mes
+            result[2] = Convert.ToInt32(fechaStr[2]); //anio
+            
+            return result;
+        }
+
+        /*
+         * Retorna Int32[] con hora, minutos en este orden
+         * 
+         */
+        public static Int32[] parseHorarios(Dictionary<string, string> lineTTS, string nombreCampo, char separador, int agentId)
+        {
+            Int32[] result = new Int32[3];
+
+            string[] fechaStr = null;
+            fechaStr = lineTTS[nombreCampo].Split(separador);
+
+            if (fechaStr.Length != 2)
+            {
+                throw new System.ArgumentException("Formato " + nombreCampo + " para agente " + agentId + " distinto a HH:mm en archivo TTS.");
+            }
+
+            result[0] = Convert.ToInt32(fechaStr[0]); //hora
+            result[1] = Convert.ToInt32(fechaStr[1]); //minutos
+
+            return result;
+        }
+
+    
     }
 }
