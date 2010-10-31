@@ -189,7 +189,7 @@
             series2.ChartType = SeriesChartType.Line;
             series2.BorderWidth = 3;
             series2.ShadowOffset = 2;
-            series2.Color = Color.YellowGreen;
+            series2.Color = Color.Yellow;
                         
             series3.ToolTip = "Nivel Mínimo";
             series3.ChartType = SeriesChartType.Line;

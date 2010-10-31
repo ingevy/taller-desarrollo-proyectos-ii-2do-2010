@@ -102,8 +102,8 @@
             }
 
             MembershipCreateStatus status;
+            
             this.provider.CreateUser(userName, password, email, null, null, true, null, out status);
-
             this.SetInnerUserId(userName, innerUserId);
 
             return status;
