@@ -153,7 +153,7 @@
                         foreach (var metricValues in this.Model.CurrentCampaingMetricValues)
                         {
                     %>
-                        <img src="<%= this.Url.Action("MetricsChart", "Agent", new { campaingId = metricValues.CampaingId, metricId = metricValues.MetricId, month = this.Model.AvailableMetricMonths[this.Model.CurrentMetricMonthIndex] }) %>" alt="<%= metricValues.MetricName %>" width="952" height="350" />
+                        <img src="<%= this.Url.Action("MetricsChart", "Agent", new { innerUserId = this.Model.AgentId, campaingId = metricValues.CampaingId, metricId = metricValues.MetricId, month = this.Model.AvailableMetricMonths[this.Model.CurrentMetricMonthIndex] }) %>" alt="<%= metricValues.MetricName %>" width="952" height="350" />
                     <%
                         }
                     %>

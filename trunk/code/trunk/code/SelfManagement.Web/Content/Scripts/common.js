@@ -33,6 +33,7 @@
             var objectiveHourlyElement = $("#ObjectiveHourlyValue")[0];
             var minimumHourlyElement = $("#MinimumHourlyValue")[0];
             var metricMonths = $("#CurrentMetricMonthIndex");
+            var innerUserId = $("#AgentId")[0].value;
 
             if (json.Status && json.Status == "error") {
                 metricValues[0].innerHTML = "<h3>Ups! Ocurrio un error...</h3>";
@@ -125,7 +126,7 @@
                     for (var i = 0; i < json.CampaingMetricValues.length; i++) {
                         var campaingMetricValue = json.CampaingMetricValues[i];
 
-                        html += "<img width=\"952\" height=\"350\" alt=\"" + campaingMetricValue.MetricName + "\" src=\"/Agent/MetricsChart?campaingId=" + campaingMetricValue.CampaingId + "&metricId=" + campaingMetricValue.MetricId + "&month=" + currentMonth + "\">";
+                        html += "<img width=\"952\" height=\"350\" alt=\"" + campaingMetricValue.MetricName + "\" src=\"/Agent/MetricsChart?innerUserId=" + innerUserId.toString() + "&campaingId=" + campaingMetricValue.CampaingId + "&metricId=" + campaingMetricValue.MetricId + "&month=" + currentMonth + "\">";
                     }
 
                     metricCharts[0].innerHTML = html;
