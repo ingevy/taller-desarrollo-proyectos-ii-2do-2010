@@ -115,7 +115,7 @@
         private Color color = Color.FromArgb(26, 59, 105);
 
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
-        public ActionResult MetricsChart(int campaingId, int metricId, string month)
+        public ActionResult MetricsChart(int innerUserId, int campaingId, int metricId, string month)
         {
             // Define the Data ... this simple example is just a list of values from 0 to 50
             var values = new List<float>();
