@@ -91,6 +91,15 @@
             }
         }
 
+        public void CreateSupervisorAgent(SupervisorAgent supervisorAgent)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                ctx.SupervisorAgents.AddObject(supervisorAgent);
+                ctx.SaveChanges();
+            }
+        }
+
         public void CreateOrUpdateSupervisorMetric(int innerUserId, int campaingId, int metricId, DateTime date, double value)
         {
             using (var ctx = new SelfManagementEntities())

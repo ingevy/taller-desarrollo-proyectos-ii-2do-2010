@@ -454,7 +454,7 @@
           </Key>
           <Property Name="ApplicationId" Type="Guid" Nullable="false" />
           <Property Name="UserId" Type="Guid" Nullable="false" />
-          <Property Name="InnerUserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InnerUserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
           <Property Name="LoweredUserName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
           <Property Name="MobileAlias" Type="String" MaxLength="16" Unicode="true" FixedLength="false" />

@@ -82,7 +82,9 @@
         {
             var filesToProcess = this.GetFilesToProcess();
 
-            this.ProcessMetrics(filesToProcess);
+            this.ProcessHumanForceFile(filesToProcess);
+
+            //this.ProcessMetrics(filesToProcess);
         }
 
         private void ProcessMetrics(IList<IDataFile> files)
@@ -156,13 +158,15 @@
 
         private void ProcessHumanForceFile(IList<IDataFile> files)
         {
+            Console.WriteLine("Procesando Archivo HF...");
+
             var filesToProcess = files;
 
             var hfFile = (from f in filesToProcess
                           where f.ExternalSystemFile == ExternalSystemFiles.HF
                           select f).ToList<IDataFile>();
 
-            if (filesToProcess.Count == 1)
+            if (hfFile.Count == 1)
             {
                 var dataLines = filesToProcess[0].DataLines;
 
@@ -174,18 +178,21 @@
                     var apellido = line["apellido"];
                     var sueldo = Convert.ToDecimal(line["sueldo bruto"]);
                     var jornada = line["Tipo Jornada"];
-                    var status = line["Status"];
+                    var status = line[" Status"];
                     var idSupervisor = Convert.ToInt32(line["idSupervisor"]);
-                    var strFecha = line["fecha ingreso"].Split('/');
+                    var strFecha = line[" fecha ingreso"].Split('/');
                     var fechaIngreso = new DateTime(Convert.ToInt32(strFecha[2]), //Año
                                                     Convert.ToInt32(strFecha[1]), //Mes
                                                     Convert.ToInt32(strFecha[0])); //Dia
-                    var idCampaña = Convert.ToInt32(line["idCampania"]);
+                    var idCampaña = Convert.ToInt32(line[" idCampania"]);
 
+                    Console.WriteLine("Grabando Agente: " + legajo);
                     if (!this.membershipService.ExistsUser(nombre + "." + apellido))
                     {
-                        this.membershipService.CreateUser(legajo, nombre + "." + apellido, dni.ToString(), "");
+                        this.membershipService.CreateUser(legajo, nombre + "." + apellido, dni.ToString(), nombre + "." + apellido + "@selfmanagement.com");
                         this.membershipService.CreateProfile(nombre + "." + apellido, dni.ToString(), nombre, apellido, sueldo, jornada, status, fechaIngreso);
+                        this.membershipService.AddUserToRol(nombre + "." + apellido, SelfManagementRoles.Agent);
+                        this.metricsRepository.CreateSupervisorAgent(new SupervisorAgent { AgentId = legajo, SupervisorId = idSupervisor });
 
                         var supervisores = this.campaingRepository.RetrieveCampaingSupervisors(idCampaña);
 

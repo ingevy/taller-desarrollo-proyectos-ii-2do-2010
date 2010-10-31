@@ -11,7 +11,7 @@
 
             processor.ProcessFiles();
 
-            Console.WriteLine("El procesamiento de las Métricas finalizó. Presione un tecla para finalizar...");
+            Console.WriteLine("El procesamiento de archivos finalizó. Presione un tecla para finalizar...");
             Console.ReadKey();
         }
     }
