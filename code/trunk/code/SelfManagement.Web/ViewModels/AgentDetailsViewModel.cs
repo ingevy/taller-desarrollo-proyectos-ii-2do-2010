@@ -21,6 +21,12 @@
             get { return this.AvailableSalaryMonths.Count - 1; }
         }
 
+        [DisplayName("Mes")]
+        public int CurrentMetricMonthIndex
+        {
+            get { return this.AvailableMetricMonths.Count - 1; }
+        }
+
         public SalaryViewModel Salary { get; set; }
 
         [DisplayName("Optimo $/h")]
@@ -35,6 +41,8 @@
         public IList<MetricValuesViewModel> CurrentCampaingMetricValues { get; set; }
 
         public IList<string> AvailableSalaryMonths { get; set; }
+
+        public IList<string> AvailableMetricMonths { get; set; }
 
         public IList<UserCampaingInfo> AgentCampaings { get; set; }
     }

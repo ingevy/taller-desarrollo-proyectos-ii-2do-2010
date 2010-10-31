@@ -48,6 +48,7 @@
             {
                 AgentId = agent.InnerUserId,
                 AvailableSalaryMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
+                AvailableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(currentCampaing.Id),
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
                 CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
                 CurrentCampaingId = currentCampaing != null ? currentCampaing.Id : 0,
@@ -91,7 +92,8 @@
         {
             var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, DateTime.Now);
             var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
-            
+            var availableMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaingId);
+
             return new JsonResult
                 {
                         JsonRequestBehavior = JsonRequestBehavior.AllowGet,
@@ -100,7 +102,9 @@
                                 CampaingMetricValues = model,
                                 OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                                 ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                                MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
+                                MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                                AvailableMetricMonths = availableMonths,
+                                CurrentMetricMonthIndex = availableMonths.Count - 1
                             }
                 };
         }
@@ -111,10 +115,10 @@
         private Color color = Color.FromArgb(26, 59, 105);
 
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
-        public ActionResult MetricsChart()
+        public ActionResult MetricsChart(int campaingId, int metricId, string month)
         {
             // Define the Data ... this simple example is just a list of values from 0 to 50
-            List<float> values = new List<float>();
+            var values = new List<float>();
             for (int i = 0; i < 50; i++)
             {
                 values.Add(i);

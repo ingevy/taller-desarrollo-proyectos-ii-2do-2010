@@ -200,7 +200,6 @@ div.statusMessage  {
 #mainPanel .content .uservalue { width: 108px; text-align: right; }
 #mainPanel .content div { padding-right:15px; padding-left:15px; margin-top:15px }
 
-
 #secondPanel p, #mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
 #secondPanel label, #mainPanel label { display: inline-block; width: 70px; }
 /*#mainPanel select { width: 110px; }*/
@@ -685,7 +684,7 @@ div.ac_results ul li.ac_over {
 	border-bottom: 1px solid;
 }
 
-#metricvaluescontainer
+#metricvaluescontainer, #metricchartscontainer
 {
 	min-height: 35px;
 }
