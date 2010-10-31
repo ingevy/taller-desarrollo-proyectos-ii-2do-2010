@@ -184,6 +184,26 @@
             }
         }
 
+        public void AddAgent(int campaingId, Agent agent)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var campaing = ctx.Campaings
+                               .Where(c => c.Id == campaingId)
+                               .FirstOrDefault();
+
+                if (campaing != null)
+                {
+                    var incorporationDate = DateTime.Parse(agent.IncorporationDate, new CultureInfo("es-AR",false));
+                    var startDate = (campaing.BeginDate < incorporationDate) ? incorporationDate : campaing.BeginDate;
+                    var campaingUser = new CampaingUser { CampaingId = campaing.Id, InnerUserId = agent.InnerUserId, BeginDate = startDate, EndDate = campaing.EndDate.GetValueOrDefault(DateTime.MaxValue) };
+                    campaing.CampaingUsers.Add(campaingUser);
+                }
+
+                ctx.SaveChanges();
+            }
+        }
+
         public int CreateCampaing(Campaing campaing)
         {
             using (var ctx = new SelfManagementEntities())

@@ -7,9 +7,9 @@
     {
         public static void Main(string[] args)
         {
-            var processor = new FilesProcessor(new MetricsRepository());
+            var processor = new FilesProcessor(new MetricsRepository(), new MembershipService(), new CampaingRepository());
 
-            processor.ProcessMetrics();
+            processor.ProcessFiles();
 
             Console.WriteLine("El procesamiento de las Métricas finalizó. Presione un tecla para finalizar...");
             Console.ReadKey();

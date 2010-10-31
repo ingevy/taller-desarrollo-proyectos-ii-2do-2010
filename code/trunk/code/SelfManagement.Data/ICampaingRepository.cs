@@ -31,6 +31,8 @@
 
         int RetrieveOrCreateCustomerIdByName(string customerName);
 
+        void AddAgent(int campaingId, Agent agent);
+
         int CreateCampaing(Campaing campaing);
 
         void SaveCampaingMetricLevels(IEnumerable<CampaingMetricLevel> campaingMetricLevels);

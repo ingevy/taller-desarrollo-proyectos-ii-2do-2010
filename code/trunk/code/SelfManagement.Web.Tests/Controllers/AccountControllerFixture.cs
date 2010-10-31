@@ -392,6 +392,11 @@
                 return MembershipCreateStatus.Success;
             }
 
+            public MembershipCreateStatus CreateUser(int innerUserId, string userName, string password, string email)
+            {
+                throw new System.NotImplementedException();
+            }
+
             public bool ChangePassword(string userName, string oldPassword, string newPassword)
             {
                 return (userName == "someUser" && oldPassword == "goodOldPassword" && newPassword == "goodNewPassword");

@@ -84,6 +84,39 @@
             return status;
         }
 
+        public MembershipCreateStatus CreateUser(int innerUserId, string userName, string password, string email)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", "userName");
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", "password");
+            }
+
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", "email");
+            }
+
+            MembershipCreateStatus status;
+            this.provider.CreateUser(userName, password, email, null, null, true, null, out status);
+
+            using (var ctx = new SelfManagementEntities())
+            {
+                var user = ctx.aspnet_Users
+                           .FirstOrDefault(a => a.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase));
+
+                user.InnerUserId = innerUserId;
+
+                ctx.SaveChanges();
+            }
+
+            return status;
+        }
+
         public void AddUserToRol(string userName, SelfManagementRoles role)
         {
             if (string.IsNullOrWhiteSpace(userName))
