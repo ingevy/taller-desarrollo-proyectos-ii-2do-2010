@@ -84,7 +84,7 @@
 
             this.ProcessHumanForceFile(filesToProcess);
 
-            //this.ProcessMetrics(filesToProcess);
+            this.ProcessMetrics(filesToProcess);
         }
 
         private void ProcessMetrics(IList<IDataFile> files)
