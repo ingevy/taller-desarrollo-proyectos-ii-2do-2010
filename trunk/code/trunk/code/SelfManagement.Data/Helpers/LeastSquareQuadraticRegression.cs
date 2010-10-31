@@ -259,26 +259,12 @@
 
         /*
          * Retorna valor Y, para un X pedido
-         * En caso de ser el 'valor Y' calculado menor al 'max Y' existente, se devuelve este ultimo
          */ 
         public double calculatePredictedY(double x){
 
             double result;
 
-            //Busco max Y
-            double maxY = 0;
-            foreach (double[] ppair in pointArray)
-            {
-                if (ppair[1] > maxY) // valor de Y
-                    maxY = ppair[1];
-            }
-            
-             //En caso de ser el 'valor Y' calculado menor al 'max Y' existente, se devuelve este ultimo
-            double calculatedY = getPredictedY(x);
-            if ( calculatedY < maxY)
-                result = maxY;
-            else
-                result = calculatedY;
+            result = getPredictedY(x);
 
             return result;
         }
