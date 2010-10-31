@@ -13,6 +13,12 @@
 
         int RetrieveAgentSupervisorId(int innerUserId);
 
+        MonthlySchedule RetrieveAgentMonthlySchedule(int innerUserId, short year, byte month);
+
+        Boolean isHolidayDate(DateTime date);
+
+        void SaveOrUpdateMonthlySchedule(MonthlySchedule schedule);
+
         double GetUserMetricValue(int innerUserId, DateTime date, int metricId, int campaingId);
 
         void CreateAgentMetric(UserMetric userMetric);
