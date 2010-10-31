@@ -107,7 +107,7 @@
                  </div>
                  <div style="clear: both; height: 5px"></div>
                  <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
-                 <h3>Resumen Métricas</h3>
+                 <h3>Resumen Actual de Métricas</h3>
                  <div id="metricvaluescontainer" style="padding: 0px; margin: 0px;" >
                     <table cellpadding="0" cellspacing="0" id="metricvalues">
                         <tbody>
@@ -146,7 +146,7 @@
                         var metricMonthIndex = 0;
                         var availableMetricMonths = this.Model.AvailableMetricMonths.Select(am => new SelectListItem { Text = am, Value = (metricMonthIndex++).ToString() });
                     %>
-                    <%: Html.DropDownListFor(model => model.CurrentMetricMonthIndex, availableMetricMonths, new { Class = "uservalue", onchange = "refreshMetricCharts()", style = "float:right; margin-right:15px;" })%>
+                    <%: Html.DropDownListFor(model => model.CurrentMetricMonthIndex, availableMetricMonths, new { Class = "uservalue", onchange = "refreshMetricCharts()", style = "float:right;" })%>
                  </h3>
                  <div id="metricchartscontainer" style="padding: 0px; margin: 0px;">
                     <%
