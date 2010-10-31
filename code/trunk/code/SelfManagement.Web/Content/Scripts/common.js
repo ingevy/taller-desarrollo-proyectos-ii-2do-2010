@@ -4,8 +4,12 @@ function refreshMetricValues() {
     var metricValues = $("#metricvaluescontainer");
     var innerUserId = $("#AgentId")[0].value;
 
+    var labels = $("#secondPanel .content label");
+
     metricValues[0].innerHTML = " ";
     metricValues.addClass("loading");
+
+    labels.addClass("loadingLabel");
 
     var url = getBaseUrl() + "Agent/CampaingMetricValues?innerUserId=" + encodeURIComponent(innerUserId) + "&campaingId=" + encodeURIComponent(campaingId)
 
@@ -17,43 +21,76 @@ function refreshMetricValues() {
         beforeSend: function (xhr) { xhr.setRequestHeader("Content-Type", "application/json"); },
         success: function (json) {
             var metricValues = $("#metricvaluescontainer");
+            var optimalHourlyElement = $("#OptimalHourlyValue")[0];
+            var objectiveHourlyElement = $("#ObjectiveHourlyValue")[0];
+            var minimumHourlyElement = $("#MinimumHourlyValue")[0];
+
             if (json.Status && json.Status == "error") {
-                metricValues[0].innerHTML = "<h3>Ups! Ocurrió un error...</h3>";
-            } else if (json.CampaingMetricValues.length == 0) {
-                metricValues[0].innerHTML = "<h3>No metricas disponibles para la Campaña elegida...</h3>";
-            } else {
-
-                var html = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"metricvalues\">";
-                html += "<tbody>";
-                html += "<tr>";
-                html += "<th>Metrica</th>";
-                html += "<th>Tipo</th>";
-                html += "<th>Nivel Optimo</th>";
-                html += "<th>Nivel Objectivo</th>";
-                html += "<th>Nivel Minimo</th>";
-                html += "<th>Valor Actual</th>";
-                html += "<th>Valor Proyectado</th>";
-                html += "</tr>";
-
-                for (var i = 0; i < json.CampaingMetricValues.length; i++) {
-                    var campaingMetricValue = json.CampaingMetricValues[i];
-                    html += "<tr>";
-                    html += "<td>" + campaingMetricValue.MetricName + "</td>";
-                    html += "<td>" + campaingMetricValue.Format + "</td>";
-                    html += "<td>" + campaingMetricValue.OptimalValue + "</td>";
-                    html += "<td>" + campaingMetricValue.ObjectiveValue + "</td>";
-                    html += "<td>" + campaingMetricValue.MinimumValue + "</td>";
-                    html += "<td>" + campaingMetricValue.CurrentValue + "</td>";
-                    html += "<td>" + campaingMetricValue.ProjectedValue + "</td>";
-                    html += "</tr>";
+                metricValues[0].innerHTML = "<h3>Ups! Ocurrio un error...</h3>";
+                optimalHourlyElement.value = "Ups! Ocurrio un error...";
+                objectiveHourlyElement.value = "Ups! Ocurrio un error...";
+                minimumHourlyElement.value = "Ups! Ocurrio un error...";
+            }
+            else {
+                if (json.CampaingMetricValues.length == 0) {
+                    metricValues[0].innerHTML = "<h3>No metricas disponibles para la Campaña elegida...</h3>";
                 }
-                html += "</tbody>";
-                html += "</table>";
+                else {
+                    var html = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"metricvalues\">";
+                    html += "<tbody>";
+                    html += "<tr>";
+                    html += "<th>Metrica</th>";
+                    html += "<th>Tipo</th>";
+                    html += "<th>Nivel Optimo</th>";
+                    html += "<th>Nivel Objectivo</th>";
+                    html += "<th>Nivel Minimo</th>";
+                    html += "<th>Valor Actual</th>";
+                    html += "<th>Valor Proyectado</th>";
+                    html += "</tr>";
 
-                metricValues[0].innerHTML = html;
+                    for (var i = 0; i < json.CampaingMetricValues.length; i++) {
+                        var campaingMetricValue = json.CampaingMetricValues[i];
+                        html += "<tr>";
+                        html += "<td>" + campaingMetricValue.MetricName + "</td>";
+                        html += "<td>" + campaingMetricValue.Format + "</td>";
+                        html += "<td>" + campaingMetricValue.OptimalValue + "</td>";
+                        html += "<td>" + campaingMetricValue.ObjectiveValue + "</td>";
+                        html += "<td>" + campaingMetricValue.MinimumValue + "</td>";
+                        html += "<td>" + campaingMetricValue.CurrentValue + "</td>";
+                        html += "<td>" + campaingMetricValue.ProjectedValue + "</td>";
+                        html += "</tr>";
+                    }
+
+                    html += "</tbody>";
+                    html += "</table>";
+
+                    metricValues[0].innerHTML = html;
+                }
+
+                if (json.OptimalHourlyValue == null) {
+                    optimalHourlyElement.value = "Ups! Ocurrio un error...";
+                }
+                else {
+                    optimalHourlyElement.value = json.OptimalHourlyValue;
+                }
+
+                if (json.ObjectiveHourlyValue == null) {
+                    objectiveHourlyElement.value = "Ups! Ocurrio un error...";
+                }
+                else {
+                    objectiveHourlyElement.value = json.ObjectiveHourlyValue;
+                }
+
+                if (json.MinimumHourlyValue == null) {
+                    minimumHourlyElement.value = "Ups! Ocurrio un error...";
+                }
+                else {
+                    minimumHourlyElement.value = json.MinimumHourlyValue;
+                }
             }
 
             metricValues.removeClass("loading");
+            labels.removeClass("loadingLabel");
         }
     });
 }
@@ -82,16 +119,16 @@ function refreshSalary() {
             var hrs = $("#mainPanel .content hr");
 
             if (json.Status && json.Status == "error") {
-                inputs[0].value = "Ups! Ocurrió un error...";
-                inputs[1].value = "Ups! Ocurrió un error...";
-                inputs[2].value = "Ups! Ocurrió un error...";
-                inputs[3].value = "Ups! Ocurrió un error...";
-                inputs[4].value = "Ups! Ocurrió un error...";
-                inputs[5].value = "Ups! Ocurrió un error...";
-                inputs[6].value = "Ups! Ocurrió un error...";
-                inputs[7].value = "Ups! Ocurrió un error...";
-                inputs[8].value = "Ups! Ocurrió un error...";
-                inputs[9].value = "Ups! Ocurrió un error...";
+                inputs[0].value = "Ups! Ocurrio un error...";
+                inputs[1].value = "Ups! Ocurrio un error...";
+                inputs[2].value = "Ups! Ocurrio un error...";
+                inputs[3].value = "Ups! Ocurrio un error...";
+                inputs[4].value = "Ups! Ocurrio un error...";
+                inputs[5].value = "Ups! Ocurrio un error...";
+                inputs[6].value = "Ups! Ocurrio un error...";
+                inputs[7].value = "Ups! Ocurrio un error...";
+                inputs[8].value = "Ups! Ocurrio un error...";
+                inputs[9].value = "Ups! Ocurrio un error...";
             } else if (json.Salary == null) {
                 inputs[0].value = "No se encontraron datos";
                 inputs[1].value = "No se encontraron datos";
@@ -189,7 +226,7 @@ function updateSupervisorsList(beginDate, endDate) {
             success: function (json) {
                 var supervisors = $("#supervisors");
                 if (json.Status && json.Status == "error") {
-                    supervisors[0].innerHTML = "<h3>Ups! Ocurrió un error...</h3>";
+                    supervisors[0].innerHTML = "<h3>Ups! Ocurrio un error...</h3>";
                 } else if (json.Supervisors.length == 0) {
                     supervisors[0].innerHTML = "<h3>No hay supervisores disponibles en el rango de fechas elegido...</h3>";
                 } else {

@@ -55,6 +55,9 @@
                                         .RetrieveCampaingsByUserId(agent.InnerUserId)
                                         .Select(c => c.ToUserCampaingInfo())
                                         .ToList(),
+                OptimalHourlyValue = currentCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                ObjectiveHourlyValue = currentCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                MinimumHourlyValue = currentCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
             };
 
             model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, DateTime.Now);
@@ -86,10 +89,20 @@
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult CampaingMetricValues(int innerUserId, int campaingId)
         {
-            // TODO: Refactor this to receive a date range or month
             var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, DateTime.Now);
+            var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
             
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { CampaingMetricValues = model } };
+            return new JsonResult
+                {
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                        Data = new
+                            {
+                                CampaingMetricValues = model,
+                                OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                                ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                                MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
+                            }
+                };
         }
 
 
@@ -97,6 +110,7 @@
         private Font font = new Font("Trebuchet MS", 14, FontStyle.Bold);
         private Color color = Color.FromArgb(26, 59, 105);
 
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult MetricsChart()
         {
             // Define the Data ... this simple example is just a list of values from 0 to 50

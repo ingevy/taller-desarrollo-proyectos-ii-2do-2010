@@ -85,19 +85,30 @@
     <div id="secondPanel" class="panel">
         <div class="innerPanel">
             <h2>
-                <span>Métricas de Campañas</span></h2>
+                <span>Métricas de Campañas</span>
+                <% 
+                    var availableCampaings = this.Model.AgentCampaings.Select(ac => new SelectListItem { Text = ac.DisplayName, Value = ac.Id.ToString() });
+                %>
+                <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onchange = "refreshMetricValues()", style = "float:right; margin-right:15px;" })%>
+            </h2>
             <div class="content">
-                <div style="float: right;">
-                    <%: Html.LabelFor(model => model.CurrentCampaingId) %>
-                    <% 
-                        var availableCampaings = this.Model.AgentCampaings.Select(ac => new SelectListItem { Text = ac.DisplayName, Value = ac.Id.ToString() });
-                    %>
-                    <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onchange = "refreshMetricValues()" })%>
-                </div>
-                <div style="clear: both; height: 1px"></div>
-
-                <div id="metricvaluescontainer" style="padding: 0px; margin: 20px 0px 0px 0px;" >
-                 <table cellpadding="0" cellspacing="0" id="metricvalues">
+                 <h3>Valores por Hora</h3>
+                 <div style="float: left;">
+                    <%: Html.LabelFor(model => model.OptimalHourlyValue) %>
+                    <%: Html.TextBoxFor(model => model.OptimalHourlyValue, new { Class = "uservalue", disabled = "true" }) %>
+                 </div>
+                 <div style="float: left;">
+                    <%: Html.LabelFor(model => model.ObjectiveHourlyValue) %>
+                    <%: Html.TextBoxFor(model => model.ObjectiveHourlyValue, new { Class = "uservalue", disabled = "true" }) %>
+                 </div>
+                 <div style="float: left;">
+                    <%: Html.LabelFor(model => model.MinimumHourlyValue) %>
+                    <%: Html.TextBoxFor(model => model.MinimumHourlyValue, new { Class = "uservalue", disabled = "true" }) %>
+                 </div>
+                 <div style="clear: both; height: 5px"></div>
+                 <h3>Gráficos</h3>
+                 <div id="metricvaluescontainer" style="padding: 0px; margin: 0px;" >
+                    <table cellpadding="0" cellspacing="0" id="metricvalues">
                     <tbody>
                         <tr>
                             <th>Metrica</th>
@@ -126,10 +137,10 @@
                         %>
                     </tbody>
                 </table>
-                <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
-                <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
-                <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
-                </div>
+                 </div>
+                 <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
+                 <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
+                 <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
             </div>
         </div>
     </div>

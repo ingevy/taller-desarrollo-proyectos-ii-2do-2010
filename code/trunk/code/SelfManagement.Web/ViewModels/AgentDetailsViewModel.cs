@@ -23,6 +23,15 @@
 
         public SalaryViewModel Salary { get; set; }
 
+        [DisplayName("Optimo $/h")]
+        public string OptimalHourlyValue { get; set; }
+
+        [DisplayName("Objetivo $/h")]
+        public string ObjectiveHourlyValue { get; set; }
+
+        [DisplayName("Minimo $/h")]
+        public string MinimumHourlyValue { get; set; }
+
         public IList<MetricValuesViewModel> CurrentCampaingMetricValues { get; set; }
 
         public IList<string> AvailableMonths { get; set; }
