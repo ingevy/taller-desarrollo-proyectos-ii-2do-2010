@@ -25,12 +25,12 @@
                     <%: Html.TextBoxFor(model => model.Salary.GrossSalary, new { Class = "uservalue", disabled = "true" })%>
                 </div>
                 <div style="float: left;">
-                    <%: Html.LabelFor(model => model.CurrentMonth) %>
+                    <%: Html.LabelFor(model => model.CurrentSalaryMonthIndex)%>
                     <% 
                         var id = 0;
-                        var availableMonths = this.Model.AvailableMonths.Select(am => new SelectListItem { Text = am, Value = (id++).ToString() });
+                        var availableMonths = this.Model.AvailableSalaryMonths.Select(am => new SelectListItem { Text = am, Value = (id++).ToString() });
                     %>
-                    <%: Html.DropDownListFor(model => model.CurrentMonth, availableMonths, new { Class = "uservalue", onchange = "refreshSalary()" })%>
+                    <%: Html.DropDownListFor(model => model.CurrentSalaryMonthIndex, availableMonths, new { Class = "uservalue", onchange = "refreshSalary()" })%>
                 </div>
                 <div style="clear: both; height: 1px"></div>
                 <div style="float: right;">
@@ -106,38 +106,39 @@
                     <%: Html.TextBoxFor(model => model.MinimumHourlyValue, new { Class = "uservalue", disabled = "true" }) %>
                  </div>
                  <div style="clear: both; height: 5px"></div>
-                 <h3>Gráficos</h3>
+                 <h3>Resumen Métricas</h3>
                  <div id="metricvaluescontainer" style="padding: 0px; margin: 0px;" >
                     <table cellpadding="0" cellspacing="0" id="metricvalues">
-                    <tbody>
-                        <tr>
-                            <th>Metrica</th>
-                            <th>Tipo</th>
-                            <th>Nivel Optimo</th>
-                            <th>Nivel Objectivo</th>
-                            <th>Nivel Minimo</th>
-                            <th>Valor Actual</th>
-                            <th>Valor Proyectado</th>
-                        </tr>
-                        <% 
-                            foreach (var metricValues in this.Model.CurrentCampaingMetricValues)
-                            {
-                        %>
-                        <tr>
-                            <td><%= metricValues.MetricName %></td>
-                            <td><%= metricValues.Format %></td>
-                            <td style="text-align: right;"><%= metricValues.OptimalValue %></td>
-                            <td style="text-align: right;"><%= metricValues.ObjectiveValue %></td>
-                            <td style="text-align: right;"><%= metricValues.MinimumValue %></td>
-                            <td style="text-align: right;"><%= metricValues.CurrentValue %></td>
-                            <td style="text-align: right;"><%= metricValues.ProjectedValue %></td>
-                        </tr>
-                        <% 
-                            }
-                        %>
-                    </tbody>
-                </table>
+                        <tbody>
+                            <tr>
+                                <th>Metrica</th>
+                                <th>Tipo</th>
+                                <th>Nivel Optimo</th>
+                                <th>Nivel Objectivo</th>
+                                <th>Nivel Minimo</th>
+                                <th>Valor Actual</th>
+                                <th>Valor Proyectado</th>
+                            </tr>
+                            <% 
+                                foreach (var metricValues in this.Model.CurrentCampaingMetricValues)
+                                {
+                            %>
+                            <tr>
+                                <td><%= metricValues.MetricName %></td>
+                                <td><%= metricValues.Format %></td>
+                                <td style="text-align: right;"><%= metricValues.OptimalValue %></td>
+                                <td style="text-align: right;"><%= metricValues.ObjectiveValue %></td>
+                                <td style="text-align: right;"><%= metricValues.MinimumValue %></td>
+                                <td style="text-align: right;"><%= metricValues.CurrentValue %></td>
+                                <td style="text-align: right;"><%= metricValues.ProjectedValue %></td>
+                            </tr>
+                            <% 
+                                }
+                            %>
+                        </tbody>
+                    </table>
                  </div>
+                 <h3>Gráficos</h3>
                  <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
                  <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
                  <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />

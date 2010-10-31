@@ -96,8 +96,8 @@ function refreshMetricValues() {
 }
 
 function refreshSalary() {
-    var index = $("#CurrentMonth")[0].selectedIndex;
-    var month = $("#CurrentMonth").children()[index].text;
+    var index = $("#CurrentSalaryMonthIndex")[0].selectedIndex;
+    var month = $("#CurrentSalaryMonthIndex").children()[index].text;
     var innerUserId = $("#AgentId")[0].value;
 
     var labels = $("#mainPanel .content label");
@@ -152,8 +152,8 @@ function refreshSalary() {
                 inputs[8].value = json.Salary.CurrentExtraHours50Worked;
                 inputs[9].value = json.Salary.CurrentExtraHours100Worked;
 
-                var index = $("#CurrentMonth")[0].selectedIndex;
-                if (index + 1 == $("#CurrentMonth").children().length) {
+                var index = $("#CurrentSalaryMonthIndex")[0].selectedIndex;
+                if (index + 1 == $("#CurrentSalaryMonthIndex").children().length) {
                     labels[2].innerHTML = "Sueldo Variable Proyectado";
                     labels[3].innerHTML = "Total Horas Proyectadas";
                     labels[4].innerHTML = "Sueldo Horas Extra 50% Proyectado";
