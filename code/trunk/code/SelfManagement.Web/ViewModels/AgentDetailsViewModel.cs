@@ -1,5 +1,6 @@
 ﻿namespace CallCenter.SelfManagement.Web.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
 
@@ -24,7 +25,7 @@
         [DisplayName("Mes")]
         public int CurrentMetricMonthIndex
         {
-            get { return this.AvailableMetricMonths.Count - 1; }
+            get { return this.AvailableMetricMonths.IndexOf(DateTime.Now.ToString("yyyy-MM")); }
         }
 
         public SalaryViewModel Salary { get; set; }
