@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AvailableCallStatusPercentageMetric.cs" />
+    <Compile Include="AverageAfterCallWorkMetric.cs" />
     <Compile Include="TimeInAuxStatusMetric.cs" />
     <Compile Include="DataFile.cs" />
     <Compile Include="InteractionToCallPercentMetric.cs" />
