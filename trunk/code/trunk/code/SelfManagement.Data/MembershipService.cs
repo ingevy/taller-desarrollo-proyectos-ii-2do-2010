@@ -104,6 +104,13 @@
             MembershipCreateStatus status;
             this.provider.CreateUser(userName, password, email, null, null, true, null, out status);
 
+            this.SetInnerUserId(userName, innerUserId);
+
+            return status;
+        }
+
+        private void SetInnerUserId(string userName, int innerUserId)
+        {
             using (var ctx = new SelfManagementEntities())
             {
                 var user = ctx.aspnet_Users
@@ -113,8 +120,6 @@
 
                 ctx.SaveChanges();
             }
-
-            return status;
         }
 
         public void AddUserToRol(string userName, SelfManagementRoles role)

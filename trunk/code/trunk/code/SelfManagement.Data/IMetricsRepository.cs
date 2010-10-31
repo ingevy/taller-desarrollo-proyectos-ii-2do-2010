@@ -17,6 +17,8 @@
 
         void CreateAgentMetric(UserMetric userMetric);
 
+        void CreateSupervisorAgent(SupervisorAgent supervisorAgent);
+
         void CreateOrUpdateSupervisorMetric(int innerUserId, int campaingId, int metricId, DateTime date, double value);
 
         void CreateOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value);
