@@ -211,7 +211,6 @@
                 series4.Points.AddXY(date.Day, this.metricsRepository.GetUserMetricValue(innerUserId, date, metricId, campaingId));
             }
 
-            // Stream the image to the browser
             var stream = new MemoryStream();
             chart.SaveImage(stream, ChartImageFormat.Png);
             stream.Seek(0, SeekOrigin.Begin);
