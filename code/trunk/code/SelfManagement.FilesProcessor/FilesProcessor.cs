@@ -38,7 +38,7 @@
                 }
                 else
                 {
-                    if (Path.GetFileName(processedFile.FileSystemPath) == "HF System.csv")
+                    if ( (Path.GetFileName(processedFile.FileSystemPath).Substring(0,2) == "HF") || Path.GetFileName(processedFile.FileSystemPath).Substring(0,3) == "STS" )
                     {
                         if (File.GetLastWriteTime(path) != processedFile.DateLastModified)
                         {
@@ -134,17 +134,23 @@
                                 {
                                     throw new ApplicationException("Data Inconsistency");
                                 }
-                                var userMetric = new UserMetric
+
+                                var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(agentCampaingId);
+
+                                if ( (from cm in campaingMetrics where cm.MetricId == metric.Id select cm).ToList().Count > 0 )
                                 {
-                                    CampaingId = agentCampaingId,
-                                    InnerUserId = legajo,
-                                    MetricId = metric.Id,
-                                    Date = metricProcessor.MetricDate,
-                                    Value = metricValues[legajo]
-                                };
-                                this.metricsRepository.CreateAgentMetric(userMetric);
-                                this.metricsRepository.CreateOrUpdateSupervisorMetric(agentSupervisorId, agentCampaingId, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);
-                                this.metricsRepository.CreateOrUpdateCampaingMetric(agentCampaingId, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);
+                                    var userMetric = new UserMetric
+                                    {
+                                        CampaingId = agentCampaingId,
+                                        InnerUserId = legajo,
+                                        MetricId = metric.Id,
+                                        Date = metricProcessor.MetricDate,
+                                        Value = metricValues[legajo]
+                                    };
+                                    this.metricsRepository.CreateAgentMetric(userMetric);
+                                    this.metricsRepository.CreateOrUpdateSupervisorMetric(agentSupervisorId, agentCampaingId, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);
+                                    this.metricsRepository.CreateOrUpdateCampaingMetric(agentCampaingId, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);
+                                }
                             }
                         }
                         catch
@@ -227,7 +233,7 @@
             var filesToProcess = files;
 
             var stsFile = (from f in filesToProcess
-                           where f.ExternalSystemFile == ExternalSystemFiles.STS
+                           where f.ExternalSystemFile == ExternalSystemFiles.STS && f.FileDate.Month == DateTime.Now.Month && f.FileDate.Year == DateTime.Now.Year
                            select f).ToList<IDataFile>();
 
             if (stsFile.Count == 1)
