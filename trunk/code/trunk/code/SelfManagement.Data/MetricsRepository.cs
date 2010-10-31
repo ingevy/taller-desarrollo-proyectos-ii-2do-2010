@@ -51,6 +51,51 @@
             }
         }
 
+        public MonthlySchedule RetrieveAgentMonthlySchedule(int innerUserId, short year, byte month)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return (from ms in ctx.MonthlySchedules
+                        where ms.InnerUserId == innerUserId && ms.Year == year && ms.Month == month
+                        select ms).FirstOrDefault();
+            }
+        }
+
+        public Boolean isHolidayDate(DateTime date)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var cDate = new DateTime(date.Year, date.Month, date.Day);
+                return ((from h in ctx.Holidays
+                         where h.Date == cDate
+                         select h).Count() == 1);
+            }
+        }
+
+        public void SaveOrUpdateMonthlySchedule(MonthlySchedule schedule)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var original = (from ms in ctx.MonthlySchedules
+                                where ms.InnerUserId == schedule.InnerUserId && ms.Year == schedule.Year && ms.Month == schedule.Month
+                                select ms).FirstOrDefault();
+
+                if (original == null)
+                {
+                    ctx.MonthlySchedules.AddObject(schedule);
+                }
+                else
+                {
+                    original.TotalHoursWorked = schedule.TotalHoursWorked;
+                    original.ExtraHoursWorked50 = schedule.ExtraHoursWorked50;
+                    original.ExtraHoursWorked100 = schedule.ExtraHoursWorked100;
+                    original.LastDayModified = schedule.LastDayModified;
+                }
+
+                ctx.SaveChanges();
+            }
+        }
+
         public double GetUserMetricValue(int innerUserId, DateTime date, int metricId, int campaingId)
         {
             using (var ctx = new SelfManagementEntities())

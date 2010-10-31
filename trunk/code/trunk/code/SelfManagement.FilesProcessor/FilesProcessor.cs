@@ -84,6 +84,8 @@
 
             this.ProcessHumanForceFile(filesToProcess);
 
+            this.ProcessTTSFilesForExtraHours(filesToProcess);
+
             this.ProcessMetrics(filesToProcess);
         }
 
@@ -228,54 +230,98 @@
             }
         }
 
-        private void ProcessTimeFiles(IList<IDataFile> files)
+        private void ProcessTTSFilesForExtraHours(IList<IDataFile> files)
         {
             var filesToProcess = files;
 
-            var stsFile = (from f in filesToProcess
-                           where f.ExternalSystemFile == ExternalSystemFiles.STS && f.FileDate.Month == DateTime.Now.Month && f.FileDate.Year == DateTime.Now.Year
-                           select f).ToList<IDataFile>();
+            var ttsFiles = (from f in filesToProcess
+                            where f.ExternalSystemFile == ExternalSystemFiles.TTS //&& f.FileDate.Month == DateTime.Now.Month && f.FileDate.Year == DateTime.Now.Year
+                            select f).ToList<IDataFile>();
 
-            if (stsFile.Count == 1)
+            if (ttsFiles.Count > 0)
             {
-                var dataLines = filesToProcess[0].DataLines;
-
-                foreach (var line in dataLines)
+                foreach (var file in ttsFiles)
                 {
-                    var agentId = Convert.ToInt32(line["Legajo"]);
+                    var dataLines = file.DataLines;
+                    var fileMonth = Convert.ToByte(file.FileDate.Month);
+                    var fileYear = Convert.ToInt16(file.FileDate.Year);
 
-                    var strFecha = line["fecha Entrada"].Split('/');
-                    var strHora = line["Horario Entrada"].Split(':');
-                    var fechaEntrada = new DateTime(Convert.ToInt32(strFecha[2]), //Año
-                                                    Convert.ToInt32(strFecha[1]), //Mes
-                                                    Convert.ToInt32(strFecha[0]), //Dia
-                                                    Convert.ToInt32(strHora[0]),  //Horas
-                                                    Convert.ToInt32(strHora[1]),  //Minutos
-                                                    0); //Segundos
-
-                    strFecha = line["fecha Salida"].Split('/');
-                    strHora = line["Horario Salida"].Split(':');
-                    var fechaSalida = new DateTime(Convert.ToInt32(strFecha[2]), //Año
-                                                   Convert.ToInt32(strFecha[1]), //Mes
-                                                   Convert.ToInt32(strFecha[0]), //Dia
-                                                   Convert.ToInt32(strHora[0]),  //Horas
-                                                   Convert.ToInt32(strHora[1]),  //Minutos
-                                                   0); //Segundos
-
-                    if (fechaSalida < fechaEntrada)
+                    foreach (var line in dataLines)
                     {
-                        //TODO: Loguear error de formato
-                    }
-                    else
-                    {
-                        //TODO
-                    }
+                        var agentId = Convert.ToInt32(line["legajo"]);
 
-                    /*var cantLlamadas = Convert.ToInt32(line["Cantidad Llamadas"]);
-                    var cantTransferidas = Convert.ToInt32(line["Cantidad Llamadas Transferidas"]);
-                    var metricValue = InteractionToCallPercentMetric.CalculateMetricValue(cantLlamadas, cantTransferidas);
+                        Console.WriteLine("Procesando TTS para Agente: " + agentId + " - Fecha: " + file.FileDate.ToString("dd/MM/yyyy"));
 
-                    calculatedValues.Add(agentId, metricValue);*/
+                        var strFecha = line["fecha Entrada"].Split('/');
+                        var strHora = line["Horario Entrada"].Split(':');
+                        var entranceDate = new DateTime(Convert.ToInt32(strFecha[2]) /*Año*/, Convert.ToInt32(strFecha[1]) /*Mes*/, Convert.ToInt32(strFecha[0]) /*Dia*/,
+                                                        Convert.ToInt32(strHora[0]) /*Horas*/, Convert.ToInt32(strHora[1]) /*Minutos*/, 0 /*Segundos*/);
+
+                        strFecha = line["fecha Salida"].Split('/');
+                        strHora = line["Horario Salida"].Split(':');
+                        var exitDate = new DateTime(Convert.ToInt32(strFecha[2]), Convert.ToInt32(strFecha[1]), Convert.ToInt32(strFecha[0]),
+                                                       Convert.ToInt32(strHora[0]), Convert.ToInt32(strHora[1]), 0);
+
+                        if (exitDate < entranceDate)
+                        {
+                            //TODO: Loguear error de formato
+                        }
+                        else
+                        {
+                            var agent = this.membershipService.RetrieveAgent(agentId);
+
+                            if (agent == null)
+                            {
+                                //TODO: Loguear error de que el agente indicado no existe
+                            }
+                            else
+                            {
+                                var agentSchedule = this.metricsRepository.RetrieveAgentMonthlySchedule(agentId, fileYear, fileMonth);
+
+                                if (agentSchedule == null)
+                                {
+                                    agentSchedule = new MonthlySchedule
+                                    {
+                                        InnerUserId = agentId,
+                                        Year = fileYear,
+                                        Month = fileMonth,
+                                        ExtraHoursWorked50 = 0,
+                                        ExtraHoursWorked100 = 0,
+                                        TotalHoursWorked = 0,
+                                        GrossSalary = Convert.ToDecimal(agent.GrossSalary),
+                                        LastDayModified = 0
+                                    };
+                                }
+                                if (entranceDate.Day > agentSchedule.LastDayModified)
+                                {
+
+                                    var workdayHours = (agent.Workday == "FTE") ? 8.0 : 6.0;
+                                    var actualWorkedHours = exitDate.Subtract(entranceDate).TotalHours;
+
+                                    if (actualWorkedHours > workdayHours)
+                                    {
+                                        var extraHours = actualWorkedHours - workdayHours;
+
+                                        if ((entranceDate.DayOfWeek.Equals(DayOfWeek.Saturday)) ||
+                                             (entranceDate.DayOfWeek.Equals(DayOfWeek.Sunday)) ||
+                                             (this.metricsRepository.isHolidayDate(entranceDate)))
+                                        {
+                                            agentSchedule.ExtraHoursWorked100 += Convert.ToInt32(Math.Round(extraHours));
+                                        }
+                                        else
+                                        {
+                                            agentSchedule.ExtraHoursWorked50 += Convert.ToInt32(Math.Round(extraHours));
+                                        }
+                                    }
+
+                                    agentSchedule.TotalHoursWorked += Convert.ToInt32(Math.Round(actualWorkedHours));
+                                    agentSchedule.LastDayModified = Convert.ToByte(file.FileDate.Day);
+                                }
+
+                                this.metricsRepository.SaveOrUpdateMonthlySchedule(agentSchedule);
+                            }
+                        }
+                    }
                 }
             }
         }
