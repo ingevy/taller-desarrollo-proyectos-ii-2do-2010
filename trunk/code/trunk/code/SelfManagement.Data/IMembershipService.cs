@@ -14,6 +14,8 @@
 
         MembershipCreateStatus CreateUser(string userName, string password, string email);
 
+        MembershipCreateStatus CreateUser(int innerUserId, string userName, string password, string email);
+
         void AddUserToRol(string userName, SelfManagementRoles role);
 
         void CreateProfile(string userName, string dni, string name, string lastName, decimal? grossSalary, string workday, string status, DateTime? incorporationDate);
