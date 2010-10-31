@@ -14,6 +14,9 @@
 
     public class AgentController : Controller
     {
+        private readonly Font Font = new Font("Trebuchet MS", 14, FontStyle.Bold);
+        private readonly Color Color = Color.FromArgb(26, 59, 105);
+
         private readonly ICampaingRepository campaingRepository;
         private readonly IMetricsRepository metricsRepository;
         private readonly IMembershipService membershipService;
@@ -109,66 +112,80 @@
                 };
         }
 
-
-
-        private Font font = new Font("Trebuchet MS", 14, FontStyle.Bold);
-        private Color color = Color.FromArgb(26, 59, 105);
-
+        // TODO: update this method.
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult MetricsChart(int innerUserId, int campaingId, int metricId, string month)
         {
-            // Define the Data ... this simple example is just a list of values from 0 to 50
-            var values = new List<float>();
-            for (int i = 0; i < 50; i++)
+            var beginDate = DateTime.ParseExact(month, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+            var endDate = this.GetEndDate(campaingId, beginDate.Year, beginDate.Month).Date;
+            var campaingMetric = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId).FirstOrDefault(cml => cml.MetricId == metricId);
+            var dates = new List<DateTime>();
+
+            while (beginDate <= endDate)
             {
-                values.Add(i);
+                beginDate = beginDate.AddDays(1);
+                dates.Add(beginDate);
             }
 
-            // Define the Chart
             var chart = new Chart()
             {
                 Width = 952,
                 Height = 350,
                 RenderType = RenderType.BinaryStreaming,
                 Palette = ChartColorPalette.BrightPastel,
-                BorderlineDashStyle = ChartDashStyle.Solid,
-                ToolTip = "Metric Name",
+                // Solid
+                BorderlineDashStyle = ChartDashStyle.NotSet,
+                ToolTip = campaingMetric.Metric.MetricName,
                 BorderWidth = 2,
-                BorderColor = color
+                BorderColor = Color,
+                // Remove
+                BorderlineWidth = 0,
             };
-            chart.BorderSkin.SkinStyle = BorderSkinStyle.Emboss;
 
-            chart.Titles.Add(new Title("TODO", Docking.Top, font, color));
-            chart.ChartAreas.Add("Waves");
-            chart.Legends.Add("Legend");
+            chart.BorderSkin.SkinStyle = BorderSkinStyle.None;
+            chart.BorderSkin.BorderWidth = 0;
+            chart.Titles.Add(new Title(campaingMetric.Metric.MetricName, Docking.Top, Font, Color));
+            chart.Titles.Add(new Title("Días", Docking.Bottom));
+            chart.Titles.Add(new Title("Valor", Docking.Left));
+            
+            var chartArea = chart.ChartAreas.Add("Waves");
+            var legend = chart.Legends.Add("Legend");
 
-            //Bind the model data to the chart
-            var series1 = chart.Series.Add("Sin");
-            var series2 = chart.Series.Add("Cos");
+            chartArea.BorderDashStyle = ChartDashStyle.NotSet;
+            
+            var series1 = chart.Series.Add("Nivel Óptimo");
+            var series2 = chart.Series.Add("Nivel Objectivo");
+            var series3 = chart.Series.Add("Nivel Mínimo");
+            var series4 = chart.Series.Add("Valor Métrica");
 
-            series1.ToolTip = "Seno";
+            series1.ToolTip = "Nivel Optimo";
             series1.ChartType = SeriesChartType.Line;
-            series2.ToolTip = "Coseno";
+            series1.BorderWidth = 2;
+            series2.ToolTip = "Nivel Objectivo";
             series2.ChartType = SeriesChartType.Line;
+            series2.BorderWidth = 2;
+            series3.ToolTip = "Nivel Mínimo";
+            series3.ChartType = SeriesChartType.Line;
+            series3.BorderWidth = 2;
+            series4.ToolTip = "Valor Métrica";
+            series4.ChartType = SeriesChartType.Line;
+            series4.BorderWidth = 2;
 
-            foreach (int value in values)
+            foreach (var date in dates)
             {
-                series1.Points.AddY((float)Math.Sin(value * .5) * 100f);
-            }
-
-            foreach (int value in values)
-            {
-                series2.Points.AddY((float)Math.Cos(value * .5) * 100f);
+                series1.Points.AddY(campaingMetric.OptimalLevel);
+                series2.Points.AddY(campaingMetric.ObjectiveLevel);
+                series3.Points.AddY(campaingMetric.MinimumLevel);
+                series4.Points.AddY(this.metricsRepository.GetUserMetricValue(innerUserId, date, metricId, campaingId));
             }
 
             // Stream the image to the browser
-            MemoryStream stream = new MemoryStream();
+            var stream = new MemoryStream();
             chart.SaveImage(stream, ChartImageFormat.Png);
             stream.Seek(0, SeekOrigin.Begin);
 
             return this.File(stream.ToArray(), "image/png");
         }
-
 
         //
         // GET: /Agent/Create
@@ -249,10 +266,10 @@
             }
         }
 
-        private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int innerUserId ,int campaingId, DateTime date)
+        private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int innerUserId, int campaingId, DateTime date)
         {
             var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId);
-            var end = this.GetEndDate(campaingId);
+            var end = this.GetEndDate(campaingId, date.Year, date.Month);
 
             return campaingMetrics
                             .Select(cml => new MetricValuesViewModel
@@ -270,27 +287,26 @@
                             .ToList();
         }
 
-        private DateTime GetEndDate(int campaingId)
+        private DateTime GetEndDate(int campaingId, int year, int month)
         {
-            var today = DateTime.Now;
             var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
 
-            if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Year == today.Year) && (campaing.EndDate.Value.Month == today.Month))
+            if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Year == year) && (campaing.EndDate.Value.Month == month))
             {
                 return campaing.EndDate.Value;
             }
-            
-            if ((today.Month == 1) || (today.Month == 3) || (today.Month == 5) || (today.Month == 7) || (today.Month == 8) || (today.Month == 10) || (today.Month == 12))
+
+            if ((month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12))
             {
-                return today.AddDays(31 - today.Day);
+                return new DateTime(year, month, 31);
             }
 
-            if (today.Month == 2)
+            if (month == 2)
             {
-                return today.AddDays(28 - today.Day);
+                return DateTime.IsLeapYear(month) ? new DateTime(year, month, 29) : new DateTime(year, month, 28);
             }
 
-            return today.AddDays(30 - today.Day);
+            return new DateTime(year, month, 30);
         }
 
         private SalaryViewModel CalculateSalary(int innerUserId, int campaingId, IList<MetricValuesViewModel> metricValues)
