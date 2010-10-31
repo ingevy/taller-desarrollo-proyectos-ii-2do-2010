@@ -1,13 +1,21 @@
-function refreshMetricValues() {
+﻿function refreshMetricValues() {
     var index = $("#CurrentCampaingId")[0].selectedIndex;
     var campaingId = $("#CurrentCampaingId").children()[index].value;
     var metricValues = $("#metricvaluescontainer");
+    var metricCharts = $("#metricchartscontainer");
+    var metricMonths = $("#CurrentMetricMonthIndex");
     var innerUserId = $("#AgentId")[0].value;
 
     var labels = $("#secondPanel .content label");
 
     metricValues[0].innerHTML = " ";
     metricValues.addClass("loading");
+
+    metricCharts[0].innerHTML = " ";
+    metricCharts.addClass("loading");
+
+    metricMonths[0].innerHTML = " ";
+    metricMonths.addClass("loading");
 
     labels.addClass("loadingLabel");
 
@@ -24,6 +32,7 @@ function refreshMetricValues() {
             var optimalHourlyElement = $("#OptimalHourlyValue")[0];
             var objectiveHourlyElement = $("#ObjectiveHourlyValue")[0];
             var minimumHourlyElement = $("#MinimumHourlyValue")[0];
+            var metricMonths = $("#CurrentMetricMonthIndex");
 
             if (json.Status && json.Status == "error") {
                 metricValues[0].innerHTML = "<h3>Ups! Ocurrio un error...</h3>";
@@ -32,8 +41,8 @@ function refreshMetricValues() {
                 minimumHourlyElement.value = "Ups! Ocurrio un error...";
             }
             else {
-                if (json.CampaingMetricValues.length == 0) {
-                    metricValues[0].innerHTML = "<h3>No metricas disponibles para la Campa�a elegida...</h3>";
+                if ((json.CampaingMetricValues == null) || (json.CampaingMetricValues.length == 0)) {
+                    metricValues[0].innerHTML = "<h3>No hay metricas disponibles para la Campaña elegida...</h3>";
                 }
                 else {
                     var html = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"metricvalues\">";
@@ -87,12 +96,68 @@ function refreshMetricValues() {
                 else {
                     minimumHourlyElement.value = json.MinimumHourlyValue;
                 }
+
+                if ((json.AvailableMetricMonths == null) || (json.AvailableMetricMonths.length == 0) || (json.CurrentMetricMonthIndex == null)) {
+                    metricMonths[0].innerHTML = "<option selected=\"selected\" value=\"0\">No hay meses disponibles</option>";
+                }
+                else {
+                    var html = "";
+
+                    for (var i = 0; i < json.AvailableMetricMonths.length; i++) {
+                        html += "<option value=\"" + i.toString() + "\" ";
+                        if (i == json.CurrentMetricMonthIndex) {
+                            html += "selected=\"selected\"";
+                        }
+                        
+                        html += ">" + json.AvailableMetricMonths[i] + "</option>";
+                    }
+
+                    metricMonths[0].innerHTML = html;
+                }
+
+                if ((json.CampaingMetricValues == null) || (json.CampaingMetricValues.length == 0) || (json.AvailableMetricMonths == null) || (json.AvailableMetricMonths.length == 0) || (json.CurrentMetricMonthIndex == null)) {
+                    metricCharts[0].innerHTML = "<h3>No hay graficos disponibles para las metricas de la Campaña elegida...</h3>";
+                }
+                else {
+                    var html = "";
+                    var currentMonth = json.AvailableMetricMonths[json.CurrentMetricMonthIndex];
+
+                    for (var i = 0; i < json.CampaingMetricValues.length; i++) {
+                        var campaingMetricValue = json.CampaingMetricValues[i];
+
+                        html += "<img width=\"952\" height=\"350\" alt=\"" + campaingMetricValue.MetricName + "\" src=\"/Agent/MetricsChart?campaingId=" + campaingMetricValue.CampaingId + "&metricId=" + campaingMetricValue.MetricId + "&month=" + currentMonth + "\">";
+                    }
+
+                    metricCharts[0].innerHTML = html;
+                }
             }
 
             metricValues.removeClass("loading");
+            metricCharts.removeClass("loading");
+            metricMonths.removeClass("loading");
             labels.removeClass("loadingLabel");
         }
     });
+}
+
+function refreshMetricCharts() {
+    var index = $("#CurrentMetricMonthIndex")[0].selectedIndex;
+    var month = $("#CurrentMetricMonthIndex").children()[index].text;
+    var images = $("#metricchartscontainer img");
+
+    images.addClass("loading");
+
+    for (var i = 0; i < images.length; i++) {
+        var originalUrl = images[i].src.toString();
+        var index = originalUrl.length - 7;
+
+        var newUrl = originalUrl.substring(0, index);
+        newUrl += month;
+
+        images[i].src = newUrl;
+    }
+
+    images.removeClass("loading");
 }
 
 function refreshSalary() {

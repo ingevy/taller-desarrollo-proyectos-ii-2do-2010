@@ -11,6 +11,8 @@
 
         IList<Supervisor> RetrieveAvailableSupervisors(DateTime beginDate, DateTime? endDate = null);
 
+        IList<string> RetrieveAvailableMonthsByCampaing(int campaingId);
+
         Campaing RetrieveUserCurrentCampaing(int innerUserId);
         
         Campaing RetrieveCampaingById(int campaingId);

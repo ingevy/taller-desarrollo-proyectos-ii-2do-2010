@@ -27,10 +27,10 @@
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.CurrentSalaryMonthIndex)%>
                     <% 
-                        var id = 0;
-                        var availableMonths = this.Model.AvailableSalaryMonths.Select(am => new SelectListItem { Text = am, Value = (id++).ToString() });
+                        var salaryMonthIndex = 0;
+                        var availableSalaryMonths = this.Model.AvailableSalaryMonths.Select(am => new SelectListItem { Text = am, Value = (salaryMonthIndex++).ToString() });
                     %>
-                    <%: Html.DropDownListFor(model => model.CurrentSalaryMonthIndex, availableMonths, new { Class = "uservalue", onchange = "refreshSalary()" })%>
+                    <%: Html.DropDownListFor(model => model.CurrentSalaryMonthIndex, availableSalaryMonths, new { Class = "uservalue", onchange = "refreshSalary()" })%>
                 </div>
                 <div style="clear: both; height: 1px"></div>
                 <div style="float: right;">
@@ -106,6 +106,7 @@
                     <%: Html.TextBoxFor(model => model.MinimumHourlyValue, new { Class = "uservalue", disabled = "true" }) %>
                  </div>
                  <div style="clear: both; height: 5px"></div>
+                 <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
                  <h3>Resumen Métricas</h3>
                  <div id="metricvaluescontainer" style="padding: 0px; margin: 0px;" >
                     <table cellpadding="0" cellspacing="0" id="metricvalues">
@@ -138,10 +139,25 @@
                         </tbody>
                     </table>
                  </div>
-                 <h3>Gráficos</h3>
-                 <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
-                 <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
-                 <img src="<%= this.Url.Action("MetricsChart", "Agent") %>" alt="Metricas" width="952" height="350" />
+                 <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />                 
+                 <h3>
+                    <span>Gráficos</span>
+                    <% 
+                        var metricMonthIndex = 0;
+                        var availableMetricMonths = this.Model.AvailableMetricMonths.Select(am => new SelectListItem { Text = am, Value = (metricMonthIndex++).ToString() });
+                    %>
+                    <%: Html.DropDownListFor(model => model.CurrentMetricMonthIndex, availableMetricMonths, new { Class = "uservalue", onchange = "refreshMetricCharts()", style = "float:right; margin-right:15px;" })%>
+                 </h3>
+                 <div id="metricchartscontainer" style="padding: 0px; margin: 0px;">
+                    <%
+                        foreach (var metricValues in this.Model.CurrentCampaingMetricValues)
+                        {
+                    %>
+                        <img src="<%= this.Url.Action("MetricsChart", "Agent", new { campaingId = metricValues.CampaingId, metricId = metricValues.MetricId, month = this.Model.AvailableMetricMonths[this.Model.CurrentMetricMonthIndex] }) %>" alt="<%= metricValues.MetricName %>" width="952" height="350" />
+                    <%
+                        }
+                    %>
+                </div>
             </div>
         </div>
     </div>

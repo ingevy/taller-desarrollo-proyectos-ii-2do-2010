@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Globalization;
 
     public class CampaingRepository : ICampaingRepository
     {
@@ -81,6 +82,18 @@
 
                 return query.ToList();
             }
+        }
+
+        public IList<string> RetrieveAvailableMonthsByCampaing(int campaingId)
+        {
+            var campaing = this.RetrieveCampaingById(campaingId);
+
+            if (campaing != null)
+            {
+                return GetMonthsList(campaing.BeginDate, campaing.EndDate.HasValue ? campaing.EndDate.Value : DateTime.Now);
+            }
+
+            throw new ArgumentException("campaingId");
         }
 
         public Campaing RetrieveCampaingById(int campaingId)
@@ -261,6 +274,19 @@
 
                 ctx.SaveChanges();
             }
+        }
+
+        private static IList<string> GetMonthsList(DateTime from, DateTime to)
+        {
+            var months = new List<string>();
+
+            while ((from.Date <= to.Date) || ((from.Date.Year <= to.Date.Year) && (from.Date.Month <= to.Date.Month)))
+            {
+                months.Add(string.Format(CultureInfo.InvariantCulture, "{0}-{1}", from.Year, from.Month.ToString("D2", CultureInfo.InvariantCulture)));
+                from = from.AddMonths(1);
+            }
+
+            return months;
         }
     }
 }
