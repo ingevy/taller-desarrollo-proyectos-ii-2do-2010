@@ -47,7 +47,7 @@
             var model = new AgentDetailsViewModel
             {
                 AgentId = agent.InnerUserId,
-                AvailableMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
+                AvailableSalaryMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
                 CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
                 CurrentCampaingId = currentCampaing != null ? currentCampaing.Id : 0,

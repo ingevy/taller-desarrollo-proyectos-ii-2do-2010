@@ -16,9 +16,9 @@
         public int CurrentCampaingId { get; set; }
 
         [DisplayName("Mes")]
-        public int CurrentMonth
+        public int CurrentSalaryMonthIndex
         {
-            get { return this.AvailableMonths.Count - 1; }
+            get { return this.AvailableSalaryMonths.Count - 1; }
         }
 
         public SalaryViewModel Salary { get; set; }
@@ -34,7 +34,7 @@
 
         public IList<MetricValuesViewModel> CurrentCampaingMetricValues { get; set; }
 
-        public IList<string> AvailableMonths { get; set; }
+        public IList<string> AvailableSalaryMonths { get; set; }
 
         public IList<UserCampaingInfo> AgentCampaings { get; set; }
     }
