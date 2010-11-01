@@ -9,10 +9,8 @@
         public double CalculateAcumulatedMetricValue(IList<UserMetric> userMetrics, DateTime date)
         {
             var metricValue = 0.0;
-
-            var maxDateWithData = (from u in userMetrics
-                                   select u.Date).ToList().Max();
-
+            var dates = from u in userMetrics select u.Date;
+            var maxDateWithData = (dates.Count() != 0) ? dates.Max() : date;
             var acumulativeMetrics = (from u in userMetrics
                                       where u.Date <= date
                                       select u).ToList();
@@ -53,10 +51,8 @@
         public double CalculateAverageMetricValue(IList<UserMetric> userMetrics, DateTime date)
         {
             var metricValue = 0.0;
-
-            var maxDateWithData = (from u in userMetrics
-                                   select u.Date).ToList().Max();
-
+            var dates = from u in userMetrics select u.Date;
+            var maxDateWithData = (dates.Count() != 0) ? dates.Max() : date;
             var acumulativeMetrics = (from u in userMetrics
                                       where u.Date <= date
                                       select u).ToList();
