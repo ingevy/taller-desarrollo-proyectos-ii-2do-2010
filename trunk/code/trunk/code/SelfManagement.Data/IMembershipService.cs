@@ -32,6 +32,8 @@
 
         Supervisor RetrieveSupervisor(int innerUserId);
 
+        MonthlySchedule RetrieveMonthlySchedule(int innerUserId, DateTime date);
+
         int RetrieveInnerUserIdByUserName(string userName);
     }
 

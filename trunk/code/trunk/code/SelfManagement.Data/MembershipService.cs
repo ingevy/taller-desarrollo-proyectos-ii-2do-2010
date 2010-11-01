@@ -252,6 +252,15 @@
             }
         }
 
+        public MonthlySchedule RetrieveMonthlySchedule(int innerUserId, DateTime date)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.MonthlySchedules
+                    .FirstOrDefault(ms => (ms.InnerUserId == innerUserId) && (ms.Year == date.Year) && (ms.Month == date.Month));               
+            }
+        }
+
         public int RetrieveInnerUserIdByUserName(string userName)
         {
             using (var ctx = new SelfManagementEntities())

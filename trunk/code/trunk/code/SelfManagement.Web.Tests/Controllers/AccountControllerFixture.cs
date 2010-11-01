@@ -451,6 +451,11 @@
             {
                 throw new System.NotImplementedException();
             }
+
+            public MonthlySchedule RetrieveMonthlySchedule(int innerUserId, System.DateTime date)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

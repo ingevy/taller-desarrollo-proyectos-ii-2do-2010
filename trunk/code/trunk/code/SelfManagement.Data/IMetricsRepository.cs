@@ -15,7 +15,7 @@
 
         MonthlySchedule RetrieveAgentMonthlySchedule(int innerUserId, short year, byte month);
 
-        Boolean isHolidayDate(DateTime date);
+        bool IsHolidayDate(DateTime date);
 
         void SaveOrUpdateMonthlySchedule(MonthlySchedule schedule);
 

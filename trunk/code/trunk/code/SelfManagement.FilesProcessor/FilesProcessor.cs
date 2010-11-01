@@ -304,7 +304,7 @@
 
                                         if ((entranceDate.DayOfWeek.Equals(DayOfWeek.Saturday)) ||
                                              (entranceDate.DayOfWeek.Equals(DayOfWeek.Sunday)) ||
-                                             (this.metricsRepository.isHolidayDate(entranceDate)))
+                                             (this.metricsRepository.IsHolidayDate(entranceDate)))
                                         {
                                             agentSchedule.ExtraHoursWorked100 += Convert.ToInt32(Math.Round(extraHours));
                                         }

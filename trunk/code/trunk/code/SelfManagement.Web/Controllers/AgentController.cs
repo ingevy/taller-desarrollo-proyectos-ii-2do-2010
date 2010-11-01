@@ -64,8 +64,9 @@
                 MinimumHourlyValue = currentCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
             };
 
-            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, DateTime.Now);
-            model.Salary = this.CalculateSalary(agent.InnerUserId, model.CurrentCampaingId, model.CurrentCampaingMetricValues);
+            var today = DateTime.Now;
+            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, today);
+            model.Salary = this.CalculateSalary(agent.InnerUserId, today);
 
             return this.View(model);
         }
@@ -74,20 +75,9 @@
         public ActionResult Salary(int innerUserId, string month)
         {
             var date = DateTime.ParseExact(month, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
-            var campaing = this.campaingRepository.RetrieveCampaingsByUserIdAndDate(innerUserId, date).FirstOrDefault();
+            var model = this.CalculateSalary(innerUserId, date);
 
-            if (campaing != null)
-            {
-                var campaingMetricValues = this.CalculateCampaingMetricValues(innerUserId, campaing.Id, date);
-                var model = this.CalculateSalary(innerUserId, campaing.Id, campaingMetricValues);
-
-                return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = model } };
-            }
-
-            var grossSalary = this.membershipService.RetrieveAgent(innerUserId).GrossSalary;
-            var emptyModel = new SalaryViewModel { GrossSalary = "$" + grossSalary, VariableSalary = "$0", TotalSalary = "$" + grossSalary };
-
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = emptyModel } };           
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = model } };
         }
 
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
@@ -297,6 +287,21 @@
             }
         }
 
+        private static DateTime GetEndDate(int year, int month)
+        {
+            if ((month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12))
+            {
+                return new DateTime(year, month, 31);
+            }
+
+            if (month == 2)
+            {
+                return DateTime.IsLeapYear(month) ? new DateTime(year, month, 29) : new DateTime(year, month, 28);
+            }
+
+            return new DateTime(year, month, 30);
+        }
+
         private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int innerUserId, int campaingId, DateTime date)
         {
             var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId);
@@ -339,77 +344,104 @@
                 return campaing.EndDate.Value;
             }
 
-            if ((month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12))
-            {
-                return new DateTime(year, month, 31);
-            }
-
-            if (month == 2)
-            {
-                return DateTime.IsLeapYear(month) ? new DateTime(year, month, 29) : new DateTime(year, month, 28);
-            }
-
-            return new DateTime(year, month, 30);
+            return GetEndDate(year, month);
         }
 
-        private SalaryViewModel CalculateSalary(int innerUserId, int campaingId, IList<MetricValuesViewModel> metricValues)
+        private SalaryViewModel CalculateSalary(int innerUserId, DateTime date)
         {
             var agent = this.membershipService.RetrieveAgent(innerUserId);
-            var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
-            var hours = agent.Workday.Equals("PTE", StringComparison.OrdinalIgnoreCase) ? 120 : 160;
+            var campaings = this.campaingRepository.RetrieveCampaingsByUserIdAndDate(innerUserId, date);
+            var schedule = this.membershipService.RetrieveMonthlySchedule(innerUserId, date);
+            var endDateMonth = GetEndDate(date.Year, date.Month);
+
+            int currentTotalHoursWorked = 0;
+            int currentExtraHours50Worked = 0;
+            int currentExtraHours100Worked = 0;
+
+            decimal projectedVariableSalary = 0;
+            decimal projectedExtra50Salary = 0;
+            decimal projectedExtra100Salary = 0;
+            decimal projectedTotalSalary = 0;
+
+            int projectedTotalHoursWorked = 0;
+            int projectedExtraHours50Worked = 0;
+            int projectedExtraHours100Worked = 0;
+
+            decimal gross = 0;
+
+            if (schedule != null)
+            {
+                gross = schedule.GrossSalary;
+                var workday = agent.Workday.Equals("PTE", StringComparison.OrdinalIgnoreCase) ? 120M : 160M;
+                var hourlyValue = gross / workday;
+
+                currentTotalHoursWorked = schedule.TotalHoursWorked;
+                currentExtraHours50Worked = schedule.ExtraHoursWorked50;
+                currentExtraHours100Worked = schedule.ExtraHoursWorked100;
+
+                projectedTotalHoursWorked = (currentTotalHoursWorked * endDateMonth.Day) / date.Day;
+                projectedExtraHours50Worked = (currentExtraHours50Worked * endDateMonth.Day) / date.Day;
+                projectedExtraHours100Worked = (currentExtraHours100Worked * endDateMonth.Day) / date.Day;
+
+                projectedExtra50Salary = projectedExtraHours50Worked * hourlyValue * 1.5M;
+                projectedExtra100Salary = projectedExtraHours100Worked * hourlyValue * 2M;
+            }
+            else
+            {
+                gross = decimal.Parse(agent.GrossSalary, NumberStyles.Any, CultureInfo.InvariantCulture);
+                projectedTotalHoursWorked = agent.Workday.Equals("PTE", StringComparison.OrdinalIgnoreCase) ? 120 : 160;
+                currentTotalHoursWorked = projectedTotalHoursWorked;
+            }
+
             var salaryViewModel = new SalaryViewModel();
 
-            var optimalCount = 0;
-            var objectiveCount = 0;
-            var minimumCount = 0;
-
-            foreach (var metricValue in metricValues)
+            foreach (var campaing in campaings)
             {
-                var optimal = double.Parse(metricValue.OptimalValue, NumberStyles.Any, CultureInfo.InvariantCulture);
-                var objective = double.Parse(metricValue.ObjectiveValue, NumberStyles.Any, CultureInfo.InvariantCulture);
-                var minimum = double.Parse(metricValue.MinimumValue, NumberStyles.Any, CultureInfo.InvariantCulture);
-                var projected = double.Parse(metricValue.ProjectedValue, NumberStyles.Any, CultureInfo.InvariantCulture);
+                var end = this.GetEndDate(campaing.Id, date.Year, date.Month);
+                var campaingMetrics = this.campaingRepository
+                                            .RetrieveCampaingMetricLevels(campaing.Id)
+                                            .Select(cml => new
+                                                {
+                                                    OptimalValue = cml.OptimalLevel,
+                                                    ObjectiveValue = cml.ObjectiveLevel,
+                                                    MinimumValue = cml.MinimumLevel,
+                                                    CurrentValue = this.metricsRepository.GetUserMetricValue(innerUserId, date, cml.MetricId, campaing.Id),
+                                                    ProjectedValue = this.metricsRepository.GetUserMetricValue(innerUserId, end, cml.MetricId, campaing.Id)
+                                                });
+                var optimalCount = 0;
+                var objectiveCount = 0;
+                var minimumCount = 0;
+                var hours = projectedTotalHoursWorked;
 
-                if (optimal <= projected) { optimalCount++; }
-                if (objective <= projected) { objectiveCount++; }
-                if (minimum <= projected) { minimumCount++; }
+                if (endDateMonth.Date != end.Date)
+                {
+                    hours = (campaing.EndDate.Value.Day * projectedTotalHoursWorked) / endDateMonth.Day;
+                }
+                
+                foreach (var metricValue in campaingMetrics)
+                {
+                    if (metricValue.OptimalValue <= metricValue.ProjectedValue) { optimalCount++; }
+                    if (metricValue.ObjectiveValue <= metricValue.ProjectedValue) { objectiveCount++; }
+                    if (metricValue.MinimumValue <= metricValue.ProjectedValue) { minimumCount++; }
+                }
+
+                if (optimalCount == campaingMetrics.Count()) { projectedVariableSalary += campaing.OptimalHourlyValue * hours; }
+                if (objectiveCount == campaingMetrics.Count()) { projectedVariableSalary += campaing.ObjectiveHourlyValue * hours; }
+                if (minimumCount == campaingMetrics.Count()) { projectedVariableSalary += campaing.MinimumHourlyValue * hours; }
             }
-
-            var gross = double.Parse(agent.GrossSalary, NumberStyles.Any, CultureInfo.InvariantCulture);
+            
+            projectedTotalSalary = gross + projectedVariableSalary + projectedExtra50Salary + projectedExtra100Salary;
+            
             salaryViewModel.GrossSalary = gross.ToString("C", CultureInfo.CurrentUICulture);
-
-            if (optimalCount == metricValues.Count)
-            {
-                var variable = campaing.OptimalHourlyValue * hours;
-
-                salaryViewModel.VariableSalary = variable.ToString("C", CultureInfo.CurrentUICulture);
-                salaryViewModel.TotalSalary = (gross + Convert.ToDouble(variable)).ToString("C", CultureInfo.CurrentUICulture);
-
-                return salaryViewModel;
-            }
-
-            if (objectiveCount == metricValues.Count)
-            {
-                var variable = campaing.ObjectiveHourlyValue * hours;
-
-                salaryViewModel.VariableSalary = variable.ToString("C", CultureInfo.CurrentUICulture);
-                salaryViewModel.TotalSalary = (gross + Convert.ToDouble(variable)).ToString("C", CultureInfo.CurrentUICulture);
-
-                return salaryViewModel;
-            }
-
-            if (minimumCount == metricValues.Count)
-            {
-                var variable = campaing.MinimumHourlyValue * hours;
-
-                salaryViewModel.VariableSalary = variable.ToString("C", CultureInfo.CurrentUICulture);
-                salaryViewModel.TotalSalary = (gross + Convert.ToDouble(variable)).ToString("C", CultureInfo.CurrentUICulture);
-
-                return salaryViewModel;
-            }
-
-            salaryViewModel.VariableSalary = "0";
-            salaryViewModel.TotalSalary = salaryViewModel.GrossSalary;
+            salaryViewModel.VariableSalary = projectedVariableSalary.ToString("C", CultureInfo.CurrentUICulture);
+            salaryViewModel.Extra50Salary = projectedExtra50Salary.ToString("C", CultureInfo.CurrentUICulture);
+            salaryViewModel.Extra100Salary = projectedExtra100Salary.ToString("C", CultureInfo.CurrentUICulture);
+            salaryViewModel.TotalSalary = projectedTotalSalary.ToString("C", CultureInfo.CurrentUICulture);
+            salaryViewModel.TotalHoursWorked = projectedTotalHoursWorked;
+            salaryViewModel.CurrentExtraHours50Worked = currentExtraHours50Worked;
+            salaryViewModel.CurrentExtraHours100Worked = currentExtraHours100Worked;
+            salaryViewModel.ExtraHours50Worked = projectedExtraHours50Worked;
+            salaryViewModel.ExtraHours100Worked = projectedExtraHours100Worked;
 
             return salaryViewModel;
         }
