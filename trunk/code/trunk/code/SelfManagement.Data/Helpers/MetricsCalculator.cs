@@ -13,11 +13,15 @@
             var maxDateWithData = (from u in userMetrics
                                    select u.Date).ToList().Max();
 
+            var acumulativeMetrics = (from u in userMetrics
+                                      where u.Date <= date
+                                      select u).ToList();
+
             if (date <= maxDateWithData)
             {
-                if (userMetrics.Count > 0)
+                if (acumulativeMetrics.Count > 0)
                 {
-                    foreach (var um in userMetrics)
+                    foreach (var um in acumulativeMetrics)
                     {
                         metricValue += um.Value;
                     }
@@ -25,13 +29,13 @@
             }
             else
             {
-                if (userMetrics.Count > 0)
+                if (acumulativeMetrics.Count > 0)
                 {
                     var solvr = new LeastSquareQuadraticRegression();
                     solvr.AddPoints(Convert.ToDouble(0), Convert.ToDouble(0));
                     var maxY = 0.0;
 
-                    foreach (var um in userMetrics)
+                    foreach (var um in acumulativeMetrics)
                     {
                         metricValue += um.Value;
                         maxY = (um.Value > maxY) ? um.Value : maxY;
@@ -53,26 +57,30 @@
             var maxDateWithData = (from u in userMetrics
                                    select u.Date).ToList().Max();
 
+            var acumulativeMetrics = (from u in userMetrics
+                                      where u.Date <= date
+                                      select u).ToList();
+
             if (date <= maxDateWithData)
             {
-                if (userMetrics.Count > 0)
+                if (acumulativeMetrics.Count > 0)
                 {
-                    foreach (var um in userMetrics)
+                    foreach (var um in acumulativeMetrics)
                     {
                         metricValue += um.Value;
                     }
 
-                    metricValue = metricValue / Convert.ToDouble(userMetrics.Count);
+                    metricValue = metricValue / Convert.ToDouble(acumulativeMetrics.Count);
                 }
             }
             else
             {
-                if (userMetrics.Count > 0)
+                if (acumulativeMetrics.Count > 0)
                 {
                     var solvr = new LeastSquareQuadraticRegression();
                     solvr.AddPoints(Convert.ToDouble(0), Convert.ToDouble(0));
 
-                    foreach (var um in userMetrics)
+                    foreach (var um in acumulativeMetrics)
                     {
                         metricValue += um.Value;
                         solvr.AddPoints(Convert.ToDouble(um.Date.Day), um.Value);
@@ -83,7 +91,7 @@
                         metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
                     }
 
-                    metricValue = metricValue / (Convert.ToDouble(userMetrics.Count) + Convert.ToDouble(date.Day - maxDateWithData.Day));
+                    metricValue = metricValue / (Convert.ToDouble(acumulativeMetrics.Count) + Convert.ToDouble(date.Day - maxDateWithData.Day));
                 }
             }
 

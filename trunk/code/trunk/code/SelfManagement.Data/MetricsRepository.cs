@@ -104,10 +104,11 @@
                 var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
 
                 var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lastDayOfMonth = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
                 var lowLimitDate = (campaing.BeginDate < firstDayOfMonth) ? firstDayOfMonth : campaing.BeginDate;
 
                 var userMetrics = (from m in ctx.UserMetrics
-                                   where m.InnerUserId == innerUserId && m.Date >= lowLimitDate && m.Date <= date
+                                   where m.InnerUserId == innerUserId && m.Date >= lowLimitDate && m.Date <= lastDayOfMonth
                                          && m.MetricId == metricId && m.CampaingId == campaing.Id
                                    select m).ToList();
                 
