@@ -61,7 +61,7 @@
             }
         }
 
-        public Boolean isHolidayDate(DateTime date)
+        public bool IsHolidayDate(DateTime date)
         {
             using (var ctx = new SelfManagementEntities())
             {
