@@ -75,6 +75,14 @@
         public ActionResult Salary(int innerUserId, string month)
         {
             var date = DateTime.ParseExact(month, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+            if ((date.Year != DateTime.Now.Year) || ((date.Year == DateTime.Now.Year) && (date.Month != DateTime.Now.Month)))
+            {
+                date = GetEndDate(date.Year, date.Month);
+            }
+            else
+            {
+                date = DateTime.Now;
+            }
             var model = this.CalculateSalary(innerUserId, date);
 
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = model } };
