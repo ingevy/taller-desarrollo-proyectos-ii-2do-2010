@@ -44,21 +44,34 @@
                 return this.View("IndexToDo");
             }
 
+            DateTime metricsDate;
+            IList<string> availableMetricMonths;            
             var agent = this.membershipService.RetrieveAgent(this.User.Identity.Name);
             var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
             var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
-            var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);                                        
+            var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
 
             if (userCampaing == null)
             {
                 userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
+                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+
+                var date = availableMetricMonths.LastOrDefault();
+
+                metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+                metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+            }
+            else
+            {
+                metricsDate = DateTime.Now;
+                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
             }
 
             var model = new AgentDetailsViewModel
             {
                 AgentId = agent.InnerUserId,
                 AvailableSalaryMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
-                AvailableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id),
+                AvailableMetricMonths = availableMetricMonths,
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
                 CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
                 CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
@@ -68,9 +81,8 @@
                 MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
             };
 
-            var today = DateTime.Now;
-            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, today);
-            model.Salary = this.CalculateSalary(agent.InnerUserId, today);
+            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, metricsDate);
+            model.Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now);
 
             return this.View(model);
         }
@@ -300,18 +312,8 @@
         }
 
         private static DateTime GetEndDate(int year, int month)
-        {
-            if ((month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12))
-            {
-                return new DateTime(year, month, 31);
-            }
-
-            if (month == 2)
-            {
-                return DateTime.IsLeapYear(month) ? new DateTime(year, month, 29) : new DateTime(year, month, 28);
-            }
-
-            return new DateTime(year, month, 30);
+        {            
+            return new DateTime(year, month, DateTime.DaysInMonth(year, month)).Date;
         }
 
         private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int innerUserId, int campaingId, DateTime date)
