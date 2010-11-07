@@ -24,6 +24,6 @@
 
         public string ObjectiveHourlyValue { get; set; }
 
-        public string MinimumHourlyValue { get; set; } 
+        public string MinimumHourlyValue { get; set; }
     }
 }

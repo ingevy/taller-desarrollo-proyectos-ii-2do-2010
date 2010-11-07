@@ -46,22 +46,26 @@
 
             var agent = this.membershipService.RetrieveAgent(this.User.Identity.Name);
             var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
-            var currentCampaing = this.campaingRepository.RetrieveUserCurrentCampaing(agent.InnerUserId);
+            var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
+            var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);                                        
+
+            if (userCampaing == null)
+            {
+                userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
+            }
+
             var model = new AgentDetailsViewModel
             {
                 AgentId = agent.InnerUserId,
                 AvailableSalaryMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
-                AvailableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(currentCampaing.Id),
+                AvailableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id),
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
                 CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
-                CurrentCampaingId = currentCampaing != null ? currentCampaing.Id : 0,
-                AgentCampaings = this.campaingRepository
-                                        .RetrieveCampaingsByUserId(agent.InnerUserId)
-                                        .Select(c => c.ToUserCampaingInfo())
-                                        .ToList(),
-                OptimalHourlyValue = currentCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                ObjectiveHourlyValue = currentCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                MinimumHourlyValue = currentCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
+                CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
+                AgentCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
+                OptimalHourlyValue = userCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                ObjectiveHourlyValue = userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
             };
 
             var today = DateTime.Now;
