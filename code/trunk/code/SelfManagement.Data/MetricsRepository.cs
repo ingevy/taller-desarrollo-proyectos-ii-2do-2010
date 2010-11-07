@@ -41,6 +41,17 @@
             }
         }
 
+        public int RetrieveUserCampaingId(int innerUserId, DateTime date)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Campaings
+                        .Where(c => ctx.CampaingUsers.Any(cu => (cu.CampaingId == c.Id) && (cu.InnerUserId == innerUserId)
+                                                          && (cu.BeginDate <= date) && (cu.EndDate >= date)))
+                        .FirstOrDefault().Id;
+            }
+        }
+
         public int RetrieveAgentSupervisorId(int innerUserId)
         {
             using (var ctx = new SelfManagementEntities())
@@ -213,6 +224,66 @@
             }
 
             return file.Id;
+        }
+
+        public void ChangeAgentSupervisor(int agentId, int newSupervisorId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var supervisorAsignment = (from sa in ctx.SupervisorAgents
+                                           where sa.AgentId == agentId
+                                           select sa).ToList().FirstOrDefault();
+
+                supervisorAsignment.SupervisorId = newSupervisorId;
+
+                ctx.SaveChanges();
+            }
+        }
+
+        public void ChangeAgentSupervisorAndCampaing(int agentId, int newSupervisorId, int newCampaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var actualAgentCampaing = ctx.Campaings
+                                          .Where(c => ctx.CampaingUsers.Any(cu => (cu.CampaingId == c.Id) && (cu.InnerUserId == agentId)
+                                                          && (cu.BeginDate <= DateTime.Now) && (cu.EndDate >= DateTime.Now)))
+                                          .FirstOrDefault();
+
+                var newCampaing = ctx.Campaings
+                                  .Where(c => c.Id == newCampaingId)
+                                  .FirstOrDefault();
+
+                var beginDate = (newCampaing.BeginDate > DateTime.Now) ? newCampaing.BeginDate : DateTime.Now;
+                var endDate = newCampaing.EndDate.GetValueOrDefault(DateTime.Now);
+
+                if (actualAgentCampaing == null)
+                {
+                    var campaingUser = new CampaingUser { CampaingId = newCampaing.Id, InnerUserId = agentId, BeginDate = beginDate, EndDate = endDate };
+
+                    ctx.CampaingUsers.AddObject(campaingUser);
+                }
+                else
+                {
+                    var oldCampaingUser = ctx.CampaingUsers
+                                          .Where(cu => (cu.CampaingId == actualAgentCampaing.Id) && (cu.InnerUserId == agentId) 
+                                                        && (cu.BeginDate <= DateTime.Now) && (cu.EndDate >= DateTime.Now))
+                                          .FirstOrDefault();
+
+                    oldCampaingUser.EndDate = DateTime.Now.AddDays(-1.0);
+
+                    var campaingUser = new CampaingUser { CampaingId = newCampaing.Id, InnerUserId = agentId, BeginDate = beginDate, EndDate = endDate };
+
+                    ctx.CampaingUsers.AddObject(campaingUser);
+                }
+
+                var supervisorAsignment = (from sa in ctx.SupervisorAgents
+                                           where sa.AgentId == agentId
+                                           select sa).ToList().FirstOrDefault();
+
+                supervisorAsignment.SupervisorId = newSupervisorId;
+
+                ctx.SaveChanges();
+            }
         }
     }
 }

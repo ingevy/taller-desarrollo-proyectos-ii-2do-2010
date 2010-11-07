@@ -11,6 +11,8 @@
 
         int RetrieveUserActualCampaingId(int innerUserId);
 
+        int RetrieveUserCampaingId(int innerUserId, DateTime date);
+
         int RetrieveAgentSupervisorId(int innerUserId);
 
         MonthlySchedule RetrieveAgentMonthlySchedule(int innerUserId, short year, byte month);
@@ -30,5 +32,9 @@
         void CreateOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value);
 
         int CreateProcessedFile(ProcessedFile file);
+
+        void ChangeAgentSupervisor(int agentId, int newSupervisorId);
+
+        void ChangeAgentSupervisorAndCampaing(int agentId, int newSupervisorId, int newCampaingId);
     }
 }
