@@ -28,7 +28,7 @@
             }
         }
 
-        public Campaing RetrieveUserCurrentCampaing(int innerUserId)
+        public Campaing RetrieveCurrentCampaingByUserId(int innerUserId)
         {
             var today = DateTime.Now;
 

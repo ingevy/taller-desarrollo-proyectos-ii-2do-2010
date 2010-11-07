@@ -13,7 +13,7 @@
 
         IList<string> RetrieveAvailableMonthsByCampaing(int campaingId);
 
-        Campaing RetrieveUserCurrentCampaing(int innerUserId);
+        Campaing RetrieveCurrentCampaingByUserId(int innerUserId);
         
         Campaing RetrieveCampaingById(int campaingId);
 
