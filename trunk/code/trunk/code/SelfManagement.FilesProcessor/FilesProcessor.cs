@@ -8,6 +8,8 @@
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Metric;
     using CallCenter.SelfManagement.Metric.Interfaces;
+    using System.Globalization;
+    using CallCenter.SelfManagement.FilesProcessor.Helpers;
 
     public class FilesProcessor
     {
@@ -84,9 +86,9 @@
 
             this.ProcessHumanForceFile(filesToProcess);
 
-            this.ProcessTTSFilesForExtraHours(filesToProcess);
+            //this.ProcessTTSFilesForExtraHours(filesToProcess);
 
-            this.ProcessMetrics(filesToProcess);
+            //this.ProcessMetrics(filesToProcess);
         }
 
         private void ProcessMetrics(IList<IDataFile> files)
@@ -129,9 +131,9 @@
                             Console.WriteLine("Grabando Metrica: " + metric.MetricName + " - Fecha: " + metricProcessor.MetricDate.ToString("dd/MM/yyyy"));
                             foreach (var legajo in metricValues.Keys)
                             {
-                                var agentCampaingId = this.metricsRepository.RetrieveUserActualCampaingId(legajo);
+                                var agentCampaingId = this.metricsRepository.RetrieveUserCampaingId(legajo, metricProcessor.MetricDate);
                                 var agentSupervisorId = this.metricsRepository.RetrieveAgentSupervisorId(legajo);
-                                var supervisorCampaingId = this.metricsRepository.RetrieveUserActualCampaingId(agentSupervisorId);
+                                var supervisorCampaingId = this.metricsRepository.RetrieveUserCampaingId(agentSupervisorId, metricProcessor.MetricDate);
                                 if (agentCampaingId != supervisorCampaingId)
                                 {
                                     throw new ApplicationException("Data Inconsistency");
@@ -174,58 +176,26 @@
                           where f.ExternalSystemFile == ExternalSystemFiles.HF
                           select f).ToList<IDataFile>();
 
-            if (hfFile.Count == 1)
+            if (hfFile.Count == 1) //El archivo HF es siempre uno solo, que se va actualizando
             {
-                var dataLines = filesToProcess[0].DataLines;
+                var dataLines = hfFile[0].DataLines;
 
                 foreach (var line in dataLines)
                 {
-                    var legajo = Convert.ToInt32(line["legajo"]);
-                    var dni = Convert.ToInt32(line["dni"]);
-                    var nombre = line["nombre"];
-                    var apellido = line["apellido"];
-                    var sueldo = Convert.ToDecimal(line["sueldo bruto"]);
-                    var jornada = line["Tipo Jornada"];
-                    var status = line[" Status"];
-                    var idSupervisor = Convert.ToInt32(line["idSupervisor"]);
-                    var strFecha = line[" fecha ingreso"].Split('/');
-                    var fechaIngreso = new DateTime(Convert.ToInt32(strFecha[2]), //Año
-                                                    Convert.ToInt32(strFecha[1]), //Mes
-                                                    Convert.ToInt32(strFecha[0])); //Dia
-                    var idCampaña = Convert.ToInt32(line[" idCampania"]);
+                    var hfAgent = new HfAgent(line);
 
-                    Console.WriteLine("Grabando Agente: " + legajo);
-                    if (!this.membershipService.ExistsUser(nombre + "." + apellido))
+                    var dbAgent = this.membershipService.RetrieveAgent(hfAgent.Legajo);
+
+                    if (dbAgent == null) //Caso 1: El agente no existe en el sistema
                     {
-                        this.membershipService.CreateUser(legajo, nombre + "." + apellido, dni.ToString(), nombre + "." + apellido + "@selfmanagement.com");
-                        this.membershipService.CreateProfile(nombre + "." + apellido, dni.ToString(), nombre, apellido, sueldo, jornada, status, fechaIngreso);
-                        this.membershipService.AddUserToRol(nombre + "." + apellido, SelfManagementRoles.Agent);
-                        this.metricsRepository.CreateSupervisorAgent(new SupervisorAgent { AgentId = legajo, SupervisorId = idSupervisor });
-
-                        var supervisores = this.campaingRepository.RetrieveCampaingSupervisors(idCampaña);
-
-                        if (supervisores.Count > 0)
-                        {
-                            var supervisor = (from s in supervisores
-                                              where s.InnerUserId == idSupervisor
-                                              select s).ToList();
-
-                            if (supervisor.Count > 0)
-                            {
-                                var agent = this.membershipService.RetrieveAgent(legajo);
-                                this.campaingRepository.AddAgent(idCampaña, agent);
-                            }
-                            else
-                            {
-                                //TODO: Loguear que el supervisor indicado no existe o no esta asignado a la campaña indicada
-                            }
-                        }
-                        else
-                        {
-                            //TODO: Loguear que la capaña indicada no existe o no tiene supervisores asignados
-                        }
+                        Console.WriteLine("Creando Agente: " + hfAgent.Legajo);
+                        this.ProcessNewAgentFromHF(hfAgent);
                     }
-
+                    else //Caso 2: El agente ya existe en el sistema. Actualizar datos
+                    {
+                        Console.WriteLine("Modificando Agente: " + hfAgent.Legajo);
+                        this.ProcessUpdatedAgentFromHF(hfAgent, dbAgent);
+                    }
                 }
             }
         }
@@ -322,6 +292,89 @@
                             }
                         }
                     }
+                }
+            }
+        }
+
+        private void ProcessNewAgentFromHF(HfAgent hfAgent)
+        {
+            var username = hfAgent.Name + "." + hfAgent.LastName;
+            if (this.membershipService.ExistsUser(username)) //Username ya tomado por otro agente
+            {
+                var i = 2;
+                var setted = false;
+                while (!setted)
+                {
+                    username = username + "." + i;
+                    if (!this.membershipService.ExistsUser(username))
+                    {
+                        setted = true;
+                    }
+                    i++;
+                }
+            }
+
+            this.membershipService.CreateUser(hfAgent.Legajo, username, hfAgent.DNI, username + "@selfmanagement.com");
+            this.membershipService.CreateProfile(username, hfAgent.DNI, hfAgent.Name, hfAgent.LastName, hfAgent.Salary, hfAgent.Workday, hfAgent.Status, hfAgent.IncorporationDate);
+            this.membershipService.AddUserToRol(username, SelfManagementRoles.Agent);
+            this.metricsRepository.CreateSupervisorAgent(new SupervisorAgent { AgentId = hfAgent.Legajo, SupervisorId = hfAgent.SupervisorId });
+
+            var supervisores = this.campaingRepository.RetrieveCampaingSupervisors(hfAgent.CampaingId);
+
+            if (supervisores.Count > 0)
+            {
+                var supervisor = (from s in supervisores
+                                  where s.InnerUserId == hfAgent.SupervisorId
+                                  select s).ToList();
+
+                if (supervisor.Count > 0)
+                {
+                    var agent = this.membershipService.RetrieveAgent(hfAgent.Legajo);
+                    this.campaingRepository.AddAgent(hfAgent.CampaingId, agent);
+                }
+                else
+                {
+                    //TODO: Loguear que el supervisor indicado no existe o no esta asignado a la campaña indicada
+                }
+            }
+            else
+            {
+                //TODO: Loguear que la capaña indicada no existe o no tiene supervisores asignados
+            }
+        }
+
+        private void ProcessUpdatedAgentFromHF(HfAgent hfAgent, Agent dbAgent)
+        {
+            //TODO: Verificar y actualizar propiedades del perfil (salary, jornada, status)
+
+            var agentActualCampaingId = this.metricsRepository.RetrieveUserActualCampaingId(dbAgent.InnerUserId);
+
+            if ((hfAgent.SupervisorId != dbAgent.SupervisorId) && (hfAgent.CampaingId == agentActualCampaingId)) //Cambio de supervisor manteniendo campaña
+            {
+                var supervisorActualCampaingId = this.metricsRepository.RetrieveUserActualCampaingId(hfAgent.SupervisorId);
+
+                //La campaña actual del nuevo supervisor debe ser la misma que tenia el agente
+                if (supervisorActualCampaingId == agentActualCampaingId)
+                {
+                    this.metricsRepository.ChangeAgentSupervisor(dbAgent.InnerUserId, hfAgent.SupervisorId);
+                }
+                else
+                {
+                    //TODO: Loguear inconsistencia de datos
+                }
+            }
+            else if ((hfAgent.SupervisorId != dbAgent.SupervisorId) && (hfAgent.CampaingId != agentActualCampaingId)) //Cambio de supervisor y de campaña
+            {
+                var supervisorActualCampaingId = this.metricsRepository.RetrieveUserActualCampaingId(hfAgent.SupervisorId);
+
+                //La campaña actual del nuevo supervisor debe ser la misma que se informa en el archivo HF
+                if (supervisorActualCampaingId == hfAgent.CampaingId)
+                {
+                    this.metricsRepository.ChangeAgentSupervisorAndCampaing(dbAgent.InnerUserId, hfAgent.SupervisorId, hfAgent.CampaingId);
+                }
+                else
+                {
+                    //TODO: Loguear inconsistencia de datos
                 }
             }
         }
