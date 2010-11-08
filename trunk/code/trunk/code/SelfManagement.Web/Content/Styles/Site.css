@@ -688,3 +688,23 @@ div.ac_results ul li.ac_over {
 {
 	min-height: 35px;
 }
+
+.optimal
+{
+	color: #008000;
+}
+
+.objective
+{
+	color: #9ACD32;
+}
+
+.minimum
+{
+	color: #FFA500;
+}
+
+.unsatisfactory
+{
+	color: #FA0000;
+}

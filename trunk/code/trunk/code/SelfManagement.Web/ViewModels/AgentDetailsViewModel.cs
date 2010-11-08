@@ -44,6 +44,12 @@
         [DisplayName("Minimo $/h")]
         public string MinimumHourlyValue { get; set; }
 
+        [DisplayName("Nivel Actual")]
+        public MetricLevel CurrentMetricLevel { get; set; }
+
+        [DisplayName("Nivel Proyectado")]
+        public MetricLevel ProjectedMetricLevel { get; set; }
+
         public IList<MetricValuesViewModel> CurrentCampaingMetricValues { get; set; }
 
         public IList<string> AvailableSalaryMonths { get; set; }

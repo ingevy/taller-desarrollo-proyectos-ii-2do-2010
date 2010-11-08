@@ -74,11 +74,13 @@
                 AvailableMetricMonths = availableMetricMonths,
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
                 CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
-                CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
+                CurrentCampaingId = userCampaing.Id,
                 AgentCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
                 OptimalHourlyValue = userCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 ObjectiveHourlyValue = userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture)
+                MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
+                ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false)
             };
 
             model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, metricsDate);
@@ -137,6 +139,8 @@
             }
 
             var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, date);
+            var currentMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, GetEndDate(date.Year, date.Month), true);
+            var projectedMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, GetEndDate(date.Year, date.Month), false);
 
             return new JsonResult
                 {
@@ -148,7 +152,11 @@
                                 ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                                 MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                                 AvailableMetricMonths = availableMonths,
-                                CurrentMetricMonthIndex = monthIndex
+                                CurrentMetricMonthIndex = monthIndex,
+                                CurrentMetricLevelDescription = currentMetricLevel.GetDescription(),
+                                ProjectedMetricLevelDescription = projectedMetricLevel.GetDescription(),
+                                CurrentMetricLevelCssClass = currentMetricLevel.GetCssClass(),
+                                ProjectedMetricLevelCssClass = projectedMetricLevel.GetCssClass()
                             }
                 };
         }
@@ -214,13 +222,13 @@
             series2.ChartType = SeriesChartType.Line;
             series2.BorderWidth = 3;
             series2.ShadowOffset = 2;
-            series2.Color = Color.Yellow;
+            series2.Color = Color.YellowGreen;
                         
             series3.ToolTip = "Nivel Mínimo";
             series3.ChartType = SeriesChartType.Line;
             series3.BorderWidth = 3;
             series3.ShadowOffset = 2;
-            series3.Color = Color.Red;
+            series3.Color = Color.Orange;
 
             series4.ToolTip = "Valor Métrica";
             series4.ChartType = SeriesChartType.Line;
@@ -427,32 +435,17 @@
                 var objectiveCount = 0;
                 var minimumCount = 0;
                 var hours = projectedTotalHoursWorked;
-                var campaingMetrics = this.campaingRepository
-                                            .RetrieveCampaingMetricLevels(campaing.Id)
-                                            .Select(cml => new
-                                                {
-                                                    OptimalValue = cml.OptimalLevel,
-                                                    ObjectiveValue = cml.ObjectiveLevel,
-                                                    MinimumValue = cml.MinimumLevel,
-                                                    CurrentValue = this.metricsRepository.GetUserMetricValue(innerUserId, date, cml.MetricId, campaing.Id),
-                                                    ProjectedValue = this.metricsRepository.GetUserMetricValue(innerUserId, end, cml.MetricId, campaing.Id)
-                                                });
                 
                 if (endDateMonth.Date != end.Date)
                 {
                     hours = (campaing.EndDate.Value.Day * projectedTotalHoursWorked) / endDateMonth.Day;
                 }
-                
-                foreach (var metricValue in campaingMetrics)
-                {
-                    if (metricValue.OptimalValue <= metricValue.ProjectedValue) { optimalCount++; }
-                    if (metricValue.ObjectiveValue <= metricValue.ProjectedValue) { objectiveCount++; }
-                    if (metricValue.MinimumValue <= metricValue.ProjectedValue) { minimumCount++; }
-                }
 
-                if (optimalCount == campaingMetrics.Count()) { projectedVariableSalary += campaing.OptimalHourlyValue * hours; }
-                if (objectiveCount == campaingMetrics.Count()) { projectedVariableSalary += campaing.ObjectiveHourlyValue * hours; }
-                if (minimumCount == campaingMetrics.Count()) { projectedVariableSalary += campaing.MinimumHourlyValue * hours; }
+                var metricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, end, false);
+
+                if (metricLevel == MetricLevel.Optimal) { projectedVariableSalary += campaing.OptimalHourlyValue * hours; }
+                if (metricLevel == MetricLevel.Objective) { projectedVariableSalary += campaing.ObjectiveHourlyValue * hours; }
+                if (metricLevel == MetricLevel.Objective) { projectedVariableSalary += campaing.MinimumHourlyValue * hours; }
             }
             
             projectedTotalSalary = gross + projectedVariableSalary + projectedExtra50Salary + projectedExtra100Salary;
@@ -469,6 +462,49 @@
             salaryViewModel.ExtraHours100Worked = projectedExtraHours100Worked;
 
             return salaryViewModel;
+        }
+
+        private MetricLevel CalculateMetricsLevel(int innerUserId, int campaingId, DateTime currentDate, DateTime projectedDate, bool currentMetricLevel)
+        {
+            var optimalCount = 0;
+            var objectiveCount = 0;
+            var minimumCount = 0;
+            var campaingMetrics = this.campaingRepository
+                                            .RetrieveCampaingMetricLevels(campaingId)
+                                            .Select(cml => new
+                                            {
+                                                IsHighestToLowest = cml.Metric.IsHighestToLowest,
+                                                OptimalValue = cml.OptimalLevel,
+                                                ObjectiveValue = cml.ObjectiveLevel,
+                                                MinimumValue = cml.MinimumLevel,
+                                                CurrentValue = this.metricsRepository.GetUserMetricValue(innerUserId, currentDate, cml.MetricId, campaingId),
+                                                ProjectedValue = this.metricsRepository.GetUserMetricValue(innerUserId, projectedDate, cml.MetricId, campaingId)
+                                            });
+
+
+            foreach (var metricValue in campaingMetrics)
+            {
+                var value = currentMetricLevel ? metricValue.CurrentValue : metricValue.ProjectedValue;
+
+                if (metricValue.IsHighestToLowest)
+                {
+                    if (metricValue.OptimalValue <= value) { optimalCount++; }
+                    if (metricValue.ObjectiveValue <= value) { objectiveCount++; }
+                    if (metricValue.MinimumValue <= value) { minimumCount++; }
+                }
+                else
+                {
+                    if (metricValue.OptimalValue >= value) { optimalCount++; }
+                    if (metricValue.ObjectiveValue >= value) { objectiveCount++; }
+                    if (metricValue.MinimumValue >= value) { minimumCount++; }
+                }
+            }
+
+            if (optimalCount == campaingMetrics.Count()) { return MetricLevel.Optimal; }
+            if (objectiveCount == campaingMetrics.Count()) { return MetricLevel.Objective; }
+            if (minimumCount == campaingMetrics.Count()) { return MetricLevel.Minimum; }
+
+            return MetricLevel.Unsatisfactory;
         }
     }
 }
