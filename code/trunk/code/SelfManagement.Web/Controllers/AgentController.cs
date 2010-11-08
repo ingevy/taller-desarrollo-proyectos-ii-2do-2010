@@ -107,25 +107,36 @@
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult CampaingMetricValues(int innerUserId, int campaingId)
         {
-            var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, DateTime.Now);
             var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
             var availableMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaingId);
             var today = DateTime.Now.Date;
             var monthIndex = availableMonths.IndexOf(today.ToString("yyyy-MM"));
+            DateTime date = today;
 
             if (monthIndex == -1)
             {
                 var last = availableMonths.Last().Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                 var lastYear = int.Parse(last[0], NumberStyles.Integer, CultureInfo.InvariantCulture);
                 var lastMonth = int.Parse(last[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
+                var flag = false;
 
                 if ((today.Year > lastYear) || ((today.Year == lastYear) && (today.Month > lastMonth)))
                 {
+                    flag = true;
                     monthIndex = availableMonths.Count - 1;
                 }
-                
-                monthIndex = 0;
+                else
+                {
+                    flag = false;
+                    monthIndex = 0;
+                }
+
+                var metricsDate = DateTime.ParseExact(availableMonths[monthIndex], "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+
+                date = flag ? GetEndDate(metricsDate.Year, metricsDate.Month) : metricsDate;
             }
+
+            var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, date);
 
             return new JsonResult
                 {
@@ -412,6 +423,10 @@
             foreach (var campaing in campaings)
             {
                 var end = this.GetEndDate(campaing.Id, date.Year, date.Month);
+                var optimalCount = 0;
+                var objectiveCount = 0;
+                var minimumCount = 0;
+                var hours = projectedTotalHoursWorked;
                 var campaingMetrics = this.campaingRepository
                                             .RetrieveCampaingMetricLevels(campaing.Id)
                                             .Select(cml => new
@@ -422,11 +437,7 @@
                                                     CurrentValue = this.metricsRepository.GetUserMetricValue(innerUserId, date, cml.MetricId, campaing.Id),
                                                     ProjectedValue = this.metricsRepository.GetUserMetricValue(innerUserId, end, cml.MetricId, campaing.Id)
                                                 });
-                var optimalCount = 0;
-                var objectiveCount = 0;
-                var minimumCount = 0;
-                var hours = projectedTotalHoursWorked;
-
+                
                 if (endDateMonth.Date != end.Date)
                 {
                     hours = (campaing.EndDate.Value.Day * projectedTotalHoursWorked) / endDateMonth.Day;
