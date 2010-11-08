@@ -46,7 +46,14 @@
                     metricValues[0].innerHTML = "<h3>No hay metricas disponibles para la Campaña elegida...</h3>";
                 }
                 else {
-                    var html = "<table cellpadding=\"0\" cellspacing=\"0\" id=\"metricvalues\">";
+                    var html = "<div style=\"float: left;\">";
+                    html += "Nivel Actual: <span class=\"" + json.CurrentMetricLevelCssClass + "\">" + json.CurrentMetricLevelDescription + "</span>";
+                    html += "</div>";
+                    html += "<div style=\"float: right;\">";
+                    html += "Nivel Proyectado: <span class=\"" + json.ProjectedMetricLevelCssClass + "\">" + json.ProjectedMetricLevelDescription + "</span>";
+                    html += "</div>";
+                    html += "<div style=\"clear: both; height: 5px\"></div>";
+                    html += "<table cellpadding=\"0\" cellspacing=\"0\" id=\"metricvalues\">";
                     html += "<tbody>";
                     html += "<tr>";
                     html += "<th>Metrica</th>";
@@ -109,7 +116,7 @@
                         if (i == json.CurrentMetricMonthIndex) {
                             html += "selected=\"selected\"";
                         }
-                        
+
                         html += ">" + json.AvailableMetricMonths[i] + "</option>";
                     }
 

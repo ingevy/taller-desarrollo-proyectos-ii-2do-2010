@@ -110,14 +110,15 @@
                  <h3>Resumen Actual de Métricas</h3>
                  <div id="metricvaluescontainer" style="padding: 0px; margin: 0px;" >
 
-                 <%--
-                     <p style="text-align:left">
-                        Nivel Actual: <span style="color:Yellow">Objetivo</span>
-                     </p>
-                     <p style="text-align:left">
-                        Nivel Proyectado: <span style="color:Green">Optimo</span>
-                     </p>
-                 --%>
+                    <div style="float: left;">
+                         Nivel Actual: <span class="<%= this.Model.CurrentMetricLevel.GetCssClass() %>"><%= this.Model.CurrentMetricLevel.GetDescription() %></span>
+                    </div>
+
+                    <div style="float: right;">
+                         Nivel Proyectado: <span class="<%= this.Model.ProjectedMetricLevel.GetCssClass() %>"><%= this.Model.ProjectedMetricLevel.GetDescription()%></span>
+                    </div>
+                    
+                    <div style="clear: both; height: 5px"></div>
 
                     <table cellpadding="0" cellspacing="0" id="metricvalues">
                         <tbody>
