@@ -109,6 +109,16 @@
                  <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
                  <h3>Resumen Actual de Métricas</h3>
                  <div id="metricvaluescontainer" style="padding: 0px; margin: 0px;" >
+
+                 <%--
+                     <p style="text-align:left">
+                        Nivel Actual: <span style="color:Yellow">Objetivo</span>
+                     </p>
+                     <p style="text-align:left">
+                        Nivel Proyectado: <span style="color:Green">Optimo</span>
+                     </p>
+                 --%>
+
                     <table cellpadding="0" cellspacing="0" id="metricvalues">
                         <tbody>
                             <tr>
@@ -149,6 +159,7 @@
                     <%: Html.DropDownListFor(model => model.CurrentMetricMonthIndex, availableMetricMonths, new { Class = "uservalue", onchange = "refreshMetricCharts()", style = "float:right;" })%>
                  </h3>
                  <div id="metricchartscontainer" style="padding: 0px; margin: 0px;">
+                 
                     <%
                         foreach (var metricValues in this.Model.CurrentCampaingMetricValues)
                         {
