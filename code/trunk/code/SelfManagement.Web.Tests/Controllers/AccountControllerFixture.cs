@@ -456,6 +456,31 @@
             {
                 throw new System.NotImplementedException();
             }
+
+            public System.Collections.Generic.IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId, int pageSize, int pageNumber)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public System.Collections.Generic.IList<Agent> RetrieveAgentsByCampaingId(int campaingId, int pageSize, int pageNumber)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public System.Collections.Generic.IList<Agent> RetrieveAllAgents(int pageSize, int pageNumber)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public System.Collections.Generic.IList<Supervisor> RetrieveSupervisorsByCampaingId(int campaingId, int pageSize, int pageNumber)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public System.Collections.Generic.IList<Supervisor> RetrieveAllSupervisors(int pageSize, int pageNumber)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

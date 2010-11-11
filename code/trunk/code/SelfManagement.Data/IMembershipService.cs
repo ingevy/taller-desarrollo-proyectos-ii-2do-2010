@@ -28,9 +28,19 @@
 
         Agent RetrieveAgent(int innerUserId);
 
+        IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId, int pageSize, int pageNumber);
+
+        IList<Agent> RetrieveAgentsByCampaingId(int campaingId, int pageSize, int pageNumber);
+
+        IList<Agent> RetrieveAllAgents(int pageSize, int pageNumber);
+        
         Supervisor RetrieveSupervisor(string userName);
 
         Supervisor RetrieveSupervisor(int innerUserId);
+
+        IList<Supervisor> RetrieveSupervisorsByCampaingId(int campaingId, int pageSize, int pageNumber);
+
+        IList<Supervisor> RetrieveAllSupervisors(int pageSize, int pageNumber);
 
         MonthlySchedule RetrieveMonthlySchedule(int innerUserId, DateTime date);
 
