@@ -19,7 +19,8 @@
             var summaryRegex = new Regex("^Summary_" + dateStrRegex + ".csv$");
             var ttsRegex = new Regex("^TTS_" + dateStrRegex + ".csv$");
             var qaRegex = new Regex("^QA_" + dateStrRegex + ".csv$");
-            var stsRegex = new Regex("^STS_(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)[1-9][0-9]{3}.csv$");
+            //var stsRegex = new Regex("^STS_(Enero|Febrero|Marzo|Abril|Mayo|Junio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre)[1-9][0-9]{3}.csv$");
+            var stsRegex = new Regex("^STS_" + dateStrRegex + ".csv$");
             var hfRegex = new Regex("^HF System.csv$");
 
             if (summaryRegex.IsMatch(fileName)) { return ExternalSystemFiles.SUMMARY; }
@@ -46,8 +47,11 @@
                 case ExternalSystemFiles.SUMMARY:
                     fileDate = DateTime.ParseExact(fileName.Substring(8, 8), "yyyyMMdd", null);
                     break;
-                case ExternalSystemFiles.STS:
+                /*case ExternalSystemFiles.STS:
                     fileDate = DateTime.ParseExact("01" + fileName.Substring(4, fileName.IndexOf(".") - 4), "ddMMMMyyyy", CultureInfo.CreateSpecificCulture("es-AR"));
+                    break;*/
+                case ExternalSystemFiles.STS:
+                    fileDate = DateTime.ParseExact(fileName.Substring(4, 8), "yyyyMMdd", null);
                     break;
                 case ExternalSystemFiles.HF:
                     fileDate = new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day);
