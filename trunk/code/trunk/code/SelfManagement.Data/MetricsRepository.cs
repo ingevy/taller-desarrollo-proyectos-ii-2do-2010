@@ -226,6 +226,24 @@
             return file.Id;
         }
 
+        public void LogInProcessedFile(string filePath, string logMessage)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var processedFile = ctx.ProcessedFiles
+                                       .Where(pf => pf.FileSystemPath == filePath)
+                                       .FirstOrDefault();
+
+                if (processedFile != null)
+                {
+                    processedFile.Log = (processedFile.Log == "") ? logMessage : processedFile.Log + "\n" + logMessage;
+                    processedFile.HasErrors = true;
+                }
+
+                ctx.SaveChanges();
+            }
+        }
+
         public void ChangeAgentSupervisor(int agentId, int newSupervisorId)
         {
             using (var ctx = new SelfManagementEntities())

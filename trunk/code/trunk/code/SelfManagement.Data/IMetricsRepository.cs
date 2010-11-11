@@ -33,6 +33,8 @@
 
         int CreateProcessedFile(ProcessedFile file);
 
+        void LogInProcessedFile(string filePath, string logMessage);
+
         void ChangeAgentSupervisor(int agentId, int newSupervisorId);
 
         void ChangeAgentSupervisorAndCampaing(int agentId, int newSupervisorId, int newCampaingId);
