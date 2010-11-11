@@ -50,6 +50,12 @@
         [DisplayName("Nivel Proyectado")]
         public MetricLevel ProjectedMetricLevel { get; set; }
 
+        public bool ShouldPaginate { get; set; }
+
+        public int PageNumber { get; set; }
+
+        public int TotalPages { get; set; }
+
         public IList<MetricValuesViewModel> CurrentCampaingMetricValues { get; set; }
 
         public IList<string> AvailableSalaryMonths { get; set; }

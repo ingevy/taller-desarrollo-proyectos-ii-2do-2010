@@ -30,9 +30,15 @@
 
         IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId, int pageSize, int pageNumber);
 
+        int CountAgentsBySupervisorId(int supervisorId);
+
         IList<Agent> RetrieveAgentsByCampaingId(int campaingId, int pageSize, int pageNumber);
 
+        int CountAgentsByCampaingId(int campaingId);
+
         IList<Agent> RetrieveAllAgents(int pageSize, int pageNumber);
+
+        int CountAllAgents();
         
         Supervisor RetrieveSupervisor(string userName);
 
@@ -40,7 +46,11 @@
 
         IList<Supervisor> RetrieveSupervisorsByCampaingId(int campaingId, int pageSize, int pageNumber);
 
+        int CountSupervisorsByCampaingId(int campaingId);
+
         IList<Supervisor> RetrieveAllSupervisors(int pageSize, int pageNumber);
+
+        int CountAllSupervisors();
 
         MonthlySchedule RetrieveMonthlySchedule(int innerUserId, DateTime date);
 

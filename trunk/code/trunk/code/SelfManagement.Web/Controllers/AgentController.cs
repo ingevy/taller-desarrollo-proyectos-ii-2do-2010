@@ -36,17 +36,14 @@
         //
         // GET: /Agent/
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
-        public ActionResult Index()
+        public ActionResult Index(int? pageNumber)
         {
-            // TODO: implement this action for AccountManager and Supervisor roles
-            if (User.IsInRole("AccountManager") || User.IsInRole("Supervisor"))
-            {
-                return this.View("IndexToDo");
-            }
-
+            bool shoulPaginate;
+            int totalCount;
+            int page;
+            var agent = this.GetAgent(pageNumber, out page, out shoulPaginate, out totalCount);
             DateTime metricsDate;
-            IList<string> availableMetricMonths;            
-            var agent = this.membershipService.RetrieveAgent(this.User.Identity.Name);
+            IList<string> availableMetricMonths;
             var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
             var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
             var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
@@ -80,7 +77,10 @@
                 ObjectiveHourlyValue = userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
-                ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false)
+                ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
+                ShouldPaginate = shoulPaginate,
+                PageNumber = page,
+                TotalPages = totalCount
             };
 
             model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, metricsDate);
@@ -144,20 +144,20 @@
 
             return new JsonResult
                 {
-                        JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                        Data = new
-                            {
-                                CampaingMetricValues = model,
-                                OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                                ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                                MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                                AvailableMetricMonths = availableMonths,
-                                CurrentMetricMonthIndex = monthIndex,
-                                CurrentMetricLevelDescription = currentMetricLevel.GetDescription(),
-                                ProjectedMetricLevelDescription = projectedMetricLevel.GetDescription(),
-                                CurrentMetricLevelCssClass = currentMetricLevel.GetCssClass(),
-                                ProjectedMetricLevelCssClass = projectedMetricLevel.GetCssClass()
-                            }
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = new
+                        {
+                            CampaingMetricValues = model,
+                            OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                            ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                            MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                            AvailableMetricMonths = availableMonths,
+                            CurrentMetricMonthIndex = monthIndex,
+                            CurrentMetricLevelDescription = currentMetricLevel.GetDescription(),
+                            ProjectedMetricLevelDescription = projectedMetricLevel.GetDescription(),
+                            CurrentMetricLevelCssClass = currentMetricLevel.GetCssClass(),
+                            ProjectedMetricLevelCssClass = projectedMetricLevel.GetCssClass()
+                        }
                 };
         }
 
@@ -165,14 +165,14 @@
         public ActionResult MetricsChart(int innerUserId, int campaingId, int metricId, string month)
         {
             var campaingMetric = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId).FirstOrDefault(cml => cml.MetricId == metricId);
-            
+
             var yearMonth = month.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
             var yearNumber = int.Parse(yearMonth[0], NumberStyles.Integer, CultureInfo.InvariantCulture);
             var monthNumber = int.Parse(yearMonth[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
 
             var beginDate = this.GetBeginDate(campaingId, yearNumber, monthNumber).Date;
             var endDate = this.GetEndDate(campaingId, yearNumber, monthNumber).Date;
-            
+
             var dates = new List<DateTime>();
 
             while (beginDate <= endDate)
@@ -200,7 +200,7 @@
             chart.Titles.Add(new Title(campaingMetric.Metric.MetricName, Docking.Top, new Font("Trebuchet MS", 14, FontStyle.Bold), FontColor));
             chart.Titles.Add(new Title(string.Format(CultureInfo.InvariantCulture, "Días ({0})", month), Docking.Bottom, new Font("Trebuchet MS", 12), FontColor));
             chart.Titles.Add(new Title("Valor", Docking.Left, new Font("Trebuchet MS", 12), FontColor));
-            
+
             var chartArea = chart.ChartAreas.Add("Waves");
             var legend = chart.Legends.Add("Legend");
 
@@ -223,7 +223,7 @@
             series2.BorderWidth = 3;
             series2.ShadowOffset = 2;
             series2.Color = Color.YellowGreen;
-                        
+
             series3.ToolTip = "Nivel Mínimo";
             series3.ChartType = SeriesChartType.Line;
             series3.BorderWidth = 3;
@@ -235,7 +235,7 @@
             series4.BorderWidth = 3;
             series4.ShadowOffset = 2;
             series4.Color = Color.Blue;
-            
+
             foreach (var date in dates)
             {
                 series1.Points.AddXY(date.Day, campaingMetric.OptimalLevel);
@@ -257,7 +257,7 @@
         public ActionResult Create()
         {
             return this.View();
-        } 
+        }
 
         //
         // POST: /Agent/Create
@@ -276,10 +276,10 @@
                 return this.View();
             }
         }
-        
+
         //
         // GET: /Agent/Edit/5
-        [Authorize(Roles = "AccountManager, Supervisor, Agent")] 
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Edit(int id)
         {
             return this.View();
@@ -305,7 +305,7 @@
 
         //
         // GET: /Agent/Delete/5
-        [Authorize(Roles = "AccountManager, Supervisor, Agent")] 
+        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Delete(int id)
         {
             return this.View();
@@ -331,7 +331,7 @@
         }
 
         private static DateTime GetEndDate(int year, int month)
-        {            
+        {
             return new DateTime(year, month, DateTime.DaysInMonth(year, month)).Date;
         }
 
@@ -364,7 +364,7 @@
             {
                 return campaing.BeginDate;
             }
-            
+
             return new DateTime(year, month, 1);
         }
 
@@ -435,7 +435,7 @@
                 var objectiveCount = 0;
                 var minimumCount = 0;
                 var hours = projectedTotalHoursWorked;
-                
+
                 if (endDateMonth.Date != end.Date)
                 {
                     hours = (campaing.EndDate.Value.Day * projectedTotalHoursWorked) / endDateMonth.Day;
@@ -447,9 +447,9 @@
                 if (metricLevel == MetricLevel.Objective) { projectedVariableSalary += campaing.ObjectiveHourlyValue * hours; }
                 if (metricLevel == MetricLevel.Objective) { projectedVariableSalary += campaing.MinimumHourlyValue * hours; }
             }
-            
+
             projectedTotalSalary = gross + projectedVariableSalary + projectedExtra50Salary + projectedExtra100Salary;
-            
+
             salaryViewModel.GrossSalary = gross.ToString("C", CultureInfo.CurrentUICulture);
             salaryViewModel.VariableSalary = projectedVariableSalary.ToString("C", CultureInfo.CurrentUICulture);
             salaryViewModel.Extra50Salary = projectedExtra50Salary.ToString("C", CultureInfo.CurrentUICulture);
@@ -505,6 +505,41 @@
             if (minimumCount == campaingMetrics.Count()) { return MetricLevel.Minimum; }
 
             return MetricLevel.Unsatisfactory;
+        }
+
+        private Agent GetAgent(int? pageNumber, out int page, out bool shoulPaginate, out int totalCount)
+        {
+            if (User.IsInRole("AccountManager"))
+            {
+                shoulPaginate = true;
+                totalCount = this.membershipService.CountAllAgents();
+                page = !pageNumber.HasValue
+                            ? 1
+                            : pageNumber.Value > totalCount
+                                ? totalCount
+                                : pageNumber.Value;
+
+                return this.membershipService.RetrieveAllAgents(1, page).FirstOrDefault();
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                var supervisorId = this.membershipService.RetrieveSupervisor(this.User.Identity.Name).InnerUserId;
+                shoulPaginate = true;
+                totalCount = this.membershipService.CountAgentsBySupervisorId(supervisorId);
+                page = !pageNumber.HasValue
+                            ? 1
+                            : pageNumber.Value > totalCount
+                                ? totalCount
+                                : pageNumber.Value;
+
+                return this.membershipService.RetrieveAgentsBySupervisorId(supervisorId, 1, page).FirstOrDefault();
+            }
+
+            shoulPaginate = false;
+            totalCount = 1;
+            page = 1;
+            return this.membershipService.RetrieveAgent(this.User.Identity.Name);
         }
     }
 }

@@ -306,6 +306,7 @@
 
                 return ctx.Agents
                         .Where(a => ctx.SupervisorAgents.Any(sa => (sa.SupervisorId == supervisorId) && (sa.AgentId == a.InnerUserId)))
+                        .OrderBy(a => a.InnerUserId)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
@@ -328,6 +329,7 @@
 
                 return ctx.Agents
                         .Where(a => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == a.InnerUserId)))
+                        .OrderBy(a => a.InnerUserId)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
@@ -339,6 +341,7 @@
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.Agents
+                        .OrderBy(a => a.InnerUserId)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
@@ -361,6 +364,7 @@
 
                 return ctx.Supervisors
                         .Where(s => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == s.InnerUserId)))
+                        .OrderBy(s => s.InnerUserId)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
@@ -372,9 +376,86 @@
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.Supervisors
+                        .OrderBy(s => s.InnerUserId)
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
+            }
+        }
+
+        public int CountAgentsBySupervisorId(int supervisorId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                if (!ctx.Supervisors.Any(s => s.InnerUserId == supervisorId))
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "El identificador de usario {0} no corresponde a un rol Supervisor.",
+                            supervisorId),
+                        "supervisorId");
+                }
+
+                return ctx.Agents
+                        .Where(a => ctx.SupervisorAgents.Any(sa => (sa.SupervisorId == supervisorId) && (sa.AgentId == a.InnerUserId)))
+                        .Count();
+            }
+        }
+
+        public int CountAgentsByCampaingId(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                if (!ctx.Campaings.Any(c => c.CustomerId == campaingId))
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "No se encontró una campaña con el identificador {0}.",
+                            campaingId),
+                        "campaingId");
+                }
+
+                return ctx.Agents
+                        .Where(a => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == a.InnerUserId)))
+                        .Count();
+            }
+        }
+
+        public int CountAllAgents()
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Agents.Count();
+            }
+        }
+
+        public int CountSupervisorsByCampaingId(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                if (!ctx.Campaings.Any(c => c.CustomerId == campaingId))
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "No se encontró una campaña con el identificador {0}.",
+                            campaingId),
+                        "campaingId");
+                }
+
+                return ctx.Supervisors
+                        .Where(s => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == s.InnerUserId)))
+                        .Count();
+            }
+        }
+
+        public int CountAllSupervisors()
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors.Count();
             }
         }
     }

@@ -173,4 +173,31 @@
             </div>
         </div>
     </div>
+
+    <% 
+        if (this.Model.ShouldPaginate)
+        {
+    %>
+        <div id="pager">
+            <ul>
+             <% if (this.Model.PageNumber > 1)
+                {
+             %>
+            <li> <%: Html.ActionLink("< ", "Index", "Agent", new { pageNumber = this.Model.PageNumber - 1 }, new { title = "Página Anterior" }) %></li>
+             <%
+                }
+             %>
+            <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Agent", new { pageNumber = this.Model.PageNumber }, new { title = "Página Actual" })%></li>
+             <% if (this.Model.PageNumber < this.Model.TotalPages)
+                {
+             %>
+            <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1 }, new { title = "Página Siguiente" }) %></li>
+             <%
+                }
+             %>
+            </ul>
+        </div>
+    <% 
+        }
+    %>
 </asp:Content>
