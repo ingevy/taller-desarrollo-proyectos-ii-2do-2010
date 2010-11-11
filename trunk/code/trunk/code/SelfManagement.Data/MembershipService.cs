@@ -289,5 +289,93 @@
 
             return months;
         }
+
+        public IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId, int pageSize, int pageNumber)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                if (!ctx.Supervisors.Any(s => s.InnerUserId == supervisorId))
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "El identificador de usario {0} no corresponde a un rol Supervisor.",
+                            supervisorId),
+                        "supervisorId");
+                }
+
+                return ctx.Agents
+                        .Where(a => ctx.SupervisorAgents.Any(sa => (sa.SupervisorId == supervisorId) && (sa.AgentId == a.InnerUserId)))
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+            }
+        }
+
+        public IList<Agent> RetrieveAgentsByCampaingId(int campaingId, int pageSize, int pageNumber)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                if (!ctx.Campaings.Any(c => c.CustomerId == campaingId))
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "No se encontró una campaña con el identificador {0}.",
+                            campaingId),
+                        "campaingId");
+                }
+
+                return ctx.Agents
+                        .Where(a => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == a.InnerUserId)))
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+            }
+        }
+
+        public IList<Agent> RetrieveAllAgents(int pageSize, int pageNumber)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Agents
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+            }
+        }
+
+        public IList<Supervisor> RetrieveSupervisorsByCampaingId(int campaingId, int pageSize, int pageNumber)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                if (!ctx.Campaings.Any(c => c.CustomerId == campaingId))
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "No se encontró una campaña con el identificador {0}.",
+                            campaingId),
+                        "campaingId");
+                }
+
+                return ctx.Supervisors
+                        .Where(s => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == s.InnerUserId)))
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+            }
+        }
+
+        public IList<Supervisor> RetrieveAllSupervisors(int pageSize, int pageNumber)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+            }
+        }
     }
 }
