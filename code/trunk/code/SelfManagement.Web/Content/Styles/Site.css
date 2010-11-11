@@ -708,3 +708,10 @@ div.ac_results ul li.ac_over {
 {
 	color: #FA0000;
 }
+
+#pager { text-align:right; }
+#pager ul { list-style: none; display: inline; }
+#pager ul li { display: inline-block; padding: 0 2px 0 5px; border-left: 1px solid #ccc; }
+#pager ul li a { text-decoration: none; font-size: 110%; }
+#pager ul li:first-child { border: 0; }
+

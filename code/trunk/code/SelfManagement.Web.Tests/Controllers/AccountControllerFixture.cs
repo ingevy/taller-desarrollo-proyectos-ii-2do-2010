@@ -481,6 +481,31 @@
             {
                 throw new System.NotImplementedException();
             }
+
+            public int CountAgentsBySupervisorId(int supervisorId)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public int CountAgentsByCampaingId(int campaingId)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public int CountAllAgents()
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public int CountSupervisorsByCampaingId(int campaingId)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public int CountAllSupervisors()
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

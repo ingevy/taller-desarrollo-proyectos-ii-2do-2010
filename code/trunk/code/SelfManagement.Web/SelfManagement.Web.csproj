@@ -132,7 +132,6 @@
     <Content Include="Content\Scripts\jquery.autocomplete.js" />
     <Content Include="Content\Styles\datepickercontrol.css" />
     <Content Include="Global.asax" />
-    <Content Include="Views\Agent\IndexToDo.aspx" />
     <Content Include="Views\Agent\Index.aspx" />
     <Content Include="Views\Campaing\Create.aspx" />
     <Content Include="Views\Campaing\Index.aspx" />
