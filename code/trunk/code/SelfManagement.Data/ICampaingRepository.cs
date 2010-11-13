@@ -5,6 +5,10 @@
 
     public interface ICampaingRepository
     {
+        bool ExistsSupervisor(int supervisorId);
+
+        bool ExistsCampaing(int campaingId);
+
         IList<Customer> RetrieveCustomersByName(string customerName);
 
         IList<Metric> RetrieveAvailableMetrics();
