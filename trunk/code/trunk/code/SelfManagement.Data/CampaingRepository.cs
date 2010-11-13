@@ -7,6 +7,30 @@
 
     public class CampaingRepository : ICampaingRepository
     {
+        public bool ExistsSupervisor(int supervisorId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var query = from s in ctx.Supervisors
+                            where s.InnerUserId == supervisorId
+                            select s;
+
+                return (query.ToList().Count > 0);
+            }
+        }
+
+        public bool ExistsCampaing(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var query = from c in ctx.Campaings
+                            where c.Id == campaingId
+                            select c;
+
+                return (query.ToList().Count > 0);
+            }
+        }
+
         public IList<Metric> RetrieveAvailableMetrics()
         {
             using (var ctx = new SelfManagementEntities())

@@ -84,17 +84,21 @@
         {
             var filesToProcess = this.GetFilesToProcess();
 
+            Console.WriteLine("Procesando Archivo HF...");
             this.ProcessHumanForceFile(filesToProcess);
+            Console.WriteLine(Environment.NewLine);
 
+            Console.WriteLine("Procesando Horas Extra...");
             this.ProcessTTSFilesForExtraHours(filesToProcess);
+            Console.WriteLine(Environment.NewLine);
 
+            Console.WriteLine("Procesando Metricas...");
             this.ProcessMetrics(filesToProcess);
+            Console.WriteLine(Environment.NewLine);
         }
 
         private void ProcessMetrics(IList<IDataFile> files)
         {
-            Console.WriteLine("Procesando Metricas...");
-
             var filesToProcess = files;
 
             if (filesToProcess.Count > 0)
@@ -160,46 +164,67 @@
 
         private void ProcessHumanForceFile(IList<IDataFile> files)
         {
-            Console.WriteLine("Procesando Archivo HF...");
-
-            var filesToProcess = files;
-
-            var hfFile = (from f in filesToProcess
+            var hfFile = (from f in files
                           where f.ExternalSystemFile == ExternalSystemFiles.HF
                           select f).ToList<IDataFile>();
 
             if (hfFile.Count == 1) //El archivo HF es siempre uno solo, que se va actualizando
             {
-                this.CreateProcessedFileFromDataFile(hfFile[0]);
-
-                var dataLines = hfFile[0].DataLines;
-
-                foreach (var line in dataLines)
+                try
                 {
-                    var hfAgent = new HfAgent(line);
+                    this.CreateProcessedFileFromDataFile(hfFile[0]);
 
-                    var dbAgent = this.membershipService.RetrieveAgent(hfAgent.Legajo);
+                    var dataLines = hfFile[0].DataLines;
 
-                    if (dbAgent == null) //Caso 1: El agente no existe en el sistema
+                    foreach (var line in dataLines)
                     {
-                        Console.WriteLine("Creando Agente: " + hfAgent.Legajo);
-                        this.ProcessNewAgentFromHF(hfAgent);
-                    }
-                    else //Caso 2: El agente ya existe en el sistema. Actualizar datos
-                    {
-                        Console.WriteLine("Modificando Agente: " + hfAgent.Legajo);
-                        this.ProcessUpdatedAgentFromHF(hfAgent, dbAgent);
+                        var hfAgent = new HfAgent(line);
+
+                        var dbAgent = this.membershipService.RetrieveAgent(hfAgent.Legajo);
+
+                        if (dbAgent == null) //Caso 1: El agente no existe en el sistema
+                        {
+                            Console.WriteLine("Creando Agente: " + hfAgent.Legajo);
+                            try
+                            {
+                                this.ProcessNewAgentFromHF(hfAgent);
+                            }
+                            catch (Exception e)
+                            {
+                                this.metricsRepository.LogInProcessedFile(hfFile[0].FilePath, "Linea "+(dataLines.IndexOf(line)+1)+": "+e.Message+Environment.NewLine);
+                                Console.WriteLine("     " + e.Message);
+                            }
+                        }
+                        else //Caso 2: El agente ya existe en el sistema. Actualizar datos
+                        {
+                            Console.WriteLine("Modificando Agente: " + hfAgent.Legajo);
+                            try
+                            {
+                                this.ProcessUpdatedAgentFromHF(hfAgent, dbAgent);
+                            }
+                            catch (Exception e)
+                            {
+                                this.metricsRepository.LogInProcessedFile(hfFile[0].FilePath, "Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message + Environment.NewLine);
+                                Console.WriteLine("     " + e.Message);
+                            }
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error procesando archivo HF: "+e.Message);
+                }
+            }
+            else if (hfFile.Count > 1)
+            {
+                Console.WriteLine("Se encontro mas de un archivo HF. Se detiene el proceso");
             }
         }
 
         private void ProcessTTSFilesForExtraHours(IList<IDataFile> files)
         {
-            var filesToProcess = files;
-
-            var timeFiles = (from f in filesToProcess
-                            where f.ExternalSystemFile == ExternalSystemFiles.TTS || f.ExternalSystemFile == ExternalSystemFiles.STS //&& f.FileDate.Month == DateTime.Now.Month && f.FileDate.Year == DateTime.Now.Year
+            var timeFiles = (from f in files
+                            where f.ExternalSystemFile == ExternalSystemFiles.TTS || f.ExternalSystemFile == ExternalSystemFiles.STS
                             select f).ToList<IDataFile>();
 
             if (timeFiles.Count > 0)
@@ -208,7 +233,7 @@
 
                 foreach (var date in groupedFiles.Keys)
                 {
-                    if (groupedFiles[date].Count == 2)
+                    if (groupedFiles[date].Count == 2) //Por cada fecha debo tener 2 archivos (par TTS-STS)
                     {
                         var ttsFile = (from f in groupedFiles[date]
                                        where f.ExternalSystemFile == ExternalSystemFiles.TTS
@@ -219,88 +244,98 @@
 
                         if ((ttsFile == null) || (stsFile == null))
                         {
-                            throw new ArgumentException("No se pudo encontrar el STS o el TTS para la fecha "+date.ToString("dd-MM-yyyy"));
+                            Console.WriteLine("No se pudo encontrar el STS o el TTS para la fecha " + date.ToString("dd-MM-yyyy"));
                         }
-
-                        this.CreateProcessedFileFromDataFile(ttsFile);
-                        this.CreateProcessedFileFromDataFile(stsFile);
-
-                        var dataLines = ttsFile.DataLines;
-                        var stsLines = stsFile.DataLines;
-                        var fileMonth = Convert.ToByte(ttsFile.FileDate.Month);
-                        var fileYear = Convert.ToInt16(ttsFile.FileDate.Year);
-
-                        foreach (var line in dataLines)
+                        else
                         {
-                            var agentId = Convert.ToInt32(line["legajo"]);
-
-                            Console.WriteLine("Procesando Horas para Agente: " + agentId + " - Fecha: " + ttsFile.FileDate.ToString("dd/MM/yyyy"));
-
-                            var strFecha = line["fecha Entrada"].Split('/');
-                            var strHora = line["Horario Entrada"].Split(':');
-                            var entranceDate = new DateTime(Convert.ToInt32(strFecha[2]) /*Año*/, Convert.ToInt32(strFecha[1]) /*Mes*/, Convert.ToInt32(strFecha[0]) /*Dia*/,
-                                                            Convert.ToInt32(strHora[0]) /*Horas*/, Convert.ToInt32(strHora[1]) /*Minutos*/, 0 /*Segundos*/);
-
-                            strFecha = line["fecha Salida"].Split('/');
-                            strHora = line["Horario Salida"].Split(':');
-                            var exitDate = new DateTime(Convert.ToInt32(strFecha[2]), Convert.ToInt32(strFecha[1]), Convert.ToInt32(strFecha[0]),
-                                                            Convert.ToInt32(strHora[0]), Convert.ToInt32(strHora[1]), 0);
-
-                            var agent = this.membershipService.RetrieveAgent(agentId);
-
-                            if (agent == null)
+                            try
                             {
-                                this.metricsRepository.LogInProcessedFile(ttsFile.FilePath, "Linea " + (dataLines.IndexOf(line)+1) + ": El agente " + line["legajo"] + " no se encuentra en la BD");
-                            }
-                            else
-                            {
-                                var agentSchedule = this.metricsRepository.RetrieveAgentMonthlySchedule(agentId, fileYear, fileMonth);
+                                this.CreateProcessedFileFromDataFile(ttsFile);
+                                this.CreateProcessedFileFromDataFile(stsFile);
 
-                                if (agentSchedule == null)
+                                var dataLines = ttsFile.DataLines;
+                                var stsLines = stsFile.DataLines;
+                                var fileMonth = Convert.ToByte(ttsFile.FileDate.Month);
+                                var fileYear = Convert.ToInt16(ttsFile.FileDate.Year);
+
+                                foreach (var line in dataLines)
                                 {
-                                    agentSchedule = new MonthlySchedule
+                                    var agentId = Convert.ToInt32(line["legajo"]);
+
+                                    Console.WriteLine("Procesando Horas para Agente: " + agentId + " - Fecha: " + ttsFile.FileDate.ToString("dd/MM/yyyy"));
+
+                                    try
                                     {
-                                        InnerUserId = agentId,
-                                        Year = fileYear,
-                                        Month = fileMonth,
-                                        ExtraHoursWorked50 = 0,
-                                        ExtraHoursWorked100 = 0,
-                                        TotalHoursWorked = 0,
-                                        GrossSalary = Convert.ToDecimal(agent.GrossSalary),
-                                        LastDayModified = 0
-                                    };
-                                }
-                                if (entranceDate.Day > agentSchedule.LastDayModified)
-                                {
+                                        var entranceDate = this.ParseDateHourFromFileFields(line["fecha Entrada"], line["Horario Entrada"]);
+                                        var exitDate = this.ParseDateHourFromFileFields(line["fecha Salida"], line["Horario Salida"]);
 
-                                    var workdayHours = this.GetScheduledHours(stsLines, agent.InnerUserId);
-                                    var actualWorkedHours = exitDate.Subtract(entranceDate).TotalHours;
+                                        var agent = this.membershipService.RetrieveAgent(agentId);
 
-                                    if (actualWorkedHours > workdayHours)
-                                    {
-                                        var extraHours = (workdayHours == 0.0) ? actualWorkedHours : actualWorkedHours - workdayHours;
-
-                                        if ((entranceDate.DayOfWeek.Equals(DayOfWeek.Saturday)) ||
-                                                (entranceDate.DayOfWeek.Equals(DayOfWeek.Sunday)) ||
-                                                (this.metricsRepository.IsHolidayDate(entranceDate)))
+                                        if (agent == null)
                                         {
-                                            agentSchedule.ExtraHoursWorked100 += Convert.ToInt32(Math.Round(extraHours));
+                                            throw new ArgumentException("El agente " + agentId + " no existe en la base de datos");                                        
                                         }
                                         else
                                         {
-                                            agentSchedule.ExtraHoursWorked50 += Convert.ToInt32(Math.Round(extraHours));
+                                            var agentSchedule = this.metricsRepository.RetrieveAgentMonthlySchedule(agentId, fileYear, fileMonth);
+
+                                            if (agentSchedule == null)
+                                            {
+                                                agentSchedule = new MonthlySchedule { InnerUserId = agentId, Year = fileYear, Month = fileMonth,
+                                                                                      ExtraHoursWorked50 = 0, ExtraHoursWorked100 = 0, TotalHoursWorked = 0, 
+                                                                                      GrossSalary = Convert.ToDecimal(agent.GrossSalary), LastDayModified = 0 };
+                                            }
+                                            if (entranceDate.Day > agentSchedule.LastDayModified)
+                                            {
+                                                var workdayHours = this.GetScheduledHours(stsLines, agent.InnerUserId);
+                                                var actualWorkedHours = exitDate.Subtract(entranceDate).TotalHours;
+
+                                                if (actualWorkedHours > workdayHours)
+                                                {
+                                                    var extraHours = (workdayHours == 0.0) ? actualWorkedHours : actualWorkedHours - workdayHours;
+
+                                                    if ((entranceDate.DayOfWeek.Equals(DayOfWeek.Saturday)) ||
+                                                            (entranceDate.DayOfWeek.Equals(DayOfWeek.Sunday)) ||
+                                                            (this.metricsRepository.IsHolidayDate(entranceDate)))
+                                                    {
+                                                        agentSchedule.ExtraHoursWorked100 += Convert.ToInt32(Math.Round(extraHours));
+                                                    }
+                                                    else
+                                                    {
+                                                        agentSchedule.ExtraHoursWorked50 += Convert.ToInt32(Math.Round(extraHours));
+                                                    }
+                                                }
+
+                                                agentSchedule.TotalHoursWorked += Convert.ToInt32(Math.Round(actualWorkedHours));
+                                                agentSchedule.LastDayModified = Convert.ToByte(ttsFile.FileDate.Day);
+                                            }
+
+                                            this.metricsRepository.SaveOrUpdateMonthlySchedule(agentSchedule);
                                         }
                                     }
-
-                                    agentSchedule.TotalHoursWorked += Convert.ToInt32(Math.Round(actualWorkedHours));
-                                    agentSchedule.LastDayModified = Convert.ToByte(ttsFile.FileDate.Day);
+                                    catch (STSException e)
+                                    {
+                                        this.metricsRepository.LogInProcessedFile(ttsFile.FilePath, "Linea " + (dataLines.IndexOf(line) + 1) + ": Error STS #" + e.Message + Environment.NewLine);
+                                        this.metricsRepository.LogInProcessedFile(stsFile.FilePath, e.Message + Environment.NewLine);
+                                        Console.WriteLine("     " + e.Message);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        this.metricsRepository.LogInProcessedFile(ttsFile.FilePath, "Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message + Environment.NewLine);
+                                        this.metricsRepository.LogInProcessedFile(stsFile.FilePath, "Error TTS-Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message + Environment.NewLine);
+                                        Console.WriteLine("     " + e.Message);
+                                    }
                                 }
-
-                                this.metricsRepository.SaveOrUpdateMonthlySchedule(agentSchedule);
                             }
-
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Error procesando archivos TTS-STS para la fecha " + date.ToString("dd-MM-yyyy") + ": " + e.Message);
+                            }
                         }
-
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se pudo encontrar el STS o el TTS para la fecha " + date.ToString("dd-MM-yyyy"));
                     }
                 }
             }
@@ -308,6 +343,20 @@
 
         private void ProcessNewAgentFromHF(HfAgent hfAgent)
         {
+            var msg = "";
+            if (!this.campaingRepository.ExistsSupervisor(hfAgent.SupervisorId))
+            {
+                msg += "El supervisor " + hfAgent.SupervisorId + " no existe en la base de datos.";
+            }
+            if (!this.campaingRepository.ExistsCampaing(hfAgent.CampaingId))
+            {
+                msg += "La campaña " + hfAgent.CampaingId + " no existe en la base de datos.";
+            }
+            if (msg != "")
+            {
+                throw new ArgumentException(msg);
+            }
+
             var username = hfAgent.Name + "." + hfAgent.LastName;
             if (this.membershipService.ExistsUser(username)) //Username ya tomado por otro agente
             {
@@ -344,17 +393,31 @@
                 }
                 else
                 {
-                    //TODO: Loguear que el supervisor indicado no existe o no esta asignado a la campaña indicada
+                    throw new ArgumentException("El supervisor "+hfAgent.SupervisorId+" no esta asignado a la campaña "+hfAgent.CampaingId);
                 }
             }
             else
             {
-                //TODO: Loguear que la capaña indicada no existe o no tiene supervisores asignados
+                throw new ArgumentException("La campaña "+hfAgent.CampaingId+" no tiene supervisores asignados");
             }
         }
 
         private void ProcessUpdatedAgentFromHF(HfAgent hfAgent, Agent dbAgent)
         {
+            var msg = "";
+            if (!this.campaingRepository.ExistsSupervisor(hfAgent.SupervisorId))
+            {
+                msg += "El supervisor " + hfAgent.SupervisorId + " no existe en la base de datos.";
+            }
+            if (!this.campaingRepository.ExistsCampaing(hfAgent.CampaingId))
+            {
+                msg += "La campaña " + hfAgent.CampaingId + " no existe en la base de datos.";
+            }
+            if (msg != "")
+            {
+                throw new ArgumentException(msg);
+            }
+
             //TODO: Verificar y actualizar propiedades del perfil (salary, jornada, status)
 
             var agentActualCampaingId = this.metricsRepository.RetrieveUserActualCampaingId(dbAgent.InnerUserId);
@@ -370,7 +433,7 @@
                 }
                 else
                 {
-                    //TODO: Loguear inconsistencia de datos
+                    throw new ArgumentException("El supervisor " + hfAgent.SupervisorId + " no esta asignado a la misma campaña que el agente " + dbAgent.InnerUserId);
                 }
             }
             else if ((hfAgent.SupervisorId != dbAgent.SupervisorId) && (hfAgent.CampaingId != agentActualCampaingId)) //Cambio de supervisor y de campaña
@@ -384,39 +447,39 @@
                 }
                 else
                 {
-                    //TODO: Loguear inconsistencia de datos
+                    throw new ArgumentException("El supervisor " + hfAgent.SupervisorId + " no esta asignado a la campaña " + hfAgent.CampaingId);
                 }
             }
         }
 
         private double GetScheduledHours(IList<Dictionary<string,string>> stsLines, int agentId)
         {
-            var scheduledHours = 0.0;
-
-            var agentLine = (from l in stsLines
-                             where Convert.ToInt32(l["legajo"]) == agentId
-                             select l).ToList().FirstOrDefault();
-
-            if (agentLine == null)
+            try
             {
-                scheduledHours = 0.0;
+                var scheduledHours = 0.0;
+
+                var agentLine = (from l in stsLines
+                                 where Convert.ToInt32(l["legajo"]) == agentId
+                                 select l).ToList().FirstOrDefault();
+
+                if (agentLine == null)
+                {
+                    scheduledHours = 0.0;
+                }
+                else
+                {
+                    var entranceDate = this.ParseDateHourFromFileFields(agentLine["fecha Entrada"], agentLine["Horario Entrada"]);
+                    var exitDate = this.ParseDateHourFromFileFields(agentLine["fecha Salida"], agentLine["Horario Salida"]);
+
+                    scheduledHours = exitDate.Subtract(entranceDate).TotalHours;
+                }
+
+                return scheduledHours;
             }
-            else
+            catch (Exception e)
             {
-                var strFecha = agentLine["fecha Entrada"].Split('/');
-                var strHora = agentLine["Horario Entrada"].Split(':');
-                var entranceDate = new DateTime(Convert.ToInt32(strFecha[2]) /*Año*/, Convert.ToInt32(strFecha[1]) /*Mes*/, Convert.ToInt32(strFecha[0]) /*Dia*/,
-                                                Convert.ToInt32(strHora[0]) /*Horas*/, Convert.ToInt32(strHora[1]) /*Minutos*/, 0 /*Segundos*/);
-
-                strFecha = agentLine["fecha Salida"].Split('/');
-                strHora = agentLine["Horario Salida"].Split(':');
-                var exitDate = new DateTime(Convert.ToInt32(strFecha[2]), Convert.ToInt32(strFecha[1]), Convert.ToInt32(strFecha[0]),
-                                                Convert.ToInt32(strHora[0]), Convert.ToInt32(strHora[1]), 0);
-
-                scheduledHours = exitDate.Subtract(entranceDate).TotalHours;
+                throw new STSException(e.Message);
             }
-
-            return scheduledHours;
         }
 
         private void CreateProcessedFileFromDataFile(IDataFile dataFile)
@@ -437,6 +500,16 @@
 
                 this.metricsRepository.CreateProcessedFile(processedFile);
             }
+        }
+
+        private DateTime ParseDateHourFromFileFields(string fecha, string hora)
+        {
+            var strFecha = fecha.Split('/');
+            var strHora = hora.Split(':');
+            var date = new DateTime(Convert.ToInt32(strFecha[2]) /*Año*/, Convert.ToInt32(strFecha[1]) /*Mes*/, Convert.ToInt32(strFecha[0]) /*Dia*/,
+                                    Convert.ToInt32(strHora[0]) /*Horas*/, Convert.ToInt32(strHora[1]) /*Minutos*/, 0 /*Segundos*/);
+
+            return date;
         }
     }
 }
