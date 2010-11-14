@@ -29,9 +29,9 @@
 
         void CreateSupervisorAgent(SupervisorAgent supervisorAgent);
 
-        void CreateOrUpdateSupervisorMetric(int innerUserId, int campaingId, int metricId, DateTime date, double value);
+        void CreateOrUpdateSupervisorMetric(int metricId, DateTime date);
 
-        void CreateOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value);
+        void CreateOrUpdateCampaingMetric(int metricId, DateTime date);
 
         int CreateProcessedFile(ProcessedFile file);
 

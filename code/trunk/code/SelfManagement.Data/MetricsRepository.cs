@@ -185,58 +185,113 @@
             }
         }
 
-        public void CreateOrUpdateSupervisorMetric(int innerUserId, int campaingId, int metricId, DateTime date, double value)
+        public void CreateOrUpdateSupervisorMetric(int metricId, DateTime date)
         {
             using (var ctx = new SelfManagementEntities())
             {
-                var original = ctx.UserMetrics
-                                  .Where(um => (um.InnerUserId == innerUserId) && (um.CampaingId == campaingId) && (um.MetricId == metricId) && (um.Date == date))
-                                  .FirstOrDefault();
+                var supervisors = ctx.SupervisorAgents
+                                  .Where(s => ctx.UserMetrics.Any(um => (um.MetricId == metricId) && (um.Date == date) && (um.InnerUserId == s.AgentId)))
+                                  .Select(s => s.SupervisorId).Distinct().ToList();
 
-                if (original != null)
+                foreach (var supervisorId in supervisors)
                 {
-                    var metric = ctx.Metrics.Where(m => m.Id == original.MetricId).FirstOrDefault();
-                    if (metric.Format == 0)
+                    /*var supervisorCampaingId = ctx.Campaings
+                                               .Where(c => ctx.CampaingUsers.Any(cu => (cu.CampaingId == c.Id) && (cu.InnerUserId == supervisorId)
+                                                      && (cu.BeginDate <= date) && (cu.EndDate >= date)))
+                                               .FirstOrDefault().Id;*/
+
+                    var supervisorCampaingId = ctx.CampaingUsers
+                                               .Where(cu => (cu.InnerUserId == supervisorId) && (cu.BeginDate <= date) && (cu.EndDate >= date))
+                                               .FirstOrDefault().CampaingId;
+
+                    var agentsMetric = ctx.UserMetrics
+                                       .Where(um => (um.MetricId == metricId) && (um.Date == date) && (um.CampaingId == supervisorCampaingId)
+                                              && ctx.SupervisorAgents.Any(sa => (sa.AgentId == um.InnerUserId) && (sa.SupervisorId == supervisorId)))
+                                       .ToList();
+
+                    var supervisorMetricValue = 0.0;
+
+                    if (agentsMetric.Count > 0)
                     {
-                        original.Value = (original.Value + value) / Convert.ToDouble(2);
+                        foreach (var am in agentsMetric)
+                        {
+                            supervisorMetricValue += am.Value;
+                        }
+
+                        supervisorMetricValue = supervisorMetricValue / Convert.ToDouble(agentsMetric.Count);
+
+                        var supervisorMetric = ctx.UserMetrics
+                                               .Where(um => (um.MetricId == metricId) && (um.Date == date)
+                                                      && (um.InnerUserId == supervisorId) && (um.CampaingId == supervisorCampaingId))
+                                               .FirstOrDefault();
+
+                        if (supervisorMetric != null)
+                        {
+                            supervisorMetric.Value = supervisorMetricValue;
+                        }
+                        else
+                        {
+                            ctx.UserMetrics.AddObject(new UserMetric
+                            {
+                                InnerUserId = supervisorId,
+                                CampaingId = supervisorCampaingId,
+                                MetricId = metricId,
+                                Date = date,
+                                Value = supervisorMetricValue
+                            });
+                        }
                     }
-                    else
-                    {
-                        original.Value += value;
-                    }
-                }
-                else
-                {
-                    ctx.UserMetrics.AddObject(new UserMetric { InnerUserId = innerUserId, CampaingId = campaingId, MetricId = metricId, Date = date, Value = value });
                 }
 
                 ctx.SaveChanges();
             }
         }
 
-        public void CreateOrUpdateCampaingMetric(int campaingId, int metricId, DateTime date, double value)
+        public void CreateOrUpdateCampaingMetric(int metricId, DateTime date)
         {
             using (var ctx = new SelfManagementEntities())
             {
-                var original = ctx.CampaingMetrics
-                                  .Where(cm => (cm.CampaingId == campaingId) && (cm.MetricId == metricId) && (cm.Date == date))
-                                  .FirstOrDefault();
+                var campaings = ctx.CampaingUsers
+                                .Where(cu => ctx.UserMetrics.Any(um => (um.MetricId == metricId) && (um.Date == date) && (um.InnerUserId == cu.InnerUserId)))
+                                .Select(cu => cu.CampaingId).Distinct().ToList();
 
-                if (original != null)
+                foreach (var campaingId in campaings)
                 {
-                    var metric = ctx.Metrics.Where(m => m.Id == original.MetricId).FirstOrDefault();
-                    if (metric.Format == 0)
+                    var agentsMetric = ctx.UserMetrics
+                                       .Where(um => (um.MetricId == metricId) && (um.Date == date) && (um.CampaingId == campaingId)
+                                              && (!ctx.Supervisors.Any(s => s.InnerUserId == um.InnerUserId)))
+                                       .ToList();
+
+                    var campaingMetricValue = 0.0;
+
+                    if (agentsMetric.Count > 0)
                     {
-                        original.Value = (original.Value + value) / Convert.ToDouble(2);
+                        foreach (var am in agentsMetric)
+                        {
+                            campaingMetricValue += am.Value;
+                        }
+
+                        campaingMetricValue = campaingMetricValue / Convert.ToDouble(agentsMetric.Count);
+
+                        var campaingMetric = ctx.CampaingMetrics
+                                               .Where(cm => (cm.MetricId == metricId) && (cm.Date == date) && (cm.CampaingId == campaingId))
+                                               .FirstOrDefault();
+
+                        if (campaingMetric != null)
+                        {
+                            campaingMetric.Value = campaingMetricValue;
+                        }
+                        else
+                        {
+                            ctx.CampaingMetrics.AddObject(new CampaingMetric
+                            {
+                                CampaingId = campaingId,
+                                MetricId = metricId,
+                                Date = date,
+                                Value = campaingMetricValue
+                            });
+                        }
                     }
-                    else
-                    {
-                        original.Value += value;
-                    }
-                }
-                else
-                {
-                    ctx.CampaingMetrics.AddObject(new CampaingMetric { CampaingId = campaingId, MetricId = metricId, Date = date, Value = value });
                 }
 
                 ctx.SaveChanges();
