@@ -35,6 +35,8 @@
 
         IList<Supervisor> RetrieveCampaingSupervisors(int campaingId);
 
+        IList<Supervisor> RetrieveCampaingSupervisors(int campaingId, int pageSize, int pageNumber);
+        
         int CountCampaingSupervisors(int campaingId);
 
         IList<Agent> RetrieveCampaingAgents(int campaingId);

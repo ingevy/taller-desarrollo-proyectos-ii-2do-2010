@@ -60,7 +60,7 @@
             var model = new SupervisorViewModel
             {
                 Id = entity.InnerUserId,
-                DisplayName = GetDisplayName(entity),
+                DisplayName = GetSupervisorDisplayName(entity),
                 Selected = false
             };
 
@@ -91,7 +91,7 @@
             };
         }
 
-        private static string GetDisplayName(Supervisor supervisor)
+        public static string GetSupervisorDisplayName(Supervisor supervisor)
         {
             if (!string.IsNullOrEmpty(supervisor.Name) && !string.IsNullOrEmpty(supervisor.LastName))
             {
