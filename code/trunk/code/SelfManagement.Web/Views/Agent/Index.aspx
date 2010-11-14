@@ -188,6 +188,12 @@
              <li> <%: Html.ActionLink("< ", "Index", "Agent", new { pageNumber = this.Model.PageNumber - 1, campaingId = this.Model.CampaingIdForPagination }, new { title = "Página Anterior" }) %></li>
              <%
                     }
+                    else if (this.Model.ShouldIncludeSupervisor)
+                    {
+             %>
+             <li> <%: Html.ActionLink("< ", "Index", "Agent", new { pageNumber = this.Model.PageNumber - 1, supervisorId = this.Model.SupervisorIdForPagination }, new { title = "Página Anterior" }) %></li>
+             <%
+                    }
                     else
                     {
              %>
@@ -205,6 +211,12 @@
              <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Agent", new { pageNumber = this.Model.PageNumber, campaingId = this.Model.CampaingIdForPagination }, new { title = "Página Actual" })%></li>
              <%
                 }
+                else if (this.Model.ShouldIncludeSupervisor)
+                {
+             %>
+             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Agent", new { pageNumber = this.Model.PageNumber, supervisorId = this.Model.SupervisorIdForPagination }, new { title = "Página Actual" })%></li>
+             <%
+                }
                 else
                 {
              %>
@@ -220,6 +232,12 @@
                     {
              %>
              <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1, campaingId = this.Model.CampaingIdForPagination }, new { title = "Página Siguiente" }) %></li>
+             <%
+                    }
+                    else if (this.Model.ShouldIncludeSupervisor)
+                    {
+             %>
+             <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1, supervisorId = this.Model.SupervisorIdForPagination }, new { title = "Página Siguiente" }) %></li>
              <%
                     }
                     else

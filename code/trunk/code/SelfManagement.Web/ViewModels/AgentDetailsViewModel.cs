@@ -54,7 +54,11 @@
 
         public bool ShouldIncludeCampaing { get; set; }
 
+        public bool ShouldIncludeSupervisor { get; set; }
+
         public int CampaingIdForPagination { get; set; }
+
+        public int SupervisorIdForPagination { get; set; }
 
         public int PageNumber { get; set; }
 

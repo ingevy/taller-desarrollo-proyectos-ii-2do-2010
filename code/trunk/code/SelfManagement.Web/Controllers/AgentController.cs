@@ -36,13 +36,14 @@
         //
         // GET: /Agent/
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
-        public ActionResult Index(int? pageNumber, int? campaingId)
+        public ActionResult Index(int? pageNumber, int? campaingId, int? supervisorId)
         {
             bool shoulPaginate;
             bool shouldIncludeCampaing;
+            bool shouldIncludeSupervisor;
             int totalCount;
             int page;
-            var agent = this.GetAgent(pageNumber, campaingId, out shoulPaginate, out shouldIncludeCampaing, out page, out totalCount);           
+            var agent = this.GetAgent(pageNumber, campaingId, supervisorId, out shoulPaginate, out shouldIncludeCampaing, out shouldIncludeSupervisor, out page, out totalCount);           
             
             var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
             var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
@@ -84,7 +85,9 @@
                 Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now),
                 ShouldPaginate = shoulPaginate,
                 ShouldIncludeCampaing = shouldIncludeCampaing,
+                ShouldIncludeSupervisor = shouldIncludeSupervisor,
                 CampaingIdForPagination = shouldIncludeCampaing ? campaingId.Value : 0,
+                SupervisorIdForPagination = shouldIncludeSupervisor ? supervisorId.Value : 0,
                 PageNumber = page,
                 TotalPages = totalCount
             };
@@ -507,44 +510,51 @@
             return MetricLevel.Unsatisfactory;
         }
 
-        private Agent GetAgent(int? pageNumber, int? campaingId, out bool shoulPaginate, out bool shoulIncludeCampaing, out int page, out int totalCount)
+        private Agent GetAgent(int? pageNumber, int? campaingId, int? supervisorId, out bool shoulPaginate, out bool shoulIncludeCampaing, out bool shoulIncludeSupervisor, out int page, out int totalCount)
         {
             shoulIncludeCampaing = false;
+            shoulIncludeSupervisor = false;
             if (User.IsInRole("AccountManager"))
             {
                 shoulPaginate = true;
                 shoulIncludeCampaing = campaingId.HasValue;
-                totalCount = !campaingId.HasValue
-                                ? this.membershipService.CountAllAgents()
-                                : this.campaingRepository.CountCampaingAgents(campaingId.Value);
+                shoulIncludeSupervisor = !campaingId.HasValue && supervisorId.HasValue;
+                totalCount = campaingId.HasValue
+                                ? this.campaingRepository.CountCampaingAgents(campaingId.Value)
+                                : supervisorId.HasValue
+                                    ? this.membershipService.CountAgentsBySupervisorId(supervisorId.Value)
+                                    : this.membershipService.CountAllAgents();
                 page = !pageNumber.HasValue
                             ? 1
                             : pageNumber.Value > totalCount
                                 ? totalCount
                                 : pageNumber.Value;
 
-                return !campaingId.HasValue
-                          ? this.membershipService.RetrieveAllAgents(1, page).FirstOrDefault()
-                          : this.campaingRepository.RetrieveCampaingAgents(campaingId.Value, 1, page).FirstOrDefault();
+                return campaingId.HasValue
+                          ? this.campaingRepository.RetrieveCampaingAgents(campaingId.Value, 1, page).FirstOrDefault()
+                          : supervisorId.HasValue
+                                ? this.membershipService.RetrieveAgentsBySupervisorId(supervisorId.Value, 1, page).FirstOrDefault()
+                                : this.membershipService.RetrieveAllAgents(1, page).FirstOrDefault();
             }
 
             if (User.IsInRole("Supervisor"))
             {
-                var supervisorId = this.membershipService.RetrieveSupervisor(this.User.Identity.Name).InnerUserId;
+                var currentSupervisorId = this.membershipService.RetrieveSupervisor(this.User.Identity.Name).InnerUserId;
                 shoulPaginate = true;
-                totalCount = this.membershipService.CountAgentsBySupervisorId(supervisorId);
+                totalCount = this.membershipService.CountAgentsBySupervisorId(currentSupervisorId);
                 page = !pageNumber.HasValue
                             ? 1
                             : pageNumber.Value > totalCount
                                 ? totalCount
                                 : pageNumber.Value;
 
-                return this.membershipService.RetrieveAgentsBySupervisorId(supervisorId, 1, page).FirstOrDefault();
+                return this.membershipService.RetrieveAgentsBySupervisorId(currentSupervisorId, 1, page).FirstOrDefault();
             }
 
             shoulPaginate = false;
             totalCount = 1;
             page = 1;
+
             return this.membershipService.RetrieveAgent(this.User.Identity.Name);
         }
     }
