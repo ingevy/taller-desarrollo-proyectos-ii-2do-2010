@@ -42,8 +42,9 @@
                 </div>
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.SupervisorsCount) %>
-                    <%: Html.TextBoxFor(model => model.SupervisorsCount, new { Class = "uservalue", disabled = "true" })%>
+                    <%: Html.ActionLink(this.Model.SupervisorsCount, "Index", "Supervisor", new { campaingId = this.Model.CampaingId }, new { Class = "uservalue", style = "display:inline-block;" })%>
                 </div>
+                <div style="clear: both; height: 1px"></div>
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.BeginDate) %>
                     <%: Html.TextBoxFor(model => model.BeginDate, new { Class = "uservalue", disabled = "true" })%>
@@ -54,8 +55,9 @@
                 </div>
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.AgentsCount) %>
-                    <%: Html.TextBoxFor(model => model.AgentsCount, new { Class = "uservalue", disabled = "true" })%>
+                    <%: Html.ActionLink(this.Model.AgentsCount, "Index", "Agent", new { campaingId = this.Model.CampaingId }, new { Class = "uservalue", style = "display:inline-block;" })%>
                 </div>
+                <div style="clear: both; height: 1px"></div>
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.OptimalHourlyValue) %>
                     <%: Html.TextBoxFor(model => model.OptimalHourlyValue, new { Class = "uservalue", disabled = "true" })%>

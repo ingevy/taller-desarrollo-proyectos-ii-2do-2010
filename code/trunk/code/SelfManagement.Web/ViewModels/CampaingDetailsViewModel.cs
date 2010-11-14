@@ -11,10 +11,10 @@
         public string DisplayName { get; set; }
 
         [DisplayName("Supervisores")]
-        public int SupervisorsCount { get; set; }
+        public string SupervisorsCount { get; set; }
 
         [DisplayName("Agentes")]
-        public int AgentsCount { get; set; }
+        public string AgentsCount { get; set; }
 
         [DisplayName("Cliente")]
         public string Customer { get; set; }
