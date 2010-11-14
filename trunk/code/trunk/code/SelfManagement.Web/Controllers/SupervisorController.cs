@@ -85,8 +85,59 @@
             return this.View(model);
         }
 
+        [Authorize(Roles = "AccountManager, Supervisor")]
+        public ActionResult CampaingMetricValues(int innerUserId, int campaingId)
+        {
+            var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
+            var availableMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaingId);
+            var today = DateTime.Now.Date;
+            var monthIndex = availableMonths.IndexOf(today.ToString("yyyy-MM"));
+            DateTime date = today;
 
-        [Authorize(Roles = "AccountManager, Supervisor, Agent")]
+            if (monthIndex == -1)
+            {
+                var last = availableMonths.Last().Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                var lastYear = int.Parse(last[0], NumberStyles.Integer, CultureInfo.InvariantCulture);
+                var lastMonth = int.Parse(last[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
+                var flag = false;
+
+                if ((today.Year > lastYear) || ((today.Year == lastYear) && (today.Month > lastMonth)))
+                {
+                    flag = true;
+                    monthIndex = availableMonths.Count - 1;
+                }
+                else
+                {
+                    flag = false;
+                    monthIndex = 0;
+                }
+
+                var metricsDate = DateTime.ParseExact(availableMonths[monthIndex], "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+
+                date = flag ? GetEndDate(metricsDate.Year, metricsDate.Month) : metricsDate;
+            }
+
+            var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, date);
+            var currentMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, GetEndDate(date.Year, date.Month), true);
+            var projectedMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, GetEndDate(date.Year, date.Month), false);
+
+            return new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new
+                {
+                    CampaingMetricValues = model,
+                    AvailableMetricMonths = availableMonths,
+                    CurrentMetricMonthIndex = monthIndex,
+                    CurrentMetricLevelDescription = currentMetricLevel.GetDescription(),
+                    ProjectedMetricLevelDescription = projectedMetricLevel.GetDescription(),
+                    CurrentMetricLevelCssClass = currentMetricLevel.GetCssClass(),
+                    ProjectedMetricLevelCssClass = projectedMetricLevel.GetCssClass()
+                }
+            };
+        }
+
+        [Authorize(Roles = "AccountManager, Supervisor")]
         public ActionResult MetricsChart(int innerUserId, int campaingId, int metricId, string month)
         {
             var campaingMetric = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId).FirstOrDefault(cml => cml.MetricId == metricId);
