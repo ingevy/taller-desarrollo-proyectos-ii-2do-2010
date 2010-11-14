@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AvailableCallStatusPercentageMetricFixture.cs" />
     <Compile Include="AverageAfterCallWorkMetricFixture.cs" />
+    <Compile Include="DataFileFixture.cs" />
     <Compile Include="ScheduleAdherenceMetricFixture.cs" />
     <Compile Include="OverallQualityScorePercentMetricFixture.cs" />
     <Compile Include="NumberOfCallsPerHourMetricFixture.cs" />

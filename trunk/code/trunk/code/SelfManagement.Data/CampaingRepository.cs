@@ -7,6 +7,18 @@
 
     public class CampaingRepository : ICampaingRepository
     {
+        public bool ExistsAgent(int agentId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var query = from a in ctx.Agents
+                            where a.InnerUserId == agentId
+                            select a;
+
+                return (query.ToList().Count > 0);
+            }
+        }
+
         public bool ExistsSupervisor(int supervisorId)
         {
             using (var ctx = new SelfManagementEntities())

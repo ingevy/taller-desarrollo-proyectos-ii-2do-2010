@@ -5,6 +5,8 @@
 
     public interface ICampaingRepository
     {
+        bool ExistsAgent(int agentId);
+
         bool ExistsSupervisor(int supervisorId);
 
         bool ExistsCampaing(int campaingId);

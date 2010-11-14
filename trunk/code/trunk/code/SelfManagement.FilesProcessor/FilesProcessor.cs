@@ -99,7 +99,9 @@
 
         private void ProcessMetrics(IList<IDataFile> files)
         {
-            var filesToProcess = files;
+            var filesToProcess = (from f in files
+                                  where f.ExternalSystemFile != ExternalSystemFiles.HF
+                                  select f).ToList();
 
             if (filesToProcess.Count > 0)
             {
@@ -116,17 +118,22 @@
 
                     foreach (var metric in avMetrics)
                     {
-                        var metricTypes = metric.CLRType.Split(',');
-                        IMetric metricProcessor = (IMetric)Activator.CreateInstance(metricTypes[1], metricTypes[0]).Unwrap();
-
                         try
                         {
-                            metricProcessor.ProcessFiles(groupedFiles[date]); // TODO: Capture error event in metrics and log file error into DB
+                            var metricTypes = metric.CLRType.Split(',');
+                            IMetric metricProcessor = (IMetric)Activator.CreateInstance(metricTypes[1], metricTypes[0]).Unwrap();
+
+                            metricProcessor.ProcessFiles(groupedFiles[date]);
                             var metricValues = metricProcessor.CalculatedValues;
 
                             Console.WriteLine("Grabando Metrica: " + metric.MetricName + " - Fecha: " + metricProcessor.MetricDate.ToString("dd/MM/yyyy"));
                             foreach (var legajo in metricValues.Keys)
                             {
+                                if (!this.campaingRepository.ExistsAgent(legajo))
+                                {
+                                    throw new ArgumentException("El agente " + legajo + " no existe en la base de datos");
+                                }
+
                                 var agentCampaingId = this.metricsRepository.RetrieveUserCampaingId(legajo, metricProcessor.MetricDate);
                                 var agentSupervisorId = this.metricsRepository.RetrieveAgentSupervisorId(legajo);
                                 var supervisorCampaingId = this.metricsRepository.RetrieveUserCampaingId(agentSupervisorId, metricProcessor.MetricDate);
@@ -141,21 +148,19 @@
                                 {
                                     var userMetric = new UserMetric
                                     {
-                                        CampaingId = agentCampaingId,
-                                        InnerUserId = legajo,
-                                        MetricId = metric.Id,
-                                        Date = metricProcessor.MetricDate,
-                                        Value = metricValues[legajo]
+                                        CampaingId = agentCampaingId, InnerUserId = legajo, MetricId = metric.Id, 
+                                        Date = metricProcessor.MetricDate, Value = metricValues[legajo]
                                     };
                                     this.metricsRepository.CreateAgentMetric(userMetric);
-                                    this.metricsRepository.CreateOrUpdateSupervisorMetric(agentSupervisorId, agentCampaingId, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);
-                                    this.metricsRepository.CreateOrUpdateCampaingMetric(agentCampaingId, metric.Id, metricProcessor.MetricDate, metricValues[legajo]);
                                 }
                             }
+
+                            this.metricsRepository.CreateOrUpdateSupervisorMetric(metric.Id, metricProcessor.MetricDate);
+                            this.metricsRepository.CreateOrUpdateCampaingMetric(metric.Id, metricProcessor.MetricDate);
                         }
-                        catch
+                        catch (Exception e)
                         {
-                            // Para evitar el throw de las metricas por el archivo HF que esta en el directorio
+                            Console.WriteLine("Error procesando metrica "+metric.MetricName+" para la fecha "+date.ToString("dd-MM-yyyy")+": "+e.Message);
                         }
                     }
                 }
