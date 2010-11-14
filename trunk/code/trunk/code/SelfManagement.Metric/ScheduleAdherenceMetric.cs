@@ -21,7 +21,7 @@
             //Veo si entro mas tarde de lo planificado
             TimeSpan spanEntrada = dateTimeEntradaTTS.Subtract(dateTimeEntradaSTS);
             //Veo si se fue antes de lo planificado
-            TimeSpan spanSalida = dateTimeSalidaSTS.Subtract( dateTimeEntradaTTS );
+            TimeSpan spanSalida = dateTimeSalidaSTS.Subtract( dateTimeSalidaTTS );
 
             //Sumo solo si entro mas tarde o si salio mas temprano
             if (spanEntrada.TotalMilliseconds > 0)
@@ -100,7 +100,7 @@
             {
                 var agentIdSTS = Convert.ToInt32(lineSTS["legajo"]);
                 //Parseo fechas de STS
-                Int32[] fechaSalidaSTS = parseFechas(lineSTS, "Fecha Salida", '/', agentIdSTS, "STS");
+                Int32[] fechaSalidaSTS = parseFechas(lineSTS, "fecha Salida", '/', agentIdSTS, "STS");
                 Int32 diaSalidaSTS = Convert.ToInt32(fechaSalidaSTS[0]);
                 Int32 mesSalidaSTS = Convert.ToInt32(fechaSalidaSTS[1]);
                 Int32 anioSalidaSTS = Convert.ToInt32(fechaSalidaSTS[2]);
@@ -110,7 +110,7 @@
 
                 DateTime dateTimeSalidaSTS = new DateTime(anioSalidaSTS, mesSalidaSTS, diaSalidaSTS, horaSalidaSTS, minutosSalidaSTS, Convert.ToInt32(0));
 
-                Int32[] fechaEntradaSTS = parseFechas(lineSTS, "Fecha Entrada", '/', agentIdSTS, "STS");
+                Int32[] fechaEntradaSTS = parseFechas(lineSTS, "fecha Entrada", '/', agentIdSTS, "STS");
                 Int32 diaEntradaSTS = Convert.ToInt32(fechaEntradaSTS[0]);
                 Int32 mesEntradaSTS = Convert.ToInt32(fechaEntradaSTS[1]);
                 Int32 anioEntradaSTS = Convert.ToInt32(fechaEntradaSTS[2]);
@@ -166,12 +166,12 @@
          * Retorna Int32[] con dia, mes, anio en este orden
          * 
          */
-        public static Int32[] parseFechas(Dictionary<string,string> lineTTS, string nombreCampo, char separador, int agentId, string tipoArchivo)
+        public static Int32[] parseFechas(Dictionary<string,string> line, string nombreCampo, char separador, int agentId, string tipoArchivo)
         {
             Int32[] result = new Int32[3];
 
             string[] fechaStr = null;
-            fechaStr = lineTTS[nombreCampo].Split(separador);
+            fechaStr = line[nombreCampo].Split(separador);
 
             if (fechaStr.Length != 3)
             {
@@ -189,12 +189,12 @@
          * Retorna Int32[] con hora, minutos en este orden
          * 
          */
-        public static Int32[] parseHorarios(Dictionary<string, string> lineTTS, string nombreCampo, char separador, int agentId, string tipoArchivo)
+        public static Int32[] parseHorarios(Dictionary<string, string> line, string nombreCampo, char separador, int agentId, string tipoArchivo)
         {
             Int32[] result = new Int32[3];
 
             string[] fechaStr = null;
-            fechaStr = lineTTS[nombreCampo].Split(separador);
+            fechaStr = line[nombreCampo].Split(separador);
 
             if (fechaStr.Length != 2)
             {
