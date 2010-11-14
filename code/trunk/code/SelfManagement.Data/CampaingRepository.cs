@@ -197,6 +197,19 @@
             }
         }
 
+        public IList<Supervisor> RetrieveCampaingSupervisors(int campaingId, int pageSize, int pageNumber)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors
+                    .Where(s => ctx.CampaingUsers.Any(cu => (cu.InnerUserId == s.InnerUserId) && (cu.CampaingId == campaingId)))
+                    .OrderBy(a => a.InnerUserId)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+            }
+        }
+
         public int CountCampaingSupervisors(int campaingId)
         {
             using (var ctx = new SelfManagementEntities())
