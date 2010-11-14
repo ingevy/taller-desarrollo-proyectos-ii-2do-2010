@@ -36,12 +36,13 @@
         //
         // GET: /Agent/
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
-        public ActionResult Index(int? pageNumber)
+        public ActionResult Index(int? pageNumber, int? campaingId)
         {
             bool shoulPaginate;
+            bool shouldIncludeCampaing;
             int totalCount;
             int page;
-            var agent = this.GetAgent(pageNumber, out page, out shoulPaginate, out totalCount);           
+            var agent = this.GetAgent(pageNumber, campaingId, out shoulPaginate, out shouldIncludeCampaing, out page, out totalCount);           
             
             var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
             var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
@@ -82,6 +83,8 @@
                 CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate),
                 Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now),
                 ShouldPaginate = shoulPaginate,
+                ShouldIncludeCampaing = shouldIncludeCampaing,
+                CampaingIdForPagination = shouldIncludeCampaing ? campaingId.Value : 0,
                 PageNumber = page,
                 TotalPages = totalCount
             };
@@ -504,19 +507,25 @@
             return MetricLevel.Unsatisfactory;
         }
 
-        private Agent GetAgent(int? pageNumber, out int page, out bool shoulPaginate, out int totalCount)
+        private Agent GetAgent(int? pageNumber, int? campaingId, out bool shoulPaginate, out bool shoulIncludeCampaing, out int page, out int totalCount)
         {
+            shoulIncludeCampaing = false;
             if (User.IsInRole("AccountManager"))
             {
                 shoulPaginate = true;
-                totalCount = this.membershipService.CountAllAgents();
+                shoulIncludeCampaing = campaingId.HasValue;
+                totalCount = !campaingId.HasValue
+                                ? this.membershipService.CountAllAgents()
+                                : this.campaingRepository.CountCampaingAgents(campaingId.Value);
                 page = !pageNumber.HasValue
                             ? 1
                             : pageNumber.Value > totalCount
                                 ? totalCount
                                 : pageNumber.Value;
 
-                return this.membershipService.RetrieveAllAgents(1, page).FirstOrDefault();
+                return !campaingId.HasValue
+                          ? this.membershipService.RetrieveAllAgents(1, page).FirstOrDefault()
+                          : this.campaingRepository.RetrieveCampaingAgents(campaingId.Value, 1, page).FirstOrDefault();
             }
 
             if (User.IsInRole("Supervisor"))
