@@ -23,6 +23,8 @@
 
         double GetUserMetricValue(int innerUserId, DateTime date, int metricId, int campaingId);
 
+        double GetCampaingMetricValue(int campaingId, DateTime date, int metricId);
+
         void CreateAgentMetric(UserMetric userMetric);
 
         void CreateSupervisorAgent(SupervisorAgent supervisorAgent);

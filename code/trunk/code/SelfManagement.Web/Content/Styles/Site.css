@@ -78,6 +78,7 @@ div.submit {
 }
 .add { background-position: -120px; }
 .remove { background-position: -80px; }
+.edit { background-position: -40px; }
 .moveUp { background-position: -280px; }
 .moveDown { background-position: -320px; }
 .relatedItineraries { background-position: -360px; }

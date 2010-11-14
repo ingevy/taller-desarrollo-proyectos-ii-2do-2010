@@ -21,6 +21,10 @@
         
         Campaing RetrieveCampaingById(int campaingId);
 
+        IList<Campaing> RetrieveAllCampaings(int pageSize, int pageNumber);
+
+        int CountAllCampaings();
+
         IList<Campaing> RetrieveCampaingsByUserIdAndDate(int innerUserId, DateTime date);
 
         IList<Campaing> RetrieveCampaingsByUserId(int innerUserId);
@@ -29,7 +33,11 @@
 
         IList<Supervisor> RetrieveCampaingSupervisors(int campaingId);
 
+        int CountCampaingSupervisors(int campaingId);
+
         IList<Agent> RetrieveCampaingAgents(int campaingId);
+
+        int CountCampaingAgents(int campaingId);
 
         IList<Agent> RetrieveAgentsBySupervisorId(int supervisorId);
 

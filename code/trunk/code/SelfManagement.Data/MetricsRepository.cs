@@ -3,12 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using CallCenter.SelfManagement.Data.Helpers;
 
     public class MetricsRepository : IMetricsRepository
     {
-
         public ProcessedFile RetrieveProcessedFileByPath(string filePath)
         {
             using (var ctx = new SelfManagementEntities())
@@ -123,16 +121,46 @@
                                          && m.MetricId == metricId && m.CampaingId == campaing.Id
                                    select m).ToList();
                 
-                var metricsCalculator = new MetricsCalculator();
                 var metricValue = 0.0;
 
                 if (metric.Format == 0)
                 {
-                    metricValue = metricsCalculator.CalculateAverageMetricValue(userMetrics, date);
+                    metricValue = MetricsCalculator.CalculateAverageMetricValue(userMetrics, date);
                 }
                 else
                 {
-                    metricValue = metricsCalculator.CalculateAcumulatedMetricValue(userMetrics, date);
+                    metricValue = MetricsCalculator.CalculateAcumulatedMetricValue(userMetrics, date);
+                }
+
+                return metricValue;
+            }
+        }
+
+        public double GetCampaingMetricValue(int campaingId, DateTime date, int metricId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var campaing = ctx.Campaings.Where(c => c.Id == campaingId).ToList().FirstOrDefault();
+                var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
+
+                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lastDayOfMonth = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+                var lowLimitDate = (campaing.BeginDate < firstDayOfMonth) ? firstDayOfMonth : campaing.BeginDate;
+
+                var campaingMetrics = (from cm in ctx.CampaingMetrics
+                                   where cm.Date >= lowLimitDate && cm.Date <= lastDayOfMonth
+                                         && cm.MetricId == metricId && cm.CampaingId == campaing.Id
+                                   select cm).ToList();
+
+                var metricValue = 0.0;
+
+                if (metric.Format == 0)
+                {
+                    metricValue = MetricsCalculator.CalculateAverageMetricValue(campaingMetrics, date);
+                }
+                else
+                {
+                    metricValue = MetricsCalculator.CalculateAcumulatedMetricValue(campaingMetrics, date);
                 }
 
                 return metricValue;
