@@ -89,7 +89,7 @@
                 <% 
                     var availableCampaings = this.Model.AgentCampaings.Select(ac => new SelectListItem { Text = ac.DisplayName, Value = ac.Id.ToString() });
                 %>
-                <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onchange = "refreshMetricValues()", style = "float:right; margin-right:15px;" })%>
+                <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onchange = "refreshAgentMetricValues()", style = "float:right; margin-right:15px;" })%>
             </h2>
             <div class="content">
                  <h3>Valores por Hora</h3>

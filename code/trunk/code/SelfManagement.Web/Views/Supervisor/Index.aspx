@@ -24,7 +24,7 @@
                 <% 
                     var availableCampaings = this.Model.SupervisorCampaings.Select(ac => new SelectListItem { Text = ac.DisplayName, Value = ac.Id.ToString() });
                 %>
-                <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onchange = "refreshMetricValues()", style = "float:right; margin-right:15px;" })%>
+                <%: Html.DropDownListFor(model => model.CurrentCampaingId, availableCampaings, new { onchange = "refreshSupervisorMetricValues()", style = "float:right; margin-right:15px;" })%>
             </h2>
             <div class="content">
                  <h3>Resumen Actual de Métricas</h3>

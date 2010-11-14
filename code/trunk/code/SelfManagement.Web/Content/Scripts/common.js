@@ -1,4 +1,4 @@
-﻿function refreshMetricValues() {
+﻿function refreshAgentMetricValues() {
     var index = $("#CurrentCampaingId")[0].selectedIndex;
     var campaingId = $("#CurrentCampaingId").children()[index].value;
     var metricValues = $("#metricvaluescontainer");
@@ -105,6 +105,132 @@
                     minimumHourlyElement.value = json.MinimumHourlyValue;
                 }
 
+                if ((json.AvailableMetricMonths == null) || (json.AvailableMetricMonths.length == 0) || (json.CurrentMetricMonthIndex == null)) {
+                    metricMonths[0].innerHTML = "<option selected=\"selected\" value=\"0\">No hay meses disponibles</option>";
+                }
+                else {
+                    var html = "";
+
+                    for (var i = 0; i < json.AvailableMetricMonths.length; i++) {
+                        html += "<option value=\"" + i.toString() + "\" ";
+                        if (i == json.CurrentMetricMonthIndex) {
+                            html += "selected=\"selected\"";
+                        }
+
+                        html += ">" + json.AvailableMetricMonths[i] + "</option>";
+                    }
+
+                    metricMonths[0].innerHTML = html;
+                }
+
+                if ((json.CampaingMetricValues == null) || (json.CampaingMetricValues.length == 0) || (json.AvailableMetricMonths == null) || (json.AvailableMetricMonths.length == 0) || (json.CurrentMetricMonthIndex == null)) {
+                    metricCharts[0].innerHTML = "<h3>No hay graficos disponibles para las metricas de la Campaña elegida...</h3>";
+                }
+                else {
+                    var html = "";
+                    var currentMonth = json.AvailableMetricMonths[json.CurrentMetricMonthIndex];
+
+                    for (var i = 0; i < json.CampaingMetricValues.length; i++) {
+                        var campaingMetricValue = json.CampaingMetricValues[i];
+
+                        html += "<img width=\"952\" height=\"350\" alt=\"" + campaingMetricValue.MetricName + "\" src=\"/Agent/MetricsChart?innerUserId=" + innerUserId.toString() + "&campaingId=" + campaingMetricValue.CampaingId + "&metricId=" + campaingMetricValue.MetricId + "&month=" + currentMonth + "\">";
+                    }
+
+                    metricCharts[0].innerHTML = html;
+                }
+            }
+
+            metricValues.removeClass("loading");
+            metricCharts.removeClass("loading");
+            metricMonths.removeClass("loading");
+            labels.removeClass("loadingLabel");
+        }
+    });
+}
+
+function refreshSupervisorMetricValues() {
+    var index = $("#CurrentCampaingId")[0].selectedIndex;
+    var campaingId = $("#CurrentCampaingId").children()[index].value;
+    var metricValues = $("#metricvaluescontainer");
+    var metricCharts = $("#metricchartscontainer");
+    var metricMonths = $("#CurrentMetricMonthIndex");
+    var innerUserId = $("#SupervisorId")[0].value;
+
+    var labels = $("#secondPanel .content label");
+
+    metricValues[0].innerHTML = " ";
+    metricValues.addClass("loading");
+
+    metricCharts[0].innerHTML = " ";
+    metricCharts.addClass("loading");
+
+    metricMonths[0].innerHTML = " ";
+    metricMonths.addClass("loading");
+
+    labels.addClass("loadingLabel");
+
+    var url = getBaseUrl() + "Supervisor/CampaingMetricValues?innerUserId=" + encodeURIComponent(innerUserId) + "&campaingId=" + encodeURIComponent(campaingId)
+
+    $.ajax({
+        url: url,
+        method: "GET",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function (xhr) { xhr.setRequestHeader("Content-Type", "application/json"); },
+        success: function (json) {
+            var metricValues = $("#metricvaluescontainer");
+            var metricMonths = $("#CurrentMetricMonthIndex");
+            var innerUserId = $("#SupervisorId")[0].value;
+
+            if (json.Status && json.Status == "error") {
+                metricValues[0].innerHTML = "<h3>Ups! Ocurrio un error...</h3>";
+                optimalHourlyElement.value = "Ups! Ocurrio un error...";
+                objectiveHourlyElement.value = "Ups! Ocurrio un error...";
+                minimumHourlyElement.value = "Ups! Ocurrio un error...";
+            }
+            else {
+                if ((json.CampaingMetricValues == null) || (json.CampaingMetricValues.length == 0)) {
+                    metricValues[0].innerHTML = "<h3>No hay metricas disponibles para la Campaña elegida...</h3>";
+                }
+                else {
+                    var html = "<div style=\"float: left;\">";
+                    html += "Nivel Actual: <span class=\"" + json.CurrentMetricLevelCssClass + "\">" + json.CurrentMetricLevelDescription + "</span>";
+                    html += "</div>";
+                    html += "<div style=\"float: right;\">";
+                    html += "Nivel Proyectado: <span class=\"" + json.ProjectedMetricLevelCssClass + "\">" + json.ProjectedMetricLevelDescription + "</span>";
+                    html += "</div>";
+                    html += "<div style=\"clear: both; height: 5px\"></div>";
+                    html += "<table cellpadding=\"0\" cellspacing=\"0\" id=\"metricvalues\">";
+                    html += "<tbody>";
+                    html += "<tr>";
+                    html += "<th>Metrica</th>";
+                    html += "<th>Tipo</th>";
+                    html += "<th>Nivel Optimo</th>";
+                    html += "<th>Nivel Objectivo</th>";
+                    html += "<th>Nivel Minimo</th>";
+                    html += "<th>Valor Actual</th>";
+                    html += "<th>Valor Proyectado</th>";
+                    html += "</tr>";
+
+                    for (var i = 0; i < json.CampaingMetricValues.length; i++) {
+                        var campaingMetricValue = json.CampaingMetricValues[i];
+                        html += "<tr>";
+                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.MetricName + "</td>";
+                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.Format + "</td>";
+                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.OptimalValue + "</td>";
+                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.ObjectiveValue + "</td>";
+                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.MinimumValue + "</td>";
+                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.CurrentValue + "</td>";
+                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.ProjectedValue + "</td>";
+                        html += "</tr>";
+                    }
+
+                    html += "</tbody>";
+                    html += "</table>";
+
+                    metricValues[0].innerHTML = html;
+                }
+                
                 if ((json.AvailableMetricMonths == null) || (json.AvailableMetricMonths.length == 0) || (json.CurrentMetricMonthIndex == null)) {
                     metricMonths[0].innerHTML = "<option selected=\"selected\" value=\"0\">No hay meses disponibles</option>";
                 }
