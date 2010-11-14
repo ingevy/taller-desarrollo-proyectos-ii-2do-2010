@@ -31,6 +31,27 @@
             }
         }
 
+        public IList<Campaing> RetrieveAllCampaings(int pageSize, int pageNumber)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Campaings
+                        .Include("Customer")
+                        .OrderBy(c => c.Id)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+            }
+        }
+
+        public int CountAllCampaings()
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Campaings.Count();
+            }
+        }
+
         public IList<Metric> RetrieveAvailableMetrics()
         {
             using (var ctx = new SelfManagementEntities())
@@ -164,6 +185,16 @@
             }
         }
 
+        public int CountCampaingSupervisors(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors
+                    .Where(s => ctx.CampaingUsers.Any(cu => (cu.InnerUserId == s.InnerUserId) && (cu.CampaingId == campaingId)))
+                    .Count();
+            }
+        }
+
         public IList<Agent> RetrieveCampaingAgents(int campaingId)
         {
             using (var ctx = new SelfManagementEntities())
@@ -171,6 +202,16 @@
                 return ctx.Agents
                     .Where(a => ctx.CampaingUsers.Any(cu => (cu.InnerUserId == a.InnerUserId) && (cu.CampaingId == campaingId)))
                     .ToList();
+            }
+        }
+
+        public int CountCampaingAgents(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Agents
+                    .Where(a => ctx.CampaingUsers.Any(cu => (cu.InnerUserId == a.InnerUserId) && (cu.CampaingId == campaingId)))
+                    .Count();
             }
         }
 

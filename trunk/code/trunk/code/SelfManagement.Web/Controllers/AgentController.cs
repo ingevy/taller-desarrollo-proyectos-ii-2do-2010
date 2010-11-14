@@ -41,13 +41,14 @@
             bool shoulPaginate;
             int totalCount;
             int page;
-            var agent = this.GetAgent(pageNumber, out page, out shoulPaginate, out totalCount);
-            DateTime metricsDate;
-            IList<string> availableMetricMonths;
+            var agent = this.GetAgent(pageNumber, out page, out shoulPaginate, out totalCount);           
+            
             var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
             var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
             var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
 
+            DateTime metricsDate;
+            IList<string> availableMetricMonths;
             if (userCampaing == null)
             {
                 userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
@@ -78,13 +79,12 @@
                 MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
                 ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
+                CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate),
+                Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now),
                 ShouldPaginate = shoulPaginate,
                 PageNumber = page,
                 TotalPages = totalCount
             };
-
-            model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, model.CurrentCampaingId, metricsDate);
-            model.Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now);
 
             return this.View(model);
         }
@@ -431,9 +431,6 @@
             foreach (var campaing in campaings)
             {
                 var end = this.GetEndDate(campaing.Id, date.Year, date.Month);
-                var optimalCount = 0;
-                var objectiveCount = 0;
-                var minimumCount = 0;
                 var hours = projectedTotalHoursWorked;
 
                 if (endDateMonth.Date != end.Date)
