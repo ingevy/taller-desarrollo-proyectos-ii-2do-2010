@@ -61,6 +61,8 @@
 
         public IList<string> AvailableMetricMonths { get; set; }
 
+        public bool ShowEndCampaing { get; set; }
+
         public int PageNumber { get; set; }
 
         public int TotalPages { get; set; }

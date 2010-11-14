@@ -37,13 +37,16 @@
             var availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaing.Id);
 
             var metricsDate = DateTime.Now.Date;
+            var showEndCampaing = true;
             if (campaing.BeginDate.Date > metricsDate)
             {
                 metricsDate = campaing.BeginDate.Date;
+                showEndCampaing = false;
             }
             else if (campaing.EndDate.HasValue && (campaing.EndDate.Value < metricsDate))
             {
                 metricsDate = campaing.EndDate.Value.Date;
+                showEndCampaing = false;
             }
 
             var model = new CampaingDetailsViewModel
@@ -64,6 +67,7 @@
                 CurrentMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
                 ProjectedMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
                 MetricValues = this.CalculateCampaingMetricValues(campaing.Id, metricsDate),
+                ShowEndCampaing = showEndCampaing,
                 PageNumber = page,
                 TotalPages = totalCount
             };
@@ -165,9 +169,8 @@
         //
         // GET: /Campaing/Edit/5
         [Authorize(Roles = "AccountManager")] 
-        public ActionResult Edit(int id)
-        {
-
+        public ActionResult Edit(int campaingId)
+        {            
             //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
             //                                                        .OrderByDescending(s => s.Selected)
             //                                                        .ToList();
@@ -175,8 +178,7 @@
             //campaingToCreate.CampaingMetricLevels = campaingToCreate.CampaingMetricLevels
             //                                                        .OrderByDescending(cml => cml.Selected)
             //                                                        .ToList();
-
-
+            
             return this.View();
         }
 
@@ -184,7 +186,7 @@
         // POST: /Campaing/Edit/5
         [HttpPost]
         [Authorize(Roles = "AccountManager")]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int campaingId, FormCollection collection)
         {
             try
             {
@@ -200,28 +202,12 @@
 
         //
         // GET: /Campaing/Delete/5
-        [Authorize(Roles = "AccountManager")] 
-        public ActionResult Delete(int id)
-        {
-            return this.View();
-        }
-
-        //
-        // POST: /Campaing/Delete/5
-        [HttpPost]
         [Authorize(Roles = "AccountManager")]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult End(int campaingId, int pageNumber)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            this.campaingRepository.EndCampaing(campaingId);
 
-                return this.RedirectToAction("Index");
-            }
-            catch
-            {
-                return this.View();
-            }
+            return this.RedirectToAction("Index", new { pageNumber = pageNumber, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La campaña '{0}' se cerró exitosamente al día de hoy.", campaingId)) });
         }
         
         private static DateTime GetEndDate(int year, int month)

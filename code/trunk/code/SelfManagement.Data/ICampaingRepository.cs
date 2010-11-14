@@ -50,5 +50,7 @@
         void SaveCampaingMetricLevels(IEnumerable<CampaingMetricLevel> campaingMetricLevels);
 
         void SaveCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors);
+
+        void EndCampaing(int campaingId);
     }
 }
