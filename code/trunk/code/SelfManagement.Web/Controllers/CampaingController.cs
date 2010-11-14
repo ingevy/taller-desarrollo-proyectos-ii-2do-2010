@@ -38,12 +38,12 @@
 
             var metricsDate = DateTime.Now.Date;
             var showEndCampaing = true;
-            if (campaing.BeginDate.Date > metricsDate)
+            if (campaing.BeginDate.Date >= metricsDate)
             {
                 metricsDate = campaing.BeginDate.Date;
                 showEndCampaing = false;
             }
-            else if (campaing.EndDate.HasValue && (campaing.EndDate.Value < metricsDate))
+            else if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Date <= metricsDate))
             {
                 metricsDate = campaing.EndDate.Value.Date;
                 showEndCampaing = false;
@@ -53,6 +53,7 @@
             {
                 CampaingId = campaing.Id,
                 AvailableMetricMonths = availableMetricMonths,
+                CurrentMetricMonthIndex = availableMetricMonths.IndexOf(metricsDate.ToString("yyyy-MM")),
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} ({1})", campaing.Name, campaing.Id),
                 Description = campaing.Description,
                 Customer = campaing.Customer.Name,

@@ -47,15 +47,7 @@
         public MetricLevel ProjectedMetricLevel { get; set; }
 
         [DisplayName("Mes")]
-        public int CurrentMetricMonthIndex
-        {
-            get
-            {
-                var index = this.AvailableMetricMonths.IndexOf(DateTime.Now.ToString("yyyy-MM"));
-
-                return (index > -1) ? index : this.AvailableMetricMonths.Count - 1;
-            }
-        }
+        public int CurrentMetricMonthIndex { get; set; }
 
         public IList<MetricValuesViewModel> MetricValues { get; set; }
 
