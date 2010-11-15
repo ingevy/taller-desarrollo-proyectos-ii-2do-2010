@@ -40,7 +40,15 @@
                         solvr.AddPoints(Convert.ToDouble(um.Date.Day), metricValue);
                     }
 
-                    metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
+                    try
+                    {
+                        metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
+                    }
+                    catch (Exception e)
+                    {
+                        metricValue = maxY;
+                    }
+                    
                     metricValue = (metricValue >= maxY) ? metricValue : maxY;
                 }
             }
@@ -75,16 +83,27 @@
                 {
                     var solvr = new LeastSquareQuadraticRegression();
                     solvr.AddPoints(Convert.ToDouble(0), Convert.ToDouble(0));
+                    var maxData = 0.0;
+                    var minData = double.MaxValue;
 
                     foreach (var um in acumulativeMetrics)
                     {
                         metricValue += um.Value;
+                        maxData = (um.Value > maxData) ? um.Value : maxData;
+                        minData = (um.Value < minData) ? um.Value : minData;
                         solvr.AddPoints(Convert.ToDouble(um.Date.Day), um.Value);
                     }
 
                     for (var i = maxDateWithData.Day + 1; i <= date.Day; i++)
                     {
-                        metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
+                        try
+                        {
+                            metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
+                        }
+                        catch (Exception e)
+                        {
+                            metricValue += ((maxData + minData) / Convert.ToDouble(2));
+                        }
                     }
 
                     metricValue = metricValue / (Convert.ToDouble(acumulativeMetrics.Count) + Convert.ToDouble(date.Day - maxDateWithData.Day));
@@ -131,7 +150,15 @@
                         solvr.AddPoints(Convert.ToDouble(um.Date.Day), metricValue);
                     }
 
-                    metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
+                    try
+                    {
+                        metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
+                    }
+                    catch (Exception e)
+                    {
+                        metricValue = maxY;
+                    }
+                    
                     metricValue = (metricValue >= maxY) ? metricValue : maxY;
                 }
             }
@@ -166,16 +193,27 @@
                 {
                     var solvr = new LeastSquareQuadraticRegression();
                     solvr.AddPoints(Convert.ToDouble(0), Convert.ToDouble(0));
+                    var maxData = 0.0;
+                    var minData = double.MaxValue;
 
                     foreach (var um in acumulativeMetrics)
                     {
                         metricValue += um.Value;
+                        maxData = (um.Value > maxData) ? um.Value : maxData;
+                        minData = (um.Value < minData) ? um.Value : minData;
                         solvr.AddPoints(Convert.ToDouble(um.Date.Day), um.Value);
                     }
 
                     for (var i = maxDateWithData.Day + 1; i <= date.Day; i++)
                     {
-                        metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
+                        try
+                        {
+                            metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
+                        }
+                        catch (Exception e)
+                        {
+                            metricValue += ((maxData + minData) / Convert.ToDouble(2));
+                        }
                     }
 
                     metricValue = metricValue / (Convert.ToDouble(acumulativeMetrics.Count) + Convert.ToDouble(date.Day - maxDateWithData.Day));
