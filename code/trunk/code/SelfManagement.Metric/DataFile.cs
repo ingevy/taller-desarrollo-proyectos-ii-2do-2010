@@ -123,7 +123,7 @@
                 }
                 catch (Exception e)
                 {
-                    throw new ApplicationException(e.Message);
+                    throw new ArgumentException(e.Message);
                 }
 
                 return parsedData;
