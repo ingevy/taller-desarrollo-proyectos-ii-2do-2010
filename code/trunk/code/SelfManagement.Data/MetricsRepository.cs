@@ -345,17 +345,19 @@
         {
             using (var ctx = new SelfManagementEntities())
             {
+                var actualDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+
                 var actualAgentCampaing = ctx.Campaings
                                           .Where(c => ctx.CampaingUsers.Any(cu => (cu.CampaingId == c.Id) && (cu.InnerUserId == agentId)
-                                                          && (cu.BeginDate <= DateTime.Now) && (cu.EndDate >= DateTime.Now)))
+                                                          && (cu.BeginDate <= actualDate) && (cu.EndDate >= actualDate)))
                                           .FirstOrDefault();
 
                 var newCampaing = ctx.Campaings
                                   .Where(c => c.Id == newCampaingId)
                                   .FirstOrDefault();
 
-                var beginDate = (newCampaing.BeginDate > DateTime.Now) ? newCampaing.BeginDate : DateTime.Now;
-                var endDate = newCampaing.EndDate.GetValueOrDefault(DateTime.Now);
+                var beginDate = (newCampaing.BeginDate > actualDate) ? newCampaing.BeginDate : actualDate;
+                var endDate = newCampaing.EndDate.GetValueOrDefault(actualDate);
 
                 if (actualAgentCampaing == null)
                 {
@@ -366,11 +368,11 @@
                 else
                 {
                     var oldCampaingUser = ctx.CampaingUsers
-                                          .Where(cu => (cu.CampaingId == actualAgentCampaing.Id) && (cu.InnerUserId == agentId) 
-                                                        && (cu.BeginDate <= DateTime.Now) && (cu.EndDate >= DateTime.Now))
+                                          .Where(cu => (cu.CampaingId == actualAgentCampaing.Id) && (cu.InnerUserId == agentId)
+                                                        && (cu.BeginDate <= actualDate) && (cu.EndDate >= actualDate))
                                           .FirstOrDefault();
 
-                    oldCampaingUser.EndDate = DateTime.Now.AddDays(-1.0);
+                    oldCampaingUser.EndDate = actualDate.AddDays(-1.0);
 
                     var campaingUser = new CampaingUser { CampaingId = newCampaing.Id, InnerUserId = agentId, BeginDate = beginDate, EndDate = endDate };
 
