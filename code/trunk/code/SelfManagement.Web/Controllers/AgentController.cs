@@ -46,7 +46,7 @@
             var agent = this.GetAgent(pageNumber, campaingId, supervisorId, out shoulPaginate, out shouldIncludeCampaing, out shouldIncludeSupervisor, out page, out totalCount);           
             
             var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
-            var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
+            var userCampaing = (campaingId.HasValue) ? this.campaingRepository.RetrieveCampaingById(campaingId.GetValueOrDefault(0)) : this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
             var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
 
             DateTime metricsDate;
@@ -63,8 +63,20 @@
             }
             else
             {
-                metricsDate = DateTime.Now;
-                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+                if (campaingId.HasValue)
+                {
+                    availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+
+                    var date = availableMetricMonths.LastOrDefault();
+
+                    metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+                    metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+                }
+                else
+                {
+                    metricsDate = DateTime.Now;
+                    availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+                }
             }
 
             var model = new AgentDetailsViewModel
