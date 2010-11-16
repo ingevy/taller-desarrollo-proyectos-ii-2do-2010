@@ -123,9 +123,9 @@
                 
                 var metricValue = 0.0;
 
-                if (metric.Format == 0)
+                if ((metric.Format == 0) || (metric.Format == 2))
                 {
-                    metricValue = MetricsCalculator.CalculateAverageMetricValue(userMetrics, date);
+                    metricValue = MetricsCalculator.CalculateAverageMetricValue(userMetrics, date, metric.Format);
                 }
                 else
                 {
@@ -154,9 +154,9 @@
 
                 var metricValue = 0.0;
 
-                if (metric.Format == 0)
+                if ((metric.Format == 0) || (metric.Format == 2))
                 {
-                    metricValue = MetricsCalculator.CalculateAverageMetricValue(campaingMetrics, date);
+                    metricValue = MetricsCalculator.CalculateAverageMetricValue(campaingMetrics, date, metric.Format);
                 }
                 else
                 {
