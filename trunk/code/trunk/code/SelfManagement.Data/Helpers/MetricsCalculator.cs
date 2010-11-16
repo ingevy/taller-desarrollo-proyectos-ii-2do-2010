@@ -44,7 +44,7 @@
                     {
                         metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
                     }
-                    catch (Exception e)
+                    catch
                     {
                         metricValue = maxY;
                     }
@@ -56,7 +56,7 @@
             return metricValue;
         }
 
-        public static double CalculateAverageMetricValue(IList<UserMetric> userMetrics, DateTime date)
+        public static double CalculateAverageMetricValue(IList<UserMetric> userMetrics, DateTime date, int metricFormat)
         {
             var metricValue = 0.0;
             var dates = from u in userMetrics select u.Date;
@@ -100,7 +100,7 @@
                         {
                             metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
                         }
-                        catch (Exception e)
+                        catch
                         {
                             metricValue += ((maxData + minData) / Convert.ToDouble(2));
                         }
@@ -110,8 +110,15 @@
                 }
             }
 
-            if (metricValue < 0) { metricValue = 0.0; }
-            if (metricValue > 100) { metricValue = 100.0; }
+            if (metricFormat == 0)
+            {
+                if (metricValue < 0) { metricValue = 0.0; }
+                if (metricValue > 100) { metricValue = 100.0; }
+            }
+            else if (metricFormat == 2)
+            {
+                if (metricValue < 0) { metricValue = 0.0; }
+            }
 
             return metricValue;
         }
@@ -154,7 +161,7 @@
                     {
                         metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
                     }
-                    catch (Exception e)
+                    catch
                     {
                         metricValue = maxY;
                     }
@@ -166,7 +173,7 @@
             return metricValue;
         }
 
-        public static double CalculateAverageMetricValue(List<CampaingMetric> campaingMetrics, DateTime date)
+        public static double CalculateAverageMetricValue(List<CampaingMetric> campaingMetrics, DateTime date, int metricFormat)
         {
             var metricValue = 0.0;
             var dates = from u in campaingMetrics select u.Date;
@@ -210,7 +217,7 @@
                         {
                             metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
                         }
-                        catch (Exception e)
+                        catch
                         {
                             metricValue += ((maxData + minData) / Convert.ToDouble(2));
                         }
@@ -220,8 +227,15 @@
                 }
             }
 
-            if (metricValue < 0) { metricValue = 0.0; }
-            if (metricValue > 100) { metricValue = 100.0; }
+            if (metricFormat == 0)
+            {
+                if (metricValue < 0) { metricValue = 0.0; }
+                if (metricValue > 100) { metricValue = 100.0; }
+            }
+            else if (metricFormat == 2)
+            {
+                if (metricValue < 0) { metricValue = 0.0; }
+            }
 
             return metricValue;
         }
