@@ -30,7 +30,7 @@
              <% if (this.Model.PageNumber < this.Model.TotalPages)
                 {
              %>
-             <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1, criteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
+             <li> <%: Html.ActionLink(" >", "Search", "Agent", new { pageNumber = this.Model.PageNumber + 1, criteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
              <%
                 }
              %>
@@ -229,7 +229,7 @@
              <% if (this.Model.PageNumber < this.Model.TotalPages)
                 {
              %>
-             <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1, criteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
+             <li> <%: Html.ActionLink(" >", "Search", "Agent", new { pageNumber = this.Model.PageNumber + 1, criteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
              <%
                 }
              %>
