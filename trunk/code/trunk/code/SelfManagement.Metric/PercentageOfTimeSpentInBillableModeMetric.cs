@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CallCenter.SelfManagement.Metric.Helpers;
     using CallCenter.SelfManagement.Metric.Interfaces;
 
     public class PercentageOfTimeSpentInBillableModeMetric : IMetric
@@ -27,6 +28,17 @@
             get { return this.metricDate; }
         }
 
+        public IList<ExternalSystemFiles> ExternalFilesNeeded
+        {
+            get
+            {
+                var files = new List<ExternalSystemFiles>();
+                files.Add(this.externalFileNeeded);
+
+                return files;
+            }
+        }
+
         public void ProcessFiles(IList<IDataFile> dataFiles)
         {
             var metricFiles = (from f in dataFiles
@@ -38,20 +50,34 @@
                 throw new System.ArgumentException("Couldn't find necessary file to process metric"); 
             }
 
-            this.metricDate = metricFiles.First().FileDate;
-
-            var dataLines = metricFiles.First().DataLines;
-
-            foreach (var line in dataLines)
+            try
             {
-                var agentId = Convert.ToInt32(line["Legajo"]);
-                var tiempoInCallMinutos = Convert.ToInt32(line["Tiempo InCall (min)"]);
-                var tiempoEnEsperaMinutos = Convert.ToInt32(line["Tiempo en espera (min)"]);
-                var tiempoEnAfterCallWorkMinutos = Convert.ToInt32(line["Tiempo en after call work (min)"]);
-                var tiempoLoggeadoMinutos = Convert.ToInt32(line["Tiempo Loggeado (min)"]);
-                var metricValue = PercentageOfTimeSpentInBillableModeMetric.CalculateMetricValue(tiempoInCallMinutos, tiempoEnEsperaMinutos, tiempoEnAfterCallWorkMinutos, tiempoLoggeadoMinutos);
+                this.metricDate = metricFiles.First().FileDate;
 
-                this.calculatedValues.Add(agentId, metricValue);
+                var dataLines = metricFiles.First().DataLines;
+
+                foreach (var line in dataLines)
+                {
+                    try
+                    {
+                        var agentId = Convert.ToInt32(line["Legajo"]);
+                        var tiempoInCallMinutos = Convert.ToInt32(line["Tiempo InCall (min)"]);
+                        var tiempoEnEsperaMinutos = Convert.ToInt32(line["Tiempo en espera (min)"]);
+                        var tiempoEnAfterCallWorkMinutos = Convert.ToInt32(line["Tiempo en after call work (min)"]);
+                        var tiempoLoggeadoMinutos = Convert.ToInt32(line["Tiempo Loggeado (min)"]);
+                        var metricValue = PercentageOfTimeSpentInBillableModeMetric.CalculateMetricValue(tiempoInCallMinutos, tiempoEnEsperaMinutos, tiempoEnAfterCallWorkMinutos, tiempoLoggeadoMinutos);
+
+                        this.calculatedValues.Add(agentId, metricValue);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new MetricException("Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new MetricException(e.Message);
             }
         }
     }

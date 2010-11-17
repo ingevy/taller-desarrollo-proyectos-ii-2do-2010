@@ -35,6 +35,8 @@
 
         int CreateProcessedFile(ProcessedFile file);
 
+        void CleanProcessedFile(ProcessedFile file);
+
         void LogInProcessedFile(string filePath, string logMessage);
 
         void ChangeAgentSupervisor(int agentId, int newSupervisorId);

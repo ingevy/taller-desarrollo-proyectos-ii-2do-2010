@@ -65,7 +65,9 @@
   <ItemGroup>
     <Compile Include="FilesProcessor.cs" />
     <Compile Include="Helpers\HfAgent.cs" />
-    <Compile Include="Helpers\STSException.cs" />
+    <Compile Include="Helpers\STSException.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

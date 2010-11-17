@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CallCenter.SelfManagement.Metric.Helpers;
     using CallCenter.SelfManagement.Metric.Interfaces;
 
     public class TimeInAuxStatusMetric : IMetric
@@ -26,7 +27,7 @@
         }
    
         private IDictionary<int, double> calculatedValues = new Dictionary<int, double>();
-        private List<ExternalSystemFiles> externalFilesNeeded = new List<ExternalSystemFiles>(); 
+        private IList<ExternalSystemFiles> externalFilesNeeded = new List<ExternalSystemFiles>(); 
         private DateTime metricDate;
 
         public IDictionary<int, double> CalculatedValues
@@ -39,6 +40,14 @@
             get { return this.metricDate; }
         }
 
+        public IList<ExternalSystemFiles> ExternalFilesNeeded
+        {
+            get
+            {
+                return this.externalFilesNeeded;
+            }
+        }
+
         public void ProcessFiles(IList<IDataFile> dataFiles)
         {
             var metricFiles = (from f in dataFiles
@@ -49,7 +58,7 @@
             //Valido cantidad de archivos
             if (metricFiles.Count != 2)
             {
-                throw new System.ArgumentException("Couldn't find necessaries files to process metric"); 
+                throw new System.ArgumentException("Couldn't find necessary files to process metric"); 
             }
 
             //Valido fechas de archivos
@@ -57,78 +66,91 @@
             {
                 throw new System.ArgumentException("File Dates do not match"); 
             }
-            
-            this.metricDate = metricFiles.First().FileDate;
 
-            IList<Dictionary<string, string>> dataLinesSummary = null;
-            IList<Dictionary<string, string>> dataLinesTTS = null;
-
-            switch (metricFiles.ElementAt(0).ExternalSystemFile)
+            try
             {
-                case ExternalSystemFiles.SUMMARY:
-                    dataLinesSummary = metricFiles.ElementAt(0).DataLines;
-                    break;
-                case ExternalSystemFiles.TTS:
-                    dataLinesTTS = metricFiles.ElementAt(0).DataLines;
-                    break;
-                default:
-                    break;
-            }
+                this.metricDate = metricFiles.First().FileDate;
 
-            switch (metricFiles.ElementAt(1).ExternalSystemFile)
-            {
-                case ExternalSystemFiles.SUMMARY:
-                    dataLinesSummary = metricFiles.ElementAt(1).DataLines;
-                    break;
-                case ExternalSystemFiles.TTS:
-                    dataLinesTTS = metricFiles.ElementAt(1).DataLines;
-                    break;
-                default:
-                    break;
-            }
-            
+                IList<Dictionary<string, string>> dataLinesSummary = null;
+                IList<Dictionary<string, string>> dataLinesTTS = null;
 
-            foreach (var lineSummary in dataLinesSummary)
-            {
-                var agentIdSummary = Convert.ToInt32(lineSummary["Legajo"]);
-                var tiempoLoggeadoMinutos = Convert.ToInt32(lineSummary["Tiempo Loggeado (min)"]);
-
-                var lineTTS = (from l in dataLinesTTS
-                               where agentIdSummary == Convert.ToInt32(l["legajo"])
-                               select l).ToList<Dictionary<string, string>>();
-
-
-                if (lineTTS.Count != 1)
+                switch (metricFiles.ElementAt(0).ExternalSystemFile)
                 {
-                    throw new System.ArgumentException("The agentID " + agentIdSummary + " in Summary File, was not found in TTS File");
+                    case ExternalSystemFiles.SUMMARY:
+                        dataLinesSummary = metricFiles.ElementAt(0).DataLines;
+                        break;
+                    case ExternalSystemFiles.TTS:
+                        dataLinesTTS = metricFiles.ElementAt(0).DataLines;
+                        break;
+                    default:
+                        break;
                 }
 
-                //Parseo fechas
-                Int32[] fechaSalida = parseFechas(lineTTS.First(), "fecha Salida", '/', agentIdSummary);
-                Int32 diaSalida = Convert.ToInt32(fechaSalida[0]);
-                Int32 mesSalida = Convert.ToInt32(fechaSalida[1]);
-                Int32 anioSalida = Convert.ToInt32(fechaSalida[2]);
-                Int32[] horarioSalida = parseHorarios(lineTTS.First(), "Horario Salida", ':', agentIdSummary);
-                Int32 horaSalida = Convert.ToInt32(horarioSalida[0]);
-                Int32 minutosSalida = Convert.ToInt32(horarioSalida[1]);
+                switch (metricFiles.ElementAt(1).ExternalSystemFile)
+                {
+                    case ExternalSystemFiles.SUMMARY:
+                        dataLinesSummary = metricFiles.ElementAt(1).DataLines;
+                        break;
+                    case ExternalSystemFiles.TTS:
+                        dataLinesTTS = metricFiles.ElementAt(1).DataLines;
+                        break;
+                    default:
+                        break;
+                }
 
-                DateTime dateTimeSalida = new DateTime(anioSalida, mesSalida, diaSalida, horaSalida, minutosSalida, Convert.ToInt32(0));
-                
-                Int32[] fechaEntrada = parseFechas(lineTTS.First(), "fecha Entrada", '/', agentIdSummary);
-                Int32 diaEntrada = Convert.ToInt32(fechaEntrada[0]);
-                Int32 mesEntrada = Convert.ToInt32(fechaEntrada[1]);
-                Int32 anioEntrada = Convert.ToInt32(fechaEntrada[2]);
-                Int32[] horarioEntrada = parseHorarios(lineTTS.First(), "Horario Entrada", ':', agentIdSummary);
-                Int32 horaEntrada = Convert.ToInt32(horarioEntrada[0]);
-                Int32 minutosEntrada = Convert.ToInt32(horarioEntrada[1]);
 
-                DateTime dateTimeEntrada = new DateTime(anioEntrada, mesEntrada, diaEntrada, horaEntrada, minutosEntrada, Convert.ToInt32(0));
+                foreach (var lineSummary in dataLinesSummary)
+                {
+                    try
+                    {
+                        var agentIdSummary = Convert.ToInt32(lineSummary["Legajo"]);
+                        var tiempoLoggeadoMinutos = Convert.ToInt32(lineSummary["Tiempo Loggeado (min)"]);
 
-                var metricValue = TimeInAuxStatusMetric.CalculateMetricValue(dateTimeSalida, dateTimeEntrada, tiempoLoggeadoMinutos);
+                        var lineTTS = (from l in dataLinesTTS
+                                       where agentIdSummary == Convert.ToInt32(l["legajo"])
+                                       select l).ToList<Dictionary<string, string>>();
 
-                this.calculatedValues.Add(agentIdSummary, metricValue);
+
+                        if (lineTTS.Count != 1)
+                        {
+                            throw new ArgumentException("The agentID " + agentIdSummary + " in Summary File, was not found in TTS File");
+                        }
+
+                        //Parseo fechas
+                        Int32[] fechaSalida = parseFechas(lineTTS.First(), "fecha Salida", '/', agentIdSummary);
+                        Int32 diaSalida = Convert.ToInt32(fechaSalida[0]);
+                        Int32 mesSalida = Convert.ToInt32(fechaSalida[1]);
+                        Int32 anioSalida = Convert.ToInt32(fechaSalida[2]);
+                        Int32[] horarioSalida = parseHorarios(lineTTS.First(), "Horario Salida", ':', agentIdSummary);
+                        Int32 horaSalida = Convert.ToInt32(horarioSalida[0]);
+                        Int32 minutosSalida = Convert.ToInt32(horarioSalida[1]);
+
+                        DateTime dateTimeSalida = new DateTime(anioSalida, mesSalida, diaSalida, horaSalida, minutosSalida, Convert.ToInt32(0));
+
+                        Int32[] fechaEntrada = parseFechas(lineTTS.First(), "fecha Entrada", '/', agentIdSummary);
+                        Int32 diaEntrada = Convert.ToInt32(fechaEntrada[0]);
+                        Int32 mesEntrada = Convert.ToInt32(fechaEntrada[1]);
+                        Int32 anioEntrada = Convert.ToInt32(fechaEntrada[2]);
+                        Int32[] horarioEntrada = parseHorarios(lineTTS.First(), "Horario Entrada", ':', agentIdSummary);
+                        Int32 horaEntrada = Convert.ToInt32(horarioEntrada[0]);
+                        Int32 minutosEntrada = Convert.ToInt32(horarioEntrada[1]);
+
+                        DateTime dateTimeEntrada = new DateTime(anioEntrada, mesEntrada, diaEntrada, horaEntrada, minutosEntrada, Convert.ToInt32(0));
+
+                        var metricValue = TimeInAuxStatusMetric.CalculateMetricValue(dateTimeSalida, dateTimeEntrada, tiempoLoggeadoMinutos);
+
+                        this.calculatedValues.Add(agentIdSummary, metricValue);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new MetricException("Summary "+this.MetricDate.ToString("dd-MM-yyyy")+" Linea " + (dataLinesSummary.IndexOf(lineSummary) + 1) + ": " + e.Message);
+                    }
+                }
             }
-            
+            catch (Exception e)
+            {
+                throw new MetricException(e.Message);
+            }
         }
 
         /*

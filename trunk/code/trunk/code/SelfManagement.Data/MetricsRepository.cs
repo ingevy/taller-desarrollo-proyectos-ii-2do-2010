@@ -309,6 +309,21 @@
             return file.Id;
         }
 
+        public void CleanProcessedFile(ProcessedFile file)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var processedFile = (from f in ctx.ProcessedFiles
+                                     where f.Id == file.Id
+                                     select f).ToList().FirstOrDefault();
+                
+                processedFile.Log = "";
+                processedFile.HasErrors = false;
+
+                ctx.SaveChanges();
+            }
+        }
+
         public void LogInProcessedFile(string filePath, string logMessage)
         {
             using (var ctx = new SelfManagementEntities())
