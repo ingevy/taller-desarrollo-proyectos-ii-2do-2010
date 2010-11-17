@@ -7,6 +7,7 @@
     using System.Linq;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Metric;
+    using CallCenter.SelfManagement.Metric.Helpers;
     using CallCenter.SelfManagement.Metric.Interfaces;
     using System.Globalization;
     using CallCenter.SelfManagement.FilesProcessor.Helpers;
@@ -105,64 +106,91 @@
 
             if (filesToProcess.Count > 0)
             {
-                var groupedFiles = this.GroupFilesToProcessByDate(filesToProcess);
-
-                foreach (var date in groupedFiles.Keys)
+                try
                 {
-                    foreach (var processedFile in groupedFiles[date])
-                    {
-                        this.CreateProcessedFileFromDataFile(processedFile);
-                    }
+                    var groupedFiles = this.GroupFilesToProcessByDate(filesToProcess);
 
-                    var avMetrics = this.metricsRepository.RetrieveAvailableMetrics();
-
-                    foreach (var metric in avMetrics)
+                    foreach (var date in groupedFiles.Keys)
                     {
-                        try
+                        foreach (var processedFile in groupedFiles[date])
                         {
-                            var metricTypes = metric.CLRType.Split(',');
-                            IMetric metricProcessor = (IMetric)Activator.CreateInstance(metricTypes[1], metricTypes[0]).Unwrap();
+                            this.CreateProcessedFileFromDataFile(processedFile);
+                        }
 
-                            metricProcessor.ProcessFiles(groupedFiles[date]);
-                            var metricValues = metricProcessor.CalculatedValues;
+                        var avMetrics = this.metricsRepository.RetrieveAvailableMetrics();
 
-                            Console.WriteLine("Grabando Metrica: " + metric.MetricName + " - Fecha: " + metricProcessor.MetricDate.ToString("dd/MM/yyyy"));
-                            foreach (var legajo in metricValues.Keys)
+                        foreach (var metric in avMetrics)
+                        {
+                            try
                             {
-                                if (!this.campaingRepository.ExistsAgent(legajo))
-                                {
-                                    throw new ArgumentException("El agente " + legajo + " no existe en la base de datos");
-                                }
+                                var metricTypes = metric.CLRType.Split(',');
+                                IMetric metricProcessor = (IMetric)Activator.CreateInstance(metricTypes[1], metricTypes[0]).Unwrap();
 
-                                var agentCampaingId = this.metricsRepository.RetrieveUserCampaingId(legajo, metricProcessor.MetricDate);
-                                var agentSupervisorId = this.metricsRepository.RetrieveAgentSupervisorId(legajo);
-                                var supervisorCampaingId = this.metricsRepository.RetrieveUserCampaingId(agentSupervisorId, metricProcessor.MetricDate);
-                                if (agentCampaingId != supervisorCampaingId)
+                                try
                                 {
-                                    throw new ApplicationException("Inconsistencia: Campaña Agente = "+Convert.ToInt32(agentCampaingId)+" - Campaña Supervisor = "+Convert.ToInt32(agentSupervisorId));
-                                }
+                                    metricProcessor.ProcessFiles(groupedFiles[date]);
+                                    var metricValues = metricProcessor.CalculatedValues;
 
-                                var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(agentCampaingId);
-
-                                if ( (from cm in campaingMetrics where cm.MetricId == metric.Id select cm).ToList().Count > 0 )
-                                {
-                                    var userMetric = new UserMetric
+                                    Console.WriteLine("Grabando Metrica: " + metric.MetricName + " - Fecha: " + metricProcessor.MetricDate.ToString("dd/MM/yyyy"));
+                                    foreach (var legajo in metricValues.Keys)
                                     {
-                                        CampaingId = agentCampaingId, InnerUserId = legajo, MetricId = metric.Id, 
-                                        Date = metricProcessor.MetricDate, Value = metricValues[legajo]
-                                    };
-                                    this.metricsRepository.CreateAgentMetric(userMetric);
-                                }
-                            }
+                                        if (!this.campaingRepository.ExistsAgent(legajo))
+                                        {
+                                            throw new MetricException("El agente " + legajo + " no existe en la base de datos");
+                                        }
 
-                            this.metricsRepository.CreateOrUpdateSupervisorMetric(metric.Id, metricProcessor.MetricDate);
-                            this.metricsRepository.CreateOrUpdateCampaingMetric(metric.Id, metricProcessor.MetricDate);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("Error procesando metrica "+metric.MetricName+" para la fecha "+date.ToString("dd-MM-yyyy")+": "+e.Message);
+                                        var agentCampaingId = this.metricsRepository.RetrieveUserCampaingId(legajo, metricProcessor.MetricDate);
+                                        var agentSupervisorId = this.metricsRepository.RetrieveAgentSupervisorId(legajo);
+                                        var supervisorCampaingId = this.metricsRepository.RetrieveUserCampaingId(agentSupervisorId, metricProcessor.MetricDate);
+                                        if (agentCampaingId != supervisorCampaingId)
+                                        {
+                                            throw new MetricException("Inconsistencia: Campaña Agente = " + Convert.ToInt32(agentCampaingId) + " - Campaña Supervisor = " + Convert.ToInt32(agentSupervisorId));
+                                        }
+
+                                        var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(agentCampaingId);
+
+                                        if ((from cm in campaingMetrics where cm.MetricId == metric.Id select cm).ToList().Count > 0)
+                                        {
+                                            var userMetric = new UserMetric
+                                            {
+                                                CampaingId = agentCampaingId,
+                                                InnerUserId = legajo,
+                                                MetricId = metric.Id,
+                                                Date = metricProcessor.MetricDate,
+                                                Value = metricValues[legajo]
+                                            };
+                                            this.metricsRepository.CreateAgentMetric(userMetric);
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    var metricFiles = (from f in groupedFiles[date]
+                                                       from f2 in metricProcessor.ExternalFilesNeeded
+                                                       where f.ExternalSystemFile == f2
+                                                       select f).ToList<IDataFile>();
+
+                                    foreach (var neededFile in metricFiles)
+                                    {
+                                        this.metricsRepository.LogInProcessedFile(neededFile.FilePath, e.Message+Environment.NewLine);
+                                    }
+
+                                    throw;
+                                }
+
+                                this.metricsRepository.CreateOrUpdateSupervisorMetric(metric.Id, metricProcessor.MetricDate);
+                                this.metricsRepository.CreateOrUpdateCampaingMetric(metric.Id, metricProcessor.MetricDate);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Error procesando metrica " + metric.MetricName + " para la fecha " + date.ToString("dd-MM-yyyy") + ": " + e.Message);
+                            }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error general durante el procesamiento de metricas: " + e.Message);
                 }
             }
         }
@@ -504,6 +532,10 @@
                 };
 
                 this.metricsRepository.CreateProcessedFile(processedFile);
+            }
+            else
+            {
+                this.metricsRepository.CleanProcessedFile(originalProcessedFile);
             }
         }
 

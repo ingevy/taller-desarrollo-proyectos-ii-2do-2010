@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AvailableCallStatusPercentageMetric.cs" />
     <Compile Include="AverageAfterCallWorkMetric.cs" />
+    <Compile Include="Helpers\MetricException.cs" />
     <Compile Include="ScheduleAdherenceMetric.cs" />
     <Compile Include="OverallQualityScorePercentMetric.cs" />
     <Compile Include="NumberOfCallsPerHourMetric.cs" />
@@ -58,6 +59,7 @@
       <Name>SelfManagement.Metric.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

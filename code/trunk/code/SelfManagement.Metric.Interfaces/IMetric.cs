@@ -9,6 +9,8 @@
 
         DateTime MetricDate { get; }
 
+        IList<ExternalSystemFiles> ExternalFilesNeeded { get; }
+
         void ProcessFiles(IList<IDataFile> dataFiles);
     }
 }
