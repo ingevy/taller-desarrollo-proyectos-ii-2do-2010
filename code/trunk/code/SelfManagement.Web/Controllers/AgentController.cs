@@ -364,7 +364,11 @@
                                             CampaingId = cml.CampaingId,
                                             MetricId = cml.MetricId,
                                             MetricName = cml.Metric.MetricName,
-                                            Format = cml.Metric.Format == 0 ? "Porcentual" : "Acumulada",
+                                            Format = cml.Metric.Format == 0 
+                                                            ? "Porcentual"
+                                                            : cml.Metric.Format == 1
+                                                                ? "Acumulada"
+                                                                : "Diaria",
                                             OptimalValue = cml.OptimalLevel.ToString("F", CultureInfo.InvariantCulture),
                                             ObjectiveValue = cml.ObjectiveLevel.ToString("F", CultureInfo.InvariantCulture),
                                             MinimumValue = cml.MinimumLevel.ToString("F", CultureInfo.InvariantCulture),
