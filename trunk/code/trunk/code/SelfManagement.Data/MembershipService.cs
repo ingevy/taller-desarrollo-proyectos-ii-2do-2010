@@ -342,7 +342,6 @@
             {
                 return ctx.Agents
                         .Where(a => a.DNI.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
-                                    || a.DNI.Contains(searchCriteria)
                                     || a.UserName.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
                                     || a.UserName.Contains(searchCriteria)
                                     || a.Workday.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
@@ -355,8 +354,7 @@
                                     || a.LastName.Contains(searchCriteria)
                                     || a.IncorporationDate.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
                                     || a.IncorporationDate.Contains(searchCriteria)
-                                    || a.GrossSalary.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
-                                    || a.GrossSalary.Contains(searchCriteria))
+                                    || a.GrossSalary.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase))
                         .OrderBy(a => a.InnerUserId)
                         .ToList();
             }
@@ -369,7 +367,6 @@
                 return ctx.Agents
                         .Where(a => (a.SupervisorId == supervisorId) 
                                      && (a.DNI.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
-                                         || a.DNI.Contains(searchCriteria)
                                          || a.UserName.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
                                          || a.UserName.Contains(searchCriteria)
                                          || a.Workday.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
@@ -382,8 +379,7 @@
                                          || a.LastName.Contains(searchCriteria)
                                          || a.IncorporationDate.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
                                          || a.IncorporationDate.Contains(searchCriteria)
-                                         || a.GrossSalary.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
-                                         || a.GrossSalary.Contains(searchCriteria)))
+                                         || a.GrossSalary.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)))
                         .OrderBy(a => a.InnerUserId)
                         .ToList();
             }
