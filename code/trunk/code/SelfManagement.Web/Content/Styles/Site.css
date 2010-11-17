@@ -716,3 +716,17 @@ div.ac_results ul li.ac_over {
 .pager ul li a { text-decoration: none; font-size: 110%; }
 .pager ul li:first-child { border: 0; }
 
+#search { float: left; padding: 5px; }
+#search input[type=submit]
+{
+	background: url("../images/search_btn.png") no-repeat scroll 0 0 transparent;
+	border: 0px none;
+	cursor: pointer;
+	height: 37px;
+	overflow: hidden;
+	padding: 0px;
+	text-indent: -1000px;
+	width: 120px;
+}
+
+#search input[type=submit]:hover { background-position: 0 -100px; }
