@@ -506,6 +506,16 @@
             {
                 throw new System.NotImplementedException();
             }
+
+            public System.Collections.Generic.IList<Agent> SearchAgents(string searchCriteria)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public System.Collections.Generic.IList<Agent> SearchAgentsBySupervisorId(int supervisorId, string searchCriteria)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

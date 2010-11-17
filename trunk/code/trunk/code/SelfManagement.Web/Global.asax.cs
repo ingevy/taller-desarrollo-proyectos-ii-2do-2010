@@ -11,10 +11,16 @@
 
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Agents
             routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                "SearchAgents",
+                "Agent/Search/{searchCriteria}",
+                new { controller = "Agent", action = "Search" });
+
+            routes.MapRoute(
+                "Default",
+                "{controller}/{action}/{id}",
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
 

@@ -455,25 +455,41 @@ function updateSupervisorsList(beginDate, endDate) {
 }
 
 function getBaseUrl() {
-    var baseUrl = "";
-    var baseElement = document.getElementsByTagName('base')[0];
+//    var baseUrl = "";
+//    var baseElement = document.getElementsByTagName('base')[0];
 
-    if (baseElement && baseElement.href && baseElement.href.length > 0) {
-        baseUrl = baseElement.href;
-    }
-    else {
-        baseUrl = document.URL;
-    }
+//    if (baseElement && baseElement.href && baseElement.href.length > 0) {
+//        baseUrl = baseElement.href;
+//    }
+//    else {
+//        baseUrl = document.URL;
+//    }
 
-    var qsStart = baseUrl.indexOf('?');
-    if (qsStart !== -1) {
-        baseUrl = baseUrl.substr(0, qsStart);
-    }
+//    var qsStart = baseUrl.indexOf('?');
+//    if (qsStart !== -1) {
+//        baseUrl = baseUrl.substr(0, qsStart);
+//    }
 
-    qsStart = baseUrl.indexOf('#');
-    if (qsStart !== -1) {
-        baseUrl = baseUrl.substr(0, qsStart);
-    }
+//    qsStart = baseUrl.indexOf('#');
+//    if (qsStart !== -1) {
+//        baseUrl = baseUrl.substr(0, qsStart);
+//    }
 
-    return baseUrl.substr(0, baseUrl.lastIndexOf('/') + 1);
+//    return baseUrl.substr(0, baseUrl.lastIndexOf('/') + 1);
+
+    return "http://localhost:10001/";
+}
+
+function searchAgentsKeyPressed(control, e) {
+    var key = (document.all) ? e.keyCode : e.which;
+
+    if (key == 13) {
+        redirectSearchAgents();
+    }
+}
+
+function redirectSearchAgents() {
+    var searchCriteria = $("#SearchCriteria")[0].value;
+
+    window.location = "/Agent/Search/" + searchCriteria;
 }

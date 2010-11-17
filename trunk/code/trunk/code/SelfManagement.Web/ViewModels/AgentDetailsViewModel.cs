@@ -64,6 +64,8 @@
 
         public int TotalPages { get; set; }
 
+        public string SearchCriteria { get; set; }
+
         public IList<MetricValuesViewModel> CurrentCampaingMetricValues { get; set; }
 
         public IList<string> AvailableSalaryMonths { get; set; }

@@ -36,6 +36,10 @@
 
         int CountAgentsByCampaingId(int campaingId);
 
+        IList<Agent> SearchAgents(string searchCriteria);
+
+        IList<Agent> SearchAgentsBySupervisorId(int supervisorId, string searchCriteria);
+
         IList<Agent> RetrieveAllAgents(int pageSize, int pageNumber);
 
         int CountAllAgents();

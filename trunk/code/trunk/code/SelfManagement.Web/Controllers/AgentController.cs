@@ -107,6 +107,74 @@
             return this.View(model);
         }
 
+        //
+        // GET: /Agent/
+        [Authorize(Roles = "AccountManager, Supervisor")]
+        public ActionResult Search(string searchCriteria, int? pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(searchCriteria))
+            {
+                return this.RedirectToAction("Index", "Agent");
+            }
+
+            bool shoulPaginate;
+            int totalCount;
+            int page;
+            searchCriteria = searchCriteria.Trim();
+            var agent = this.SearchAgent(searchCriteria, pageNumber, out shoulPaginate, out page, out totalCount);
+
+            if (agent == null)
+            {
+                return this.View("NotFound", new AgentDetailsViewModel { SearchCriteria = searchCriteria });
+            }
+
+            var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
+            var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
+            var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
+
+            DateTime metricsDate;
+            IList<string> availableMetricMonths;
+            if (userCampaing == null)
+            {
+                userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
+                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+
+                var date = availableMetricMonths.LastOrDefault();
+
+                metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+                metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+            }
+            else
+            {
+                metricsDate = DateTime.Now;
+                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+            }
+
+            var model = new AgentDetailsViewModel
+            {
+                AgentId = agent.InnerUserId,
+                SearchCriteria = searchCriteria,
+                AvailableSalaryMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
+                AvailableMetricMonths = availableMetricMonths,
+                DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
+                CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
+                CurrentCampaingId = userCampaing.Id,
+                AgentCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
+                OptimalHourlyValue = userCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                ObjectiveHourlyValue = userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
+                ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
+                CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate),
+                Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now),
+                ShouldPaginate = shoulPaginate,
+                PageNumber = page,
+                TotalPages = totalCount
+            };
+
+            return this.View(model);
+        }
+
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Salary(int innerUserId, string month)
         {
@@ -572,6 +640,59 @@
             page = 1;
 
             return this.membershipService.RetrieveAgent(this.User.Identity.Name);
+        }
+
+        private Agent SearchAgent(string searchCriteria, int? pageNumber, out bool shoulPaginate, out int page, out int totalCount)
+        {
+            IList<Agent> agents;
+            if (User.IsInRole("AccountManager"))
+            {
+                var agentId = 0;
+                if (int.TryParse(searchCriteria, NumberStyles.Integer, CultureInfo.InvariantCulture, out agentId))
+                {
+                    var agent = this.membershipService.RetrieveAgent(agentId);
+                    if (agent != null)
+                    {
+                        shoulPaginate = false;
+                        page = 1;
+                        totalCount = 1;
+
+                        return agent;
+                    }
+                }
+
+                agents = this.membershipService.SearchAgents(searchCriteria);
+            }
+            else
+            {
+                var agentId = 0;
+                var currentSupervisorId = this.membershipService.RetrieveSupervisor(this.User.Identity.Name).InnerUserId;
+                if (int.TryParse(searchCriteria, NumberStyles.Integer, CultureInfo.InvariantCulture, out agentId))
+                {
+                    var agent = this.membershipService.RetrieveAgent(agentId);
+                    if ((agent != null) && (agent.SupervisorId == currentSupervisorId))
+                    {
+                        shoulPaginate = false;
+                        page = 1;
+                        totalCount = 1;
+
+                        return agent;
+                    }
+                }
+
+                agents = this.membershipService.SearchAgentsBySupervisorId(currentSupervisorId, searchCriteria);
+            }
+
+            shoulPaginate = true;
+            totalCount = agents.Count;
+            page = !pageNumber.HasValue
+                        ? 1
+                        : pageNumber.Value > totalCount
+                            ? totalCount
+                            : pageNumber.Value;
+
+
+            return agents.Skip(page - 1).Take(1).FirstOrDefault();
         }
     }
 }
