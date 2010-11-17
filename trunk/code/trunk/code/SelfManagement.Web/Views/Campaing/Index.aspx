@@ -5,6 +5,29 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
+    <div class="pager">
+        <span>Páginas</span>
+        <ul>
+            <%
+               if (this.Model.PageNumber > 1)
+               {
+            %>
+                <li> <%: Html.ActionLink("< ", "Index", "Campaing", new { pageNumber = this.Model.PageNumber - 1 }, new { title = "Página Anterior" }) %></li>
+            <%
+               }
+            %>
+                <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Campaing", new { pageNumber = this.Model.PageNumber }, new { title = "Página Actual" })%></li>
+            <%
+               if (this.Model.PageNumber < this.Model.TotalPages)
+               {
+            %>
+                <li> <%: Html.ActionLink(" >", "Index", "Campaing", new { pageNumber = this.Model.PageNumber + 1 }, new { title = "Página Siguiente" })%></li>
+            <%
+               }
+            %>
+        </ul>
+    </div>
+
     <h1 class="info">
         <span style="float: left;">
             <%= this.Model.DisplayName %></span>
@@ -148,7 +171,8 @@
         </div>
     </div>
 
-    <div id="pager">
+    <div class="pager">
+        <span>Páginas</span>
         <ul>
             <%
                if (this.Model.PageNumber > 1)

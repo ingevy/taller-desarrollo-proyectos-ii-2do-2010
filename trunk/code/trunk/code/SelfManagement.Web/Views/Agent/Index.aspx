@@ -4,6 +4,88 @@
     SelfManagement - Agentes
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+
+    <% 
+        if (this.Model.ShouldPaginate)
+        {
+    %>
+        <div class="pager">
+            <span>Páginas</span>
+            <ul>
+             <% if (this.Model.PageNumber > 1)
+                {
+                    if (this.Model.ShouldIncludeCampaing)
+                    {
+             %>
+             <li> <%: Html.ActionLink("< ", "Index", "Agent", new { pageNumber = this.Model.PageNumber - 1, campaingId = this.Model.CampaingIdForPagination }, new { title = "Página Anterior" }) %></li>
+             <%
+                    }
+                    else if (this.Model.ShouldIncludeSupervisor)
+                    {
+             %>
+             <li> <%: Html.ActionLink("< ", "Index", "Agent", new { pageNumber = this.Model.PageNumber - 1, supervisorId = this.Model.SupervisorIdForPagination }, new { title = "Página Anterior" }) %></li>
+             <%
+                    }
+                    else
+                    {
+             %>
+             <li> <%: Html.ActionLink("< ", "Index", "Agent", new { pageNumber = this.Model.PageNumber - 1 }, new { title = "Página Anterior" }) %></li>
+             <%
+                    }
+                }
+             %>
+
+
+             <%
+                if (this.Model.ShouldIncludeCampaing)
+                {
+             %>
+             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Agent", new { pageNumber = this.Model.PageNumber, campaingId = this.Model.CampaingIdForPagination }, new { title = "Página Actual" })%></li>
+             <%
+                }
+                else if (this.Model.ShouldIncludeSupervisor)
+                {
+             %>
+             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Agent", new { pageNumber = this.Model.PageNumber, supervisorId = this.Model.SupervisorIdForPagination }, new { title = "Página Actual" })%></li>
+             <%
+                }
+                else
+                {
+             %>
+             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Agent", new { pageNumber = this.Model.PageNumber }, new { title = "Página Actual" })%></li>
+             <%
+                }
+             %>
+
+
+             <% if (this.Model.PageNumber < this.Model.TotalPages)
+                {
+                    if (this.Model.ShouldIncludeCampaing)
+                    {
+             %>
+             <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1, campaingId = this.Model.CampaingIdForPagination }, new { title = "Página Siguiente" }) %></li>
+             <%
+                    }
+                    else if (this.Model.ShouldIncludeSupervisor)
+                    {
+             %>
+             <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1, supervisorId = this.Model.SupervisorIdForPagination }, new { title = "Página Siguiente" }) %></li>
+             <%
+                    }
+                    else
+                    {
+             %>
+             <li> <%: Html.ActionLink(" >", "Index", "Agent", new { pageNumber = this.Model.PageNumber + 1 }, new { title = "Página Siguiente" }) %></li>
+             <%
+                    }
+                }
+             %>
+            </ul>
+        </div>
+    <% 
+        }
+    %>
+    
     <h1 class="info">
         <span style="float: left;">
             <%= this.Model.DisplayName %></span> <span style="float: right;">
@@ -178,7 +260,8 @@
         if (this.Model.ShouldPaginate)
         {
     %>
-        <div id="pager">
+        <div class="pager">
+            <span>Páginas</span>
             <ul>
              <% if (this.Model.PageNumber > 1)
                 {
