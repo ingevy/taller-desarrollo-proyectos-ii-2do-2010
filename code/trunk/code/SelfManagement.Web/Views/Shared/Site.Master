@@ -73,7 +73,6 @@
                 </div>
             </div>
         </div>
-        <br />
         <div id="footer">
             <hr />
             <p class="fiuba"><img src="<%=Url.Content("~/Content/Images/fiuba_logo.png")%>" alt="Facultad de Ingeniería" /></p>
