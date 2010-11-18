@@ -55,6 +55,8 @@
 
         public bool ShowEndCampaing { get; set; }
 
+        public string SearchCriteria { get; set; }
+
         public int PageNumber { get; set; }
 
         public int TotalPages { get; set; }

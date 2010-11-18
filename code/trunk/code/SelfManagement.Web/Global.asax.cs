@@ -17,6 +17,18 @@
                 "Agent/Search/{searchCriteria}",
                 new { controller = "Agent", action = "Search" });
 
+            // Supervisors
+            routes.MapRoute(
+                "SearchSupervisors",
+                "Supervisor/Search/{searchCriteria}",
+                new { controller = "Supervisor", action = "Search" });
+
+            // Campaings
+            routes.MapRoute(
+                "SearchCampaings",
+                "Campaing/Search/{searchCriteria}",
+                new { controller = "Campaing", action = "Search" });
+
             routes.MapRoute(
                 "Default",
                 "{controller}/{action}/{id}",

@@ -466,8 +466,36 @@ function searchAgentsKeyPressed(control, e) {
     }
 }
 
+function searchSupervisorsKeyPressed(control, e) {
+    var key = (document.all) ? e.keyCode : e.which;
+
+    if (key == 13) {
+        redirectSearchSupervisors();
+    }
+}
+
+function searchSupervisorsKeyPressed(control, e) {
+    var key = (document.all) ? e.keyCode : e.which;
+
+    if (key == 13) {
+        redirectSearchCampaings();
+    }
+}
+
 function redirectSearchAgents() {
     var searchCriteria = $("#SearchCriteria")[0].value;
 
     window.location = "/Agent/Search/" + searchCriteria;
+}
+
+function redirectSearchSupervisors() {
+    var searchCriteria = $("#SearchCriteria")[0].value;
+
+    window.location = "/Supervisor/Search/" + searchCriteria;
+}
+
+function redirectSearchCampaings() {
+    var searchCriteria = $("#SearchCriteria")[0].value;
+
+    window.location = "/Campaing/Search/" + searchCriteria;
 }
