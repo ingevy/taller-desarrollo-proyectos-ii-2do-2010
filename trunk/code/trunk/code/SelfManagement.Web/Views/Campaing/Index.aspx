@@ -148,7 +148,6 @@
                         </tbody>
                     </table>
                  </div>
-                 <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />                 
                  <h3>
                     <span>Gráficos</span>
                     <% 
