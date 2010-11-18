@@ -455,29 +455,7 @@ function updateSupervisorsList(beginDate, endDate) {
 }
 
 function getBaseUrl() {
-//    var baseUrl = "";
-//    var baseElement = document.getElementsByTagName('base')[0];
-
-//    if (baseElement && baseElement.href && baseElement.href.length > 0) {
-//        baseUrl = baseElement.href;
-//    }
-//    else {
-//        baseUrl = document.URL;
-//    }
-
-//    var qsStart = baseUrl.indexOf('?');
-//    if (qsStart !== -1) {
-//        baseUrl = baseUrl.substr(0, qsStart);
-//    }
-
-//    qsStart = baseUrl.indexOf('#');
-//    if (qsStart !== -1) {
-//        baseUrl = baseUrl.substr(0, qsStart);
-//    }
-
-//    return baseUrl.substr(0, baseUrl.lastIndexOf('/') + 1);
-
-    return "http://localhost:10001/";
+    return document.location.protocol + "//" + document.location.host;
 }
 
 function searchAgentsKeyPressed(control, e) {

@@ -219,7 +219,6 @@
                     <%: Html.TextBoxFor(model => model.MinimumHourlyValue, new { Class = "uservalue", disabled = "true" }) %>
                  </div>
                  <div style="clear: both; height: 5px"></div>
-                 <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />
                  <h3>Resumen Actual de Métricas</h3>
                  <div id="metricvaluescontainer" style="padding: 0px; margin: 0px;" >
 
@@ -263,7 +262,6 @@
                         </tbody>
                     </table>
                  </div>
-                 <hr style="background-color:#C2C2C2;border:none;display:block;margin-bottom:0px;margin-top:15px;padding:0px;" />                 
                  <h3>
                     <span>Gráficos</span>
                     <% 
