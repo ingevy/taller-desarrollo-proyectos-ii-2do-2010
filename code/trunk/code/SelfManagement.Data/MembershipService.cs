@@ -294,16 +294,6 @@
         {
             using (var ctx = new SelfManagementEntities())
             {
-                if (!ctx.Supervisors.Any(s => s.InnerUserId == supervisorId))
-                {
-                    throw new ArgumentException(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "El identificador de usario {0} no corresponde a un rol Supervisor.",
-                            supervisorId),
-                        "supervisorId");
-                }
-
                 return ctx.Agents
                         .Where(a => ctx.SupervisorAgents.Any(sa => (sa.SupervisorId == supervisorId) && (sa.AgentId == a.InnerUserId)))
                         .OrderBy(a => a.InnerUserId)
@@ -436,16 +426,6 @@
         {
             using (var ctx = new SelfManagementEntities())
             {
-                if (!ctx.Supervisors.Any(s => s.InnerUserId == supervisorId))
-                {
-                    throw new ArgumentException(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "El identificador de usario {0} no corresponde a un rol Supervisor.",
-                            supervisorId),
-                        "supervisorId");
-                }
-
                 return ctx.Agents
                         .Where(a => ctx.SupervisorAgents.Any(sa => (sa.SupervisorId == supervisorId) && (sa.AgentId == a.InnerUserId)))
                         .Count();

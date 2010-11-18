@@ -43,28 +43,24 @@
             bool shouldIncludeSupervisor;
             int totalCount;
             int page;
-            var agent = this.GetAgent(pageNumber, campaingId, supervisorId, out shoulPaginate, out shouldIncludeCampaing, out shouldIncludeSupervisor, out page, out totalCount);           
-            
-            var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
+            var agent = this.GetAgent(pageNumber, campaingId, supervisorId, out shoulPaginate, out shouldIncludeCampaing, out shouldIncludeSupervisor, out page, out totalCount);
+
+            if (agent == null)
+            {
+                return this.View("NotFound", new AgentDetailsViewModel());
+            }
+
+            var currentSupervisor = agent.SupervisorId.HasValue ? this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value) : (Supervisor)null;
             var userCampaing = (campaingId.HasValue) ? this.campaingRepository.RetrieveCampaingById(campaingId.GetValueOrDefault(0)) : this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
             var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
 
-            DateTime metricsDate;
-            IList<string> availableMetricMonths;
+            var metricsDate = DateTime.Now;
+            IList<string> availableMetricMonths = null;
             if (userCampaing == null)
             {
-                userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
-                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
-
-                var date = availableMetricMonths.LastOrDefault();
-
-                metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
-                metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
-            }
-            else
-            {
-                if (campaingId.HasValue)
+                if ((userCampaings != null) && (userCampaings.Count > 0))
                 {
+                    userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
                     availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
 
                     var date = availableMetricMonths.LastOrDefault();
@@ -72,10 +68,17 @@
                     metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
                     metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
                 }
-                else
+            }
+            else
+            {
+                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+
+                if (campaingId.HasValue)
                 {
-                    metricsDate = DateTime.Now;
-                    availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+                    var date = availableMetricMonths.LastOrDefault();
+
+                    metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+                    metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
                 }
             }
 
@@ -85,15 +88,12 @@
                 AvailableSalaryMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
                 AvailableMetricMonths = availableMetricMonths,
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
-                CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
-                CurrentCampaingId = userCampaing.Id,
+                CurrentSupervisor = EntityTranslator.GetSupervisorDisplayName(currentSupervisor),
+                CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
                 AgentCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
-                OptimalHourlyValue = userCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                ObjectiveHourlyValue = userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
-                ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
-                CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate),
+                OptimalHourlyValue = userCampaing != null ? userCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture) : null,
+                ObjectiveHourlyValue = userCampaing != null ? userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture) : null,
+                MinimumHourlyValue = userCampaing != null ? userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture) : null,
                 Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now),
                 ShouldPaginate = shoulPaginate,
                 ShouldIncludeCampaing = shouldIncludeCampaing,
@@ -103,6 +103,13 @@
                 PageNumber = page,
                 TotalPages = totalCount
             };
+
+            if (userCampaing != null)
+            {
+                model.CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true);
+                model.ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false);
+                model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate);
+            }
 
             return this.View(model);
         }
@@ -128,25 +135,27 @@
                 return this.View("NotFound", new AgentDetailsViewModel { SearchCriteria = searchCriteria });
             }
 
-            var currentSupervisor = this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value);
+            var currentSupervisor = agent.SupervisorId.HasValue ? this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value) : (Supervisor)null;
             var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
             var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
 
-            DateTime metricsDate;
-            IList<string> availableMetricMonths;
+            var metricsDate = DateTime.Now;
+            IList<string> availableMetricMonths = null;
             if (userCampaing == null)
             {
-                userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
-                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+                if ((userCampaings != null) && (userCampaings.Count > 0))
+                {
+                    userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
+                    availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
 
-                var date = availableMetricMonths.LastOrDefault();
+                    var date = availableMetricMonths.LastOrDefault();
 
-                metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
-                metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+                    metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+                    metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+                }
             }
             else
             {
-                metricsDate = DateTime.Now;
                 availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
             }
 
@@ -157,20 +166,24 @@
                 AvailableSalaryMonths = this.membershipService.RetrieveAvailableMonthsByUser(agent.InnerUserId),
                 AvailableMetricMonths = availableMetricMonths,
                 DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", agent.Name, agent.LastName, agent.InnerUserId),
-                CurrentSupervisor = string.Format(CultureInfo.InvariantCulture, "{0} {1} ({2})", currentSupervisor.Name, currentSupervisor.LastName, currentSupervisor.InnerUserId),
-                CurrentCampaingId = userCampaing.Id,
+                CurrentSupervisor = EntityTranslator.GetSupervisorDisplayName(currentSupervisor),
+                CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
                 AgentCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
-                OptimalHourlyValue = userCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                ObjectiveHourlyValue = userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                MinimumHourlyValue = userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
-                ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
-                CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate),
+                OptimalHourlyValue = userCampaing != null ? userCampaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture) : null,
+                ObjectiveHourlyValue = userCampaing != null ? userCampaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture) : null,
+                MinimumHourlyValue = userCampaing != null ? userCampaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture) : null,
                 Salary = this.CalculateSalary(agent.InnerUserId, DateTime.Now),
                 ShouldPaginate = shoulPaginate,
                 PageNumber = page,
                 TotalPages = totalCount
             };
+
+            if (userCampaing != null)
+            {
+                model.CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true);
+                model.ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false);
+                model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate);
+            }
 
             return this.View(model);
         }
@@ -187,6 +200,7 @@
             {
                 date = DateTime.Now;
             }
+
             var model = this.CalculateSalary(innerUserId, date);
 
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Salary = model } };
@@ -529,6 +543,13 @@
                                 : supervisorId.HasValue
                                     ? this.membershipService.CountAgentsBySupervisorId(supervisorId.Value)
                                     : this.membershipService.CountAllAgents();
+
+                if (totalCount == 0)
+                {
+                    page = 0;
+                    return null;
+                }
+
                 page = !pageNumber.HasValue
                             ? 1
                             : pageNumber.Value > totalCount
@@ -547,6 +568,13 @@
                 var currentSupervisorId = this.membershipService.RetrieveSupervisor(this.User.Identity.Name).InnerUserId;
                 shoulPaginate = true;
                 totalCount = this.membershipService.CountAgentsBySupervisorId(currentSupervisorId);
+                
+                if (totalCount == 0)
+                {
+                    page = 0;
+                    return null;
+                }
+
                 page = !pageNumber.HasValue
                             ? 1
                             : pageNumber.Value > totalCount

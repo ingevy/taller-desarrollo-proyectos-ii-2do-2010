@@ -455,7 +455,7 @@ function updateSupervisorsList(beginDate, endDate) {
 }
 
 function getBaseUrl() {
-    return document.location.protocol + "//" + document.location.host;
+    return document.location.protocol + "//" + document.location.host + "/";
 }
 
 function searchAgentsKeyPressed(control, e) {

@@ -4,6 +4,7 @@
     using System.Security.Principal;
     using System.Web.Security;
     using CallCenter.SelfManagement.Web.ViewModels;
+    using System;
 
     public static class ExtensionMethodHelper
     {
@@ -11,7 +12,32 @@
         {
             var role = Roles.GetRolesForUser().FirstOrDefault();
 
-            return role ?? "Sin rol asignado";
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                return "Sin rol asignado";
+            }
+
+            if (role.Equals("AccountManager", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Jefe de Cuentas";
+            }
+            
+            if (role.Equals("Supervisor", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Supervisor";
+            }
+
+            if (role.Equals("Agent", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Agente";
+            }
+
+            if (role.Equals("ITManager", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Responsable de IT";
+            }
+
+            return "Desconocido";
         }
 
         public static string GetCssClass(this MetricLevel metriclevel)
