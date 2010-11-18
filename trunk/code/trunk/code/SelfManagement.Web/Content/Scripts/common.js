@@ -474,7 +474,7 @@ function searchSupervisorsKeyPressed(control, e) {
     }
 }
 
-function searchSupervisorsKeyPressed(control, e) {
+function searchCampaingsKeyPressed(control, e) {
     var key = (document.all) ? e.keyCode : e.which;
 
     if (key == 13) {

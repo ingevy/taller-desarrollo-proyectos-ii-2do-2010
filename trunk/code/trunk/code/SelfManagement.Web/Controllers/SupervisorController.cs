@@ -32,8 +32,6 @@
             this.membershipService = membershipService;
         }
 
-        //
-        // GET: /Supervisor/
         [Authorize(Roles = "AccountManager, Supervisor")]
         public ActionResult Index(int? pageNumber, int? campaingId)
         {
@@ -103,7 +101,71 @@
 
             return this.View(model);
         }
+        
+        [Authorize(Roles = "AccountManager")]
+        public ActionResult Search(string searchCriteria, int? pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(searchCriteria))
+            {
+                return this.RedirectToAction("Index", "Supervisor");
+            }
 
+            bool shoulPaginate;
+            int totalCount;
+            int page;
+            var supervisor = this.SearchSupervisor(searchCriteria, pageNumber, out shoulPaginate, out page, out totalCount);
+
+            if (supervisor == null)
+            {
+                return this.View("NotFound", new SupervisorDetailsViewModel());
+            }
+
+            var userCampaing = this.campaingRepository.RetrieveCurrentCampaingByUserId(supervisor.InnerUserId);
+            var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(supervisor.InnerUserId);
+
+            DateTime metricsDate = DateTime.Now;
+            IList<string> availableMetricMonths = null;
+            if (userCampaing == null)
+            {
+                if ((userCampaings != null) && (userCampaings.Count > 0))
+                {
+                    userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
+                    availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+
+                    var date = availableMetricMonths.LastOrDefault();
+
+                    metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+                    metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+                }
+            }
+            else
+            {
+                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+            }
+
+            var model = new SupervisorDetailsViewModel
+            {
+                SupervisorId = supervisor.InnerUserId,
+                AvailableMetricMonths = availableMetricMonths,
+                DisplayName = EntityTranslator.GetSupervisorDisplayName(supervisor),
+                AgentsCount = string.Format(CultureInfo.InvariantCulture, "{0} (ver todos)", this.membershipService.CountAgentsBySupervisorId(supervisor.InnerUserId)),
+                CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
+                SupervisorCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
+                ShouldPaginate = shoulPaginate,
+                PageNumber = page,
+                TotalPages = totalCount
+            };
+
+            if (userCampaing != null)
+            {
+                model.CurrentMetricLevel = this.CalculateMetricsLevel(supervisor.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true);
+                model.ProjectedMetricLevel = this.CalculateMetricsLevel(supervisor.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false);
+                model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(supervisor.InnerUserId, userCampaing.Id, metricsDate);
+            }
+
+            return this.View(model);
+        }
+        
         [Authorize(Roles = "AccountManager, Supervisor")]
         public ActionResult CampaingMetricValues(int innerUserId, int campaingId)
         {
@@ -343,7 +405,6 @@
             return MetricLevel.Unsatisfactory;
         }
 
-
         private Supervisor GetSupervisor(int? pageNumber, int? campaingId, out bool shoulPaginate, out bool shoulIncludeCampaing, out int page, out int totalCount)
         {
             if (User.IsInRole("AccountManager"))
@@ -377,6 +438,35 @@
             page = 1;
 
             return this.membershipService.RetrieveSupervisor(this.User.Identity.Name);
+        }
+
+        private Supervisor SearchSupervisor(string searchCriteria, int? pageNumber, out bool shoulPaginate, out int page, out int totalCount)
+        {
+            var supervisorId = 0;
+            if (int.TryParse(searchCriteria, NumberStyles.Integer, CultureInfo.InvariantCulture, out supervisorId))
+            {
+                var supervisor = this.membershipService.RetrieveSupervisor(supervisorId);
+                if (supervisor != null)
+                {
+                    shoulPaginate = false;
+                    page = 1;
+                    totalCount = 1;
+
+                    return supervisor;
+                }
+            }
+
+            var supervisors = this.membershipService.SearchSupervisors(searchCriteria);
+            shoulPaginate = true;
+            totalCount = supervisors.Count;
+            page = !pageNumber.HasValue
+                        ? 1
+                        : pageNumber.Value > totalCount
+                            ? totalCount
+                            : pageNumber.Value;
+
+
+            return supervisors.Skip(page - 1).Take(1).FirstOrDefault();
         }
     }
 }

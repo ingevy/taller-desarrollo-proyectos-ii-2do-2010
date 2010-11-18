@@ -48,6 +48,8 @@
 
         Supervisor RetrieveSupervisor(int innerUserId);
 
+        IList<Supervisor> SearchSupervisors(string searchCriteria);
+
         IList<Supervisor> RetrieveSupervisorsByCampaingId(int campaingId, int pageSize, int pageNumber);
 
         int CountSupervisorsByCampaingId(int campaingId);

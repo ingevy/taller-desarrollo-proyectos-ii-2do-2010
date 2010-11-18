@@ -350,6 +350,30 @@
             }
         }
 
+        public IList<Supervisor> SearchSupervisors(string searchCriteria)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Supervisors
+                        .Where(s => s.DNI.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || s.UserName.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || s.UserName.Contains(searchCriteria)
+                                    || s.Workday.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || s.Workday.Contains(searchCriteria)
+                                    || s.Status.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || s.Status.Contains(searchCriteria)
+                                    || s.Name.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || s.Name.Contains(searchCriteria)
+                                    || s.LastName.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || s.LastName.Contains(searchCriteria)
+                                    || s.IncorporationDate.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || s.IncorporationDate.Contains(searchCriteria)
+                                    || s.GrossSalary.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(s => s.InnerUserId)
+                        .ToList();
+            }
+        }
+
         public IList<Agent> SearchAgentsBySupervisorId(int supervisorId, string searchCriteria)
         {
             using (var ctx = new SelfManagementEntities())
