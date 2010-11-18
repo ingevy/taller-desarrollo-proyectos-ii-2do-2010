@@ -117,6 +117,11 @@
             </div>
         </div>
     </div>
+
+    <% 
+        if (this.Model.CurrentCampaingId != 0)
+        {
+    %>
     <div id="secondPanel" class="panel">
         <div class="innerPanel">
             <h2>
@@ -206,6 +211,17 @@
             </div>
         </div>
     </div>
+    <% 
+        }
+        else
+        {
+    %>
+    <h1 class="info" style="margin: 30px 10px 10px 10px; text-align: center">
+        <span>No se encontraron campañas para el Agente</span>
+    </h1>
+    <% 
+        }
+    %>
 
     <% 
         if (this.Model.ShouldPaginate)

@@ -51,7 +51,14 @@
                 </ul>
             </div>
             <div id="toolbar">
+            <%
+                if (!this.Request.Url.AbsolutePath.Contains("Account/LogOn"))
+                {
+            %>
                 <% Html.RenderPartial("LogOnUserControl"); %>
+            <%
+                }
+            %>
             </div>
         </div>
         <div id="pageWrapper">

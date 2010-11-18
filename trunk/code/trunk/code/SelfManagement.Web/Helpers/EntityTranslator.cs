@@ -93,6 +93,11 @@
 
         public static string GetSupervisorDisplayName(Supervisor supervisor)
         {
+            if (supervisor == null)
+            {
+                return "No asignado";
+            }
+
             if (!string.IsNullOrEmpty(supervisor.Name) && !string.IsNullOrEmpty(supervisor.LastName))
             {
                 return string.Format(CultureInfo.CurrentUICulture, "{0} {1} ({2})", supervisor.Name, supervisor.LastName, supervisor.InnerUserId);
