@@ -33,8 +33,6 @@
             this.membershipService = membershipService;
         }
 
-        //
-        // GET: /Agent/
         [Authorize(Roles = "AccountManager, Supervisor, Agent")]
         public ActionResult Index(int? pageNumber, int? campaingId, int? supervisorId)
         {
@@ -114,8 +112,6 @@
             return this.View(model);
         }
 
-        //
-        // GET: /Agent/
         [Authorize(Roles = "AccountManager, Supervisor")]
         public ActionResult Search(string searchCriteria, int? pageNumber)
         {

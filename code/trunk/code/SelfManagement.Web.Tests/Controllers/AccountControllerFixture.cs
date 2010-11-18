@@ -516,6 +516,11 @@
             {
                 throw new System.NotImplementedException();
             }
+
+            public System.Collections.Generic.IList<Supervisor> SearchSupervisors(string searchCriteria)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }
