@@ -1,10 +1,10 @@
 ﻿namespace CallCenter.SelfManagement.Web.Helpers
 {
+    using System;
     using System.Linq;
     using System.Security.Principal;
     using System.Web.Security;
     using CallCenter.SelfManagement.Web.ViewModels;
-    using System;
 
     public static class ExtensionMethodHelper
     {

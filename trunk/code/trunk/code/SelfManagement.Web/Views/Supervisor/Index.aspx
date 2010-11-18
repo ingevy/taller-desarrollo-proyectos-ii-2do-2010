@@ -6,10 +6,36 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <% 
+        if (this.User.IsInRole("AccountManager"))
+        {
+    %>
+    <div id="search">
+        <%= this.Html.TextBoxFor(model => model.SearchCriteria, new { onkeypress = "searchSupervisorsKeyPressed(this, event)" })%>
+        <input type="submit" value="Buscar" onclick="redirectSearchSupervisors();" />
+    </div>
+    <% 
+        }
+    %>
+
+    <% 
         if (this.Model.ShouldPaginate)
         {
     %>
+
+        <% 
+            if (this.User.IsInRole("AccountManager"))
+            {
+        %>
+        <div class="pager" style="float:right">
+        <%
+            }
+            else
+            {
+        %>
         <div class="pager">
+        <%
+            }
+        %>
             <span>Páginas</span>
             <ul>
              <% if (this.Model.PageNumber > 1)
@@ -68,6 +94,15 @@
         }
     %>
 
+    <% 
+        if (this.User.IsInRole("AccountManager"))
+        {
+    %>
+    <div style="clear: both; height: 1px"></div>
+    <% 
+        }
+    %>
+
     <h1 class="info">
         <span style="float: left;">
             <%= this.Model.DisplayName %></span>
@@ -80,7 +115,11 @@
     <%: Html.HiddenFor(model => model.SupervisorId) %>
 
     <div style="clear: both; height: 1px"></div>
-        
+
+    <% 
+        if (this.Model.CurrentCampaingId != 0)
+        {
+    %>
     <div id="secondPanel" class="panel">
         <div class="innerPanel">
             <h2>
@@ -156,6 +195,17 @@
             </div>
         </div>
     </div>
+    <% 
+        }
+        else
+        {
+    %>
+    <h1 class="info" style="margin: 30px 10px 10px 10px; text-align: center">
+        <span>No se encontraron campañas para el Supervisor</span>
+    </h1>
+    <% 
+        }
+    %>
 
     <% 
         if (this.Model.ShouldPaginate)

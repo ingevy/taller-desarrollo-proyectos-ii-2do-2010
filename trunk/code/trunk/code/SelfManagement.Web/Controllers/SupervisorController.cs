@@ -43,25 +43,21 @@
             int page;
             var supervisor = this.GetSupervisor(pageNumber, campaingId, out shoulPaginate, out shouldIncludeCampaing, out page, out totalCount);
 
+            if (supervisor == null)
+            {
+                return this.View("NotFound", new SupervisorDetailsViewModel());
+            }
+
             var userCampaing = (campaingId.HasValue) ? this.campaingRepository.RetrieveCampaingById(campaingId.GetValueOrDefault(0)) : this.campaingRepository.RetrieveCurrentCampaingByUserId(supervisor.InnerUserId);
             var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(supervisor.InnerUserId);
 
-            DateTime metricsDate;
-            IList<string> availableMetricMonths;
+            DateTime metricsDate = DateTime.Now;
+            IList<string> availableMetricMonths = null;
             if (userCampaing == null)
             {
-                userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
-                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
-
-                var date = availableMetricMonths.LastOrDefault();
-
-                metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
-                metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
-            }
-            else
-            {
-                if (campaingId.HasValue)
+                if ((userCampaings != null) && (userCampaings.Count > 0))
                 {
+                    userCampaing = userCampaings.OrderByDescending(c => c.BeginDate).LastOrDefault();
                     availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
 
                     var date = availableMetricMonths.LastOrDefault();
@@ -69,10 +65,17 @@
                     metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
                     metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
                 }
-                else
+            }
+            else
+            {
+                availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+
+                if (campaingId.HasValue)
                 {
-                    metricsDate = DateTime.Now;
-                    availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(userCampaing.Id);
+                    var date = availableMetricMonths.LastOrDefault();
+
+                    metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+                    metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
                 }
             }
 
@@ -82,17 +85,21 @@
                 AvailableMetricMonths = availableMetricMonths,
                 DisplayName = EntityTranslator.GetSupervisorDisplayName(supervisor),
                 AgentsCount = string.Format(CultureInfo.InvariantCulture, "{0} (ver todos)", this.membershipService.CountAgentsBySupervisorId(supervisor.InnerUserId)),
-                CurrentCampaingId = userCampaing.Id,
+                CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
                 SupervisorCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
-                CurrentMetricLevel = this.CalculateMetricsLevel(supervisor.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
-                ProjectedMetricLevel = this.CalculateMetricsLevel(supervisor.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
-                CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(supervisor.InnerUserId, userCampaing.Id, metricsDate),
                 ShouldPaginate = shoulPaginate,
                 ShouldIncludeCampaing = shouldIncludeCampaing,
                 CampaingIdForPagination = shouldIncludeCampaing ? campaingId.Value : 0,
                 PageNumber = page,
                 TotalPages = totalCount
             };
+
+            if (userCampaing != null)
+            {
+                model.CurrentMetricLevel = this.CalculateMetricsLevel(supervisor.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true);
+                model.ProjectedMetricLevel = this.CalculateMetricsLevel(supervisor.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false);
+                model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(supervisor.InnerUserId, userCampaing.Id, metricsDate);
+            }
 
             return this.View(model);
         }
@@ -239,85 +246,6 @@
             return this.File(stream.ToArray(), "image/png");
         }
 
-        //
-        // GET: /Supervisor/Create
-        [Authorize(Roles = "AccountManager, Supervisor")]
-        public ActionResult Create()
-        {
-            return View();
-        } 
-
-        //
-        // POST: /Supervisor/Create
-        [HttpPost]
-        [Authorize(Roles = "AccountManager, Supervisor")]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Supervisor/Edit/5
-        [Authorize(Roles = "AccountManager, Supervisor")] 
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Supervisor/Edit/5
-        [HttpPost]
-        [Authorize(Roles = "AccountManager, Supervisor")]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
- 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Supervisor/Delete/5
-        [Authorize(Roles = "AccountManager, Supervisor")]
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Supervisor/Delete/5
-        [HttpPost]
-        [Authorize(Roles = "AccountManager, Supervisor")]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
- 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
         private static DateTime GetEndDate(int year, int month)
         {
             return new DateTime(year, month, DateTime.DaysInMonth(year, month)).Date;
@@ -425,6 +353,13 @@
                 totalCount = !campaingId.HasValue
                                 ? this.membershipService.CountAllSupervisors()
                                 : this.campaingRepository.CountCampaingSupervisors(campaingId.Value);
+                
+                if (totalCount == 0)
+                {
+                    page = 0;
+                    return null;
+                }
+
                 page = !pageNumber.HasValue
                             ? 1
                             : pageNumber.Value > totalCount
