@@ -30,6 +30,16 @@
                 new { controller = "Campaing", action = "Search" });
 
             routes.MapRoute(
+                "EditCampaing",
+                "Campaing/Edit/{campaingId}",
+                new { controller = "Campaing", action = "Edit" });
+
+            routes.MapRoute(
+               "EndCampaing",
+               "Campaing/End/{campaingId}",
+               new { controller = "Campaing", action = "End" });
+
+            routes.MapRoute(
                 "Default",
                 "{controller}/{action}/{id}",
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional }

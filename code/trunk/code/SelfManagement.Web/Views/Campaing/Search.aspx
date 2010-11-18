@@ -21,16 +21,16 @@
                if (this.Model.PageNumber > 1)
                {
             %>
-                <li> <%: Html.ActionLink("< ", "Index", "Campaing", new { pageNumber = this.Model.PageNumber - 1 }, new { title = "Página Anterior" }) %></li>
+                <li> <%: Html.ActionLink("< ", "Search", "Campaing", new { pageNumber = this.Model.PageNumber - 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Anterior" })%></li>
             <%
                }
             %>
-                <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Campaing", new { pageNumber = this.Model.PageNumber }, new { title = "Página Actual" })%></li>
+                <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Search", "Campaing", new { pageNumber = this.Model.PageNumber, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Actual" })%></li>
             <%
                if (this.Model.PageNumber < this.Model.TotalPages)
                {
             %>
-                <li> <%: Html.ActionLink(" >", "Index", "Campaing", new { pageNumber = this.Model.PageNumber + 1 }, new { title = "Página Siguiente" })%></li>
+                <li> <%: Html.ActionLink(" >", "Search", "Campaing", new { pageNumber = this.Model.PageNumber + 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
             <%
                }
             %>
@@ -52,7 +52,7 @@
                     if (this.Model.ShowEndCampaing)
                     {
                 %>
-                <%: Html.ActionLink("Terminar Campaña", "End", "Campaing", new { campaingId = this.Model.CampaingId }, new { Class = "btn remove", rel = "nofollow", title = "Terminar Campaña", onclick = "return confirm('Los Agentes y Supervisores asignados a la campaña se liberarán.\n¿Realmente desea terminar la campaña el día de hoy?');" })%>
+                <%: Html.ActionLink("Terminar Campaña", "End", "Campaing", new { campaingId = this.Model.CampaingId, pageNumber = this.Model.PageNumber }, new { Class = "btn remove", rel = "nofollow", title = "Terminar Campaña", onclick = "return confirm('Los Agentes y Supervisores asignados a la campaña se liberarán.\n¿Realmente desea terminar la campaña el día de hoy?');" })%>
                 <%
                     }
                 %>
@@ -195,16 +195,16 @@
                if (this.Model.PageNumber > 1)
                {
             %>
-                <li> <%: Html.ActionLink("< ", "Index", "Campaing", new { pageNumber = this.Model.PageNumber - 1 }, new { title = "Página Anterior" }) %></li>
+                <li> <%: Html.ActionLink("< ", "Search", "Campaing", new { pageNumber = this.Model.PageNumber - 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Anterior" })%></li>
             <%
                }
             %>
-                <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Index", "Campaing", new { pageNumber = this.Model.PageNumber }, new { title = "Página Actual" })%></li>
+                <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Search", "Campaing", new { pageNumber = this.Model.PageNumber, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Actual" })%></li>
             <%
                if (this.Model.PageNumber < this.Model.TotalPages)
                {
             %>
-                <li> <%: Html.ActionLink(" >", "Index", "Campaing", new { pageNumber = this.Model.PageNumber + 1 }, new { title = "Página Siguiente" })%></li>
+                <li> <%: Html.ActionLink(" >", "Search", "Campaing", new { pageNumber = this.Model.PageNumber + 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
             <%
                }
             %>

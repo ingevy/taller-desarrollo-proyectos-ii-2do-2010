@@ -27,6 +27,8 @@
 
         int CountAllCampaings();
 
+        IList<Campaing> SearchCampaings(string searchCriteria);
+        
         IList<Campaing> RetrieveCampaingsByUserIdAndDate(int innerUserId, DateTime date);
 
         IList<Campaing> RetrieveCampaingsByUserId(int innerUserId);

@@ -100,6 +100,23 @@
             }
         }
 
+        public IList<Campaing> SearchCampaings(string searchCriteria)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.Campaings
+                        .Include("Customer")
+                        .Where(c => c.Name.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || c.Name.Contains(searchCriteria)
+                                    || c.Description.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || c.Description.Contains(searchCriteria)
+                                    || c.Customer.Name.Equals(searchCriteria, StringComparison.OrdinalIgnoreCase)
+                                    || c.Customer.Name.Contains(searchCriteria))
+                        .OrderBy(c => c.Id)
+                        .ToList();
+            }
+        }
+
         public IList<Campaing> RetrieveCampaingsByUserId(int innerUserId)
         {
             using (var ctx = new SelfManagementEntities())
@@ -158,6 +175,7 @@
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.Campaings
+                    .Include("Customer")
                     .Where(c => c.Id == campaingId)
                     .FirstOrDefault();
             }

@@ -57,6 +57,8 @@
 
         public string SearchCriteria { get; set; }
 
+        public bool ShouldPaginate { get; set; }
+
         public int PageNumber { get; set; }
 
         public int TotalPages { get; set; }
