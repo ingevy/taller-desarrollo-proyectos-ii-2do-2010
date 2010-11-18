@@ -113,6 +113,7 @@
             bool shoulPaginate;
             int totalCount;
             int page;
+            searchCriteria = searchCriteria.Trim();
             var supervisor = this.SearchSupervisor(searchCriteria, pageNumber, out shoulPaginate, out page, out totalCount);
 
             if (supervisor == null)
@@ -151,6 +152,7 @@
                 AgentsCount = string.Format(CultureInfo.InvariantCulture, "{0} (ver todos)", this.membershipService.CountAgentsBySupervisorId(supervisor.InnerUserId)),
                 CurrentCampaingId = userCampaing != null ? userCampaing.Id : 0,
                 SupervisorCampaings = userCampaings.Select(c => c.ToUserCampaingInfo()).ToList(),
+                SearchCriteria = searchCriteria,
                 ShouldPaginate = shoulPaginate,
                 PageNumber = page,
                 TotalPages = totalCount

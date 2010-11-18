@@ -20,17 +20,17 @@
              <% if (this.Model.PageNumber > 1)
                 {
              %>
-             <li> <%: Html.ActionLink("< ", "Search", "Agent", new { pageNumber = this.Model.PageNumber - 1, criteria = this.Model.SearchCriteria }, new { title = "Página Anterior" }) %></li>
+             <li> <%: Html.ActionLink("< ", "Search", "Agent", new { pageNumber = this.Model.PageNumber - 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Anterior" })%></li>
              <%
                 }
              %>
 
-             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Search", "Agent", new { pageNumber = this.Model.PageNumber, criteria = this.Model.SearchCriteria }, new { title = "Página Actual" })%></li>
+             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Search", "Agent", new { pageNumber = this.Model.PageNumber, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Actual" })%></li>
 
              <% if (this.Model.PageNumber < this.Model.TotalPages)
                 {
              %>
-             <li> <%: Html.ActionLink(" >", "Search", "Agent", new { pageNumber = this.Model.PageNumber + 1, criteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
+             <li> <%: Html.ActionLink(" >", "Search", "Agent", new { pageNumber = this.Model.PageNumber + 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
              <%
                 }
              %>
@@ -233,17 +233,17 @@
              <% if (this.Model.PageNumber > 1)
                 {
              %>
-             <li> <%: Html.ActionLink("< ", "Search", "Agent", new { pageNumber = this.Model.PageNumber - 1, criteria = this.Model.SearchCriteria }, new { title = "Página Anterior" }) %></li>
+             <li> <%: Html.ActionLink("< ", "Search", "Agent", new { pageNumber = this.Model.PageNumber - 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Anterior" })%></li>
              <%
                 }
              %>
 
-             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Search", "Agent", new { pageNumber = this.Model.PageNumber, criteria = this.Model.SearchCriteria }, new { title = "Página Actual" })%></li>
+             <li> <%: Html.ActionLink(string.Format("{0}/{1}", this.Model.PageNumber, this.Model.TotalPages), "Search", "Agent", new { pageNumber = this.Model.PageNumber, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Actual" })%></li>
 
              <% if (this.Model.PageNumber < this.Model.TotalPages)
                 {
              %>
-             <li> <%: Html.ActionLink(" >", "Search", "Agent", new { pageNumber = this.Model.PageNumber + 1, criteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
+             <li> <%: Html.ActionLink(" >", "Search", "Agent", new { pageNumber = this.Model.PageNumber + 1, searchCriteria = this.Model.SearchCriteria }, new { title = "Página Siguiente" })%></li>
              <%
                 }
              %>

@@ -2,15 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.UI.DataVisualization.Charting;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
-    using System.Web.UI.DataVisualization.Charting;
-    using System.IO;
-    using System.Drawing;
     
     public class CampaingController : Controller
     {
@@ -32,56 +32,42 @@
             this.metricsRepository = metricsRepository;
         }
 
-        //
-        // GET: /Campaing/
         [Authorize(Roles = "AccountManager")]
         public ActionResult Index(int? pageNumber)
         {
             int totalCount;
             int page;
             var campaing = this.GetCampaing(pageNumber, out page, out totalCount);
-            var availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaing.Id);
 
-            var metricsDate = DateTime.Now.Date;
-            var showEndCampaing = true;
-            if (campaing.BeginDate.Date >= metricsDate)
+            if (campaing == null)
             {
-                metricsDate = campaing.BeginDate.Date;
-                showEndCampaing = false;
-            }
-            else if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Date <= metricsDate))
-            {
-                metricsDate = campaing.EndDate.Value.Date;
-                showEndCampaing = false;
+                return this.View("NotFound", new CampaingDetailsViewModel());
             }
 
-            var model = new CampaingDetailsViewModel
-            {
-                CampaingId = campaing.Id,
-                AvailableMetricMonths = availableMetricMonths,
-                CurrentMetricMonthIndex = availableMetricMonths.IndexOf(metricsDate.ToString("yyyy-MM")),
-                DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} ({1})", campaing.Name, campaing.Id),
-                Description = campaing.Description,
-                Customer = campaing.Customer.Name,
-                CampaingType = campaing.CampaingType == 0 ? "De Entrada" : "De Salida",
-                AgentsCount = string.Format(CultureInfo.InvariantCulture, "{0} (ver todos)", this.campaingRepository.CountCampaingAgents(campaing.Id)),
-                SupervisorsCount = string.Format(CultureInfo.InvariantCulture, "{0} (ver todos)", this.campaingRepository.CountCampaingSupervisors(campaing.Id)),
-                BeginDate = campaing.BeginDate.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture),
-                EndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture) : string.Empty,
-                OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                CurrentMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
-                ProjectedMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
-                MetricValues = this.CalculateCampaingMetricValues(campaing.Id, metricsDate),
-                ShowEndCampaing = showEndCampaing,
-                PageNumber = page,
-                TotalPages = totalCount
-            };
-
-            return this.View(model);
+            return this.View(CreateCampaingDetailsViewModel(campaing, null, true, page, totalCount));
         }
 
+        [Authorize(Roles = "AccountManager")]
+        public ActionResult Search(string searchCriteria, int? pageNumber)
+        {
+            if (string.IsNullOrWhiteSpace(searchCriteria))
+            {
+                return this.RedirectToAction("Index", "Campaing");
+            }
+
+            int totalCount;
+            int page;
+            bool shouldPaginate;
+            searchCriteria = searchCriteria.Trim();
+            var campaing = this.SearchCampaing(searchCriteria, pageNumber, out shouldPaginate, out page, out totalCount);
+
+            if (campaing == null)
+            {
+                return this.View("NotFound", new CampaingDetailsViewModel { SearchCriteria = searchCriteria });
+            }
+
+            return this.View(CreateCampaingDetailsViewModel(campaing, searchCriteria, shouldPaginate, page, totalCount));
+        }
 
         [Authorize(Roles = "AccountManager")]
         public ActionResult MetricsChart(int campaingId, int metricId, string month)
@@ -173,9 +159,6 @@
             return this.File(stream.ToArray(), "image/png");
         }
 
-
-        //
-        // GET: /Campaing/Create
         [Authorize(Roles = "AccountManager")]
         public ActionResult Create()
         {
@@ -198,9 +181,7 @@
 
             return this.View(model);
         }
-
-        //
-        // POST: /Campaing/Create
+        
         [HttpPost]
         [Authorize(Roles = "AccountManager")]
         public ActionResult Create(CampaingViewModel campaingToCreate)
@@ -230,7 +211,6 @@
             return this.View(campaingToCreate);
         }
 
-        // The autocomplete request sends a parameter 'q' that contains the filter
         [Authorize(Roles = "AccountManager")]
         public ActionResult FindCustomer(string q)
         {
@@ -265,8 +245,6 @@
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Supervisors = supervisors } };
         }
 
-        //
-        // GET: /Campaing/Edit/5
         [Authorize(Roles = "AccountManager")] 
         public ActionResult Edit(int campaingId)
         {            
@@ -281,8 +259,6 @@
             return this.View();
         }
 
-        //
-        // POST: /Campaing/Edit/5
         [HttpPost]
         [Authorize(Roles = "AccountManager")]
         public ActionResult Edit(int campaingId, FormCollection collection)
@@ -299,14 +275,12 @@
             }
         }
 
-        //
-        // GET: /Campaing/Delete/5
         [Authorize(Roles = "AccountManager")]
-        public ActionResult End(int campaingId, int pageNumber)
+        public ActionResult End(int campaingId)
         {
             this.campaingRepository.EndCampaing(campaingId);
 
-            return this.RedirectToAction("Index", new { pageNumber = pageNumber, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La campaña '{0}' se cerró exitosamente al día de hoy.", campaingId)) });
+            return this.RedirectToAction("Search", new { searchCriteria = campaingId, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La campaña '{0}' se cerró exitosamente al día de hoy.", campaingId)) });
         }
         
         private static DateTime GetEndDate(int year, int month)
@@ -330,6 +304,52 @@
                     this.ModelState[key].Errors.Clear();
                 }
             }
+        }
+        
+        private CampaingDetailsViewModel CreateCampaingDetailsViewModel(Campaing campaing, string searchCriteria, bool shouldPaginate, int page, int totalCount)
+        {
+            var availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaing.Id);
+
+            var metricsDate = DateTime.Now.Date;
+            var showEndCampaing = true;
+            if (campaing.BeginDate.Date >= metricsDate)
+            {
+                metricsDate = campaing.BeginDate.Date;
+                showEndCampaing = false;
+            }
+            else if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Date <= metricsDate))
+            {
+                metricsDate = campaing.EndDate.Value.Date;
+                showEndCampaing = false;
+            }
+
+            var model = new CampaingDetailsViewModel
+            {
+                CampaingId = campaing.Id,
+                AvailableMetricMonths = availableMetricMonths,
+                CurrentMetricMonthIndex = availableMetricMonths.IndexOf(metricsDate.ToString("yyyy-MM")),
+                DisplayName = string.Format(CultureInfo.InvariantCulture, "{0} ({1})", campaing.Name, campaing.Id),
+                Description = campaing.Description,
+                Customer = campaing.Customer.Name,
+                CampaingType = campaing.CampaingType == 0 ? "De Entrada" : "De Salida",
+                AgentsCount = string.Format(CultureInfo.InvariantCulture, "{0} (ver todos)", this.campaingRepository.CountCampaingAgents(campaing.Id)),
+                SupervisorsCount = string.Format(CultureInfo.InvariantCulture, "{0} (ver todos)", this.campaingRepository.CountCampaingSupervisors(campaing.Id)),
+                BeginDate = campaing.BeginDate.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture),
+                EndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture) : string.Empty,
+                OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                CurrentMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
+                ProjectedMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
+                MetricValues = this.CalculateCampaingMetricValues(campaing.Id, metricsDate),
+                ShowEndCampaing = showEndCampaing,
+                SearchCriteria = searchCriteria,
+                ShouldPaginate = shouldPaginate,
+                PageNumber = page,
+                TotalPages = totalCount
+            };
+
+            return model;
         }
 
         private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int campaingId, DateTime date)
@@ -427,6 +447,13 @@
         private Campaing GetCampaing(int? pageNumber, out int page, out int totalCount)
         {
             totalCount = this.campaingRepository.CountAllCampaings();
+
+            if (totalCount == 0)
+            {
+                page = 1;
+                return null;
+            }
+
             page = !pageNumber.HasValue
                         ? 1
                         : pageNumber.Value > totalCount
@@ -434,6 +461,35 @@
                             : pageNumber.Value;
 
             return this.campaingRepository.RetrieveAllCampaings(1, page).FirstOrDefault();
+        }
+
+        private Campaing SearchCampaing(string searchCriteria, int? pageNumber, out bool shoulPaginate, out int page, out int totalCount)
+        {
+            var campaingId = 0;
+            if (int.TryParse(searchCriteria, NumberStyles.Integer, CultureInfo.InvariantCulture, out campaingId))
+            {
+                var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
+                if (campaing != null)
+                {
+                    shoulPaginate = false;
+                    page = 1;
+                    totalCount = 1;
+
+                    return campaing;
+                }
+            }
+
+            var campaings = this.campaingRepository.SearchCampaings(searchCriteria);
+            shoulPaginate = true;
+            totalCount = campaings.Count;
+            page = !pageNumber.HasValue
+                        ? 1
+                        : pageNumber.Value > totalCount
+                            ? totalCount
+                            : pageNumber.Value;
+
+
+            return campaings.Skip(page - 1).Take(1).FirstOrDefault();
         }
     }
 }

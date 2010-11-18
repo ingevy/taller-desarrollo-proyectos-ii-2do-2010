@@ -137,8 +137,10 @@
     <Content Include="Views\Agent\NotFound.aspx" />
     <Content Include="Views\Agent\Search.aspx" />
     <Content Include="Views\Agent\Index.aspx" />
+    <Content Include="Views\Campaing\Search.aspx" />
     <Content Include="Views\Campaing\Create.aspx" />
     <Content Include="Views\Campaing\Index.aspx" />
+    <Content Include="Views\Campaing\NotFound.aspx" />
     <Content Include="Views\Supervisor\Search.aspx" />
     <Content Include="Views\Supervisor\Index.aspx" />
     <Content Include="Views\Supervisor\NotFound.aspx" />

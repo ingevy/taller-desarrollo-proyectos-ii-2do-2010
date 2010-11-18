@@ -25,10 +25,6 @@
 
         public IMembershipService MembershipService { get; set; }
 
-        // **************************************
-        // URL: /Account/LogOn
-        // **************************************
-
         public ActionResult LogOn()
         {
             return this.View();
@@ -61,21 +57,13 @@
             return this.View(model);
         }
 
-        // **************************************
-        // URL: /Account/LogOff
-        // **************************************
-
         public ActionResult LogOff()
         {
             this.FormsService.SignOut();
 
             return this.RedirectToAction("Index", "Home");
         }
-
-        // **************************************
-        // URL: /Account/Register
-        // **************************************
-
+    
         public ActionResult Register()
         {
             this.ViewData["PasswordLength"] = this.MembershipService.MinPasswordLength;
@@ -108,10 +96,6 @@
             return this.View(model);
         }
 
-        // **************************************
-        // URL: /Account/ChangePassword
-        // **************************************
-
         [Authorize]
         public ActionResult ChangePassword()
         {
@@ -141,10 +125,6 @@
             
             return this.View(model);
         }
-
-        // **************************************
-        // URL: /Account/ChangePasswordSuccess
-        // **************************************
 
         public ActionResult ChangePasswordSuccess()
         {
