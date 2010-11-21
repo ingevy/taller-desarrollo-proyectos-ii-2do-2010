@@ -116,7 +116,7 @@
                 }
                 else
                 {
-                    this.ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
+                    this.ModelState.AddModelError("ChangePasswordViewModel", "La contraseña actual es incorrecta o la nueva contraseña es inválida.");
                 }
             }
 

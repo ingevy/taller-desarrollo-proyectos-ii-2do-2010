@@ -3,6 +3,7 @@
 <asp:Content ID="loginTitle" ContentPlaceHolderID="TitleContent" runat="server">
     SelfManagement - Iniciar Sesión
 </asp:Content>
+
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="dual">
         <div class="panel" id="campaingMetrics">
