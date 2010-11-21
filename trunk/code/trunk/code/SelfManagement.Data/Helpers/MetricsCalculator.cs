@@ -42,7 +42,7 @@
 
                     try
                     {
-                        metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
+                        metricValue = solvr.CalculatePredictedY(Convert.ToDouble(date.Day));
                     }
                     catch
                     {
@@ -98,7 +98,7 @@
                     {
                         try
                         {
-                            metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
+                            metricValue += solvr.CalculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
                         }
                         catch
                         {
@@ -159,7 +159,7 @@
 
                     try
                     {
-                        metricValue = solvr.calculatePredictedY(Convert.ToDouble(date.Day));
+                        metricValue = solvr.CalculatePredictedY(Convert.ToDouble(date.Day));
                     }
                     catch
                     {
@@ -215,7 +215,7 @@
                     {
                         try
                         {
-                            metricValue += solvr.calculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
+                            metricValue += solvr.CalculatePredictedY(Convert.ToDouble(Convert.ToDouble(i)));
                         }
                         catch
                         {

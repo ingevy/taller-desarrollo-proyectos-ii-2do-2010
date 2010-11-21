@@ -176,6 +176,7 @@
             {
                 return ctx.Campaings
                     .Include("Customer")
+                    .Include("CampaingMetricLevels")
                     .Where(c => c.Id == campaingId)
                     .FirstOrDefault();
             }

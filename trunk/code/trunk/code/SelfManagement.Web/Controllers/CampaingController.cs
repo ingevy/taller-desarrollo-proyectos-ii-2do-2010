@@ -247,7 +247,41 @@
 
         [Authorize(Roles = "AccountManager")] 
         public ActionResult Edit(int campaingId)
-        {            
+        {
+            var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
+
+            if (campaing == null)
+            {
+                return this.View("NotFound", new CampaingDetailsViewModel());
+            }
+
+            //var model = new CampaingViewModel
+            //{
+            //    BeginDate = campaing.BeginDate.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture),
+            //    EndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture) : null,
+            //    Name = campaing.Name,
+            //    Description = campaing.Description,
+            //    CampaingType = campaing.CampaingType,
+            //    CustomerName = campaing.Customer.Name,
+            //    OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+            //    ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+            //    MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+            //    //CampaingSupervisors = this.campaingRepository
+            //    //                            .RetrieveAvailableSupervisors(DateTime.Today)
+            //    //                            .Select(up => up.ToViewModel())
+            //    //                            .OrderByDescending(s => s.Selected)
+            //    //                            .ThenBy(s => s.Id)
+            //    //                            .ToList(),
+            //    //CampaingMetricLevels = this.campaingRepository
+            //    //                        .RetrieveAvailableMetrics()
+            //    //                        .Select(m => m.ToViewModel())
+            //    //                        .OrderByDescending(cml => cml.Selected)
+            //    //                        .ThenBy(cml => cml.Name)
+            //    //                        .ToList()
+            //};
+
+            //return this.View("Create", model);
+
             //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
             //                                                        .OrderByDescending(s => s.Selected)
             //                                                        .ToList();
@@ -261,7 +295,7 @@
 
         [HttpPost]
         [Authorize(Roles = "AccountManager")]
-        public ActionResult Edit(int campaingId, FormCollection collection)
+        public ActionResult Edit(CampaingViewModel campaingToEdit)
         {
             try
             {
@@ -286,6 +320,16 @@
         private static DateTime GetEndDate(int year, int month)
         {
             return new DateTime(year, month, DateTime.DaysInMonth(year, month)).Date;
+        }
+
+        private static DateTime GetEndDate(Campaing campaing, int year, int month)
+        {
+            if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Year == year) && (campaing.EndDate.Value.Month == month))
+            {
+                return campaing.EndDate.Value;
+            }
+
+            return GetEndDate(year, month);
         }
 
         private void ClearInvalidErrors(CampaingViewModel campaing)
@@ -339,8 +383,8 @@
                 OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                CurrentMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true),
-                ProjectedMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false),
+                CurrentMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(campaing, metricsDate.Year, metricsDate.Month), true),
+                ProjectedMetricLevel = this.CalculateMetricsLevel(campaing.Id, metricsDate, GetEndDate(campaing, metricsDate.Year, metricsDate.Month), false),
                 MetricValues = this.CalculateCampaingMetricValues(campaing.Id, metricsDate),
                 ShowEndCampaing = showEndCampaing,
                 SearchCriteria = searchCriteria,
@@ -356,6 +400,8 @@
         {
             var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId);
             var end = this.GetEndDate(campaingId, date.Year, date.Month);
+
+            date = date > end ? end : date;
 
             return campaingMetrics
                             .Select(cml => new MetricValuesViewModel
@@ -393,12 +439,7 @@
         {
             var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
 
-            if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Year == year) && (campaing.EndDate.Value.Month == month))
-            {
-                return campaing.EndDate.Value;
-            }
-
-            return GetEndDate(year, month);
+            return GetEndDate(campaing, year, month);
         }
         
         private MetricLevel CalculateMetricsLevel(int campaingId, DateTime currentDate, DateTime projectedDate, bool currentMetricLevel)
@@ -425,15 +466,15 @@
 
                 if (metricValue.IsHighestToLowest)
                 {
-                    if (metricValue.OptimalValue <= value) { optimalCount++; }
-                    if (metricValue.ObjectiveValue <= value) { objectiveCount++; }
-                    if (metricValue.MinimumValue <= value) { minimumCount++; }
+                    if (metricValue.OptimalValue <= Math.Round(value, 2)) { optimalCount++; }
+                    if (metricValue.ObjectiveValue <= Math.Round(value, 2)) { objectiveCount++; }
+                    if (metricValue.MinimumValue <= Math.Round(value, 2)) { minimumCount++; }
                 }
                 else
                 {
-                    if (metricValue.OptimalValue >= value) { optimalCount++; }
-                    if (metricValue.ObjectiveValue >= value) { objectiveCount++; }
-                    if (metricValue.MinimumValue >= value) { minimumCount++; }
+                    if (metricValue.OptimalValue >= Math.Round(value, 2)) { optimalCount++; }
+                    if (metricValue.ObjectiveValue >= Math.Round(value, 2)) { objectiveCount++; }
+                    if (metricValue.MinimumValue >= Math.Round(value, 2)) { minimumCount++; }
                 }
             }
 
