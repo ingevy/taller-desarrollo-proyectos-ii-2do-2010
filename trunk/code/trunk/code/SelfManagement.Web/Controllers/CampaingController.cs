@@ -314,7 +314,7 @@
         {
             this.campaingRepository.EndCampaing(campaingId);
 
-            return this.RedirectToAction("Search", new { searchCriteria = campaingId, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La campaña '{0}' se cerró exitosamente al día de hoy.", campaingId)) });
+            return this.RedirectToAction("Search", new { searchCriteria = campaingId, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La Campaña '{0}' se cerró exitosamente al día de hoy.", campaingId)) });
         }
         
         private static DateTime GetEndDate(int year, int month)
