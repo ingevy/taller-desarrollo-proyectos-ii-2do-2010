@@ -453,7 +453,10 @@
             }
             else
             {
-                gross = decimal.Parse(agent.GrossSalary, NumberStyles.Any, CultureInfo.InvariantCulture);
+                var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+                format.CurrencySymbol = "$";
+
+                gross = decimal.Parse(agent.GrossSalary, NumberStyles.Any, format);
                 projectedTotalHoursWorked = agent.Workday.Equals("PTE", StringComparison.OrdinalIgnoreCase) ? 120 : 160;
                 currentTotalHoursWorked = projectedTotalHoursWorked;
             }
