@@ -1,7 +1,20 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CallCenter.SelfManagement.Web.ViewModels.CampaingViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
+
+<% if (this.Model.IsEditing)
+   {
+%>
+    SelfManagement - Editar Campaña
+<% }
+   else
+   {
+%>
     SelfManagement - Nueva Campaña
+<%
+   }
+%>
+
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <script type="text/javascript">
@@ -24,13 +37,15 @@
     <div id="mainPanel" class="panel">
         <div class="innerPanel">
             <h2>
-                <span>Datos Generales</span></h2>
+                <span>Datos Generales</span>
+                <%: Html.HiddenFor(model => model.Id) %>
+            </h2>
             <fieldset>
                 <div style="float: left;">
                     <label for="Name">
                         Nombre</label>
-                    <%: Html.TextBoxFor(model => model.Name, new { Class = "uservalue" })%>
-                    <%: Html.ValidationMessageFor(model => model.Name)%>
+                    <%: Html.TextBoxFor(model => model.Name, new { Class = "uservalue" }) %>
+                    <%: Html.ValidationMessageFor(model => model.Name) %>
                 </div>
                 <div style="float: left;">
                     <label for="CampaingType">
@@ -212,10 +227,11 @@
 
     <script type="text/javascript">
         DatePickerControl.onSelect = function (inputid) {
+            var campaingId = document.getElementById("Id");
             var beginDate = document.getElementById("BeginDate");
             var endDate = document.getElementById("EndDate");
 
-            updateSupervisorsList(beginDate.value, endDate.value);
+            updateSupervisorsList(campaingId.value, beginDate.value, endDate.value);
         }
   </script>
 </asp:Content>

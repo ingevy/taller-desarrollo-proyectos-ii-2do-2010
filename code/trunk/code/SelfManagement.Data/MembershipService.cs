@@ -307,16 +307,6 @@
         {
             using (var ctx = new SelfManagementEntities())
             {
-                if (!ctx.Campaings.Any(c => c.CustomerId == campaingId))
-                {
-                    throw new ArgumentException(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "No se encontró una campaña con el identificador {0}.",
-                            campaingId),
-                        "campaingId");
-                }
-
                 return ctx.Agents
                         .Where(a => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == a.InnerUserId)))
                         .OrderBy(a => a.InnerUserId)
@@ -415,16 +405,6 @@
         {
             using (var ctx = new SelfManagementEntities())
             {
-                if (!ctx.Campaings.Any(c => c.CustomerId == campaingId))
-                {
-                    throw new ArgumentException(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "No se encontró una campaña con el identificador {0}.",
-                            campaingId),
-                        "campaingId");
-                }
-
                 return ctx.Supervisors
                         .Where(s => ctx.CampaingUsers.Any(ca => (ca.CampaingId == campaingId) && (ca.InnerUserId == s.InnerUserId)))
                         .OrderBy(s => s.InnerUserId)

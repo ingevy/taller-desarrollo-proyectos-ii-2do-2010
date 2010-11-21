@@ -398,7 +398,7 @@ function showOrHideMetricLevels(event, id) {
     }
 }
 
-function updateSupervisorsList(beginDate, endDate) {
+function updateSupervisorsList(campaingId, beginDate, endDate) {
     var supervisors = $("#supervisors");
 
     if (!beginDate || (beginDate == "")) {
@@ -411,9 +411,12 @@ function updateSupervisorsList(beginDate, endDate) {
         supervisors[0].innerHTML = " ";
         supervisors.addClass("loading");
 
-        var url = getBaseUrl() + "AvailableSupervisores?beginDate=" + encodeURIComponent(beginDate);
+        var url = getBaseUrl() + "Campaing/AvailableSupervisores?beginDate=" + encodeURIComponent(beginDate);
         if (endDate && (endDate != "")) {
             url += "&endDate=" + encodeURIComponent(endDate);
+        }
+        if (campaingId && (campaingId > 0)) {
+            url += "&campaingId=" + campaingId;
         }
 
         $.ajax({

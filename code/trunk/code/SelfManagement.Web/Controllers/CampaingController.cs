@@ -20,16 +20,18 @@
         private readonly Color BackColor = Color.FromArgb(221, 221, 238);
         private readonly ICampaingRepository campaingRepository;
         private readonly IMetricsRepository metricsRepository;
+        private readonly IMembershipService membershipService;
 
         public CampaingController()
-            : this(new RepositoryFactory().GetCampaingRepository(), new RepositoryFactory().GetMetricsRepository())
+            : this(new RepositoryFactory().GetCampaingRepository(), new RepositoryFactory().GetMetricsRepository(), new RepositoryFactory().GetMembershipService())
         {
         }
 
-        public CampaingController(ICampaingRepository campaingRepository, IMetricsRepository metricsRepository)
+        public CampaingController(ICampaingRepository campaingRepository, IMetricsRepository metricsRepository, IMembershipService membershipService)
         {
             this.campaingRepository = campaingRepository;
             this.metricsRepository = metricsRepository;
+            this.membershipService = membershipService;
         }
 
         [Authorize(Roles = "AccountManager")]
@@ -164,6 +166,8 @@
         {
             var model = new CampaingViewModel
             {
+                Id = 0,
+                IsEditing = false,
                 BeginDate = DateTime.Today.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture),
                 CampaingSupervisors = this.campaingRepository
                                             .RetrieveAvailableSupervisors(DateTime.Today)
@@ -223,24 +227,9 @@
         }
 
         [Authorize(Roles = "AccountManager")]
-        public ActionResult AvailableSupervisores(string beginDate, string endDate)
+        public ActionResult AvailableSupervisores(int? campaingId, string beginDate, string endDate)
         {
-            IEnumerable<SupervisorViewModel> supervisors = new List<SupervisorViewModel>();
-            DateTime begin;
-            DateTime end;
-
-            if (DateTime.TryParseExact(beginDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out begin))
-            {
-                supervisors = DateTime.TryParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out end)
-                    ? begin < end
-                        ? this.campaingRepository
-                            .RetrieveAvailableSupervisors(begin, end)
-                            .Select(s => s.ToViewModel())
-                        : supervisors
-                    : this.campaingRepository
-                            .RetrieveAvailableSupervisors(begin)
-                            .Select(s => s.ToViewModel());                        
-            }
+            var supervisors = this.GetAvailableSupervisors(campaingId, beginDate, endDate);
 
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Supervisors = supervisors } };
         }
@@ -249,38 +238,34 @@
         public ActionResult Edit(int campaingId)
         {
             var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
-
             if (campaing == null)
             {
                 return this.View("NotFound", new CampaingDetailsViewModel());
             }
 
-            //var model = new CampaingViewModel
-            //{
-            //    BeginDate = campaing.BeginDate.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture),
-            //    EndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture) : null,
-            //    Name = campaing.Name,
-            //    Description = campaing.Description,
-            //    CampaingType = campaing.CampaingType,
-            //    CustomerName = campaing.Customer.Name,
-            //    OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-            //    ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-            //    MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-            //    //CampaingSupervisors = this.campaingRepository
-            //    //                            .RetrieveAvailableSupervisors(DateTime.Today)
-            //    //                            .Select(up => up.ToViewModel())
-            //    //                            .OrderByDescending(s => s.Selected)
-            //    //                            .ThenBy(s => s.Id)
-            //    //                            .ToList(),
-            //    //CampaingMetricLevels = this.campaingRepository
-            //    //                        .RetrieveAvailableMetrics()
-            //    //                        .Select(m => m.ToViewModel())
-            //    //                        .OrderByDescending(cml => cml.Selected)
-            //    //                        .ThenBy(cml => cml.Name)
-            //    //                        .ToList()
-            //};
-
-            //return this.View("Create", model);
+            var beginDate = campaing.BeginDate.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture);
+            var endDate = campaing.EndDate.HasValue ? campaing.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.CurrentUICulture) : null;
+            var model = new CampaingViewModel
+            {
+                Id = campaingId,
+                IsEditing = true,
+                BeginDate = beginDate,
+                EndDate = endDate,
+                Name = campaing.Name,
+                Description = campaing.Description,
+                CampaingType = campaing.CampaingType,
+                CustomerName = campaing.Customer.Name,
+                OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
+                CampaingSupervisors = this.GetAvailableSupervisors(campaingId, beginDate, endDate),
+                CampaingMetricLevels = this.campaingRepository
+                                            .RetrieveAvailableMetrics()
+                                            .Select(m => m.ToViewModel())
+                                            .ToList()
+            };
+            
+            return this.View("Create", model);
 
             //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
             //                                                        .OrderByDescending(s => s.Selected)
@@ -350,6 +335,39 @@
             }
         }
         
+        private IList<SupervisorViewModel> GetAvailableSupervisors(int? campaingId, string beginDate, string endDate)
+        {
+            var supervisors = new List<SupervisorViewModel>();
+            DateTime begin;
+            DateTime end;
+
+            if (DateTime.TryParseExact(beginDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out begin))
+            {
+                supervisors = DateTime.TryParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out end)
+                    ? begin < end
+                        ? this.campaingRepository
+                            .RetrieveAvailableSupervisors(begin, end)
+                            .Select(s => s.ToViewModel())
+                            .ToList()
+                        : supervisors
+                    : this.campaingRepository
+                            .RetrieveAvailableSupervisors(begin)
+                            .Select(s => s.ToViewModel())
+                            .ToList();
+
+                if (campaingId.HasValue)
+                {
+                    supervisors.AddRange(this.membershipService
+                                .RetrieveSupervisorsByCampaingId(campaingId.Value, int.MaxValue, 1)
+                                .Select(s => s.ToViewModel(true)));
+                }
+            }
+
+            return supervisors
+                        .OrderByDescending(s => s.Selected)
+                        .ToList();
+        }
+
         private CampaingDetailsViewModel CreateCampaingDetailsViewModel(Campaing campaing, string searchCriteria, bool shouldPaginate, int page, int totalCount)
         {
             var availableMetricMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaing.Id);
