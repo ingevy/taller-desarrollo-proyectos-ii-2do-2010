@@ -55,13 +55,13 @@
             return entity;
         }
 
-        public static SupervisorViewModel ToViewModel(this Supervisor entity)
+        public static SupervisorViewModel ToViewModel(this Supervisor entity, bool selected = false)
         {
             var model = new SupervisorViewModel
             {
                 Id = entity.InnerUserId,
                 DisplayName = GetSupervisorDisplayName(entity),
-                Selected = false
+                Selected = selected
             };
 
             return model;
