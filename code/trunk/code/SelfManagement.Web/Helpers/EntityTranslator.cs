@@ -13,6 +13,7 @@
         {
             var entity = new Campaing
             {
+                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
                 BeginDate = DateTime.ParseExact(model.BeginDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None),

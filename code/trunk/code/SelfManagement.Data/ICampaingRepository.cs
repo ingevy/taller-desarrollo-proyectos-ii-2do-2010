@@ -55,10 +55,14 @@
 
         int CreateCampaing(Campaing campaing);
 
+        void EditCampaing(Campaing campaing);
+
+        void EndCampaing(int campaingId);
+
         void SaveCampaingMetricLevels(IEnumerable<CampaingMetricLevel> campaingMetricLevels);
 
         void SaveCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors);
 
-        void EndCampaing(int campaingId);
+        void UpdateCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors);
     }
 }
