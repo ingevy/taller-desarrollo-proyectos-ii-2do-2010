@@ -124,26 +124,26 @@
 
             series1.ToolTip = "Nivel Optimo";
             series1.ChartType = SeriesChartType.Line;
-            series1.BorderWidth = 3;
-            series1.ShadowOffset = 2;
+            series1.BorderWidth = 2;
+            series1.ShadowOffset = 1;
             series1.Color = Color.Green;
 
             series2.ToolTip = "Nivel Objetivo";
             series2.ChartType = SeriesChartType.Line;
-            series2.BorderWidth = 3;
-            series2.ShadowOffset = 2;
-            series2.Color = Color.YellowGreen;
+            series2.BorderWidth = 2;
+            series2.ShadowOffset = 1;
+            series2.Color = Color.Orange;
 
             series3.ToolTip = "Nivel Mínimo";
             series3.ChartType = SeriesChartType.Line;
-            series3.BorderWidth = 3;
-            series3.ShadowOffset = 2;
-            series3.Color = Color.Orange;
+            series3.BorderWidth = 2;
+            series3.ShadowOffset = 1;
+            series3.Color = Color.Red;
 
             series4.ToolTip = "Valor Métrica";
             series4.ChartType = SeriesChartType.Line;
-            series4.BorderWidth = 3;
-            series4.ShadowOffset = 2;
+            series4.BorderWidth = 2;
+            series4.ShadowOffset = 1;
             series4.Color = Color.Blue;
 
             foreach (var date in dates)
