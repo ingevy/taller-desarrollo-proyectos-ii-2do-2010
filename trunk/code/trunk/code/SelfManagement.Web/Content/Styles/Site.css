@@ -147,7 +147,8 @@ body, input, textarea, td, th, select, option { font-family: "Segoe UI", Arial, 
 			}
 		
 	#header #navigation {
-		padding-top: 18px; width: auto;
+		padding-top: 33px;
+		width: auto;
 		text-align: center;
 		text-transform: uppercase;
 		}
