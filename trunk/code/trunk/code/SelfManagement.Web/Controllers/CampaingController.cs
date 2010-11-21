@@ -202,9 +202,8 @@
                 this.campaingRepository.SaveCampaingSupervisors(campaingToCreate.CampaingSupervisors
                                                                                     .Where(s => s.Selected)
                                                                                     .Select(s => s.ToEntity(campaingId, campaingToCreate.BeginDate, campaingToCreate.EndDate)));
-                
 
-                return this.RedirectToAction("Index", new { msg = Server.UrlEncode("La nueva campaña se creó exitosamente.")});
+                return this.RedirectToAction("Search", new { searchCriteria = campaingId, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La nueva Campaña '{0}' se creó exitosamente.", campaingId)) });
             }
 
             if (!datesValid)
@@ -258,24 +257,27 @@
                 OptimalHourlyValue = campaing.OptimalHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 ObjectiveHourlyValue = campaing.ObjectiveHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
                 MinimumHourlyValue = campaing.MinimumHourlyValue.ToString("C", CultureInfo.CurrentUICulture),
-                CampaingSupervisors = this.GetAvailableSupervisors(campaingId, beginDate, endDate),
-                CampaingMetricLevels = this.campaingRepository
+                CampaingSupervisors = this.GetAvailableSupervisors(campaingId, beginDate, endDate)
+            };
+
+            var availableMetrics = this.campaingRepository
                                             .RetrieveAvailableMetrics()
                                             .Select(m => m.ToViewModel())
-                                            .ToList()
-            };
-            
+                                            .ToList();
+            var campaingMetricLevels = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId);
+            foreach (var campaingMetricLevel in campaingMetricLevels)
+            {
+                var metricLevel = availableMetrics.FirstOrDefault(cml => cml.Id == campaingMetricLevel.MetricId);
+
+                metricLevel.Selected = true;
+                metricLevel.OptimalLevel = campaingMetricLevel.OptimalLevel.ToString(CultureInfo.InvariantCulture);
+                metricLevel.ObjectiveLevel = campaingMetricLevel.ObjectiveLevel.ToString(CultureInfo.InvariantCulture);
+                metricLevel.MinimumLevel = campaingMetricLevel.MinimumLevel.ToString(CultureInfo.InvariantCulture);
+            }
+
+            model.CampaingMetricLevels = availableMetrics.OrderByDescending(cml => cml.Selected).ToList();
+
             return this.View("Create", model);
-
-            //campaingToCreate.CampaingSupervisors = campaingToCreate.CampaingSupervisors
-            //                                                        .OrderByDescending(s => s.Selected)
-            //                                                        .ToList();
-
-            //campaingToCreate.CampaingMetricLevels = campaingToCreate.CampaingMetricLevels
-            //                                                        .OrderByDescending(cml => cml.Selected)
-            //                                                        .ToList();
-            
-            return this.View();
         }
 
         [HttpPost]
@@ -286,7 +288,7 @@
             {
                 // TODO: Add update logic here
 
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Search", new { searchCriteria = campaingToEdit.Id, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La Campaña '{0}' se editó exitosamente.", campaingToEdit.Id)) });
             }
             catch
             {
