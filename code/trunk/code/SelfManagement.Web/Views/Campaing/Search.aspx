@@ -5,6 +5,19 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
+    <script type="text/javascript">
+        $(function () {
+            $("#endCampaing").click(function (event) {
+                if (!confirm('Todos los Agentes y Supervisores asignados a esta Campaña se liberarán.\n¿Realmente desea terminar la Campaña el día de hoy?')) {
+                    event.preventDefault();
+                    return false;
+                }
+
+                return true;
+            });
+        });
+    </script>
+
     <div id="search">
         <%= this.Html.TextBoxFor(model => model.SearchCriteria, new { onkeypress = "searchCampaingsKeyPressed(this, event)" }) %>
         <input type="submit" value="Buscar" onclick="redirectSearchCampaings();" />
@@ -52,7 +65,7 @@
                     if (this.Model.ShowEndCampaing)
                     {
                 %>
-                <%: Html.ActionLink("Terminar Campaña", "End", "Campaing", new { campaingId = this.Model.CampaingId, pageNumber = this.Model.PageNumber }, new { Class = "btn remove", rel = "nofollow", title = "Terminar Campaña", onclick = "return confirm('Los Agentes y Supervisores asignados a la campaña se liberarán.\n¿Realmente desea terminar la campaña el día de hoy?');" })%>
+                <%: Html.ActionLink("Terminar Campaña", "End", "Campaing", new { campaingId = this.Model.CampaingId, pageNumber = this.Model.PageNumber }, new { Class = "btn remove", rel = "nofollow", title = "Terminar Campaña", id = "endCampaing" })%>
                 <%
                     }
                 %>
