@@ -488,7 +488,6 @@
                     var originalSupervisor = ctx.CampaingUsers.FirstOrDefault(cu => (cu.CampaingId == campaingId) && (cu.InnerUserId == supervisor.InnerUserId));
                     if (originalSupervisor != null)
                     {
-                        originalSupervisor.BeginDate = supervisor.BeginDate;
                         originalSupervisor.EndDate = supervisor.EndDate;
                     }
                     else
@@ -501,7 +500,6 @@
                         var originalAgent = ctx.CampaingUsers.FirstOrDefault(cu => (cu.InnerUserId == agent.InnerUserId) && (cu.CampaingId == campaingId));
                         if (originalAgent != null)
                         {
-                            originalAgent.BeginDate = supervisor.BeginDate;
                             originalAgent.EndDate = supervisor.EndDate;
                         }
                         else
