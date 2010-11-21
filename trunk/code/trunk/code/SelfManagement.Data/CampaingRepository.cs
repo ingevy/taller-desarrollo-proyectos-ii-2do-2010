@@ -306,27 +306,6 @@
             }
         }
 
-        public void EndCampaing(int campaingId)
-        {
-            using (var ctx = new SelfManagementEntities())
-            {
-                var campaing = ctx.Campaings
-                               .FirstOrDefault(c => c.Id == campaingId);
-                var originalEndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value.Date : DateTime.MaxValue.Date;
-                
-                campaing.EndDate = DateTime.Now;
-                var campaingUsers = ctx.CampaingUsers
-                                    .Where(cu => (cu.CampaingId == campaingId) && (cu.EndDate.Year == originalEndDate.Year) && (cu.EndDate.Month == originalEndDate.Month) && (cu.EndDate.Day == originalEndDate.Day));
-
-                foreach (var campaingUser in campaingUsers)
-                {
-                    campaingUser.EndDate = campaing.EndDate.Value;
-                }
-
-                ctx.SaveChanges();
-            }
-        }
-
         public void AddAgent(int campaingId, Agent agent)
         {
             using (var ctx = new SelfManagementEntities())
@@ -355,6 +334,49 @@
                 ctx.SaveChanges();
 
                 return campaing.Id;
+            }
+        }
+
+        public void EndCampaing(int campaingId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var campaing = ctx.Campaings
+                               .FirstOrDefault(c => c.Id == campaingId);
+                var originalEndDate = campaing.EndDate.HasValue ? campaing.EndDate.Value.Date : DateTime.MaxValue.Date;
+
+                campaing.EndDate = DateTime.Now;
+                var campaingUsers = ctx.CampaingUsers
+                                    .Where(cu => (cu.CampaingId == campaingId) && (cu.EndDate.Year == originalEndDate.Year) && (cu.EndDate.Month == originalEndDate.Month) && (cu.EndDate.Day == originalEndDate.Day));
+
+                foreach (var campaingUser in campaingUsers)
+                {
+                    campaingUser.EndDate = campaing.EndDate.Value;
+                }
+
+                ctx.SaveChanges();
+            }
+        }
+
+        public void EditCampaing(Campaing campaing)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                var originalCampaing = ctx.Campaings.FirstOrDefault(c => c.Id == campaing.Id);
+                if (originalCampaing != null)
+                {
+                    originalCampaing.Name = campaing.Name;
+                    originalCampaing.Description = campaing.Description;
+                    originalCampaing.CampaingType = campaing.CampaingType;
+                    originalCampaing.CustomerId = campaing.CustomerId;
+                    originalCampaing.BeginDate = campaing.BeginDate;
+                    originalCampaing.EndDate = campaing.EndDate;
+                    originalCampaing.OptimalHourlyValue = campaing.OptimalHourlyValue;
+                    originalCampaing.ObjectiveHourlyValue = campaing.ObjectiveHourlyValue;
+                    originalCampaing.MinimumHourlyValue = campaing.MinimumHourlyValue;
+
+                    ctx.SaveChanges();
+                }
             }
         }
 
@@ -436,6 +458,39 @@
                 }
 
                 ctx.SaveChanges();
+            }
+        }
+        
+        public void UpdateCampaingSupervisors(IEnumerable<CampaingUser> campaingSupervisors)
+        {
+            var campaingId = campaingSupervisors.FirstOrDefault().CampaingId;
+            if (!campaingSupervisors.All(cu => cu.CampaingId == campaingId))
+            {
+                throw new ArgumentException("Todas los supervisores deben pertenecer a una misma campaña.", "campaingSupervisors");
+            }
+
+            using (var ctx = new SelfManagementEntities())
+            {
+                //var supervisorIds = campaingSupervisors.Select(cu => cu.InnerUserId).ToList();
+
+                //if (!supervisorIds.All(supervisorId => ctx.Supervisors.Any(s => s.InnerUserId == supervisorId)))
+                //{
+                //    throw new ArgumentException("Solo se pueden asignar usarios que tengan rol de Supervisor.", "campaingSupervisors");
+                //}
+
+                //foreach (var supervisor in campaingSupervisors)
+                //{
+                //    ctx.CampaingUsers.AddObject(supervisor);
+                //}
+
+                //foreach (var agent in ctx.Agents.Where(a => a.SupervisorId.HasValue && supervisorIds.Contains(a.SupervisorId.Value)))
+                //{
+                //    var supervisor = campaingSupervisors.FirstOrDefault(cu => cu.InnerUserId == agent.SupervisorId);
+
+                //    ctx.CampaingUsers.AddObject(new CampaingUser { CampaingId = campaingId, InnerUserId = agent.InnerUserId, BeginDate = supervisor.BeginDate, EndDate = supervisor.EndDate });
+                //}
+
+                //ctx.SaveChanges();
             }
         }
 

@@ -284,16 +284,28 @@
         [Authorize(Roles = "AccountManager")]
         public ActionResult Edit(CampaingViewModel campaingToEdit)
         {
-            try
+            var datesValid = campaingToEdit.AreDatesValid();
+            this.ClearInvalidErrors(campaingToEdit);
+
+            if (this.ModelState.IsValid && datesValid)
             {
-                // TODO: Add update logic here
+                this.campaingRepository.EditCampaing(campaingToEdit.ToEntity(this.campaingRepository));
+                this.campaingRepository.SaveCampaingMetricLevels(campaingToEdit.CampaingMetricLevels
+                                                                                    .Where(cml => cml.Selected)
+                                                                                    .Select(cml => cml.ToEntity(campaingToEdit.Id)));
+                this.campaingRepository.UpdateCampaingSupervisors(campaingToEdit.CampaingSupervisors
+                                                                                    .Where(s => s.Selected)
+                                                                                    .Select(s => s.ToEntity(campaingToEdit.Id, campaingToEdit.BeginDate, campaingToEdit.EndDate)));
 
                 return this.RedirectToAction("Search", new { searchCriteria = campaingToEdit.Id, msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "La Campaña '{0}' se editó exitosamente.", campaingToEdit.Id)) });
             }
-            catch
+
+            if (!datesValid)
             {
-                return this.View();
+                this.ModelState["EndDate"].Errors.Add("La fecha de inicio tiene que ser menor que la de fin.");
             }
+
+            return this.View("Create", campaingToEdit);
         }
 
         [Authorize(Roles = "AccountManager")]
