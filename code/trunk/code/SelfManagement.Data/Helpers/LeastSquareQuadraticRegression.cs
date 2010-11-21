@@ -1,26 +1,20 @@
 ﻿namespace CallCenter.SelfManagement.Data.Helpers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Collections;
 
     public class LeastSquareQuadraticRegression
     {
-        /* instance variables */
-        ArrayList pointArray = new ArrayList();
+        private ArrayList pointArray = new ArrayList();
         private int numOfEntries;
         private double[] pointpair;
 
-        /*constructor */
         public LeastSquareQuadraticRegression()
         {
-            numOfEntries = 0;
-            pointpair = new double[2];
+            this.numOfEntries = 0;
+            this.pointpair = new double[2];
         }
 
-        /*instance methods */
         /// <summary>
         /// add point pairs
         /// </summary>
@@ -28,35 +22,38 @@
         /// <param name="y">y value</param>
         public void AddPoints(double x, double y)
         {
-            pointpair = new double[2];
-            numOfEntries += 1;
-            pointpair[0] = x;
-            pointpair[1] = y;
-            pointArray.Add(pointpair);
+            this.pointpair = new double[2];
+
+            this.numOfEntries += 1;
+            this.pointpair[0] = x;
+            this.pointpair[1] = y;
+
+            this.pointArray.Add(this.pointpair);
         }
 
         /// <summary>
         /// returns the a term of the equation ax^2 + bx + c
         /// </summary>
         /// <returns>a term</returns>
-        public double aTerm()
+        public double ATerm()
         {
-            if (numOfEntries < 3)
+            if (this.numOfEntries < 3)
             {
-                throw new InvalidOperationException(
-                   "Insufficient pairs of co-ordinates");
+                throw new InvalidOperationException("Insufficient pairs of co-ordinates");
             }
+
             //notation sjk to mean the sum of x_i^j*y_i^k. 
-            double s40 = getSx4(); //sum of x^4
-            double s30 = getSx3(); //sum of x^3
-            double s20 = getSx2(); //sum of x^2
-            double s10 = getSx();  //sum of x
-            double s00 = numOfEntries;
+            double s40 = GetSx4(); //sum of x^4
+            double s30 = GetSx3(); //sum of x^3
+            double s20 = GetSx2(); //sum of x^2
+            double s10 = GetSx();  //sum of x
+            double s00 = this.numOfEntries;
+            
             //sum of x^0 * y^0  ie 1 * number of entries
 
-            double s21 = getSx2y(); //sum of x^2*y
-            double s11 = getSxy();  //sum of x*y
-            double s01 = getSy();   //sum of y
+            double s21 = GetSx2y(); //sum of x^2*y
+            double s11 = GetSxy();  //sum of x*y
+            double s01 = GetSy();   //sum of y
 
             //a = Da/D
             return (s21 * (s20 * s00 - s10 * s10) -
@@ -72,24 +69,25 @@
         /// returns the b term of the equation ax^2 + bx + c
         /// </summary>
         /// <returns>b term</returns>
-        public double bTerm()
+        public double BTerm()
         {
-            if (numOfEntries < 3)
+            if (this.numOfEntries < 3)
             {
-                throw new InvalidOperationException(
-                   "Insufficient pairs of co-ordinates");
+                throw new InvalidOperationException("Insufficient pairs of co-ordinates");
             }
+
             //notation sjk to mean the sum of x_i^j*y_i^k.
-            double s40 = getSx4(); //sum of x^4
-            double s30 = getSx3(); //sum of x^3
-            double s20 = getSx2(); //sum of x^2
-            double s10 = getSx();  //sum of x
-            double s00 = numOfEntries;
+            double s40 = GetSx4(); //sum of x^4
+            double s30 = GetSx3(); //sum of x^3
+            double s20 = GetSx2(); //sum of x^2
+            double s10 = GetSx();  //sum of x
+            double s00 = this.numOfEntries;
+            
             //sum of x^0 * y^0  ie 1 * number of entries
 
-            double s21 = getSx2y(); //sum of x^2*y
-            double s11 = getSxy();  //sum of x*y
-            double s01 = getSy();   //sum of y
+            double s21 = GetSx2y(); //sum of x^2*y
+            double s11 = GetSxy();  //sum of x*y
+            double s01 = GetSy();   //sum of y
 
             //b = Db/D
             return (s40 * (s11 * s00 - s01 * s10) -
@@ -102,27 +100,28 @@
         }
 
         /// <summary>
-        /// returns the c term of the equation ax^2 + bx + c
+        /// Returns the c term of the equation ax^2 + bx + c
         /// </summary>
         /// <returns>c term</returns>
-        public double cTerm()
+        public double CTerm()
         {
-            if (numOfEntries < 3)
+            if (this.numOfEntries < 3)
             {
-                throw new InvalidOperationException(
-                           "Insufficient pairs of co-ordinates");
+                throw new InvalidOperationException("Insufficient pairs of co-ordinates");
             }
+
             //notation sjk to mean the sum of x_i^j*y_i^k.
-            double s40 = getSx4(); //sum of x^4
-            double s30 = getSx3(); //sum of x^3
-            double s20 = getSx2(); //sum of x^2
-            double s10 = getSx();  //sum of x
-            double s00 = numOfEntries;
+            double s40 = GetSx4(); //sum of x^4
+            double s30 = GetSx3(); //sum of x^3
+            double s20 = GetSx2(); //sum of x^2
+            double s10 = GetSx();  //sum of x
+            double s00 = this.numOfEntries;
+            
             //sum of x^0 * y^0  ie 1 * number of entries
 
-            double s21 = getSx2y(); //sum of x^2*y
-            double s11 = getSxy();  //sum of x*y
-            double s01 = getSy();   //sum of y
+            double s21 = GetSx2y(); //sum of x^2*y
+            double s11 = GetSxy();  //sum of x*y
+            double s01 = GetSy();   //sum of y
 
             //c = Dc/D
             return (s40 * (s20 * s01 - s10 * s11) -
@@ -134,139 +133,151 @@
                      s20 * (s30 * s10 - s20 * s20));
         }
 
-        public double rSquare() // get r-squared
+        // get r-squared
+        public double RSquare() 
         {
-            if (numOfEntries < 3)
+            if (this.numOfEntries < 3)
             {
-                throw new InvalidOperationException(
-                   "Insufficient pairs of co-ordinates");
+                throw new InvalidOperationException("Insufficient pairs of co-ordinates");
             }
+
             // 1 - (residual sum of squares / total sum of squares)
-            return 1 - getSSerr() / getSStot();
+            return 1 - GetSSerr() / GetSStot();
         }
 
-
-        /*helper methods*/
-        private double getSx() // get sum of x
+        // get sum of x
+        private double GetSx()
         {
             double Sx = 0;
-            foreach (double[] ppair in pointArray)
+            foreach (double[] ppair in this.pointArray)
             {
                 Sx += ppair[0];
             }
+
             return Sx;
         }
 
-        private double getSy() // get sum of y
+        // get sum of y
+        private double GetSy()
         {
-            double Sy = 0;
-            foreach (double[] ppair in pointArray)
+            double sy = 0;
+            foreach (double[] ppair in this.pointArray)
             {
-                Sy += ppair[1];
+                sy += ppair[1];
             }
-            return Sy;
+
+            return sy;
         }
 
-        private double getSx2() // get sum of x^2
+        // get sum of x^2
+        private double GetSx2()
         {
-            double Sx2 = 0;
-            foreach (double[] ppair in pointArray)
+            double sx2 = 0;
+            foreach (double[] ppair in this.pointArray)
             {
-                Sx2 += Math.Pow(ppair[0], 2); // sum of x^2
+                sx2 += Math.Pow(ppair[0], 2); // sum of x^2
             }
-            return Sx2;
+
+            return sx2;
         }
 
-        private double getSx3() // get sum of x^3
+        // get sum of x^3
+        private double GetSx3()
         {
-            double Sx3 = 0;
-            foreach (double[] ppair in pointArray)
+            double sx3 = 0;
+            foreach (double[] ppair in this.pointArray)
             {
-                Sx3 += Math.Pow(ppair[0], 3); // sum of x^3
+                sx3 += Math.Pow(ppair[0], 3); // sum of x^3
             }
-            return Sx3;
+
+            return sx3;
         }
 
-        private double getSx4() // get sum of x^4
+        // get sum of x^4
+        private double GetSx4()
         {
-            double Sx4 = 0;
-            foreach (double[] ppair in pointArray)
+            double sx4 = 0;
+            foreach (double[] ppair in this.pointArray)
             {
-                Sx4 += Math.Pow(ppair[0], 4); // sum of x^4
+                sx4 += Math.Pow(ppair[0], 4); // sum of x^4
             }
-            return Sx4;
+
+            return sx4;
         }
 
-        private double getSxy() // get sum of x*y
+        // get sum of x*y
+        private double GetSxy()
         {
-            double Sxy = 0;
-            foreach (double[] ppair in pointArray)
+            double sxy = 0;
+            foreach (double[] ppair in this.pointArray)
             {
-                Sxy += ppair[0] * ppair[1]; // sum of x*y
+                sxy += ppair[0] * ppair[1]; // sum of x*y
             }
-            return Sxy;
+
+            return sxy;
         }
 
-        private double getSx2y() // get sum of x^2*y
+        // get sum of x^2*y
+        private double GetSx2y()
         {
-            double Sx2y = 0;
-            foreach (double[] ppair in pointArray)
+            double sx2y = 0;
+            foreach (double[] ppair in this.pointArray)
             {
-                Sx2y += Math.Pow(ppair[0], 2) * ppair[1]; // sum of x^2*y
+                sx2y += Math.Pow(ppair[0], 2) * ppair[1]; // sum of x^2*y
             }
-            return Sx2y;
+
+            return sx2y;
         }
 
-        private double getYMean() // mean value of y
+        // mean value of y
+        private double GetYMean()
         {
             double y_tot = 0;
-            foreach (double[] ppair in pointArray)
+            foreach (double[] ppair in this.pointArray)
             {
                 y_tot += ppair[1];
             }
-            return y_tot / numOfEntries;
+
+            return y_tot / this.numOfEntries;
         }
 
-        private double getSStot() // total sum of squares
+        private double GetSStot() // total sum of squares
         {
             //the sum of the squares of the differences between 
             //the measured y values and the mean y value
             double ss_tot = 0;
-            foreach (double[] ppair in pointArray)
+            foreach (double[] ppair in this.pointArray)
             {
-                ss_tot += Math.Pow(ppair[1] - getYMean(), 2);
+                ss_tot += Math.Pow(ppair[1] - GetYMean(), 2);
             }
+
             return ss_tot;
         }
 
-        private double getSSerr() // residual sum of squares
+        // residual sum of squares
+        private double GetSSerr()
         {
             //the sum of the squares of te difference between 
             //the measured y values and the values of y predicted by the equation
             double ss_err = 0;
-            foreach (double[] ppair in pointArray)
+            foreach (double[] ppair in this.pointArray)
             {
-                ss_err += Math.Pow(ppair[1] - getPredictedY(ppair[0]), 2);
+                ss_err += Math.Pow(ppair[1] - GetPredictedY(ppair[0]), 2);
             }
+
             return ss_err;
         }
 
-        private double getPredictedY(double x)
+        private double GetPredictedY(double x)
         {
-            //returns value of y predicted by the equation for a given value of x
-            return aTerm() * Math.Pow(x, 2) + bTerm() * x + cTerm();
+            // returns value of y predicted by the equation for a given value of x
+            return ATerm() * Math.Pow(x, 2) + BTerm() * x + CTerm();
         }
 
-        /*
-         * Retorna valor Y, para un X pedido
-         */ 
-        public double calculatePredictedY(double x){
-
-            double result;
-
-            result = getPredictedY(x);
-
-            return result;
+        // Retorna valor Y, para un X pedido
+        public double CalculatePredictedY(double x)
+        {
+            return GetPredictedY(x);
         }
     }
 }

@@ -68,8 +68,8 @@
                     for (var i = 0; i < json.CampaingMetricValues.length; i++) {
                         var campaingMetricValue = json.CampaingMetricValues[i];
                         html += "<tr>";
-                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.MetricName + "</td>";
-                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.Format + "</td>";
+                        html += "<td>" + campaingMetricValue.MetricName + "</td>";
+                        html += "<td>" + campaingMetricValue.Format + "</td>";
                         html += "<td style=\"text-align: right;\">" + campaingMetricValue.OptimalValue + "</td>";
                         html += "<td style=\"text-align: right;\">" + campaingMetricValue.ObjectiveValue + "</td>";
                         html += "<td style=\"text-align: right;\">" + campaingMetricValue.MinimumValue + "</td>";
@@ -215,8 +215,8 @@ function refreshSupervisorMetricValues() {
                     for (var i = 0; i < json.CampaingMetricValues.length; i++) {
                         var campaingMetricValue = json.CampaingMetricValues[i];
                         html += "<tr>";
-                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.MetricName + "</td>";
-                        html += "<td style=\"text-align: right;\">" + campaingMetricValue.Format + "</td>";
+                        html += "<td>" + campaingMetricValue.MetricName + "</td>";
+                        html += "<td>" + campaingMetricValue.Format + "</td>";
                         html += "<td style=\"text-align: right;\">" + campaingMetricValue.OptimalValue + "</td>";
                         html += "<td style=\"text-align: right;\">" + campaingMetricValue.ObjectiveValue + "</td>";
                         html += "<td style=\"text-align: right;\">" + campaingMetricValue.MinimumValue + "</td>";

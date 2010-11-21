@@ -64,7 +64,7 @@
                     var date = availableMetricMonths.LastOrDefault();
 
                     metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
-                    metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+                    metricsDate = GetEndDate(userCampaing, metricsDate.Year, metricsDate.Month);
                 }
             }
             else
@@ -76,7 +76,7 @@
                     var date = availableMetricMonths.LastOrDefault();
 
                     metricsDate = DateTime.ParseExact(date, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
-                    metricsDate = GetEndDate(metricsDate.Year, metricsDate.Month);
+                    metricsDate = GetEndDate(userCampaing, metricsDate.Year, metricsDate.Month);
                 }
             }
 
@@ -104,8 +104,10 @@
 
             if (userCampaing != null)
             {
-                model.CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), true);
-                model.ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, GetEndDate(metricsDate.Year, metricsDate.Month), false);
+                var endDate = GetEndDate(userCampaing, metricsDate.Year, metricsDate.Month);
+
+                model.CurrentMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, endDate, true);
+                model.ProjectedMetricLevel = this.CalculateMetricsLevel(agent.InnerUserId, userCampaing.Id, metricsDate, endDate, false);
                 model.CurrentCampaingMetricValues = this.CalculateCampaingMetricValues(agent.InnerUserId, userCampaing.Id, metricsDate);
             }
 
@@ -209,7 +211,8 @@
             var availableMonths = this.campaingRepository.RetrieveAvailableMonthsByCampaing(campaingId);
             var today = DateTime.Now.Date;
             var monthIndex = availableMonths.IndexOf(today.ToString("yyyy-MM"));
-            DateTime date = today;
+            var date = today;
+            var endDate = GetEndDate(campaing, date.Year, date.Month);
 
             if (monthIndex == -1)
             {
@@ -231,12 +234,13 @@
 
                 var metricsDate = DateTime.ParseExact(availableMonths[monthIndex], "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
 
-                date = flag ? GetEndDate(metricsDate.Year, metricsDate.Month) : metricsDate;
+                endDate = GetEndDate(campaing, metricsDate.Year, metricsDate.Month);
+                date = flag ? endDate : metricsDate;
             }
 
             var model = this.CalculateCampaingMetricValues(innerUserId, campaingId, date);
-            var currentMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, GetEndDate(date.Year, date.Month), true);
-            var projectedMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, GetEndDate(date.Year, date.Month), false);
+            var currentMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, endDate, true);
+            var projectedMetricLevel = this.CalculateMetricsLevel(innerUserId, campaing.Id, date, endDate, false);
 
             return new JsonResult
                 {
@@ -352,11 +356,23 @@
             return new DateTime(year, month, DateTime.DaysInMonth(year, month)).Date;
         }
 
+        private static DateTime GetEndDate(Campaing campaing, int year, int month)
+        {
+            if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Year == year) && (campaing.EndDate.Value.Month == month))
+            {
+                return campaing.EndDate.Value;
+            }
+
+            return GetEndDate(year, month);
+        }
+
         private IList<MetricValuesViewModel> CalculateCampaingMetricValues(int innerUserId, int campaingId, DateTime date)
         {
             var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(campaingId);
             var end = this.GetEndDate(campaingId, date.Year, date.Month);
 
+            date = date > end ? end : date;
+                
             return campaingMetrics
                             .Select(cml => new MetricValuesViewModel
                                         {
@@ -393,12 +409,7 @@
         {
             var campaing = this.campaingRepository.RetrieveCampaingById(campaingId);
 
-            if (campaing.EndDate.HasValue && (campaing.EndDate.Value.Year == year) && (campaing.EndDate.Value.Month == month))
-            {
-                return campaing.EndDate.Value;
-            }
-
-            return GetEndDate(year, month);
+            return GetEndDate(campaing, year, month);
         }
 
         private SalaryViewModel CalculateSalary(int innerUserId, DateTime date)
@@ -451,7 +462,7 @@
 
             foreach (var campaing in campaings)
             {
-                var end = this.GetEndDate(campaing.Id, date.Year, date.Month);
+                var end = GetEndDate(campaing, date.Year, date.Month);
                 var hours = projectedTotalHoursWorked;
 
                 if (endDateMonth.Date != end.Date)
@@ -506,15 +517,15 @@
 
                 if (metricValue.IsHighestToLowest)
                 {
-                    if (metricValue.OptimalValue <= value) { optimalCount++; }
-                    if (metricValue.ObjectiveValue <= value) { objectiveCount++; }
-                    if (metricValue.MinimumValue <= value) { minimumCount++; }
+                    if (metricValue.OptimalValue <= Math.Round(value, 2)) { optimalCount++; }
+                    if (metricValue.ObjectiveValue <= Math.Round(value, 2)) { objectiveCount++; }
+                    if (metricValue.MinimumValue <= Math.Round(value, 2)) { minimumCount++; }
                 }
                 else
                 {
-                    if (metricValue.OptimalValue >= value) { optimalCount++; }
-                    if (metricValue.ObjectiveValue >= value) { objectiveCount++; }
-                    if (metricValue.MinimumValue >= value) { minimumCount++; }
+                    if (metricValue.OptimalValue >= Math.Round(value, 2)) { optimalCount++; }
+                    if (metricValue.ObjectiveValue >= Math.Round(value, 2)) { objectiveCount++; }
+                    if (metricValue.MinimumValue >= Math.Round(value, 2)) { minimumCount++; }
                 }
             }
 

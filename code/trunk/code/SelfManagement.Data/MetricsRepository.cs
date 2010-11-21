@@ -108,9 +108,9 @@
         public double GetUserMetricValue(int innerUserId, DateTime date, int metricId, int campaingId)
         {
             using (var ctx = new SelfManagementEntities())
-            {                
-                var campaing = ctx.Campaings.Where(c => c.Id == campaingId).ToList().FirstOrDefault();
-                var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
+            {
+                var campaing = ctx.Campaings.FirstOrDefault(c => c.Id == campaingId);
+                var metric = ctx.Metrics.FirstOrDefault(m => m.Id == metricId);
 
                 var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
                 var lastDayOfMonth = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
@@ -140,8 +140,8 @@
         {
             using (var ctx = new SelfManagementEntities())
             {
-                var campaing = ctx.Campaings.Where(c => c.Id == campaingId).ToList().FirstOrDefault();
-                var metric = ctx.Metrics.Where(m => m.Id == metricId).ToList().FirstOrDefault();
+                var campaing = ctx.Campaings.FirstOrDefault(c => c.Id == campaingId);
+                var metric = ctx.Metrics.FirstOrDefault(m => m.Id == metricId);
 
                 var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
                 var lastDayOfMonth = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
