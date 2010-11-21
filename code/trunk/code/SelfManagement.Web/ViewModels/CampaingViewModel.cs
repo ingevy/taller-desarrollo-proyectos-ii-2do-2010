@@ -8,7 +8,7 @@
 
     public class CampaingViewModel
     {
-        private const NumberStyles NumberStyle = NumberStyles.Float | NumberStyles.Integer | NumberStyles.Number;
+        private const NumberStyles NumberStyle = NumberStyles.Float | NumberStyles.Integer | NumberStyles.Number | NumberStyles.Currency;
 
         public int Id { get; set; }
 
@@ -76,9 +76,12 @@
                 decimal objectiveHourlyValue;
                 decimal minimumHourlyValue;
 
-                if (decimal.TryParse(this.OptimalHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out optimalHourlyValue) &&
-                    decimal.TryParse(this.ObjectiveHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out objectiveHourlyValue) &&
-                    decimal.TryParse(this.MinimumHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out minimumHourlyValue))
+                var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+                format.CurrencySymbol = "$";
+
+                if (decimal.TryParse(this.OptimalHourlyValue, NumberStyle, format, out optimalHourlyValue) &&
+                    decimal.TryParse(this.ObjectiveHourlyValue, NumberStyle, format, out objectiveHourlyValue) &&
+                    decimal.TryParse(this.MinimumHourlyValue, NumberStyle, format, out minimumHourlyValue))
                 {
                     return (optimalHourlyValue > objectiveHourlyValue) && (optimalHourlyValue > minimumHourlyValue)
                            ? 1
@@ -97,8 +100,11 @@
                 decimal objectiveHourlyValue;
                 decimal minimumHourlyValue;
 
-                if (decimal.TryParse(this.ObjectiveHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out objectiveHourlyValue) &&
-                    decimal.TryParse(this.MinimumHourlyValue, NumberStyle, CultureInfo.InvariantCulture, out minimumHourlyValue))
+                var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+                format.CurrencySymbol = "$";
+
+                if (decimal.TryParse(this.ObjectiveHourlyValue, NumberStyle, format, out objectiveHourlyValue) &&
+                    decimal.TryParse(this.MinimumHourlyValue, NumberStyle, format, out minimumHourlyValue))
                 {
                     return objectiveHourlyValue > minimumHourlyValue
                            ? 1
@@ -154,8 +160,10 @@
         public static ValidationResult ValidateNumber(string number, ValidationContext validationContext)
         {
             double result = 0;
+            var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+            format.CurrencySymbol = "$";
 
-            if (!double.TryParse(number, NumberStyle, CultureInfo.InvariantCulture, out result))
+            if (!double.TryParse(number, NumberStyle, format, out result))
             {
                 return new ValidationResult("Formato inválido.");
             }

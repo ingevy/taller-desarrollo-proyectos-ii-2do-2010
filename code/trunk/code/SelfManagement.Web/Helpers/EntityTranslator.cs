@@ -7,10 +7,13 @@
 
     public static class EntityTranslator
     {
-        private const NumberStyles NumberStyle = NumberStyles.Float | NumberStyles.Integer | NumberStyles.Number;
+        private const NumberStyles NumberStyle = NumberStyles.Float | NumberStyles.Integer | NumberStyles.Number | NumberStyles.Currency;
 
         public static Campaing ToEntity(this CampaingViewModel model, ICampaingRepository repository)
         {
+            var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+            format.CurrencySymbol = "$";
+
             var entity = new Campaing
             {
                 Id = model.Id,
@@ -19,9 +22,9 @@
                 BeginDate = DateTime.ParseExact(model.BeginDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None),
                 EndDate = string.IsNullOrWhiteSpace(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None),
                 CampaingType = model.CampaingType,
-                OptimalHourlyValue = decimal.Parse(model.OptimalHourlyValue, NumberStyle, CultureInfo.InvariantCulture),
-                ObjectiveHourlyValue = decimal.Parse(model.ObjectiveHourlyValue, NumberStyle, CultureInfo.InvariantCulture),
-                MinimumHourlyValue = decimal.Parse(model.MinimumHourlyValue, NumberStyle, CultureInfo.InvariantCulture),
+                OptimalHourlyValue = decimal.Parse(model.OptimalHourlyValue, NumberStyle, format),
+                ObjectiveHourlyValue = decimal.Parse(model.ObjectiveHourlyValue, NumberStyle, format),
+                MinimumHourlyValue = decimal.Parse(model.MinimumHourlyValue, NumberStyle, format),
                 CustomerId = repository.RetrieveOrCreateCustomerIdByName(model.CustomerName),
             };
 
@@ -30,13 +33,16 @@
 
         public static CampaingMetricLevel ToEntity(this CampaingMetricLevelViewModel model, int campaingId)
         {
+            var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+            format.CurrencySymbol = "$";
+
             var entity = new CampaingMetricLevel
             {
                 CampaingId = campaingId,
                 MetricId = model.Id,
-                OptimalLevel = double.Parse(model.OptimalLevel, NumberStyle, CultureInfo.InvariantCulture),
-                ObjectiveLevel = double.Parse(model.ObjectiveLevel, NumberStyle, CultureInfo.InvariantCulture),
-                MinimumLevel = double.Parse(model.MinimumLevel, NumberStyle, CultureInfo.InvariantCulture),
+                OptimalLevel = double.Parse(model.OptimalLevel, NumberStyle, format),
+                ObjectiveLevel = double.Parse(model.ObjectiveLevel, NumberStyle, format),
+                MinimumLevel = double.Parse(model.MinimumLevel, NumberStyle, format),
                 Enabled = true
             };
 

@@ -164,7 +164,14 @@
 
             if (campaing != null)
             {
-                return GetMonthsList(campaing.BeginDate, campaing.EndDate.HasValue ? campaing.EndDate.Value : DateTime.Now);
+                var today = DateTime.Now.Date;
+                return GetMonthsList(
+                    campaing.BeginDate,
+                    campaing.EndDate.HasValue
+                        ? campaing.EndDate.Value
+                        : campaing.BeginDate > today
+                            ? campaing.BeginDate.AddMonths(1)
+                            : today);
             }
 
             throw new ArgumentException("campaingId");
@@ -439,7 +446,6 @@
             using (var ctx = new SelfManagementEntities())
             {
                 var supervisorIds = campaingSupervisors.Select(cu => cu.InnerUserId).ToList();
-
                 if (!supervisorIds.All(supervisorId => ctx.Supervisors.Any(s => s.InnerUserId == supervisorId)))
                 {
                     throw new ArgumentException("Solo se pueden asignar usarios que tengan rol de Supervisor.", "campaingSupervisors");
@@ -471,26 +477,52 @@
 
             using (var ctx = new SelfManagementEntities())
             {
-                //var supervisorIds = campaingSupervisors.Select(cu => cu.InnerUserId).ToList();
+                var supervisorIds = campaingSupervisors.Select(cu => cu.InnerUserId).ToList();
+                if (!supervisorIds.All(supervisorId => ctx.Supervisors.Any(s => s.InnerUserId == supervisorId)))
+                {
+                    throw new ArgumentException("Solo se pueden asignar usarios que tengan rol de Supervisor.", "campaingSupervisors");
+                }
 
-                //if (!supervisorIds.All(supervisorId => ctx.Supervisors.Any(s => s.InnerUserId == supervisorId)))
-                //{
-                //    throw new ArgumentException("Solo se pueden asignar usarios que tengan rol de Supervisor.", "campaingSupervisors");
-                //}
+                foreach (var supervisor in campaingSupervisors)
+                {
+                    var originalSupervisor = ctx.CampaingUsers.FirstOrDefault(cu => (cu.CampaingId == campaingId) && (cu.InnerUserId == supervisor.InnerUserId));
+                    if (originalSupervisor != null)
+                    {
+                        originalSupervisor.BeginDate = supervisor.BeginDate;
+                        originalSupervisor.EndDate = supervisor.EndDate;
+                    }
+                    else
+                    {
+                        ctx.CampaingUsers.AddObject(supervisor);
+                    }
 
-                //foreach (var supervisor in campaingSupervisors)
-                //{
-                //    ctx.CampaingUsers.AddObject(supervisor);
-                //}
+                    foreach (var agent in ctx.Agents.Where(a => a.SupervisorId.HasValue && a.SupervisorId.Value == supervisor.InnerUserId))
+                    {
+                        var originalAgent = ctx.CampaingUsers.FirstOrDefault(cu => (cu.InnerUserId == agent.InnerUserId) && (cu.CampaingId == campaingId));
+                        if (originalAgent != null)
+                        {
+                            originalAgent.BeginDate = supervisor.BeginDate;
+                            originalAgent.EndDate = supervisor.EndDate;
+                        }
+                        else
+                        {
+                            ctx.CampaingUsers.AddObject(new CampaingUser { CampaingId = campaingId, InnerUserId = agent.InnerUserId, BeginDate = supervisor.BeginDate, EndDate = supervisor.EndDate });
+                        }
+                    }
+                }
 
-                //foreach (var agent in ctx.Agents.Where(a => a.SupervisorId.HasValue && supervisorIds.Contains(a.SupervisorId.Value)))
-                //{
-                //    var supervisor = campaingSupervisors.FirstOrDefault(cu => cu.InnerUserId == agent.SupervisorId);
+                var oldSupervisors = ctx.CampaingUsers.Where(cu => !supervisorIds.Contains(cu.InnerUserId) && (cu.CampaingId == campaingId) && ctx.Supervisors.Any(s => s.InnerUserId == cu.InnerUserId));
+                var today = DateTime.Now.Date;
+                foreach (var oldSupervisor in oldSupervisors)
+                {
+                    oldSupervisor.EndDate = today;                  
+                    foreach (var oldAgent in ctx.CampaingUsers.Where(cu => (cu.CampaingId == campaingId) && ctx.Agents.Any(a => a.SupervisorId.HasValue && a.SupervisorId.Value == oldSupervisor.InnerUserId)))
+                    {
+                        oldAgent.EndDate = today;
+                    }
+                }
 
-                //    ctx.CampaingUsers.AddObject(new CampaingUser { CampaingId = campaingId, InnerUserId = agent.InnerUserId, BeginDate = supervisor.BeginDate, EndDate = supervisor.EndDate });
-                //}
-
-                //ctx.SaveChanges();
+                ctx.SaveChanges();
             }
         }
 
