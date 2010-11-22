@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\AgentController.cs" />
     <Compile Include="Controllers\CampaingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -134,6 +135,8 @@
     <Content Include="Content\Scripts\jquery.autocomplete.js" />
     <Content Include="Content\Styles\datepickercontrol.css" />
     <Content Include="Global.asax" />
+    <Content Include="Views\Administration\FileLogs.aspx" />
+    <Content Include="Views\Administration\Users.aspx" />
     <Content Include="Views\Agent\NotFound.aspx" />
     <Content Include="Views\Agent\Search.aspx" />
     <Content Include="Views\Agent\Index.aspx" />

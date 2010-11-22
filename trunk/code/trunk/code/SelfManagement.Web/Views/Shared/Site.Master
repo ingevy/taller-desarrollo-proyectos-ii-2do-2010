@@ -46,8 +46,14 @@
                             <li><%=Html.ActionLink("Agentes", "Index", "Agent")%></li>
                        <%
                           }
-                       %>    
-                   <% } %>
+                          else if (Page.User.IsInRole("ITManager"))
+                          {
+                       %>  
+                            <li><%=Html.ActionLink("Usuarios", "Users", "Administration")%></li>
+                            <li><%=Html.ActionLink("Logs", "FileLogs", "Administration")%></li>
+                       <%
+                          }
+                      } %>
                 </ul>
             </div>
             <div id="toolbar">
