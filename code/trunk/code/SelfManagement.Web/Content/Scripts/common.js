@@ -404,7 +404,7 @@ function updateSupervisorsList(campaingId, beginDate, endDate) {
     if (!beginDate || (beginDate == "")) {
         supervisors[0].innerHTML = "<h3>No hay supervisores disponibles en el rango de fechas elegido...</h3>";
     }
-    else if (endDate && (endDate != "") && (endDate <= beginDate)) {
+    else if (endDate && (endDate != "") && (endDate.split("/").reverse().join("") <= beginDate.split("/").reverse().join(""))) {
         supervisors[0].innerHTML = "<h3>La fecha de inicio tiene que ser menor que la de fin para determinar los Supervisores disponibles...</h3>";
     }
     else {
@@ -436,7 +436,7 @@ function updateSupervisorsList(campaingId, beginDate, endDate) {
                     for (var i = 0; i < json.Supervisors.length; i++) {
                         var supervisor = json.Supervisors[i];
 
-                        html += "<li class=\"ui-state-default\"><span class=\"off id\">";
+                        html += "<li class=\"custom-ui-state-default\"><span class=\"off id\">";
                         html += "<input id=\"CampaingSupervisors_" + i.toString() +"__Id\" name=\"CampaingSupervisors[" + i.toString() + "].Id\" type=\"hidden\" value=\"" + supervisor.Id + "\" /></span>";
                         html += "<h3>";
                         html += "<a href=\"#\">" + supervisor.DisplayName  + "</a></h3>";

@@ -122,7 +122,7 @@
                         for (var index = 0; index < this.Model.CampaingMetricLevels.Count(); index++)
                         {
                             %>
-                            <li class="ui-state-default"><span class="off id">
+                            <li class="custom-ui-state-default"><span class="off id">
                                 <%: Html.HiddenFor(model => this.Model.CampaingMetricLevels[index].Id)%></span>
                                 <h3>
                                     <a href="#">
@@ -199,7 +199,7 @@
                         for (var index = 0; index < this.Model.CampaingSupervisors.Count(); index++)
                         {
                             %>
-                            <li class="ui-state-default"><span class="off id">
+                            <li class="custom-ui-state-default"><span class="off id">
                                 <%: Html.HiddenFor(model => this.Model.CampaingSupervisors[index].Id)%></span>
                                 <h3>
                                     <a href="#">

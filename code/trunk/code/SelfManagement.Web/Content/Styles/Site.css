@@ -369,8 +369,8 @@ div.panel div.items ul.itineraries li ul.campaingElement  {
 .clone .options { display: none; }
 #campaingMetrics .empty, #campaingSupervisors .empty { position: absolute; width: 450px; }        
 #campaingMetrics ul, #campaingSupervisors ul { min-height: 300px; }
-#campaingMetrics .items li.ui-state-highlight, #campaingSupervisors .items li.ui-state-highlight { border: 1px solid #fcefa1; }
-#campaingMetrics .items li.ui-state-default, #campaingSupervisors .items li.ui-state-default { }
+#campaingMetrics .items li.custom-ui-state-highlight, #campaingSupervisors .items li.custom-ui-state-highlight { border: 1px solid #fcefa1; }
+#campaingMetrics .items li.custom-ui-state-default, #campaingSupervisors .items li.custom-ui-state-default { }
 #campaingMetrics .items li.ui-sortable-helper, #campaingSupervisors .items li.ui-sortable-helper { border: 1px solid #fcefa1; }
 #campaingMetrics .items li .btn ,#campaingSupervisors .items li .btn { height: 37px; display: inline-block; line-height: 0px; }
 #campaingMetrics .items li .handler, #campaingSupervisors .items li .handler {
