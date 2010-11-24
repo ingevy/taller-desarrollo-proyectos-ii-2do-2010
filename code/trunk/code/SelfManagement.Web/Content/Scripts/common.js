@@ -502,3 +502,38 @@ function redirectSearchCampaings() {
 
     window.location = "/Campaing/Search/" + searchCriteria;
 }
+
+function filterFiles() {
+    var index = $("#Type")[0].selectedIndex;
+    var type = $("#Type").children()[index].value;
+
+    index = $("#State")[0].selectedIndex;
+    var state = $("#State").children()[index].value;
+
+    var dataDate = $("#DataDate")[0].value
+    var processingDate = $("#ProcessingDate")[0].value
+    var modifiedDate = $("#ModifiedDate")[0].value
+
+    var url = getBaseUrl() + "Administration/Files";
+    var initialized = false;
+    if (dataDate && (dataDate != "")) {
+        url += "?dataDate=" + encodeURIComponent(dataDate);
+        initialized = true;
+    }
+    if (processingDate && (processingDate != "")) {
+        url += (initialized ? "&" : "?") + "processingDate=" + encodeURIComponent(processingDate);
+        initialized = true;
+    }
+    if (modifiedDate && (modifiedDate != "")) {
+        url += (initialized ? "&" : "?") + "modifiedDate=" + encodeURIComponent(modifiedDate);
+        initialized = true;
+    }
+    if (state && (state != "") && (state != "2")) {
+        url += (initialized ? "&" : "?") + "state=" + state;
+        initialized = true;
+    }
+    if (type && (type != "") && (type != "5")) {
+        url += (initialized ? "&" : "?") + "type=" + type;
+        initialized = true;
+    }
+}

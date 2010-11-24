@@ -89,6 +89,7 @@
     <Compile Include="ViewModels\CampaingMetricLevelViewModel.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\CampaingDetailsViewModel.cs" />
+    <Compile Include="ViewModels\FileFilterViewModel.cs" />
     <Compile Include="ViewModels\SupervisorDetailsViewModel.cs" />
     <Compile Include="ViewModels\LogOnViewModel.cs" />
     <Compile Include="ViewModels\MetricLevel.cs" />
