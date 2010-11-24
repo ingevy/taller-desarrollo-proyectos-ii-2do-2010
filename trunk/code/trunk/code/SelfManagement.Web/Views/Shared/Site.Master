@@ -8,9 +8,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=8" />
     <meta name="description" content="Sistema SelfManagement para control de métricas de Campañas del Call Center y seguimiento de la parte variable del sueldo" />
     <link href="<%=Url.Content("~/Content/Styles/Site.css")%>" rel="stylesheet" type="text/css" media="screen" />
+    <link href="<%=Url.Content("~/Content/Styles/jquery-ui.css")%>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<%=Url.Content("~/Content/Styles/datepickercontrol.css")%>" rel="stylesheet" type="text/css" media="screen" />
-    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery-1.4.1.js")%>"></script>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery-1.4.4.js")%>"></script>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery-ui.js")%>"></script>
     <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery.autocomplete.js")%>"></script>
+    <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/jquery-tmpl.js")%>"></script>
     <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/datepickercontrol.js")%>"></script>
     <script type="text/javascript" src="<%=Url.Content("~/Content/Scripts/common.js")%>"></script>
 </head>
