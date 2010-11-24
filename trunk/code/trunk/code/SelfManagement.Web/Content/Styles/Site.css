@@ -677,25 +677,25 @@ div.ac_results ul li.ac_over {
 	margin-top: 10px;
 }
 
-#metricvalues 
+#filevalues, #metricvalues 
 {
 	padding: 3px;
 	width: 952px;
 }
 
-#metricvalues tbody  th 
+#filevalues  tbody  th, #metricvalues tbody  th 
 {
 	background-color: #DDDDEE;
 	padding: 2px 7px;
 }
 
-#metricvalues tbody  td
+#filevalues tbody  td, #metricvalues tbody  td
 {
 	padding: 2px 7px;
 	border-bottom: 1px solid #DDDDEE;
 }
 
-#metricvalues tbody tr
+#filevalues tbody tr, #metricvalues tbody tr
 {
 	border-top: 1px solid;
 	border-bottom: 1px solid;

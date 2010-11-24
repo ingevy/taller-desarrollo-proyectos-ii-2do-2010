@@ -21,6 +21,17 @@
             });
         });
     </script>
+
+    <script type="text/html" id="fileRowTemplate">
+            <tr>
+                <td>${Id}</td>
+                <td>${State}</td>
+                <td>${Type}</td>
+                <td>${DataDate}</td>
+                <td>${ProcessingDate}</td>
+                <td>${ModifiedDate}</td>
+            </tr>
+        </script>
     
     <div id="mainPanel" class="panel">
         <div class="innerPanel">
@@ -68,7 +79,19 @@
                 <span>Resultados</span>
             </h2>
             <div class="content">
-                
+                <table cellpadding="0" cellspacing="0" id="filevalues">
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <th>Estado</th>
+                                <th>Ruta</th>
+                                <th>Tipo</th>
+                                <th>Fecha Datos</th>
+                                <th>Fecha Procesado</th>
+                                <th>Fecha Modificado</th>
+                            </tr>
+                        </tbody>
+                </table>
             </div>
         </div>
     </div>
