@@ -184,6 +184,11 @@ div.statusMessage  {
 	margin-top: 10px;
 }
 
+#mainPanel #fileFilters select { width: 127px }
+#mainPanel #fileFilters nobr { width: 127px }
+#mainPanel #fileFilters nobr input { width: 100px }
+#mainPanel #fileFilters label { width: 153px; }
+
 /* search form */
 #secondPanel, #mainPanel {
 	width: 984px;
@@ -232,6 +237,16 @@ div.statusMessage  {
 	cursor: pointer;
 	}
 	#buttonsPanel input[type=reset]:hover { background-position: 0 -100px; }
+
+#buttonsPanel input[type=button]  {
+	width: 120px; height: 37px;
+	padding: 0; border: 0;
+	background: url(../images/filter_btn.png) no-repeat; background-position: 0 0;
+	text-indent: -1000px; overflow: hidden;
+	cursor: pointer;
+	margin-right: 10px;
+	}
+	#buttonsPanel input[type=button]:hover { background-position: 0 -100px; }
 
 #mainPanel .advancedSearch input[type="text"] { width: 110px; }
 #mainPanel .advancedSearch div.fieldsA { float: left; width: 35%; }
