@@ -7,6 +7,8 @@
     {
         ProcessedFile RetrieveProcessedFileByPath(string filePath);
 
+        IList<ProcessedFile> FilterProcessedFiles(string dataDate, string processingDate, string modifiedDate, int? type, int? state);
+
         IList<Metric> RetrieveAvailableMetrics();
 
         int RetrieveUserActualCampaingId(int innerUserId);

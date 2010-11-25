@@ -17,6 +17,11 @@
             }
         }
 
+        public IList<ProcessedFile> FilterProcessedFiles(string dataDate, string processingDate, string modifiedDate, int? type, int? state)
+        {
+            return new List<ProcessedFile>();
+        }
+
         public IList<Metric> RetrieveAvailableMetrics()
         {
             using (var ctx = new SelfManagementEntities())
