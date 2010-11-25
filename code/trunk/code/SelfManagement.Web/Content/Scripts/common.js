@@ -565,5 +565,9 @@ function filterFiles() {
             $("#errorMessage").show();
         }
     });
+}
 
+function showFileLog(sender, event) {
+    event.cancelBubble = true;
+    return false;
 }

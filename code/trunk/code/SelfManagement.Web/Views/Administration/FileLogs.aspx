@@ -27,7 +27,7 @@
 
     <script type="text/html" id="fileRowTemplate">
             <tr>
-                <td>${Id}</td>
+                <td><a href="#" onclick="showFileLog(this, event);">${Id}</a></td>
                 <td style="text-align: center;"><span class="${CssClass}" title="${State}"></span></td>
                 <td>${Path}</td>
                 <td style="text-align: center;" >${FileType}</td>
