@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
     using CallCenter.SelfManagement.Data.Helpers;
+    using CallCenter.SelfManagement.Metric.Interfaces;
 
     public class MetricsRepository : IMetricsRepository
     {
@@ -21,7 +24,41 @@
         {
             using (var ctx = new SelfManagementEntities())
             {
-                return ctx.ProcessedFiles.ToList();
+                IQueryable<ProcessedFile> filter = ctx.ProcessedFiles;
+                DateTime date;
+                int number;
+
+                if (type.HasValue)
+                {
+                    filter = filter.Where(f => f.FileType == type.Value);
+                }
+
+                if (state.HasValue)
+                {
+                    filter = filter.Where(f => f.HasErrors == (state.Value != 0));
+                }
+
+                if (DateTime.TryParseExact(processingDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                {
+                    filter = filter.Where(f => (f.DateProcessed.Year == date.Year) && (f.DateProcessed.Month == date.Month) && (f.DateProcessed.Day == date.Day));
+                }
+
+                if (DateTime.TryParseExact(modifiedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                {
+                    filter = filter.Where(f => (f.DateLastModified.Year == date.Year) && (f.DateLastModified.Month == date.Month) && (f.DateLastModified.Day == date.Day));
+                }
+
+                if (DateTime.TryParseExact(dataDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                {
+                    return filter
+                            .ToList()
+                            .Where(f => IsInDateData(f, date))
+                            .ToList();
+                }
+                else
+                {
+                    return filter.ToList();
+                }
             }
         }
 
@@ -410,6 +447,18 @@
 
                 ctx.SaveChanges();
             }
+        }
+
+        private static bool IsInDateData(ProcessedFile file, DateTime dateData)
+        {
+            if (((ExternalSystemFiles)file.FileType) == ExternalSystemFiles.HF)
+            {
+                return true;
+            }
+
+            var fileDateDate = DateTime.ParseExact(Path.GetFileNameWithoutExtension(file.FileSystemPath).Split('_')[1], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
+
+            return fileDateDate.Date == dateData.Date;
         }
     }
 }

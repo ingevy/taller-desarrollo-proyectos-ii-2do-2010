@@ -30,7 +30,7 @@
                 <td>${Id}</td>
                 <td>${HasErrors}</td>
                 <td>${Path}</td>
-                <td>${FileType}</td>
+                <td style="text-align: center;" >${FileType}</td>
                 <td>${DateData}</td>
                 <td>${DateProcessed}</td>
                 <td>${DateLastModified}</td>
@@ -98,7 +98,7 @@
                                     <th>Id</th>
                                     <th>Estado</th>
                                     <th>Ruta</th>
-                                    <th>Tipo</th>
+                                    <th style="text-align: center;">Tipo</th>
                                     <th>Fecha Datos</th>
                                     <th>Fecha Procesado</th>
                                     <th>Fecha Modificado</th>
