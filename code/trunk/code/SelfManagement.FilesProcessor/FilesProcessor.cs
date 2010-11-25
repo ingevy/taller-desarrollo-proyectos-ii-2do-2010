@@ -211,35 +211,43 @@
 
                     foreach (var line in dataLines)
                     {
-                        var hfAgent = new HfAgent(line);
-
-                        var dbAgent = this.membershipService.RetrieveAgent(hfAgent.Legajo);
-
-                        if (dbAgent == null) //Caso 1: El agente no existe en el sistema
+                        try
                         {
-                            Console.WriteLine("Creando Agente: " + hfAgent.Legajo);
-                            try
+                            var hfAgent = new HfAgent(line);
+
+                            var dbAgent = this.membershipService.RetrieveAgent(hfAgent.Legajo);
+
+                            if (dbAgent == null) //Caso 1: El agente no existe en el sistema
                             {
-                                this.ProcessNewAgentFromHF(hfAgent);
+                                Console.WriteLine("Creando Agente: " + hfAgent.Legajo);
+                                try
+                                {
+                                    this.ProcessNewAgentFromHF(hfAgent);
+                                }
+                                catch (Exception e)
+                                {
+                                    this.metricsRepository.LogInProcessedFile(hfFile[0].FilePath, "Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message + Environment.NewLine);
+                                    Console.WriteLine("     " + e.Message);
+                                }
                             }
-                            catch (Exception e)
+                            else //Caso 2: El agente ya existe en el sistema. Actualizar datos
                             {
-                                this.metricsRepository.LogInProcessedFile(hfFile[0].FilePath, "Linea "+(dataLines.IndexOf(line)+1)+": "+e.Message+Environment.NewLine);
-                                Console.WriteLine("     " + e.Message);
+                                Console.WriteLine("Modificando Agente: " + hfAgent.Legajo);
+                                try
+                                {
+                                    this.ProcessUpdatedAgentFromHF(hfAgent, dbAgent);
+                                }
+                                catch (Exception e)
+                                {
+                                    this.metricsRepository.LogInProcessedFile(hfFile[0].FilePath, "Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message + Environment.NewLine);
+                                    Console.WriteLine("     " + e.Message);
+                                }
                             }
                         }
-                        else //Caso 2: El agente ya existe en el sistema. Actualizar datos
+                        catch (Exception e)
                         {
-                            Console.WriteLine("Modificando Agente: " + hfAgent.Legajo);
-                            try
-                            {
-                                this.ProcessUpdatedAgentFromHF(hfAgent, dbAgent);
-                            }
-                            catch (Exception e)
-                            {
-                                this.metricsRepository.LogInProcessedFile(hfFile[0].FilePath, "Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message + Environment.NewLine);
-                                Console.WriteLine("     " + e.Message);
-                            }
+                            this.metricsRepository.LogInProcessedFile(hfFile[0].FilePath, "Linea " + (dataLines.IndexOf(line) + 1) + ": " + e.Message + Environment.NewLine);
+                            Console.WriteLine("     " + e.Message);
                         }
                     }
                 }
