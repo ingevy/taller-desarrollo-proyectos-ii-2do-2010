@@ -29,8 +29,9 @@
             <tr>
                 <td>${Id}</td>
                 <td>${HasErrors}</td>
+                <td>${Path}</td>
                 <td>${FileType}</td>
-                <td>TODO</td>
+                <td>${DateData}</td>
                 <td>${DateProcessed}</td>
                 <td>${DateLastModified}</td>
             </tr>
@@ -42,24 +43,24 @@
                 <span>Filtros de Archivos</span></h2>
             <fieldset id="fileFilters">
                 <div style="float: left;">
-                    <%: Html.LabelFor(model => model.DataDate) %>
-                    <%: Html.TextBoxFor(model => model.DataDate, new { datepicker = "true", datepicker_format = "DD/MM/YYYY" }) %>
+                    <%: Html.LabelFor(model => model.DateData) %>
+                    <%: Html.TextBoxFor(model => model.DateData, new { datepicker = "true", datepicker_format = "DD/MM/YYYY" })%>
                 </div>
                 <div style="float: left;">
-                    <%: Html.LabelFor(model => model.ProcessingDate) %>
-                    <%: Html.TextBoxFor(model => model.ProcessingDate, new { datepicker = "true", datepicker_format = "DD/MM/YYYY" }) %>
+                    <%: Html.LabelFor(model => model.DateProcessed)%>
+                    <%: Html.TextBoxFor(model => model.DateProcessed, new { datepicker = "true", datepicker_format = "DD/MM/YYYY" })%>
                 </div>
                 <div style="float: left;">
-                    <%: Html.LabelFor(model => model.ModifiedDate) %>
-                    <%: Html.TextBoxFor(model => model.ModifiedDate, new { datepicker = "true", datepicker_format = "DD/MM/YYYY" })%>
+                    <%: Html.LabelFor(model => model.DateModified)%>
+                    <%: Html.TextBoxFor(model => model.DateModified, new { datepicker = "true", datepicker_format = "DD/MM/YYYY" })%>
                 </div>
                 <div style="clear: both; height: 1px"></div>
                 <div style="float: left;">
-                    <%: Html.LabelFor(model => model.Type) %>
+                    <%: Html.LabelFor(model => model.FileType)%>
                     <%
                         var fileTypes = new List<SelectListItem> { new SelectListItem { Text = "Todos", Value = "5", Selected = true }, new SelectListItem { Text = "Summary", Value = "0" }, new SelectListItem { Text = "QA", Value = "1" }, new SelectListItem { Text = "TTS", Value = "2" }, new SelectListItem { Text = "STS", Value = "3" }, new SelectListItem { Text = "HF", Value = "4" } };
                     %>
-                    <%: Html.DropDownListFor(model => model.Type, fileTypes) %>
+                    <%: Html.DropDownListFor(model => model.FileType, fileTypes)%>
                 </div>
                 <div style="float: left;">
                     <%: Html.LabelFor(model => model.State) %>
@@ -81,7 +82,7 @@
             <h2>
                 <span>Resultados</span>
             </h2>
-            <div class="content">
+            <div class="content" style="padding: 9px;">
                 <div id="loadingMessage" class="loading" title="Filtrando..." style="min-height: 70px;">
                 </div>
                 <div id="errorMessage" style="display: none; text-align:center; min-height: 70px;">
@@ -90,7 +91,7 @@
                 <div id="noResultsMessage" style="display: none; text-align:center; min-height: 70px;">
                     <p style="font-weight:bold;">No se encontraron archivos para los filtros usados.</p>
 			    </div>
-                <div id="fileValuesContainer" style="display: none; min-height: 70px;">
+                <div id="fileValuesContainer" style="display: none; min-height: 70px; padding:0; font-size: 85%;">
                     <table cellpadding="0" cellspacing="0" id="fileValues">
                             <tbody>
                                 <tr>

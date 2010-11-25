@@ -509,15 +509,15 @@ function filterFiles() {
     $("#noResultsMessage").hide();
     $("#fileValuesContainer").hide();
 
-    var index = $("#Type")[0].selectedIndex;
-    var type = $("#Type").children()[index].value;
+    var index = $("#FileType")[0].selectedIndex;
+    var type = $("#FileType").children()[index].value;
 
     index = $("#State")[0].selectedIndex;
     var state = $("#State").children()[index].value;
 
-    var dataDate = $("#DataDate")[0].value
-    var processingDate = $("#ProcessingDate")[0].value
-    var modifiedDate = $("#ModifiedDate")[0].value
+    var dataDate = $("#DateData")[0].value
+    var processingDate = $("#DateProcessed")[0].value
+    var modifiedDate = $("#DateModified")[0].value
 
     var url = getBaseUrl() + "Administration/Files";
     var initialized = false;

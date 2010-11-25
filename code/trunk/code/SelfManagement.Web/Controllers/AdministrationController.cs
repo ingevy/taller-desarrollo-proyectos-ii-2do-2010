@@ -1,9 +1,12 @@
 ﻿namespace CallCenter.SelfManagement.Web.Controllers
 {
+    using System.Linq;
     using System.Web.Mvc;
     using CallCenter.SelfManagement.Data;
+    using CallCenter.SelfManagement.Metric.Interfaces;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
+    using System.Globalization;
 
     public class AdministrationController : Controller
     {
@@ -42,7 +45,20 @@
         {
             var files = this.metricsRepository.FilterProcessedFiles(dataDate, processingDate, modifiedDate, type, state);
 
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = files };
+            return new JsonResult
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = files.Select(f => new
+                        {
+                            Id = f.Id,
+                            Path = f.FileSystemPath,
+                            FileType = ((ExternalSystemFiles)f.FileType).ToString(),
+                            HasErrors = f.HasErrors,
+                            DateData = "-- TODO --",
+                            DateProcessed = f.DateProcessed.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),
+                            DateLastModified = f.DateLastModified.ToString()
+                        })
+                };
         }
     }
 }

@@ -12,14 +12,17 @@
             using (var ctx = new SelfManagementEntities())
             {
                 return ctx.ProcessedFiles
-                    .Where(pf => pf.FileSystemPath == filePath )
+                    .Where(pf => pf.FileSystemPath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
                     .FirstOrDefault();
             }
         }
 
         public IList<ProcessedFile> FilterProcessedFiles(string dataDate, string processingDate, string modifiedDate, int? type, int? state)
         {
-            return new List<ProcessedFile>();
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.ProcessedFiles.ToList();
+            }
         }
 
         public IList<Metric> RetrieveAvailableMetrics()
