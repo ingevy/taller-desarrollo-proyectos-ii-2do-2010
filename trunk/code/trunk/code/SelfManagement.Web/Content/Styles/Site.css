@@ -677,10 +677,16 @@ div.ac_results ul li.ac_over {
 	margin-top: 10px;
 }
 
-#fileValues, #metricvalues 
+#metricvalues 
 {
 	padding: 3px;
 	width: 952px;
+}
+
+#fileValues 
+{
+	padding: 2px;
+	width: 960px;
 }
 
 #fileValues  tbody  th, #metricvalues tbody  th 

@@ -5,16 +5,16 @@
     public class FileFilterViewModel
     {
         [DisplayName("Fecha Datos:")]
-        public string DataDate { get; set; }
+        public string DateData { get; set; }
 
         [DisplayName("Fecha Procesado:")]
-        public string ProcessingDate { get; set; }
+        public string DateProcessed { get; set; }
 
         [DisplayName("Fecha Modificado:")]
-        public string ModifiedDate { get; set; }
+        public string DateModified { get; set; }
 
         [DisplayName("Tipo:")]
-        public int Type { get; set; }
+        public int FileType { get; set; }
 
         [DisplayName("Estado:")]
         public int State { get; set; }
