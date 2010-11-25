@@ -5,6 +5,8 @@
 
     public interface IMetricsRepository
     {
+        ProcessedFile RetrieveProcessedFilesById(int fileId);
+
         ProcessedFile RetrieveProcessedFileByPath(string filePath);
 
         IList<ProcessedFile> FilterProcessedFiles(string dataDate, string processingDate, string modifiedDate, int? type, int? state);

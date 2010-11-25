@@ -568,6 +568,40 @@ function filterFiles() {
 }
 
 function showFileLog(sender, event) {
+    var logDialog = $("#dialogContainer").dialog({ modal: true, height: 400, width: 550, autoOpen: false, resizable: false });
+    
+    logDialog.dialog('open');
+
+    $("#loadingMessageLog").show();
+    $("#errorMessageLog").hide();
+    $("#noResultsMessageLog").hide();
+    $("#logInfoContainer").hide();
+
+    var url = getBaseUrl() + "Administration/FileLog?fileId=" + sender.innerHTML;
+
+    $.ajax({
+        url: url,
+        success: function (data, textStatus, XMLHttpRequest) {
+            if ((data == null) || (data.Log == null) || (data.Log == "")) {
+                $("#loadingMessageLog").hide();
+                $("#errorMessageLog").hide();
+                $("#noResultsMessageLog").show();
+            } else {
+                $("#logInfo")[0].innerHTML = data.Log;
+                $("#loadingMessageLog").hide();
+                $("#errorMessageLog").hide();
+                $("#logInfoContainer").show();
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $("#loadingMessage").hide();
+            $("#noResultsMessage").hide();
+            $("#fileValuesContainer").hide();
+            $("#errorMessage").show();
+        }
+    });
+
     event.cancelBubble = true;
+    event.preventDefault();
     return false;
 }

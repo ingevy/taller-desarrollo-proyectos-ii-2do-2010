@@ -10,13 +10,19 @@
 
     public class MetricsRepository : IMetricsRepository
     {
+        public ProcessedFile RetrieveProcessedFilesById(int fileId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.ProcessedFiles.FirstOrDefault(pf => pf.Id == fileId);
+            }
+        }
+
         public ProcessedFile RetrieveProcessedFileByPath(string filePath)
         {
             using (var ctx = new SelfManagementEntities())
             {
-                return ctx.ProcessedFiles
-                    .Where(pf => pf.FileSystemPath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
-                    .FirstOrDefault();
+                return ctx.ProcessedFiles.FirstOrDefault(pf => pf.FileSystemPath.Equals(filePath, StringComparison.OrdinalIgnoreCase));
             }
         }
 

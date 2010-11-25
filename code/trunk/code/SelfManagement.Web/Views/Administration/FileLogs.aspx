@@ -17,7 +17,7 @@
         $(function () {
 
             filterFiles();
-
+            
             $("#filterButton").click(function (event) {
                 // alert("Filtar");
                 filterFiles();
@@ -107,6 +107,20 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="dialogContainer" style="display: none; padding: 0px;" title="Log">
+        <div id="loadingMessageLog" title="Cargando..." class="loading" style="min-height: 70px; margin-top: 10px;">
+        </div>
+        <div id="errorMessageLog" style="display: none; text-align:center">
+            <p style="font-weight:bold;">Hubo un error al consultar el log del archivo. Por favor, intente más tarde.</p>
+        </div>
+        <div id="noResultsMessageLog" style="display: none; text-align:center">
+            <p style="font-weight:bold;">El archivo seleccionado no posee log.</p>
+        </div>
+        <div id="logInfoContainer" style="display: none">
+            <p id="logInfo" style="font-weight:bold;">log</p>
         </div>
     </div>
 
