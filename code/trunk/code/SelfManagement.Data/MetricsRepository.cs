@@ -25,7 +25,6 @@
             using (var ctx = new SelfManagementEntities())
             {
                 IQueryable<ProcessedFile> filter = ctx.ProcessedFiles;
-                DateTime date;
                 int number;
 
                 if (type.HasValue)
@@ -38,21 +37,24 @@
                     filter = filter.Where(f => f.HasErrors == (state.Value != 0));
                 }
 
-                if (DateTime.TryParseExact(processingDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                DateTime dateProcessed;
+                if (DateTime.TryParseExact(processingDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateProcessed))
                 {
-                    filter = filter.Where(f => (f.DateProcessed.Year == date.Year) && (f.DateProcessed.Month == date.Month) && (f.DateProcessed.Day == date.Day));
+                    filter = filter.Where(f => (f.DateProcessed.Year == dateProcessed.Year) && (f.DateProcessed.Month == dateProcessed.Month) && (f.DateProcessed.Day == dateProcessed.Day));
                 }
 
-                if (DateTime.TryParseExact(modifiedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                DateTime dateLastModified;
+                if (DateTime.TryParseExact(modifiedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateLastModified))
                 {
-                    filter = filter.Where(f => (f.DateLastModified.Year == date.Year) && (f.DateLastModified.Month == date.Month) && (f.DateLastModified.Day == date.Day));
+                    filter = filter.Where(f => (f.DateLastModified.Year == dateLastModified.Year) && (f.DateLastModified.Month == dateLastModified.Month) && (f.DateLastModified.Day == dateLastModified.Day));
                 }
 
-                if (DateTime.TryParseExact(dataDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                DateTime dateData;
+                if (DateTime.TryParseExact(dataDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateData))
                 {
                     return filter
                             .ToList()
-                            .Where(f => IsInDateData(f, date))
+                            .Where(f => IsInDateData(f, dateData))
                             .ToList();
                 }
                 else
