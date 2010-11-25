@@ -1,14 +1,15 @@
 ﻿namespace CallCenter.SelfManagement.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Metric.Interfaces;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
-    using System.Globalization;
-    using System;
-    using System.IO;
 
     public class AdministrationController : Controller
     {
@@ -39,7 +40,7 @@
         [Authorize(Roles = "ITManager")]
         public ActionResult FileLogs()
         {
-            return this.View(new FileFilterViewModel());
+            return this.View(new FileFilterViewModel { FileType = 5, State = 1 });
         }
 
         [Authorize(Roles = "ITManager")]
@@ -68,14 +69,14 @@
         public ActionResult FileLog(int fileId)
         {
             var file = this.metricsRepository.RetrieveProcessedFilesById(fileId);
-            var log = string.Empty;
+            IEnumerable<string> logs = new List<string>();
 
-            if (file != null)
+            if ((file != null) && !string.IsNullOrWhiteSpace(file.Log))
             {
-                log = file.Log;
+                logs = file.Log.Trim().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);                
             }
-            
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Log = log } };
+
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = logs.Select(l => new { Value = l }) };
         }
 
         private static string GetDateDataFromFile(ProcessedFile file)

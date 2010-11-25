@@ -35,7 +35,11 @@
                 <td>${DateProcessed}</td>
                 <td>${DateLastModified}</td>
             </tr>
-        </script>
+    </script>
+
+    <script type="text/html" id="fileLogTemplate">
+            <p>${Value}</p>
+    </script>
     
     <div id="mainPanel" class="panel">
         <div class="innerPanel">
@@ -110,7 +114,7 @@
         </div>
     </div>
 
-    <div id="dialogContainer" style="display: none; padding: 0px;" title="Log">
+    <div id="dialogContainer" style="display: none; padding: 0px;" title="Log de Archivo">
         <div id="loadingMessageLog" title="Cargando..." class="loading" style="min-height: 70px; margin-top: 10px;">
         </div>
         <div id="errorMessageLog" style="display: none; text-align:center">
@@ -120,7 +124,7 @@
             <p style="font-weight:bold;">El archivo seleccionado no posee log.</p>
         </div>
         <div id="logInfoContainer" style="display: none">
-            <p id="logInfo" style="font-weight:bold;">log</p>
+            <div id="logInfo" style="font-weight:bold;">log</div>
         </div>
     </div>
 
