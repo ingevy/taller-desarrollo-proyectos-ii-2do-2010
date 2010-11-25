@@ -7,6 +7,8 @@
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
     using System.Globalization;
+    using System;
+    using System.IO;
 
     public class AdministrationController : Controller
     {
@@ -54,11 +56,23 @@
                             Path = f.FileSystemPath,
                             FileType = ((ExternalSystemFiles)f.FileType).ToString(),
                             HasErrors = f.HasErrors,
-                            DateData = "-- TODO --",
+                            DateData = GetDateDataFromFile(f),
                             DateProcessed = f.DateProcessed.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),
-                            DateLastModified = f.DateLastModified.ToString()
+                            DateLastModified = f.DateLastModified.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)
                         })
                 };
+        }
+
+        private static string GetDateDataFromFile(ProcessedFile file)
+        {
+            if (((ExternalSystemFiles)file.FileType) == ExternalSystemFiles.HF)
+            {
+                return "N/A";
+            }
+
+            return DateTime
+                        .ParseExact(Path.GetFileNameWithoutExtension(file.FileSystemPath).Split('_')[1], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None)
+                        .ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
         }
     }
 }
