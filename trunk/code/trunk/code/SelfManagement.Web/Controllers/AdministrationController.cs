@@ -64,6 +64,20 @@
                 };
         }
 
+        [Authorize(Roles = "ITManager")]
+        public ActionResult FileLog(int fileId)
+        {
+            var file = this.metricsRepository.RetrieveProcessedFilesById(fileId);
+            var log = string.Empty;
+
+            if (file != null)
+            {
+                log = file.Log;
+            }
+            
+            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { Log = log } };
+        }
+
         private static string GetDateDataFromFile(ProcessedFile file)
         {
             if (((ExternalSystemFiles)file.FileType) == ExternalSystemFiles.HF)
