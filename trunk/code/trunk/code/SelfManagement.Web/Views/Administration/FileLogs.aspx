@@ -15,6 +15,9 @@
 
     <script type="text/javascript">
         $(function () {
+
+            filterFiles();
+
             $("#filterButton").click(function (event) {
                 // alert("Filtar");
                 filterFiles();
@@ -25,11 +28,11 @@
     <script type="text/html" id="fileRowTemplate">
             <tr>
                 <td>${Id}</td>
-                <td>${State}</td>
-                <td>${Type}</td>
-                <td>${DataDate}</td>
-                <td>${ProcessingDate}</td>
-                <td>${ModifiedDate}</td>
+                <td>${HasErrors}</td>
+                <td>${FileType}</td>
+                <td>TODO</td>
+                <td>${DateProcessed}</td>
+                <td>${DateLastModified}</td>
             </tr>
         </script>
     
@@ -79,19 +82,29 @@
                 <span>Resultados</span>
             </h2>
             <div class="content">
-                <table cellpadding="0" cellspacing="0" id="filevalues">
-                        <tbody>
-                            <tr>
-                                <th>Id</th>
-                                <th>Estado</th>
-                                <th>Ruta</th>
-                                <th>Tipo</th>
-                                <th>Fecha Datos</th>
-                                <th>Fecha Procesado</th>
-                                <th>Fecha Modificado</th>
-                            </tr>
-                        </tbody>
-                </table>
+                <div id="loadingMessage" class="loading" title="Filtrando..." style="min-height: 70px;">
+                </div>
+                <div id="errorMessage" style="display: none; text-align:center; min-height: 70px;">
+                    <p style="font-weight:bold;">Hubo un error al consultar los archivos procesados. Por favor, intente más tarde.</p>
+			    </div>
+                <div id="noResultsMessage" style="display: none; text-align:center; min-height: 70px;">
+                    <p style="font-weight:bold;">No se encontraron archivos para los filtros usados.</p>
+			    </div>
+                <div id="fileValuesContainer" style="display: none; min-height: 70px;">
+                    <table cellpadding="0" cellspacing="0" id="fileValues">
+                            <tbody>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Estado</th>
+                                    <th>Ruta</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Datos</th>
+                                    <th>Fecha Procesado</th>
+                                    <th>Fecha Modificado</th>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

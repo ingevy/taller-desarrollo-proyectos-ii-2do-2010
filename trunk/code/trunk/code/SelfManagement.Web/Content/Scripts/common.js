@@ -504,6 +504,11 @@ function redirectSearchCampaings() {
 }
 
 function filterFiles() {
+    $("#loadingMessage").show();
+    $("#errorMessage").hide();
+    $("#noResultsMessage").hide();
+    $("#fileValuesContainer").hide();
+
     var index = $("#Type")[0].selectedIndex;
     var type = $("#Type").children()[index].value;
 
@@ -536,4 +541,29 @@ function filterFiles() {
         url += (initialized ? "&" : "?") + "type=" + type;
         initialized = true;
     }
+
+    $.ajax({
+        url: url,
+        success: function (data, textStatus, XMLHttpRequest) {
+            $("#fileValues tr:has(td)").remove();
+
+            if ((data == null) || (data.length == 0)) {
+                $("#loadingMessage").hide();
+                $("#errorMessage").hide();
+                $("#noResultsMessage").show();
+            } else {
+                $("#fileRowTemplate").tmpl(data).appendTo("#fileValues");
+                $("#loadingMessage").hide();
+                $("#errorMessage").hide();
+                $("#fileValuesContainer").show();
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $("#loadingMessage").hide();
+            $("#noResultsMessage").hide();
+            $("#fileValuesContainer").hide();
+            $("#errorMessage").show();
+        }
+    });
+
 }
