@@ -83,6 +83,26 @@ div.submit {
 .moveDown { background-position: -320px; }
 .relatedItineraries { background-position: -360px; }
 
+.file_with_errors {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+    background: url(../images/file_with_errors.png) no-repeat;
+    text-indent: -1000px;
+    overflow: hidden;
+    cursor: default;
+}
+
+.file_no_errors {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+    background: url(../images/file_no_errors.png) no-repeat;
+    text-indent: -1000px;
+    overflow: hidden;
+    cursor: default;    
+}
+
 .bulkAdd { display: block; font-size: 14px; line-height: 24px; text-align: right;
            border-bottom: 1px solid #eee; padding-bottom: 4px;
            padding-right: 27px; background: url(../images/btn_add.png) no-repeat top right;

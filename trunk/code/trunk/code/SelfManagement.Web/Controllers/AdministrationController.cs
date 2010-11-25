@@ -55,7 +55,8 @@
                             Id = f.Id,
                             Path = f.FileSystemPath,
                             FileType = ((ExternalSystemFiles)f.FileType).ToString(),
-                            HasErrors = f.HasErrors,
+                            CssClass = f.HasErrors ? "file_with_errors" : "file_no_errors",
+                            State = f.HasErrors ? "Con Errores" : "Sin Errores",
                             DateData = GetDateDataFromFile(f),
                             DateProcessed = f.DateProcessed.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),
                             DateLastModified = f.DateLastModified.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)

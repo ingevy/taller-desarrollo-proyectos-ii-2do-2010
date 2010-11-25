@@ -28,7 +28,7 @@
     <script type="text/html" id="fileRowTemplate">
             <tr>
                 <td>${Id}</td>
-                <td>${HasErrors}</td>
+                <td style="text-align: center;"><span class="${CssClass}" title="${State}"></span></td>
                 <td>${Path}</td>
                 <td style="text-align: center;" >${FileType}</td>
                 <td>${DateData}</td>
