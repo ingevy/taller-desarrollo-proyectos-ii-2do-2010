@@ -54,7 +54,7 @@
                           else if (Page.User.IsInRole("ITManager"))
                           {
                        %>  
-                            <li><%=Html.ActionLink("Usuarios", "Users", "Administration")%></li>
+                            <li><%=Html.ActionLink("Crear Usuario", "CreateUser", "Administration")%></li>
                             <li><%=Html.ActionLink("Logs", "FileLogs", "Administration")%></li>
                        <%
                           }
