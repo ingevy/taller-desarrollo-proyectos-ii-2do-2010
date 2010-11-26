@@ -227,6 +227,16 @@ div.statusMessage  {
 #mainPanel .content .uservalue { width: 108px; text-align: right; }
 #mainPanel .content div { padding-right:15px; padding-left:15px; margin-top:15px }
 
+#mainPanel .content2 .uservalue { width: 170px; text-align: right; }
+#mainPanel .content2 div { padding-right:15px; padding-left:15px; margin-top:15px }
+#mainPanel .content2 label { width: 268px }
+#mainPanel .content2 { padding: 5px 15px 15px 15px; }
+
+#secondPanel .content2 .uservalue { width: 170px; text-align: right; }
+#secondPanel .content2 div { padding-right:15px; padding-left:15px; margin-top:15px }
+#secondPanel .content2 label { width: 268px }
+#secondPanel .content2 { padding: 5px 15px 15px 15px; }
+
 #secondPanel p, #mainPanel p { padding: 2px; margin: 0.3em; text-align: center }
 #secondPanel label, #mainPanel label { display: inline-block; width: 70px; }
 /*#mainPanel select { width: 110px; }*/
