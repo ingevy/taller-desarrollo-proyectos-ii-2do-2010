@@ -1,7 +1,6 @@
 ﻿namespace CallCenter.SelfManagement.Web.Controllers
 {
     using System.Web.Mvc;
-    using System.Web.Security;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.Services;
@@ -62,38 +61,6 @@
             this.FormsService.SignOut();
 
             return this.RedirectToAction("Index", "Home");
-        }
-    
-        public ActionResult Register()
-        {
-            this.ViewData["PasswordLength"] = this.MembershipService.MinPasswordLength;
-
-            return this.View();
-        }
-
-        [HttpPost]
-        public ActionResult Register(RegisterViewModel model)
-        {
-            if (this.ModelState.IsValid)
-            {
-                // Attempt to register the user
-                var createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
-
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    this.FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
-                    return this.RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    this.ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            this.ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-
-            return this.View(model);
         }
 
         [Authorize]

@@ -89,6 +89,7 @@
     <Compile Include="ViewModels\CampaingMetricLevelViewModel.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\CampaingDetailsViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\FileFilterViewModel.cs" />
     <Compile Include="ViewModels\SupervisorDetailsViewModel.cs" />
     <Compile Include="ViewModels\LogOnViewModel.cs" />
@@ -142,7 +143,7 @@
     <Content Include="Content\Styles\jquery-ui.css" />
     <Content Include="Global.asax" />
     <Content Include="Views\Administration\FileLogs.aspx" />
-    <Content Include="Views\Administration\Users.aspx" />
+    <Content Include="Views\Administration\CreateUser.aspx" />
     <Content Include="Views\Agent\NotFound.aspx" />
     <Content Include="Views\Agent\Search.aspx" />
     <Content Include="Views\Agent\Index.aspx" />
@@ -164,7 +165,6 @@
     <Content Include="Views\Account\ChangePassword.aspx" />
     <Content Include="Views\Account\ChangePasswordSuccess.aspx" />
     <Content Include="Views\Account\LogOn.aspx" />
-    <Content Include="Views\Account\Register.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\LogOnUserControl.ascx" />

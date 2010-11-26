@@ -10,33 +10,88 @@
     using CallCenter.SelfManagement.Metric.Interfaces;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
+    using System.Web.Security;
 
     public class AdministrationController : Controller
     {
         private readonly IMetricsRepository metricsRepository;
+        private readonly IMembershipService membershipService;
 
         public AdministrationController()
-            : this(new RepositoryFactory().GetMetricsRepository())
+            : this(new RepositoryFactory().GetMetricsRepository(), new RepositoryFactory().GetMembershipService())
         {
         }
 
-        public AdministrationController(IMetricsRepository metricsRepository)
+        public AdministrationController(IMetricsRepository metricsRepository, IMembershipService membershipService)
         {
             this.metricsRepository = metricsRepository;
+            this.membershipService = membershipService;
         }
 
         [Authorize(Roles = "ITManager")]
         public ActionResult Index()
         {
-            return this.View("Users");
+            return this.RedirectToAction("CreateUser");
         }
 
         [Authorize(Roles = "ITManager")]
-        public ActionResult Users()
+        public ActionResult CreateUser()
         {
-            return this.View();
+            return this.View(new UserViewModel { Role = 1 });
         }
 
+        [HttpPost]
+        [Authorize(Roles = "ITManager")]
+        public ActionResult CreateUser(UserViewModel userToCreate)
+        {
+            var globalError = string.Empty;
+            if (this.ModelState.IsValid)
+            {
+                MembershipCreateStatus status;
+                if (string.IsNullOrWhiteSpace(userToCreate.Id))
+                {
+                    status = this.membershipService.CreateUser(userToCreate.Username, userToCreate.Password, userToCreate.Email);
+                    if (status == MembershipCreateStatus.Success)
+                    {
+                        var innerUserId = this.membershipService.RetrieveAgent(userToCreate.Username).InnerUserId;
+
+                        return this.RedirectToAction("CreateUser", new { msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "El nuevo Agente '{0}' se creó exitosamente.", innerUserId)) });
+                    }
+                    else
+                    {
+                        globalError = AccountValidation.ErrorCodeToString(status);
+                    }
+                }
+                else
+                {
+                    innerUserId = int.Parse(userToCreate.Id, NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    if (this.membershipService.RetrieveAgent(innerUserId) == null)
+                    {
+                        status = this.membershipService.CreateUser(innerUserId, userToCreate.Username, userToCreate.Password, userToCreate.Email);
+                        if (status == MembershipCreateStatus.Success)
+                        {
+                            return this.RedirectToAction("CreateUser", new { msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "El nuevo Agente '{0}' se creó exitosamente.", innerUserId)) });
+                        }
+                        else
+                        {
+                            globalError = AccountValidation.ErrorCodeToString(status);
+                        }
+                    }
+                    else
+                    {
+                        globalError = "El Identificador de usuario seleccionado ya esta siendo usado por otro usuario.";
+                    }
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(globalError))
+            {
+                this.ModelState["GlobalError"].Errors.Add(globalError);
+            }
+
+            return this.View(userToCreate);
+        }
+        
         [Authorize(Roles = "ITManager")]
         public ActionResult FileLogs()
         {

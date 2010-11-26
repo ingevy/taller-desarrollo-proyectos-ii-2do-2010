@@ -170,7 +170,7 @@
 
             if (result < 0)
             {
-                return new ValidationResult("El valor de hora no puede ser negativo.");
+                return new ValidationResult("El valor no puede ser negativo.");
             }
 
             return ValidationResult.Success;
