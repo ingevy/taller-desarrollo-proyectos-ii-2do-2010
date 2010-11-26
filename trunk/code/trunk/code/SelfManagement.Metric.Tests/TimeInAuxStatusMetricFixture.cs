@@ -5,6 +5,7 @@
     using CallCenter.SelfManagement.Metric.Interfaces;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
+    using CallCenter.SelfManagement.Metric.Helpers;
 
     [TestClass]
     public class TimeInAuxStatusMetricFixture
@@ -49,7 +50,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(MetricException))]
         public void ShouldThrowAgentIDinSummaryFileNotFoundInTTSFileMetricAuxTm()
         {
             //File Summary
