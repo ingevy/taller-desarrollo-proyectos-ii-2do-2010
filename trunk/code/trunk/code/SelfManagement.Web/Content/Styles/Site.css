@@ -709,13 +709,13 @@ div.ac_results ul li.ac_over {
 	width: 960px;
 }
 
-#fileValues  tbody  th, #metricvalues tbody  th 
+#fileValues tbody th, #metricvalues tbody th
 {
 	background-color: #DDDDEE;
 	padding: 2px 7px;
 }
 
-#fileValues tbody  td, #metricvalues tbody  td
+#fileValues tbody td, #metricvalues tbody td
 {
 	padding: 2px 7px;
 	border-bottom: 1px solid #DDDDEE;
@@ -726,6 +726,14 @@ div.ac_results ul li.ac_over {
 	border-top: 1px solid;
 	border-bottom: 1px solid;
 }
+
+#fileValues tbody tr .link span {
+	color: #06f;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#fileValues tbody tr .link span:hover { color: #000; }
 
 #metricvaluescontainer, #metricchartscontainer
 {

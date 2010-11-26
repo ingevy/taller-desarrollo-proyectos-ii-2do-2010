@@ -76,6 +76,8 @@
                 logs = file.Log.Trim().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);                
             }
 
+            logs = logs.Select(l => l.Trim().Trim('\n')).Distinct();
+
             return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = logs.Select(l => new { Value = l }) };
         }
 
