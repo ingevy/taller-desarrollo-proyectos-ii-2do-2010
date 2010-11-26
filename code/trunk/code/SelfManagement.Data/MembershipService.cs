@@ -280,6 +280,14 @@
             }
         }
 
+        public bool ExistsUser(int innerUserId)
+        {
+            using (var ctx = new SelfManagementEntities())
+            {
+                return ctx.aspnet_Users.FirstOrDefault(u => u.InnerUserId == innerUserId) != null;
+            }
+        }
+
         private static IList<string> GetMonthsList(DateTime from, DateTime to)
         {
             var months = new List<string>();

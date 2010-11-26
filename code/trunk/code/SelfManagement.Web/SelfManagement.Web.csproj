@@ -95,7 +95,6 @@
     <Compile Include="ViewModels\LogOnViewModel.cs" />
     <Compile Include="ViewModels\MetricLevel.cs" />
     <Compile Include="ViewModels\MetricValuesViewModel.cs" />
-    <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\SalaryViewModel.cs" />
     <Compile Include="ViewModels\SupervisorViewModel.cs" />
     <Compile Include="ViewModels\UserCampaingInfo.cs" />

@@ -12,6 +12,8 @@
 
         bool ExistsUser(string userName);
 
+        bool ExistsUser(int innerUserId);
+
         MembershipCreateStatus CreateUser(string userName, string password, string email);
 
         MembershipCreateStatus CreateUser(int innerUserId, string userName, string password, string email);

@@ -14,6 +14,8 @@
 
     public class AdministrationController : Controller
     {
+        private const NumberStyles NumberStyle = NumberStyles.Float | NumberStyles.Integer | NumberStyles.Number | NumberStyles.Currency;
+
         private readonly IMetricsRepository metricsRepository;
         private readonly IMembershipService membershipService;
 
@@ -53,9 +55,10 @@
                     status = this.membershipService.CreateUser(userToCreate.Username, userToCreate.Password, userToCreate.Email);
                     if (status == MembershipCreateStatus.Success)
                     {
-                        var innerUserId = this.membershipService.RetrieveAgent(userToCreate.Username).InnerUserId;
+                        this.AddRoleAndProfile(userToCreate);
 
-                        return this.RedirectToAction("CreateUser", new { msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "El nuevo Agente '{0}' se creó exitosamente.", innerUserId)) });
+                        var innerUserId = this.membershipService.RetrieveInnerUserIdByUserName(userToCreate.Username);
+                        return this.RedirectToAction("CreateUser", new { msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "El nuevo usuario '{0}' se creó exitosamente.", innerUserId)) });
                     }
                     else
                     {
@@ -64,13 +67,15 @@
                 }
                 else
                 {
-                    innerUserId = int.Parse(userToCreate.Id, NumberStyles.Integer, CultureInfo.InvariantCulture);
-                    if (this.membershipService.RetrieveAgent(innerUserId) == null)
+                    var innerUserId = int.Parse(userToCreate.Id, NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    if (!this.membershipService.ExistsUser(innerUserId))
                     {
                         status = this.membershipService.CreateUser(innerUserId, userToCreate.Username, userToCreate.Password, userToCreate.Email);
                         if (status == MembershipCreateStatus.Success)
                         {
-                            return this.RedirectToAction("CreateUser", new { msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "El nuevo Agente '{0}' se creó exitosamente.", innerUserId)) });
+                            this.AddRoleAndProfile(userToCreate);
+
+                            return this.RedirectToAction("CreateUser", new { msg = Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "El nuevo usuario '{0}' se creó exitosamente.", innerUserId)) });
                         }
                         else
                         {
@@ -86,7 +91,13 @@
 
             if (!string.IsNullOrWhiteSpace(globalError))
             {
-                this.ModelState["GlobalError"].Errors.Add(globalError);
+                this.ModelState.AddModelError("GlobalError", globalError);
+            }
+
+            if ((this.ModelState[""] != null) && (this.ModelState[""].Errors.Count > 0))
+            {
+                this.ModelState["Password"].Errors.Add(this.ModelState[""].Errors[0].ErrorMessage);
+                this.ModelState["ConfirmPassword"].Errors.Add(this.ModelState[""].Errors[0].ErrorMessage);
             }
 
             return this.View(userToCreate);
@@ -146,6 +157,23 @@
             return DateTime
                         .ParseExact(Path.GetFileNameWithoutExtension(file.FileSystemPath).Split('_')[1], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None)
                         .ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+        }
+
+        private void AddRoleAndProfile(UserViewModel user)
+        {
+            this.membershipService.AddUserToRol(user.Username, (SelfManagementRoles)user.Role);
+
+            decimal? grossSalary = null;
+            decimal grossSalaryValue;
+            var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+            format.CurrencySymbol = "$";
+                        
+            if (decimal.TryParse(user.GrossSalary, NumberStyle, format, out grossSalaryValue))
+            {
+                grossSalary = grossSalaryValue;
+            }
+ 
+            this.membershipService.CreateProfile(user.Username, user.Dni, user.Names, user.LastName, grossSalary, user.Status == 0 ? "PTE" : "FTE", user.Status == 0 ? "activo" : "inactivo", DateTime.Now);
         }
     }
 }

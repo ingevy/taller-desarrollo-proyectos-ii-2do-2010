@@ -3,8 +3,8 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Globalization;
-    using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Data;
+    using CallCenter.SelfManagement.Web.Helpers;
 
     [PropertiesMustMatch("Password", "ConfirmPassword", ErrorMessage = "La contraseña y la confirmación de la misma no coinciden.")]
     public class UserViewModel
@@ -47,6 +47,10 @@
         [Range(0, 1, ErrorMessage = "El estado seleccionado es inválido.")]
         public int Status { get; set; }
 
+        [DisplayName("Jornada:")]
+        [Range(0, 1, ErrorMessage = "La jornada seleccionada es inválido.")]
+        public int Workday { get; set; }
+
         [Required(ErrorMessage = "El nombre del usuario es requerido.")]
         [DisplayName("DNI:")]
         public string Dni { get; set; }
@@ -77,6 +81,11 @@
 
         public static ValidationResult ValidateNumber(string number, ValidationContext validationContext)
         {
+            if (string.IsNullOrWhiteSpace(number))
+            {
+                return ValidationResult.Success;
+            }
+
             double result = 0;
             var format = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
             format.CurrencySymbol = "$";

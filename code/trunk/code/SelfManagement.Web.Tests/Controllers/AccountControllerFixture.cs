@@ -226,92 +226,7 @@
             Assert.AreEqual(model, viewResult.ViewData.Model);
             Assert.AreEqual("El nombre de usuario o contraseña es inválido.", controller.ModelState["LogOnViewModel"].Errors[0].ErrorMessage);
         }
-
-        [TestMethod]
-        public void Register_Get_ReturnsView()
-        {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ActionResult result = controller.Register();
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
-            Assert.AreEqual(10, ((ViewResult)result).ViewData["PasswordLength"]);
-        }
-
-        [TestMethod]
-        public void Register_Post_ReturnsRedirectOnSuccess()
-        {
-            // Arrange
-            AccountController controller = GetAccountController();
-            RegisterViewModel model = new RegisterViewModel()
-            {
-                UserName = "someUser",
-                Email = "goodEmail",
-                Password = "goodPassword",
-                ConfirmPassword = "goodPassword"
-            };
-
-            // Act
-            ActionResult result = controller.Register(model);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
-            RedirectToRouteResult redirectResult = (RedirectToRouteResult)result;
-            Assert.AreEqual("Home", redirectResult.RouteValues["controller"]);
-            Assert.AreEqual("Index", redirectResult.RouteValues["action"]);
-        }
-
-        [TestMethod]
-        public void Register_Post_ReturnsViewIfRegistrationFails()
-        {
-            // Arrange
-            AccountController controller = GetAccountController();
-            RegisterViewModel model = new RegisterViewModel()
-            {
-                UserName = "duplicateUser",
-                Email = "goodEmail",
-                Password = "goodPassword",
-                ConfirmPassword = "goodPassword"
-            };
-
-            // Act
-            ActionResult result = controller.Register(model);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
-            ViewResult viewResult = (ViewResult)result;
-            Assert.AreEqual(model, viewResult.ViewData.Model);
-            Assert.AreEqual("Username already exists. Please enter a different user name.", controller.ModelState[""].Errors[0].ErrorMessage);
-            Assert.AreEqual(10, viewResult.ViewData["PasswordLength"]);
-        }
-
-        [TestMethod]
-        public void Register_Post_ReturnsViewIfModelStateIsInvalid()
-        {
-            // Arrange
-            AccountController controller = GetAccountController();
-            RegisterViewModel model = new RegisterViewModel()
-            {
-                UserName = "someUser",
-                Email = "goodEmail",
-                Password = "goodPassword",
-                ConfirmPassword = "goodPassword"
-            };
-            controller.ModelState.AddModelError("", "Dummy error message.");
-
-            // Act
-            ActionResult result = controller.Register(model);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
-            ViewResult viewResult = (ViewResult)result;
-            Assert.AreEqual(model, viewResult.ViewData.Model);
-            Assert.AreEqual(10, viewResult.ViewData["PasswordLength"]);
-        }
-
+        
         private static AccountController GetAccountController()
         {
             AccountController controller = new AccountController()
@@ -518,6 +433,11 @@
             }
 
             public System.Collections.Generic.IList<Supervisor> SearchSupervisors(string searchCriteria)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public bool ExistsUser(int innerUserId)
             {
                 throw new System.NotImplementedException();
             }
