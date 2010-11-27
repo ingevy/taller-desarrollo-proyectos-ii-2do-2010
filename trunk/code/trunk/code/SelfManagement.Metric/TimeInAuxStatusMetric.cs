@@ -58,13 +58,13 @@
             //Valido cantidad de archivos
             if (metricFiles.Count != 2)
             {
-                throw new System.ArgumentException("Couldn't find necessary files to process metric"); 
+                throw new System.ArgumentException("No se encontraron los archivos necesarios para procesar la metrica"); 
             }
 
             //Valido fechas de archivos
             if (metricFiles.ElementAt(0).FileDate != metricFiles.ElementAt(1).FileDate)
             {
-                throw new System.ArgumentException("File Dates do not match"); 
+                throw new System.ArgumentException("La fecha de los archivos no coincide"); 
             }
 
             try
@@ -113,7 +113,7 @@
 
                         if (lineTTS.Count != 1)
                         {
-                            throw new ArgumentException("The agentID " + agentIdSummary + " in Summary File, was not found in TTS File");
+                            throw new ArgumentException("El Agente " + agentIdSummary + " del archivo Summary, no se encontro en el archivo TTS");
                         }
 
                         //Parseo fechas

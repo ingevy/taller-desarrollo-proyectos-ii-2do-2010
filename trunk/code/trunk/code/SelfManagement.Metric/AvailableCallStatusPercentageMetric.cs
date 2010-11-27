@@ -47,7 +47,7 @@
 
             if (metricFiles.Count != 1)
             {
-                throw new System.ArgumentException("Couldn't find necessary file to process metric"); 
+                throw new System.ArgumentException("No se encontro el archivo necesario para procesar la metrica"); 
             }
 
             try

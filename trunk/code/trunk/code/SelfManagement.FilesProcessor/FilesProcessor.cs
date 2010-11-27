@@ -134,32 +134,47 @@
                                     Console.WriteLine("Grabando Metrica: " + metric.MetricName + " - Fecha: " + metricProcessor.MetricDate.ToString("dd/MM/yyyy"));
                                     foreach (var legajo in metricValues.Keys)
                                     {
-                                        if (!this.campaingRepository.ExistsAgent(legajo))
+                                        try
                                         {
-                                            throw new MetricException("El agente " + legajo + " no existe en la base de datos");
-                                        }
-
-                                        var agentCampaingId = this.metricsRepository.RetrieveUserCampaingId(legajo, metricProcessor.MetricDate);
-                                        var agentSupervisorId = this.metricsRepository.RetrieveAgentSupervisorId(legajo);
-                                        var supervisorCampaingId = this.metricsRepository.RetrieveUserCampaingId(agentSupervisorId, metricProcessor.MetricDate);
-                                        if (agentCampaingId != supervisorCampaingId)
-                                        {
-                                            throw new MetricException("Inconsistencia: Campaña Agente = " + Convert.ToInt32(agentCampaingId) + " - Campaña Supervisor = " + Convert.ToInt32(agentSupervisorId));
-                                        }
-
-                                        var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(agentCampaingId);
-
-                                        if ((from cm in campaingMetrics where cm.MetricId == metric.Id select cm).ToList().Count > 0)
-                                        {
-                                            var userMetric = new UserMetric
+                                            if (!this.campaingRepository.ExistsAgent(legajo))
                                             {
-                                                CampaingId = agentCampaingId,
-                                                InnerUserId = legajo,
-                                                MetricId = metric.Id,
-                                                Date = metricProcessor.MetricDate,
-                                                Value = metricValues[legajo]
-                                            };
-                                            this.metricsRepository.CreateAgentMetric(userMetric);
+                                                throw new MetricException("El agente " + legajo + " no existe en la base de datos");
+                                            }
+
+                                            var agentCampaingId = this.metricsRepository.RetrieveUserCampaingId(legajo, metricProcessor.MetricDate);
+                                            var agentSupervisorId = this.metricsRepository.RetrieveAgentSupervisorId(legajo);
+                                            var supervisorCampaingId = this.metricsRepository.RetrieveUserCampaingId(agentSupervisorId, metricProcessor.MetricDate);
+                                            if (agentCampaingId != supervisorCampaingId)
+                                            {
+                                                throw new MetricException("Inconsistencia de Agente "+legajo+" : Campaña Agente = " + Convert.ToInt32(agentCampaingId) + " - Campaña Supervisor = " + Convert.ToInt32(agentSupervisorId));
+                                            }
+
+                                            var campaingMetrics = this.campaingRepository.RetrieveCampaingMetricLevels(agentCampaingId);
+
+                                            if ((from cm in campaingMetrics where cm.MetricId == metric.Id select cm).ToList().Count > 0)
+                                            {
+                                                var userMetric = new UserMetric
+                                                {
+                                                    CampaingId = agentCampaingId,
+                                                    InnerUserId = legajo,
+                                                    MetricId = metric.Id,
+                                                    Date = metricProcessor.MetricDate,
+                                                    Value = metricValues[legajo]
+                                                };
+                                                this.metricsRepository.CreateAgentMetric(userMetric);
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            var metricFiles = (from f in groupedFiles[date]
+                                                               from f2 in metricProcessor.ExternalFilesNeeded
+                                                               where f.ExternalSystemFile == f2
+                                                               select f).ToList<IDataFile>();
+
+                                            foreach (var neededFile in metricFiles)
+                                            {
+                                                this.metricsRepository.LogInProcessedFile(neededFile.FilePath, e.Message + Environment.NewLine);
+                                            }
                                         }
                                     }
                                 }
@@ -172,7 +187,7 @@
 
                                     foreach (var neededFile in metricFiles)
                                     {
-                                        this.metricsRepository.LogInProcessedFile(neededFile.FilePath, e.Message+Environment.NewLine);
+                                        this.metricsRepository.LogInProcessedFile(neededFile.FilePath, "Error general: "+e.Message+Environment.NewLine);
                                     }
 
                                     throw;

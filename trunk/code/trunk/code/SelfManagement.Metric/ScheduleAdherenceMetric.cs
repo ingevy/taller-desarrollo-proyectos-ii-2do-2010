@@ -66,13 +66,13 @@
             //Valido cantidad de archivos
             if (metricFiles.Count != 2)
             {
-                throw new System.ArgumentException("Couldn't find necessary files to process metric"); 
+                throw new System.ArgumentException("No se encontraron los archivos necesarios para procesar la metrica"); 
             }
 
             //Valido fechas de archivos
             if (metricFiles.ElementAt(0).FileDate != metricFiles.ElementAt(1).FileDate)
             {
-                throw new System.ArgumentException("File Dates do not match"); 
+                throw new System.ArgumentException("La fecha de los archivos no coincide"); 
             }
 
             try
