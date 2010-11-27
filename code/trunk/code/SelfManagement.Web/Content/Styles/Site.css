@@ -795,3 +795,22 @@ div.ac_results ul li.ac_over {
 	padding: 0px 8px 0px 8px;
 	margin: 11px 0px 4px 0px;
 }
+
+.ui-dialog .ui-dialog-content {
+    overflow: hidden !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: #696969;
+    color: rgb(251, 250, 240);
+    border: none;
+}
+
+.ui-button {
+    background: #696969 !important;
+    color: rgb(251, 250, 240) !important;
+}
+
+.ui-state-focus, .ui-state-hover {
+    border: 1px solid #E6E3D8 !important;
+}
