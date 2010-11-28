@@ -33,6 +33,7 @@
         public void ShouldCalculateMetricValueForTheAgentsInFileMetricAvailPct()
         {
             var dataLines = new List<Dictionary<string, string>>();
+            var today = DateTime.Now;
 
             var dic1 = this.GenerateDictionaryForSummaryFile("34,9/8/2010,70,200,12,3,330,60,70");
             var dic2 = this.GenerateDictionaryForSummaryFile("156,9/8/2010,50,210,8,1,320,40,70");
@@ -45,6 +46,7 @@
             var newDataFile1 = new Mock<IDataFile>();
             newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.SUMMARY);
             newDataFile1.Setup(f => f.DataLines).Returns(dataLines);
+            newDataFile1.Setup(f => f.FileDate).Returns(today);
 
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
@@ -58,6 +60,7 @@
             var availPct2 = AvailableCallStatusPercentageMetric.CalculateMetricValue(Convert.ToInt32(dic2["Tiempo Ready for Call (min)"]), Convert.ToInt32(dic2["Tiempo Loggeado (min)"]));
             var availPct3 = AvailableCallStatusPercentageMetric.CalculateMetricValue(Convert.ToInt32(dic3["Tiempo Ready for Call (min)"]), Convert.ToInt32(dic3["Tiempo Loggeado (min)"]));
 
+            Assert.AreEqual(availPctMetric.MetricDate, today);
             Assert.AreEqual(availPct1, availPctMetric.CalculatedValues[Convert.ToInt32(dic1["Legajo"])]);
             Assert.AreEqual(availPct2, availPctMetric.CalculatedValues[Convert.ToInt32(dic2["Legajo"])]);
             Assert.AreEqual(availPct3, availPctMetric.CalculatedValues[Convert.ToInt32(dic3["Legajo"])]);
