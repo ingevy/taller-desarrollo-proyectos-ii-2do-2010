@@ -6,11 +6,11 @@
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Security;
     using CallCenter.SelfManagement.Data;
     using CallCenter.SelfManagement.Metric.Interfaces;
     using CallCenter.SelfManagement.Web.Helpers;
     using CallCenter.SelfManagement.Web.ViewModels;
-    using System.Web.Security;
 
     public class AdministrationController : Controller
     {
