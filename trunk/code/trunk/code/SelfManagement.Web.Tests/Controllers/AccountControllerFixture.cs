@@ -52,7 +52,6 @@
         [TestMethod]
         public void ChangePassword_Post_ReturnsViewIfChangePasswordFails()
         {
-            // Arrange
             AccountController controller = GetAccountController();
             ChangePasswordViewModel model = new ChangePasswordViewModel()
             {
@@ -68,7 +67,7 @@
             Assert.IsInstanceOfType(result, typeof(ViewResult));
             ViewResult viewResult = (ViewResult)result;
             Assert.AreEqual(model, viewResult.ViewData.Model);
-            Assert.AreEqual("The current password is incorrect or the new password is invalid.", controller.ModelState[""].Errors[0].ErrorMessage);
+            Assert.AreEqual("La contraseña actual es incorrecta o la nueva contraseña es inválida.", controller.ModelState["ChangePasswordViewModel"].Errors[0].ErrorMessage);
             Assert.AreEqual(10, viewResult.ViewData["PasswordLength"]);
         }
 

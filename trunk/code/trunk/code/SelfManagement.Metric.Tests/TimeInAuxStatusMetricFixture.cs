@@ -2,10 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using CallCenter.SelfManagement.Metric.Helpers;
     using CallCenter.SelfManagement.Metric.Interfaces;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
-    using CallCenter.SelfManagement.Metric.Helpers;
 
     [TestClass]
     public class TimeInAuxStatusMetricFixture
@@ -85,8 +85,7 @@
             var auxTmMetric = new TimeInAuxStatusMetric();
             auxTmMetric.ProcessFiles(dataFiles);
         }
-
-
+        
         [TestMethod]
         public void ShouldCalculateMetricValueForTheAgentsInFileMetricAuxTm()
         {
@@ -183,7 +182,5 @@
 
             return dic;
         }
-
-
     }
 }
