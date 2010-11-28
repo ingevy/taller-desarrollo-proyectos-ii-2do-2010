@@ -1,6 +1,72 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestList name="12__CPH" id="08e9e112-8d21-4814-889e-d70aa4293d14" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="b650cae6-70e2-7eb7-e85d-af73bbe44568" name="ShouldCalculateMetricValueForTheAgentsInFileMetricCPH" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="1e2c26a6-79c7-84aa-8faa-98115790400d" name="ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricCPH" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="05__AUX_TM" id="144050e8-9c76-4096-8bce-bf704b9b3e3b" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="10e6306e-cda8-a8b6-fe6c-9b8560490e5c" name="ShouldThrowAgentIDinSummaryFileNotFoundInTTSFileMetricAuxTm" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="576bc5aa-41f0-4892-f645-b71376ba75ce" name="ShouldThrowCouldNotFindNecessariesFilesWhenSummaryOrTTSFilesNotInListMetricAuxTm" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="8d03470e-6af9-deff-49d1-fd97f69dce8b" name="ShouldCalculateMetricValueForTheAgentsInFileMetricAuxTm" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="9922f3d9-9464-8634-7797-3f7d38fa5168" name="ShouldThrowFileDatesSummaryAndTTSDoNotMatchMetricAuxTm" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="06__AVAIL_PCT" id="5de50162-e0ce-4ea3-b8e5-fa2c62e03ab5" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="aebb2055-eb97-c632-aabb-c9647d58b95f" name="ShouldCalculateMetricValueForTheAgentsInFileMetricAvailPct" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="0e79cd90-b7f9-19cf-6017-1a125202642b" name="ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricAvailPct" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="08__AVG_ACW_TM" id="74c4672e-e6a6-4de1-8bb6-029271d74411" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="6ebee3f7-3a4d-1625-bb6b-5e983df6804b" name="ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricAvgAcwTm" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="811363d6-9e9a-55f2-1932-06a7a3f78318" name="ShouldCalculateMetricValueForTheAgentsInFileMetricAvgAcwTm" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
   <TestList name="Lists of Tests" id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
     <RunConfiguration id="0bd6a107-f0e6-4b9c-bf8c-f98bbbd58dc8" name="Local" storage="local.testsettings" type="Microsoft.VisualStudio.TestTools.Common.TestRunConfiguration, Microsoft.VisualStudio.QualityTools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestList>
+  <TestList name="01__I2C_PCT" id="90c54f6a-7dbc-4409-8e07-17db6fc79f17" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="3a7cca61-9c13-addb-eed7-8b73e3ab4d77" name="ShouldCalculateMetricValueForTheAgentsInFileMetricI2C" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="08b1a261-15da-8b62-8634-23bb80ec4283" name="ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricI2C" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="14__NCH" id="9a018f20-65d6-4c17-a060-55e539e01f83" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="24b82fd3-42ee-388f-30c0-d57d1e51f70f" name="ShouldCalculateMetricValueForTheAgentsInFileMetricNch" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="2fd0286e-a800-b3ef-b2cc-e8d67f240ecb" name="ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricNch" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="13__INCHAIR_OCC" id="9f9036ae-c613-4f79-b29d-a5dec34740ed" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="00fef61a-5916-0a15-264c-fc20fa3a873f" name="ShouldCalculateMetricValueForTheAgentsInFileMetricInChairOcc" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="9cfdf780-bff9-410c-42c8-2af8ec92f0f7" name="ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricInChairOcc" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="20__SCHED_ADG" id="9ff274b0-8e9d-4ffd-a532-106abc4124ec" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="b1db54ca-a2f2-5740-0ad1-fc3d0633f5e8" name="ShouldThrowCouldNotFindNecessariesFilesWhenSTSOrTTSFilesNotInListMetricSchedAdg" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="a1d9fc67-64bd-3264-baa7-cc70b8dc96d4" name="ShouldThrowFileDatesSTSAndTTSDoNotMatchMetricSchedAdg" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="6ebf2114-5b62-2e00-0c86-a7642987b1ba" name="ShouldCalculateMetricValueForTheAgentsInFileMetricSchedAdg" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="18__QA_SCORE" id="adfc4ef3-fa73-435e-acd2-0879ff7b8430" parentListId="bb3b7165-7eb2-42da-9919-02b7dd306758">
+    <TestLinks>
+      <TestLink id="f4fa8693-bbac-3914-746c-580c81ad1e56" name="ShouldCalculateMetricValueForTheAgentsInFileMetricQaScore" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="36c75307-023f-f70a-d2e5-1598cf8077d6" name="ShouldThrowCouldNotFindNecessaryFileWhenSummaryFileNotInListMetricQaScore" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+  <TestList name="Metrics" id="bb3b7165-7eb2-42da-9919-02b7dd306758" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="DataFile" id="f4ad3847-4951-4c65-ac53-ca9a990ee85f" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <TestLinks>
+      <TestLink id="8a97ac37-5de5-e7c8-c4bb-4720977a158e" name="ShouldThrowArgumentExceptionIfFileNotExists" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="dfa1d6f0-bb2f-a928-d091-c74258c2d561" name="ShouldCreateDataFileWithDateAndTypeAndPathTakenFromPath" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="9c1a81fb-6443-9bb5-a188-5dc7c75ee0e8" name="ShouldThrowArgumentExceptionIfFileNameNotSupported" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="d2033801-fc05-80f9-0ba7-edd1d30cb860" name="ShouldReturnDictionaryWithColumnValuePairsFromFile" storage="selfmanagement.metric.tests\bin\debug\selfmanagement.metric.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
   </TestList>
 </TestLists>

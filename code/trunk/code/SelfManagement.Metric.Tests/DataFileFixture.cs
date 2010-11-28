@@ -1,11 +1,9 @@
 ﻿namespace CallCenter.SelfManagement.Metric.Tests
 {
     using System;
-    using System.Collections.Generic;
+    using System.IO;
     using CallCenter.SelfManagement.Metric.Interfaces;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Moq;
-    using System.IO;
 
     [TestClass]
     public class DataFileFixture
