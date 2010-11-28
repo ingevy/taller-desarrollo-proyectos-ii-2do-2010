@@ -1,10 +1,10 @@
 ﻿namespace CallCenter.SelfManagement.Data.Tests
 {
+    using System;
     using System.Globalization;
     using System.Web.Security;
     using CallCenter.SelfManagement.Data;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
 
     [TestClass]
     public class MembershipServiceFixture

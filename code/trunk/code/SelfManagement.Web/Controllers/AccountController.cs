@@ -34,7 +34,7 @@
         {
             if (this.ModelState.IsValid)
             {
-                if (MembershipService.ValidateUser(model.UserName, model.Password))
+                if (this.MembershipService.ValidateUser(model.UserName, model.Password))
                 {
                     this.FormsService.SignIn(model.UserName, model.RememberMe);
                     if (!string.IsNullOrEmpty(returnUrl))
@@ -66,7 +66,7 @@
         [Authorize]
         public ActionResult ChangePassword()
         {
-            this.ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            this.ViewData["PasswordLength"] = this.MembershipService.MinPasswordLength;
             
             return this.View();
         }

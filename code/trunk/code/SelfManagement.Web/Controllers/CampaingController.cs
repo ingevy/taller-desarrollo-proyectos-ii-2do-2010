@@ -46,7 +46,7 @@
                 return this.View("NotFound", new CampaingDetailsViewModel());
             }
 
-            return this.View(CreateCampaingDetailsViewModel(campaing, null, true, page, totalCount));
+            return this.View(this.CreateCampaingDetailsViewModel(campaing, null, true, page, totalCount));
         }
 
         [Authorize(Roles = "AccountManager")]
@@ -68,7 +68,7 @@
                 return this.View("NotFound", new CampaingDetailsViewModel { SearchCriteria = searchCriteria });
             }
 
-            return this.View(CreateCampaingDetailsViewModel(campaing, searchCriteria, shouldPaginate, page, totalCount));
+            return this.View(this.CreateCampaingDetailsViewModel(campaing, searchCriteria, shouldPaginate, page, totalCount));
         }
 
         [Authorize(Roles = "AccountManager")]
@@ -100,22 +100,22 @@
                 BorderlineDashStyle = ChartDashStyle.Solid,
                 ToolTip = campaingMetric.Metric.MetricName,
                 BorderWidth = 2,
-                BorderlineColor = FontColor,
-                BackSecondaryColor = BackColor,
-                BackColor = BackColor,
-                ForeColor = FontColor,
+                BorderlineColor = this.FontColor,
+                BackSecondaryColor = this.BackColor,
+                BackColor = this.BackColor,
+                ForeColor = this.FontColor,
             };
 
             chart.BorderSkin.SkinStyle = BorderSkinStyle.FrameTitle1;
-            chart.Titles.Add(new Title(campaingMetric.Metric.MetricName, Docking.Top, new Font("Trebuchet MS", 14, FontStyle.Bold), FontColor));
-            chart.Titles.Add(new Title(string.Format(CultureInfo.InvariantCulture, "Días ({0})", month), Docking.Bottom, new Font("Trebuchet MS", 12), FontColor));
-            chart.Titles.Add(new Title("Valor", Docking.Left, new Font("Trebuchet MS", 12), FontColor));
+            chart.Titles.Add(new Title(campaingMetric.Metric.MetricName, Docking.Top, new Font("Trebuchet MS", 14, FontStyle.Bold), this.FontColor));
+            chart.Titles.Add(new Title(string.Format(CultureInfo.InvariantCulture, "Días ({0})", month), Docking.Bottom, new Font("Trebuchet MS", 12), this.FontColor));
+            chart.Titles.Add(new Title("Valor", Docking.Left, new Font("Trebuchet MS", 12), this.FontColor));
 
             var chartArea = chart.ChartAreas.Add("Waves");
             var legend = chart.Legends.Add("Legend");
 
-            chartArea.BackColor = BackColor;
-            legend.BackColor = BackColor;
+            chartArea.BackColor = this.BackColor;
+            legend.BackColor = this.BackColor;
 
             var series1 = chart.Series.Add("Nivel Optimo");
             var series2 = chart.Series.Add("Nivel Objetivo");
@@ -490,8 +490,7 @@
                                                 CurrentValue = this.metricsRepository.GetCampaingMetricValue(campaingId, currentDate, cml.MetricId),
                                                 ProjectedValue = this.metricsRepository.GetCampaingMetricValue(campaingId, projectedDate, cml.MetricId)
                                             });
-
-
+            
             foreach (var metricValue in campaingMetrics)
             {
                 var value = currentMetricLevel ? metricValue.CurrentValue : metricValue.ProjectedValue;
@@ -560,8 +559,7 @@
                         : pageNumber.Value > totalCount
                             ? totalCount
                             : pageNumber.Value;
-
-
+            
             return campaings.Skip(page - 1).Take(1).FirstOrDefault();
         }
     }
