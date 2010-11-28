@@ -31,7 +31,6 @@
             using (var ctx = new SelfManagementEntities())
             {
                 IQueryable<ProcessedFile> filter = ctx.ProcessedFiles;
-                int number;
 
                 if (type.HasValue)
                 {

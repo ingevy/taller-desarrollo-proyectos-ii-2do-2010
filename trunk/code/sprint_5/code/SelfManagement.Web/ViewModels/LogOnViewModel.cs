@@ -17,5 +17,4 @@
         [DisplayName("Recordar mi contraseña")]
         public bool RememberMe { get; set; }
     }
-
 }
