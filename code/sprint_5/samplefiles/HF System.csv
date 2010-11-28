@@ -1,0 +1,3 @@
+legajo,dni,nombre,apellido,sueldo bruto,Tipo Jornada, Status,idSupervisor, fecha ingreso, idCampania
+5,24129333,Juana,Liorna,1900,PTE, activo, 6, 15/4/2009,2
+11,26050210,Carlos,Abate,1700,PTE, activo, 12, 1/8/2009,4
