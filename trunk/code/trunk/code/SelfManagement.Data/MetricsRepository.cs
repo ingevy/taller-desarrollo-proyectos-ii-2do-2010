@@ -185,7 +185,7 @@
                     metricValue = MetricsCalculator.CalculateAcumulatedMetricValue(userMetrics, date);
                 }
 
-                return metricValue;
+                return (metric.Format != 0) ? metricValue : metricValue * 100;
             }
         }
 
@@ -216,7 +216,7 @@
                     metricValue = MetricsCalculator.CalculateAcumulatedMetricValue(campaingMetrics, date);
                 }
 
-                return metricValue;
+                return (metric.Format != 0) ? metricValue : metricValue * 100;
             }
         }
 

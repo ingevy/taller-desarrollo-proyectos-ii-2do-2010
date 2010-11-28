@@ -41,7 +41,7 @@
 
                 if (double.TryParse(this.OptimalLevel, NumberStyle, CultureInfo.InvariantCulture, out optimalLevel))
                 {
-                    if ((this.FormatType == 0) && (optimalLevel > 1))
+                    if ((this.FormatType == 0) && (optimalLevel > 100))
                     {
                         return 0;
                     }
@@ -78,7 +78,7 @@
 
                 if (double.TryParse(this.ObjectiveLevel, NumberStyle, CultureInfo.InvariantCulture, out objectiveLevel))
                 {
-                    if ((this.FormatType == 0) && (objectiveLevel > 1))
+                    if ((this.FormatType == 0) && (objectiveLevel > 100))
                     {
                         return 0;
                     }
@@ -113,7 +113,7 @@
 
                 if (double.TryParse(this.MinimumLevel, NumberStyle, CultureInfo.InvariantCulture, out minimumLevel))
                 {
-                    return ((this.FormatType == 0) && (minimumLevel > 1))
+                    return ((this.FormatType == 0) && (minimumLevel > 100))
                            ? 0
                            : 1;
                 }
