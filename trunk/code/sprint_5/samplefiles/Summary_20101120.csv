@@ -1,0 +1,6 @@
+Legajo,Date,Cantidad Llamadas,Tiempo InCall (min),Tiempo en espera (min),Cantidad Llamadas Transferidas,Tiempo Loggeado (min),Tiempo Ready for Call (min),Tiempo en after call work (min)
+1,20/11/2010,22,215,10,4,335,50,60
+3,20/11/2010,72,260,4,2,353,22,67
+5,20/11/2010,52,254,10,1,315,21,30
+8,20/11/2010,55,210,8,1,328,40,70
+10,20/11/2010,75,288,4,3,348,21,35
