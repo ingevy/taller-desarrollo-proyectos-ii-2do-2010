@@ -18,18 +18,18 @@
 
         public override string FormatErrorMessage(string name)
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.CurrentUICulture,
                 this.ErrorMessageString,
                 name,
-                minCharacters);
+                this.minCharacters);
         }
 
         public override bool IsValid(object value)
         {
             var valueAsString = value as string;
 
-            return (valueAsString != null && valueAsString.Length >= minCharacters);
+            return (valueAsString != null) && (valueAsString.Length >= this.minCharacters);
         }
     }
 }

@@ -1,11 +1,9 @@
 ﻿namespace CallCenter.SelfManagement.Metric.Tests
 {
     using System;
-    using System.Collections.Generic;
+    using System.IO;
     using CallCenter.SelfManagement.Metric.Interfaces;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Moq;
-    using System.IO;
 
     [TestClass]
     public class DataFileFixture
@@ -50,7 +48,7 @@
         [TestMethod]
         public void ShouldReturnDictionaryWithColumnValuePairsFromFile()
         {
-            using (var sw = new StreamWriter("TTS_20100930.csv",false))
+            using (var sw = new StreamWriter("TTS_20100930.csv", false))
             {
                 sw.Write("legajo,fecha Entrada,Horario Entrada,Horario Salida,fecha Salida");
                 sw.Write(Environment.NewLine);

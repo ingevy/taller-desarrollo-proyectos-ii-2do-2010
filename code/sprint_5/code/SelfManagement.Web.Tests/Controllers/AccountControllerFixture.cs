@@ -52,7 +52,6 @@
         [TestMethod]
         public void ChangePassword_Post_ReturnsViewIfChangePasswordFails()
         {
-            // Arrange
             AccountController controller = GetAccountController();
             ChangePasswordViewModel model = new ChangePasswordViewModel()
             {
@@ -68,7 +67,7 @@
             Assert.IsInstanceOfType(result, typeof(ViewResult));
             ViewResult viewResult = (ViewResult)result;
             Assert.AreEqual(model, viewResult.ViewData.Model);
-            Assert.AreEqual("The current password is incorrect or the new password is invalid.", controller.ModelState[""].Errors[0].ErrorMessage);
+            Assert.AreEqual("La contraseña actual es incorrecta o la nueva contraseña es inválida.", controller.ModelState["ChangePasswordViewModel"].Errors[0].ErrorMessage);
             Assert.AreEqual(10, viewResult.ViewData["PasswordLength"]);
         }
 
@@ -122,7 +121,7 @@
             RedirectToRouteResult redirectResult = (RedirectToRouteResult)result;
             Assert.AreEqual("Home", redirectResult.RouteValues["controller"]);
             Assert.AreEqual("Index", redirectResult.RouteValues["action"]);
-            Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignOut_WasCalled);
+            Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignOutWasCalled);
         }
 
         [TestMethod]
@@ -158,7 +157,7 @@
             RedirectToRouteResult redirectResult = (RedirectToRouteResult)result;
             Assert.AreEqual("Home", redirectResult.RouteValues["controller"]);
             Assert.AreEqual("Index", redirectResult.RouteValues["action"]);
-            Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignIn_WasCalled);
+            Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignInWasCalled);
         }
 
         [TestMethod]
@@ -180,7 +179,7 @@
             Assert.IsInstanceOfType(result, typeof(RedirectResult));
             RedirectResult redirectResult = (RedirectResult)result;
             Assert.AreEqual("/someUrl", redirectResult.Url);
-            Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignIn_WasCalled);
+            Assert.IsTrue(((MockFormsAuthenticationService)controller.FormsService).SignInWasCalled);
         }
 
         [TestMethod]
@@ -246,8 +245,8 @@
 
         private class MockFormsAuthenticationService : IFormsAuthenticationService
         {
-            public bool SignIn_WasCalled;
-            public bool SignOut_WasCalled;
+            public bool SignInWasCalled;
+            public bool SignOutWasCalled;
 
             public void SignIn(string userName, bool createPersistentCookie)
             {
@@ -255,24 +254,24 @@
                 Assert.AreEqual("someUser", userName);
                 Assert.IsFalse(createPersistentCookie);
 
-                SignIn_WasCalled = true;
+                this.SignInWasCalled = true;
             }
 
             public void SignOut()
             {
-                SignOut_WasCalled = true;
+                this.SignOutWasCalled = true;
             }
         }
 
         private class MockHttpContext : HttpContextBase
         {
-            private readonly IPrincipal _user = new GenericPrincipal(new GenericIdentity("someUser"), null /* roles */);
+            private readonly IPrincipal user = new GenericPrincipal(new GenericIdentity("someUser"), null /* roles */);
 
             public override IPrincipal User
             {
                 get
                 {
-                    return _user;
+                    return this.user;
                 }
                 set
                 {

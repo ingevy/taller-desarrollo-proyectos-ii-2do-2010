@@ -25,7 +25,7 @@
 
         public override object TypeId
         {
-            get { return typeId; }
+            get { return this.typeId; }
         }
 
         public override string FormatErrorMessage(string name)
@@ -33,17 +33,17 @@
             return string.Format(
                 CultureInfo.InvariantCulture,
                 this.ErrorMessageString,
-                OriginalProperty, ConfirmProperty);
+                this.OriginalProperty,
+                this.ConfirmProperty);
         }
 
         public override bool IsValid(object value)
         {
             var properties = TypeDescriptor.GetProperties(value);
-            var originalValue = properties.Find(OriginalProperty, true /* ignoreCase */).GetValue(value);
-            var confirmValue = properties.Find(ConfirmProperty, true /* ignoreCase */).GetValue(value);
+            var originalValue = properties.Find(this.OriginalProperty, true).GetValue(value);
+            var confirmValue = properties.Find(this.ConfirmProperty, true).GetValue(value);
 
             return Object.Equals(originalValue, confirmValue);
         }
     }
-
 }

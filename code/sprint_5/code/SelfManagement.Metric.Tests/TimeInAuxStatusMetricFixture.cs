@@ -2,10 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using CallCenter.SelfManagement.Metric.Helpers;
     using CallCenter.SelfManagement.Metric.Interfaces;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
-    using CallCenter.SelfManagement.Metric.Helpers;
 
     [TestClass]
     public class TimeInAuxStatusMetricFixture
@@ -85,12 +85,11 @@
             var auxTmMetric = new TimeInAuxStatusMetric();
             auxTmMetric.ProcessFiles(dataFiles);
         }
-
-
+        
         [TestMethod]
         public void ShouldCalculateMetricValueForTheAgentsInFileMetricAuxTm()
         {
-            //File Summary
+            // File Summary
             var newDataFile1 = new Mock<IDataFile>();
             newDataFile1.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.SUMMARY);
             newDataFile1.Setup(f => f.FileDate).Returns(DateTime.ParseExact("20100908", "yyyyMMdd", null));
@@ -102,7 +101,7 @@
             dataLinesSummary.Add(dic2Summary);
             newDataFile1.Setup(f => f.DataLines).Returns(dataLinesSummary);
 
-            //File TTS
+            // File TTS
             var newDataFile2 = new Mock<IDataFile>();
             newDataFile2.Setup(f => f.ExternalSystemFile).Returns(ExternalSystemFiles.TTS);
             newDataFile2.Setup(f => f.FileDate).Returns(DateTime.ParseExact("20100908", "yyyyMMdd", null));
@@ -113,37 +112,34 @@
             dataLinesTTS.Add(dic1TTS);
             dataLinesTTS.Add(dic2TTS);
             newDataFile2.Setup(f => f.DataLines).Returns(dataLinesTTS);
-
-
+            
             var dataFiles = new List<IDataFile>();
             dataFiles.Add(newDataFile1.Object);
             dataFiles.Add(newDataFile2.Object);
-
-
+            
             var auxTmMetric = new TimeInAuxStatusMetric();
             auxTmMetric.ProcessFiles(dataFiles);
 
             Assert.AreEqual(2, auxTmMetric.CalculatedValues.Count);
 
-            //Dates reg 1
-            Int32[] fechaSalida1 = TimeInAuxStatusMetric.parseFechas    (dic1TTS, "fecha Salida",   '/', Convert.ToInt32(dic1TTS["legajo"]));
-            Int32[] horarioSalida1 = TimeInAuxStatusMetric.parseHorarios(dic1TTS, "Horario Salida", ':', Convert.ToInt32(dic1TTS["legajo"]));
+            // Dates reg 1
+            Int32[] fechaSalida1 = TimeInAuxStatusMetric.ParseDates(dic1TTS, "fecha Salida", '/', Convert.ToInt32(dic1TTS["legajo"]));
+            Int32[] horarioSalida1 = TimeInAuxStatusMetric.ParseSchedules(dic1TTS, "Horario Salida", ':', Convert.ToInt32(dic1TTS["legajo"]));
             DateTime dateTimeSalida1 = new DateTime(fechaSalida1[2], fechaSalida1[1], fechaSalida1[0], horarioSalida1[0], horarioSalida1[1], Convert.ToInt32(0)); //anio, mes, dia, hora, minutos, seg
             
-            Int32[] fechaEntrada1 = TimeInAuxStatusMetric.parseFechas    (dic1TTS, "fecha Entrada",   '/', Convert.ToInt32(dic1TTS["legajo"]));
-            Int32[] horarioEntrada1 = TimeInAuxStatusMetric.parseHorarios(dic1TTS, "Horario Entrada", ':', Convert.ToInt32(dic1TTS["legajo"]));
+            Int32[] fechaEntrada1 = TimeInAuxStatusMetric.ParseDates(dic1TTS, "fecha Entrada", '/', Convert.ToInt32(dic1TTS["legajo"]));
+            Int32[] horarioEntrada1 = TimeInAuxStatusMetric.ParseSchedules(dic1TTS, "Horario Entrada", ':', Convert.ToInt32(dic1TTS["legajo"]));
             DateTime dateTimeEntrada1 = new DateTime(fechaEntrada1[2], fechaEntrada1[1], fechaEntrada1[0], horarioEntrada1[0], horarioEntrada1[1], Convert.ToInt32(0));//anio, mes, dia, hora, minutos, seg
 
-            //Dates reg 2
-            Int32[] fechaSalida2 = TimeInAuxStatusMetric.parseFechas    (dic2TTS, "fecha Salida",   '/', Convert.ToInt32(dic2TTS["legajo"]));
-            Int32[] horarioSalida2 = TimeInAuxStatusMetric.parseHorarios(dic2TTS, "Horario Salida", ':', Convert.ToInt32(dic2TTS["legajo"]));
+            // Dates reg 2
+            Int32[] fechaSalida2 = TimeInAuxStatusMetric.ParseDates(dic2TTS, "fecha Salida", '/', Convert.ToInt32(dic2TTS["legajo"]));
+            Int32[] horarioSalida2 = TimeInAuxStatusMetric.ParseSchedules(dic2TTS, "Horario Salida", ':', Convert.ToInt32(dic2TTS["legajo"]));
             DateTime dateTimeSalida2 = new DateTime(fechaSalida2[2], fechaSalida2[1], fechaSalida2[0], horarioSalida2[0], horarioSalida2[1], Convert.ToInt32(0)); //anio, mes, dia, hora, minutos, seg
             
-            Int32[] fechaEntrada2 = TimeInAuxStatusMetric.parseFechas    (dic2TTS, "fecha Entrada",   '/', Convert.ToInt32(dic2TTS["legajo"]));
-            Int32[] horarioEntrada2 = TimeInAuxStatusMetric.parseHorarios(dic2TTS, "Horario Entrada", ':', Convert.ToInt32(dic2TTS["legajo"]));
+            Int32[] fechaEntrada2 = TimeInAuxStatusMetric.ParseDates(dic2TTS, "fecha Entrada", '/', Convert.ToInt32(dic2TTS["legajo"]));
+            Int32[] horarioEntrada2 = TimeInAuxStatusMetric.ParseSchedules(dic2TTS, "Horario Entrada", ':', Convert.ToInt32(dic2TTS["legajo"]));
             DateTime dateTimeEntrada2 = new DateTime(fechaEntrada2[2], fechaEntrada2[1], fechaEntrada2[0], horarioEntrada2[0], horarioEntrada2[1], Convert.ToInt32(0));//anio, mes, dia, hora, minutos, seg
-
-
+            
             var auxTm1 = TimeInAuxStatusMetric.CalculateMetricValue(dateTimeSalida1, dateTimeEntrada1, Convert.ToInt32(dic1Summary["Tiempo Loggeado (min)"]));
             var auxTm2 = TimeInAuxStatusMetric.CalculateMetricValue(dateTimeSalida2, dateTimeEntrada2, Convert.ToInt32(dic2Summary["Tiempo Loggeado (min)"]));
 
@@ -183,7 +179,5 @@
 
             return dic;
         }
-
-
     }
 }
