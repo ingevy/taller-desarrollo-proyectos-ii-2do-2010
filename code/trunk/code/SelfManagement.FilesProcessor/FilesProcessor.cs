@@ -175,6 +175,8 @@
                                             {
                                                 this.metricsRepository.LogInProcessedFile(neededFile.FilePath, e.Message + Environment.NewLine);
                                             }
+
+                                            Console.WriteLine("      "+e.Message);
                                         }
                                     }
                                 }
