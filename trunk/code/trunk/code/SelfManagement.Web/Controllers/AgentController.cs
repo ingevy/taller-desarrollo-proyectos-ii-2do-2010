@@ -49,7 +49,7 @@
             }
 
             var currentSupervisor = agent.SupervisorId.HasValue ? this.membershipService.RetrieveSupervisor(agent.SupervisorId.Value) : (Supervisor)null;
-            var userCampaing = (campaingId.HasValue) ? this.campaingRepository.RetrieveCampaingById(campaingId.GetValueOrDefault(0)) : this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
+            var userCampaing = campaingId.HasValue ? this.campaingRepository.RetrieveCampaingById(campaingId.GetValueOrDefault(0)) : this.campaingRepository.RetrieveCurrentCampaingByUserId(agent.InnerUserId);
             var userCampaings = this.campaingRepository.RetrieveCampaingsByUserId(agent.InnerUserId);
 
             var metricsDate = DateTime.Now;
@@ -290,22 +290,22 @@
                 BorderlineDashStyle = ChartDashStyle.Solid,
                 ToolTip = campaingMetric.Metric.MetricName,
                 BorderWidth = 2,
-                BorderlineColor = FontColor,
-                BackSecondaryColor = BackColor,
-                BackColor = BackColor,
-                ForeColor = FontColor,
+                BorderlineColor = this.FontColor,
+                BackSecondaryColor = this.BackColor,
+                BackColor = this.BackColor,
+                ForeColor = this.FontColor,
             };
 
             chart.BorderSkin.SkinStyle = BorderSkinStyle.FrameTitle1;
-            chart.Titles.Add(new Title(campaingMetric.Metric.MetricName, Docking.Top, new Font("Trebuchet MS", 14, FontStyle.Bold), FontColor));
-            chart.Titles.Add(new Title(string.Format(CultureInfo.InvariantCulture, "Días ({0})", month), Docking.Bottom, new Font("Trebuchet MS", 12), FontColor));
-            chart.Titles.Add(new Title("Valor", Docking.Left, new Font("Trebuchet MS", 12), FontColor));
+            chart.Titles.Add(new Title(campaingMetric.Metric.MetricName, Docking.Top, new Font("Trebuchet MS", 14, FontStyle.Bold), this.FontColor));
+            chart.Titles.Add(new Title(string.Format(CultureInfo.InvariantCulture, "Días ({0})", month), Docking.Bottom, new Font("Trebuchet MS", 12), this.FontColor));
+            chart.Titles.Add(new Title("Valor", Docking.Left, new Font("Trebuchet MS", 12), this.FontColor));
 
             var chartArea = chart.ChartAreas.Add("Waves");
             var legend = chart.Legends.Add("Legend");
 
-            chartArea.BackColor = BackColor;
-            legend.BackColor = BackColor;
+            chartArea.BackColor = this.BackColor;
+            legend.BackColor = this.BackColor;
 
             var series1 = chart.Series.Add("Nivel Optimo");
             var series2 = chart.Series.Add("Nivel Objetivo");
@@ -512,8 +512,7 @@
                                                 CurrentValue = this.metricsRepository.GetUserMetricValue(innerUserId, currentDate, cml.MetricId, campaingId),
                                                 ProjectedValue = this.metricsRepository.GetUserMetricValue(innerUserId, projectedDate, cml.MetricId, campaingId)
                                             });
-
-
+            
             foreach (var metricValue in campaingMetrics)
             {
                 var value = currentMetricLevel ? metricValue.CurrentValue : metricValue.ProjectedValue;
@@ -649,8 +648,7 @@
                         : pageNumber.Value > totalCount
                             ? totalCount
                             : pageNumber.Value;
-
-
+            
             return agents.Skip(page - 1).Take(1).FirstOrDefault();
         }
     }

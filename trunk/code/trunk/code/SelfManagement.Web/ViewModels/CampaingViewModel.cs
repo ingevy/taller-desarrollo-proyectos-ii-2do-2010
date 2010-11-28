@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
     using System.Globalization;
+    using System.Linq;
 
     public class CampaingViewModel
     {
@@ -15,7 +15,7 @@
         public bool IsEditing { get; set; }
 
         [Required(ErrorMessage = "El nombre de la campaña es requerido.")]
-        [StringLength(100, ErrorMessage="El nombre de la campaña debe tener menos de 100 caracteres.")]
+        [StringLength(100, ErrorMessage = "El nombre de la campaña debe tener menos de 100 caracteres.")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "El cliente es requerido.")]

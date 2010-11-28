@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace CallCenter.SelfManagement.Web.ViewModels
+﻿namespace CallCenter.SelfManagement.Web.ViewModels
 {
     public class SupervisorViewModel
     {
